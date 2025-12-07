@@ -1,0 +1,32 @@
+{
+  "name": "kernec-cedric-devoir-6-api-russell",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cedrickernec/kernec-cedric-devoir-6-api-russell.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cedrickernec/kernec-cedric-devoir-6-api-russell/issues"
+  },
+  "homepage": "https://github.com/cedrickernec/kernec-cedric-devoir-6-api-russell#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "espress": "^0.0.0",
+    "express": "^5.2.1",
+    "mongoose": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
