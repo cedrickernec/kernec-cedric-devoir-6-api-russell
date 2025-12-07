@@ -3,17 +3,21 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import cors from "cors";
 
-import catwayRoutes from "./routes/catways.js"
-import reservationRoutes from "./routes/reservations.js"
-import userRoutes from "./routes/users.js"
+import authRoutes from "./routes/authRoutes.js";
+
+import catwayRoutes from "./routes/catwayRoutes.js"
+import reservationRoutes from "./routes/reservationRoute.js"
+import userRoutes from "./routes/userRoutes.js"
 
 dotenv.config();
 
 connectDB();
 
 const app = express();
+
 app.use(express.json());
 app.use(cors());
+app.use("/auth", authRoutes);
 app.use("/api/catways", catwayRoutes);
 app.use("/api/reservations", reservationRoutes);
 app.use("/api/users", userRoutes);
