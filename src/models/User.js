@@ -21,13 +21,4 @@ const UserSchema = new mongoose.Schema({
     },
 });
 
-// Préparation au futur hash du password
-UserSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) return next();
-
-    //futur hash ici
-
-    next()
-})
-
 export default mongoose.model("User", UserSchema);
