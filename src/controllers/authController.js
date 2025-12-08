@@ -124,3 +124,14 @@ export const login = async (req, res) => {
         res.status(500).json({ message: "Erreur serveur", error: error.message });
     }
 };
+
+// ===============================================
+// DÉCONNEXION
+// ===============================================
+export const logout = async (req, res) => {
+    try {
+        return res.status(200).json({ message: "Déconnecté avec succès."});
+    } catch (error) {
+        res.status(500).json({ message: "Serveur erreur", error: error.message });
+    }
+};
