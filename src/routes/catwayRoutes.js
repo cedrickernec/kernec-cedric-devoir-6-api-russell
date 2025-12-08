@@ -1,3 +1,5 @@
+import reservationRoutes from "./reservationRoutes.js";
+
 import { Router } from "express";
 
 import {
@@ -17,5 +19,7 @@ router.get("/:id", authMiddleware, getCatwayById);
 router.post("/", authMiddleware, createCatway);
 router.put("/:id", authMiddleware, updateCatway);
 router.delete("/:id", authMiddleware, deleteCatway);
+
+router.use("/:id/reservations", reservationRoutes);
 
 export default router;

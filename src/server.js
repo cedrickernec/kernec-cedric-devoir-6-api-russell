@@ -5,9 +5,9 @@ import cors from "cors";
 
 import authRoutes from "./routes/authRoutes.js";
 
-import catwayRoutes from "./routes/catwayRoutes.js"
-import reservationRoutes from "./routes/reservationRoute.js"
-import userRoutes from "./routes/userRoutes.js"
+import catwayRoutes from "./routes/catwayRoutes.js";
+import reservationGlobalRoutes from "./routes/reservationGlobalRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/auth", authRoutes);
 app.use("/api/catways", catwayRoutes);
-app.use("/api/reservations", reservationRoutes);
+app.use("/api/reservations", reservationGlobalRoutes);
 app.use("/api/users", userRoutes);
 
 // Route d'accueil pour vérification du serveur
