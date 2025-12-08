@@ -72,3 +72,32 @@ export const validatePassword = (password) => {
 
   return { valid: false, errors: detailedErrors };
 };
+
+// =====================================
+// VALIDATION MODIFICATION UTILISATEUR
+// =====================================
+export function validateUserUpdate(body) {
+  const errors = {};
+
+  const { username, email, password } = body;
+
+  // Username modifié ?
+  if (username !== undefined) {
+    const usernameError = validateUsername(username);
+    if (usernameError) errors.username = usernameError;
+  }
+
+  // Email modifié ?
+  if (email !== undefined) {
+    const emailError = validateEmail(email);
+    if (emailError) errors.email = emailError;
+  }
+
+  // Password modifié ?
+  if (password !== undefined) {
+    const passwordError = validatePassword(password);
+    if (passwordError) errors.password = passwordError;
+  }
+
+  return errors
+}
