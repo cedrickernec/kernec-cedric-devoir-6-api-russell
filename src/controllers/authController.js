@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-import { validateUsername, validateEmail, validatePassword } from "../utils/validators.js";
+import { validateUsername, validateEmail, validatePassword } from "../utils/validators/userValidators.js";
 
 // ===============================================
 // INSCRIPTION
@@ -62,7 +62,7 @@ export const signup = async (req, res) => {
             password: hashedPassword,
         })
 
-        // 8) Réponse
+        // 8) Réponse → succès
         res.status(201).json({
             message: "Utilisateur créé avec succès.",
             user: {
