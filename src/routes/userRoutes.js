@@ -17,6 +17,6 @@ router.get("/", authMiddleware, getAllUsers);
 router.get("/:id", authMiddleware, getUserById);
 router.put("/:id", authMiddleware, updateUser);
 router.put("/:id/password", authMiddleware, updatePassword);
-router.get("/:id", authMiddleware, deleteUser);
+router.delete("/:id", authMiddleware, deleteUser);
 
 export default router;
