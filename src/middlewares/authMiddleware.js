@@ -15,7 +15,7 @@ export const authMiddleware = (req, res, next) => {
         const token = authHeader.split(" ")[1];
 
         // 3) Vérification et décodage du token
-        const decoded = jwt.verify(token, process.env.JWT_TOKEN)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
         // 4) Attachement du user à req
         req.user = decoded;
