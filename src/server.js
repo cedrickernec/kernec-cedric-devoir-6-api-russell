@@ -4,10 +4,10 @@ import { connectDB } from "./config/db.js";
 import cors from "cors";
 
 import authRoutes from "./routes/authRoutes.js";
-
 import catwayRoutes from "./routes/catwayRoutes.js";
 import reservationGlobalRoutes from "./routes/reservationGlobalRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import documentationRoutes from "./routes/documentationRoutes.js";
 
 dotenv.config();
 
@@ -21,6 +21,7 @@ app.use("/auth", authRoutes);
 app.use("/api/catways", catwayRoutes);
 app.use("/api/reservations", reservationGlobalRoutes);
 app.use("/api/users", userRoutes);
+app.use("/documentation", documentationRoutes);
 
 // Route d'accueil pour vérification du serveur
 app.get("/", (req, res) => {
