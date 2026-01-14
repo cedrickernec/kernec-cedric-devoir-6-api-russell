@@ -1,0 +1,98 @@
+/* ======================================================
+   AUTH WRAPPER & CARD
+   ====================================================== */
+
+.login-card-wrapper {
+    position: relative;
+}
+
+.login-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ======================================================
+   AUTH TEXT CONTENT
+   ====================================================== */
+
+.login-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+}
+
+.login-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.login-description {
+    font-size: 0.85rem;
+    padding-bottom: 35px;
+    border-bottom: var(--border-strong);
+}
+
+/* ======================================================
+   AUTH FORM
+   ====================================================== */
+
+.login-form label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: var(--border-strong);
+}
+
+.login-form .btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    font-size: 1rem;
+}
+
+/* ======================================================
+   AUTH ERRORS
+   ====================================================== */
+
+.error-message {
+    color: var(--danger-1);
+    text-align: center;
+}
+
+/* ======================================================
+   AUTH DOC LINK
+   ====================================================== */
+
+.doc-link {
+    position: absolute;
+    top: -8px;
+    left: -80px;
+
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--color-primary);
+    color: white;
+    text-decoration: none;
+
+    border-radius: 6px 0 0 6px;
+    transition: background 0.2s ease;
+}
+
+.doc-link:hover {
+    background: var(--accent-primary);
+    color: white;
+}

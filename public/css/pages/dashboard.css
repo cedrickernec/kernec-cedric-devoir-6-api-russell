@@ -1,0 +1,24 @@
+/* ======================================================
+   DASHBOARD - USER INFOS
+   ====================================================== */
+.user-box {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow-sm);
+    margin-bottom: 30px;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-box p {
+    margin: 0.3rem 0;
+}
+
+.user-box p i {
+    font-size: var(--size-icon);
+    padding-right: 10px;
+}

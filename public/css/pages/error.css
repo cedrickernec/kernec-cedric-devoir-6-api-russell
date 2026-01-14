@@ -1,0 +1,87 @@
+/* ==================================================
+   ERROR CARD - CONTAINER
+================================================== */
+
+.error-card {
+    background: white;
+    border-radius: 12px;
+    padding: 48px 56px;
+    max-width: 520px;
+    width: 100%;
+
+    text-align: center;
+
+    box-shadow: var(--box-shadow-lg);
+    animation: errorFadeIn 0.35s ease;
+}
+
+/* ==================================================
+   ERROR CARD - VARIANTS
+================================================== */
+
+.error-card--danger {
+    border-top: 6px solid var(--danger-1);
+}
+
+.error-card--danger .error-code {
+    color: var(--danger-1);
+}
+
+.error-card--warning {
+    border-top: 6px solid var(--accent-secondary);
+}
+
+.error-card--warning .error-code {
+    color: var(--accent-secondary);
+}
+
+/* ==================================================
+   ERROR CARD - CONTENT
+================================================== */
+
+.error-code {
+    display: block;
+    font-size: 4.5rem;
+    font-weight: bold;
+    color: var(--accent-primary);
+    margin-bottom: 12px;
+}
+
+.error-title {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.error-message {
+    font-size: 0.95rem;
+    color: var(--color-secondary);
+    line-height: 1.5;
+    margin-bottom: 28px;
+}
+
+/* ==================================================
+   ERROR CARD - ACTIONS
+================================================== */
+
+.error-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* ==================================================
+   ANIMATION
+================================================== */
+
+@keyframes errorFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

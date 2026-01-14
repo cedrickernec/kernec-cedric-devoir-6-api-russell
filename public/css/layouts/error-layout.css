@@ -1,0 +1,19 @@
+@import url(../base/reset.css);
+@import url(../base/typography.css);
+@import url(../base/variables.css);
+@import url(../base/accessibility.css);
+@import url(../components/buttons.css);
+
+.error-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-grey);
+}
+
+.error-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,143 @@
+/**
+ * --------------------------------------------------------------------
+ * Controlleur de vue - Catways
+ * --------------------------------------------------------------------
+ * - Pages EJS
+ * - Panel latéral
+ */
+
+import Catway from "../../../api/models/Catway.js";
+import { findNextCatwayNumber } from "../../utils/catways/findNextCatwayNumber.js";
+import { mapCatwayToDetail, mapCatwayToList } from "../../utils/catways/catwayMapper.js";
+import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
+import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
+
+/* ==================================================
+  CATWAYS LIST
+================================================== */
+
+export const getCatwaysPage = async (req, res, next) => {
+    try {
+        const catways = await Catway.find().sort({ catwayNumber: 1 });
+        const catwaysView = catways.map(mapCatwayToList);
+
+        res.render("catways/catwaysList", {
+            title: "Liste des catways",
+            activePage: "catways",
+            catways: catwaysView
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+/* ==================================================
+  CATWAY DETAILS - FULL PAGE (BY NUMBER)
+================================================== */
+
+export const getCatwayByNumber = async (req, res, next) => {
+  try {
+    const catwayNumber = Number(req.params.catwayNumber);
+    const { from, id: reservationId } = req.query;
+    const catway = await Catway.findOne({ catwayNumber });
+
+    if (!catway) {
+      const error = new Error("Catway introuvable");
+      error.status = 404;
+      return next(error);
+    }
+
+    const catwayViewModel = mapCatwayToDetail(catway);
+
+    res.render("catways/catwayDetails", {
+      title: "Détail catway",
+      activePage: "catways",
+      catway: catwayViewModel,
+      from,
+      reservationId
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* ==================================================
+  CATWAY PANEL
+================================================== */
+
+export const getCatwayPanel = async (req, res) => {
+  try {
+    const catwayNumber = Number(req.params.catwayNumber);
+    const catway = await Catway.findOne({ catwayNumber });
+
+    if (!catway) {
+      return res.status(404).render("partials/panels/panelError", {
+        layout: false,
+        message: CATWAY_MESSAGES.NOT_FOUND
+      });
+    }
+
+    const catwayViewModel = mapCatwayToDetail(catway);
+
+    res.render("partials/panels/catwayPanel", {
+      layout: false,
+      entity: catwayViewModel
+    });
+    
+  } catch (error) {
+    console.error("Erreur chargement panel catway :", error);
+
+    res.status(500).render("partials/panels/panelError", {
+      layout: false,
+      message: COMMON_MESSAGES.LOAD_ERROR
+    })
+  }
+};
+
+/* ==================================================
+  CREATE CATWAY PAGE
+================================================== */
+
+export const getCreateCatwayPage = async (req, res, next) => {
+  try {
+    const suggestedNumber = await findNextCatwayNumber();
+
+    res.render("catways/catwayCreate", {
+        title: "Créer un catway",
+        activePage: "catways",
+        suggestedNumber,
+        errors: {},
+        formData: {}
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* ==================================================
+  EDIT CATWAY PAGE
+================================================== */
+
+export const getEditCatwayPage = async (req, res, next) => {
+  try {
+    const catwayNumber = Number(req.params.catwayNumber);
+    const catway = await Catway.findOne({ catwayNumber });
+
+    if (!catway) {
+      return next();
+    }
+
+    res.render("catways/catwayEdit", {
+      title: "Éditer un catway",
+      activePage: "catways",
+      catway,
+      errors: {},
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};

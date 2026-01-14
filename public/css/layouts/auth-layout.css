@@ -1,0 +1,237 @@
+@import url(../base/variables.css);
+@import url(../base/reset.css);
+@import url(../base/typography.css);
+@import url(../base/accessibility.css);
+@import url(../components/buttons.css);
+@import url(../components/form.css);
+
+body {
+    margin: 0;
+    background: none;
+}
+
+.auth-container::before {
+    z-index: var(--z-background);
+}
+
+.auth-container::after {
+    z-index: calc(var(--z-background) + 1);
+}
+
+.auth-hero {
+    z-index: var(--z-content);
+}
+
+.auth-content {
+    z-index: var(--z-floating);
+}
+
+/* ======================================================
+   NO-ANIMATIONS
+   (pas d'animation au rechargement lors d'une erreur d'authentification)
+   ====================================================== */
+
+.no-animations *,
+.no-animations *::before,
+.no-animations *::after {
+    animation: none !important;
+    transition: none !important;
+}
+
+.no-animations .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+.no-animations .delay-1,
+.no-animations .delay-2,
+.no-animations .delay-3,
+.no-animations .delay-4 {
+    animation-delay: 0s !important;
+}
+
+/* ======================================================
+   AUTH CONTAINER
+   ====================================================== */
+
+.auth-container {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--auth-padding);
+    overflow: hidden;
+}
+
+/* Background image */
+.auth-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    left: 0;
+    width: 75%;
+
+    background-image: url(../../images/pexels-robert-stokoe-105922-714666.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: left center;
+
+    mask-image: linear-gradient(
+        to right,
+        black 75%,
+        transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to right,
+        black 75%,
+        transparent 100%
+    );
+}
+
+/* Dark overlay */
+.auth-container::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background: radial-gradient(
+        circle at bottom left,
+        rgba(0, 0, 0, 0.6) 0%,
+        rgba(0, 0, 0, 0.4) 15%,
+        rgba(0, 0, 0, 0.2) 30%,
+        rgba(0, 0, 0, 0) 40%
+    );
+}
+
+/* ======================================================
+   HERO
+   ====================================================== */
+
+.auth-hero {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.hero-kicker {
+    position: absolute;
+    top: var(--auth-padding);
+    left: var(--auth-padding);
+
+    display: inline-block;
+    padding-left: 12px;
+
+    font-size: 0.85rem;
+    font-weight: bold;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.hero-kicker::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    right: calc(100% + 12px);
+    width: calc(100vw - var(--auth-padding));
+    height: 12px;
+
+    background: rgba(255, 255, 255, 0.85);
+    border-right: 10px solid var(--accent-primary);
+}
+
+.auth-hero-text {
+    position: absolute;
+    bottom: var(--auth-padding);
+    left: var(--auth-padding);
+
+    max-width: 520px;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+/* Typography */
+.hero-title {
+    display: block;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: bold;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    color: white;
+}
+
+.hero-subtitle {
+    display: block;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 16px;
+}
+
+.hero-intro {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* ======================================================
+   AUTH CARD
+   ====================================================== */
+
+.auth-content {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    width: 500px;
+    padding: 40px;
+
+    background: white;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow-md);
+
+    animation: authCardEnter 0.6s ease-out forwards;
+    animation-delay: 0.1s;
+}
+
+/* ======================================================
+   ANIMATIONS
+   ====================================================== */
+
+@keyframes authCardEnter {
+    from {
+        opacity: 0;
+        transform: translateX(40px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+.delay-3 { animation-delay: 0.6s; }
+.delay-4 { animation-delay: 0.8s; }
+
+.reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: revealUp 0.7s ease-out forwards;
+}
+
+@keyframes revealUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}

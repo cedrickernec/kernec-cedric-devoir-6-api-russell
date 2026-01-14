@@ -1,0 +1,59 @@
+<dl class="side-panel-list">
+  <div class="side-panel-row">
+    <dt>Statut</dt>
+    <dd>
+      <span
+        class="status <%= entity.status.className %>"
+        role="status"
+        ><%= entity.status.label %></span
+      >
+    </dd>
+  </div>
+
+  <div class="side-panel-row">
+    <dt>Client</dt>
+    <dd><%= entity.clientName %></dd>
+  </div>
+
+  <div class="side-panel-row">
+    <dt>Bateau</dt>
+    <dd><%= entity.boatName %></dd>
+  </div>
+
+  <div class="side-panel-row">
+    <dt>Catway</dt>
+    <dd>
+      <a
+        href="/catways/number/<%= entity.catway.number %>?from=reservation&id=<%= entity.id %>"
+        class="link"
+        aria-label="Ouvrir la fiche du catway <%= entity.catway.number %>"
+      >
+        #<%= entity.catway.number %>
+        <i
+          class="fa-solid fa-arrow-up-right-from-square"
+          aria-hidden="true"
+        ></i>
+      </a>
+    </dd>
+  </div>
+
+  <div class="side-panel-row">
+    <dt>Début</dt>
+    <dd><%= entity.startDateFormatted %></dd>
+  </div>
+
+  <div class="side-panel-row">
+    <dt>Fin</dt>
+    <dd><%= entity.endDateFormatted %></dd>
+  </div>
+
+  <div class="side-panel-row">
+    <dt>Durée</dt>
+    <dd><%= entity.duration %></dd>
+  </div>
+
+  <div class="side-panel-row">
+    <dt>Créé le</dt>
+    <dd class="muted"><%= entity.createdAtFormatted %></dd>
+  </div>
+</dl>

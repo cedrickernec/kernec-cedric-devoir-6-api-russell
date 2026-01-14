@@ -1,0 +1,60 @@
+/* ======================================================
+   TYPOGRAPHY & TEXTS
+   ====================================================== */
+
+body {
+    font-family: Arial, sans-serif;
+    color: var(--color-black-init);
+}
+
+h1 {
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    font-weight: bold;
+    font-size: 1.75rem;
+}
+
+h2 {
+    margin-bottom: 0.9rem;
+}
+
+.muted {
+    color: var(--color-secondary);
+}
+
+a {
+    color: inherit;
+}
+
+.link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+.link:hover {
+    color: var(--accent-primary-hover);
+}
+
+.link i {
+    font-size: 0.8em;
+}
+
+button,
+input,
+select,
+textarea {
+    color: inherit;
+}
+
+::placeholder {
+    color: color-mix(in srgb, var(--color-black-init) 60%, transparent);
+}
+
+svg {
+    fill: currentColor;
+}

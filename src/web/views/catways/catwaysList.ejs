@@ -1,0 +1,191 @@
+<h1>
+  Liste des catways
+  <span id="catways-count" aria-hidden="true"></span>
+</h1>
+
+<!-- ====== ACTION BUTTONS ====== -->
+
+<div class="table-actions">
+  <a href="/catways/create" class="btn btn--primary btn--shadow">
+    <i class="fa-solid fa-square-plus" aria-hidden="true"></i>
+    Ajouter un catway
+  </a>
+
+  <button id="delete-selected" class="btn btn-danger btn--shadow" disabled>
+    Supprimer la sélection
+  </button>
+</div>
+
+<!-- ====== FILTERS BAR ====== -->
+
+<div class="filters-bar">
+  <!-- CatwayNumber -->
+  <select id="filter-catway">
+    <option value="">Tous les numéros</option>
+    <% for (let i = 1; i <= 20; i++) { %>
+    <option value="<%= i %>">Catway <%= i %></option>
+    <% } %>
+  </select>
+
+  <!-- Type -->
+  <select id="filter-type">
+    <option value="">Tous les types</option>
+    <option value="short">Short</option>
+    <option value="long">Long</option>
+  </select>
+
+  <!-- State -->
+  <fieldset class="filter-group">
+    <span class="filter-group__label">État</span>
+    <label class="filter-checkbox">
+      <input type="checkbox" id="filter-state-ok" />
+      Bon état
+    </label>
+
+    <label class="filter-checkbox">
+      <input type="checkbox" id="filter-state-hs" />
+      Hors service
+    </label>
+
+    <label class="filter-checkbox">
+      <input type="checkbox" id="filter-state-warning" />
+      Autre état
+    </label>
+  </fieldset>
+
+  <button
+    type="button"
+    id="filters-reset"
+    class="btn btn--primary btn-icon"
+    aria-label="Réinitialiser les filtres"
+  >
+    <i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i>
+  </button>
+</div>
+
+<!-- ====== TABLE ====== -->
+
+<div class="table-wrapper">
+  <table class="data-table data-table--fixed is-clickable">
+    <caption class="sr-only">
+      Liste des catways avec numéro de catway, type et état
+    </caption>
+
+    <colgroup>
+      <col class="col-checkbox" />
+      <col class="col-catway" />
+      <col class="col-type" />
+      <col class="col-auto" />
+      <col class="col-action" />
+      <col class="col-action" />
+    </colgroup>
+
+    <thead>
+      <tr>
+        <th scope="col" class="align-center checkbox">
+          <input
+            type="checkbox"
+            id="select-all"
+            aria-label="Sélectionner tous les catways"
+          />
+        </th>
+        <th scope="col" class="align-center">Catway</th>
+        <th scope="col" class="align-center">Type</th>
+        <th scope="col" class="align-left">État</th>
+        <th scope="col" class="align-center actions border-col-left"></th>
+        <th scope="col" class="align-center actions"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if (!catways || catways.length === 0) { %>
+      <tr>
+        <td colspan="6" class="no-data">Aucun catway existant.</td>
+      </tr>
+      <% } else { %> <% for (let i = 0; i < catways.length; i++) { %>
+      <tr
+        class="js-catway-row js-panel-row"
+        data-entity-id="<%= catways[i].catwayNumber %>"
+        data-highlight="<%= flash?.highlightNumber === catways[i].catwayNumber ? 'true' : 'false' %>"
+        data-number="<%= catways[i].catwayNumber %>"
+        data-type="<%= catways[i].catwayType.toLowerCase() %>"
+        data-state="
+        <%= catways[i].isOutOfService ? 'hs' : (catways[i].status.className === 'status--ok' ? 'ok' : 'warning') %>"
+      >
+        <td class="align-center">
+          <input
+            type="checkbox"
+            name="selectedCatways"
+            value="<%= catways[i].id %>"
+          />
+        </td>
+
+        <td class="align-center bold"><%= catways[i].catwayNumber %></td>
+
+        <td class="align-center"><%= catways[i].catwayType %></td>
+
+        <td class="align-left">
+          <span class="cell-ellipsis cell-ellipsis--flex">
+            <span
+              class="status <%= catways[i].status.className %>"
+              aria-label="<%= catways[i].status.aria %>"
+            >
+              <%= catways[i].status.label %>
+            </span>
+          </span>
+        </td>
+
+        <td class="align-center actions border-col-left">
+          <a
+            href="/catways/<%= catways[i].catwayNumber %>"
+            class="btn btn--primary btn-icon"
+            aria-label="Voir le détail du catway <%= catways[i].catwayNumber %>"
+          >
+            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+          </a>
+        </td>
+
+        <td class="align-center actions">
+          <a
+            href="/catways/<%= catways[i].catwayNumber %>/edit"
+            class="btn btn--primary btn-icon"
+            aria-label="Éditer le catway <%= catways[i].catwayNumber %>"
+          >
+            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+          </a>
+        </td>
+      </tr>
+      <% } %> <% } %>
+
+      <!-- Ligne aucun résultat -->
+      <tr id="no-results-row" class="no-data" role="status" aria-live="polite" hidden>
+        <td colspan="6">Aucun catway correspondant aux filtres</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ====== SCRIPTS ====== -->
+
+<script type="module" src="/js/ui/panel/catwaysPanel.js"></script>
+<script type="module" src="/js/ui/animation/highlightCleanup.js"></script>
+<script type="module" src="/js/panel/panelDeleteAction.js"></script>
+<script type="module" src="/js/panel/panelEditAction.js"></script>
+
+<script type="module">
+  import { initCatwaysTable } from "/js/table/entities/catwaysTable.js";
+  initCatwaysTable();
+</script>
+
+<script type="module">
+  import { initCatwaysLiveFilter } from "/js/table/filters/catwaysLiveFilter.js";
+  initCatwaysLiveFilter();
+</script>
+
+<% if (flash) { %>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    showToast("<%= flash.type %>", "<%= flash.message %>");
+  });
+</script>
+<% } %>

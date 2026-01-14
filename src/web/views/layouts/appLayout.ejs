@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <!-- Layouts/pages styles -->
+    <link rel="stylesheet" href="/css/layouts/app-layout.css" />
+    <link rel="stylesheet" href="/css/pages/dashboard.css" />
+    <link rel="stylesheet" href="/css/pages/details.css" />
+  </head>
+
+  <body
+    data-session-max-age="<%= sessionMaxAge %>"
+    data-force-warning="<%= forceSessionWarning %>"
+  >
+    <div class="layout">
+      <!-- ======================== SIDEBAR =========================== -->
+       
+      <aside class="sidebar" aria-label="Menu latéral">
+        <h1 class="sidebar-title">API Russell</h1>
+
+        <!-- ====== SIDEBAR-MENU ====== -->
+
+        <nav class="sidebar-menu" aria-label="Navigation principale">
+          <p>
+            <a
+              href="/dashboard"
+              class="btn btn-nav <%= activePage === 'dashboard' ? 'is-active' : '' %>"
+              aria-current="<%= activePage === 'dashboard' ? 'page' : false %>"
+            >
+              <i class="fa-solid fa-house-chimney-user" aria-hidden="true"></i>
+              Dashboard
+            </a>
+          </p>
+          <p>
+            <a
+              href="/users"
+              class="btn btn-nav <%= activePage === 'users' ? 'is-active' : '' %>"
+              aria-current="<%= activePage === 'users' ? 'page' : false %>"
+            >
+              <i class="fa-solid fa-users" aria-hidden="true"></i>
+              Utilisateurs
+            </a>
+          </p>
+          <p>
+            <a
+              href="/catways"
+              class="btn btn-nav <%= activePage === 'catways' ? 'is-active' : '' %>"
+              aria-current="<%= activePage === 'catways' ? 'page' : false %>"
+            >
+              <i class="fa-solid fa-anchor" aria-hidden="true"></i>
+              Catways
+            </a>
+          </p>
+          <p>
+            <a
+              href="/reservations"
+              class="btn btn-nav <%= activePage === 'reservations' ? 'is-active' : '' %>"
+              aria-current="<%= activePage === 'reservations' ? 'page' : false %>"
+            >
+              <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+              Réservations
+            </a>
+          </p>
+        </nav>
+        <div class="sidebar-doc">
+          <p>
+            <a
+              href="/documentation"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-nav <%= activePage === 'documentation' ? 'is-active' : '' %>"
+              aria-current="<%= activePage === 'documentation' ? 'page' : false %>"
+            >
+              <i class="fa-solid fa-book" aria-hidden="true"></i>
+              Documentation
+            </a>
+          </p>
+        </div>
+
+        <!-- ====== SIDEBAR-FOOTER ====== -->
+
+        <div class="sidebar-footer">
+          <div class="sidebar-footer-content">
+            <div class="sidebar-clock">
+              <p id="sidebar-date"><%= currentDate %></p>
+              <p id="sidebar-time"><%= currentTime %></p>
+            </div>
+
+            <section class="sidebar-user" aria-label="Utilisateur connecté">
+              <p class="sidebar-username">
+                <i class="fa-solid fa-user" aria-hidden="true"></i>
+                <%= user.username %>
+              </p>
+              <p class="sidebar-email"><%= user.email %></p>
+            </section>
+          </div>
+
+          <a href="/auth/logout" title="Déconnexion" class="btn btn-danger">
+            <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+            Déconnexion</a
+          >
+        </div>
+      </aside>
+
+      <!-- ======================== MAIN CONTENT =========================== -->
+
+      <%- include('../partials/floatingActions') %>
+      <main><%- body %></main>
+    </div>
+
+    <!-- ======================== GLOBAL SIDE PANEL =========================== -->
+
+    <aside
+      id="side-panel"
+      class="side-panel"
+      role="complementary"
+      aria-labelledby="side-panel-title"
+      aria-hidden="true"
+      tabindex="-1"
+    >
+      <div class="side-panel-header">
+        <h2 id="side-panel-title"></h2>
+        <button
+          id="side-panel-toggle"
+          class="side-panel-toggle"
+          aria-label="Fermer"
+          aria-controls="side-panel"
+          aria-expanded="false"
+        >
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div id="side-panel-content" class="side-panel-content">
+        <!-- Contenu injecté dynamiquement -->
+      </div>
+      <div class="side-panel-actions">
+        <button
+          type="button"
+          data-panel-action="edit"
+          class="btn btn--primary btn--shadow"
+        >
+          <i class="fa-solid fa-pen" aria-hidden="true"></i>
+        </button>
+        <button
+          type="button"
+          data-panel-action="delete"
+          id="panel-delete-selected"
+          class="btn btn-danger btn--shadow"
+        >
+          <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+          Supprimer
+        </button>
+      </div>
+    </aside>
+
+    <!-- ======================== SESSION WARNING =========================== -->
+
+    <div id="session-warning" class="session-warning hidden">
+      <div class="session-warning-content">
+        <div class="session-warning-header">
+          <h3>Session bientôt expirée</h3>
+        </div>
+
+        <div class="session-warning-text">
+          <p>Votre session va expirer dans moins d'une minute.</p>
+          <p>Souhaitez-vous rester connecté ?</p>
+        </div>
+
+        <div class="session-warning-actions">
+          <button type="button" id="stay-connected" class="btn btn--primary">
+            <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>Rester
+            connecté
+          </button>
+          <a
+            href="/auth/logout"
+            class="btn btn-danger"
+            aria-label="Se déconnecter"
+            ><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Se
+            déconnecter</a
+          >
+        </div>
+
+        <% if (forceSessionWarning) { %>
+        <p class="dev-hint">Mode développement - affichage forcé</p>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- ======================== TOAST CONTAINER =========================== -->
+
+    <div
+      id="toast-container"
+      class="toast-container"
+      aria-live="polite"
+      aria-atomic="false"
+    ></div>
+
+    <!-- ======================== CONFIRM MODAL =========================== -->
+
+    <div
+      id="confirm-modal"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-title"
+    >
+      <div class="modal-backdrop"></div>
+
+      <div class="modal-content" tabindex="-1">
+        <button
+          id="btn-modal-close"
+          class="btn btn-close modal-close"
+          aria-label="Fermer la modale"
+        >
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+
+        <h3 id="confirm-title">Confirmation</h3>
+        <div id="confirm-message"></div>
+
+        <div class="modal-actions">
+          <button id="btn-modal-cancel" class="btn btn-cancel">Annuler</button>
+          <button
+            id="btn-modal-confirm"
+            class="btn btn-confirm btn-modal-confirm"
+          >
+            Confirmer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!--====== SCRIPTS ======-->
+
+    <script type="module" src="/js/bootstrap/app.bootstrap.js"></script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+/* ======================================================
+   CODE
+   ====================================================== */
+
+pre {
+    background: #272822;
+    color: #f8f8f2;
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin-top: 8px;
+}
+
+pre code {
+    display: block;
+    padding-left: 0;
+}
+
+code {
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+}

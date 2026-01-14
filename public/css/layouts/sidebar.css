@@ -1,0 +1,102 @@
+/* ======================================================
+   SIDEBAR
+   ====================================================== */
+
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background: white;
+    border-right: var(--border-light);
+    padding: 30px 20px;
+    overflow-y: auto;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-title {
+    padding-left: 8px;
+    font-size: 1.375rem;
+}
+
+/* ======================================================
+   SIDEBAR MENU
+   ====================================================== */
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-doc {
+    margin-top: auto;
+}
+
+.menu-group {
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+/* ======================================================
+   SIDEBAR FOOTER
+   ====================================================== */
+
+.sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.sidebar-footer-content {
+    display: flex;
+    flex-direction: column;
+    border-top: var(--border-strong);
+    gap: 20px;
+    padding: 20px 0;
+}
+
+/* DATE + HOURS */
+.sidebar-clock {
+    padding: 6px 12px;
+    min-height: 70px;
+    border: var(--border-light);
+    border-radius: 6px;
+    background: var(--bg-grey);
+}
+
+#sidebar-date {
+    margin: 4px 0;
+    font-weight: bold;
+}
+
+#sidebar-time {
+    margin: 4px 0;
+    color: var(--color-secondary);
+}
+
+/* USER */
+.sidebar-user {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 12px;
+}
+
+.sidebar-username {
+    font-weight: bold;
+    color: var(--accent-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-email {
+    font-size: 0.75rem;
+    color: var(--color-tertiary);
+    display: flex;
+    align-items: center;
+    font-style: italic;
+}

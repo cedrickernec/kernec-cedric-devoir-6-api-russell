@@ -1,0 +1,61 @@
+/* ======================================================
+   VARIABLES
+   ====================================================== */
+
+:root {
+    /* Base colors */
+    --color-black-init: #242b31;
+    --color-primary: #323c44;
+    --color-secondary: #4c5f6f;
+    --color-tertiary: #96a3ae;
+    --color-quaternary: #e8e8e8;
+    --color-quinary: #f2f2f2;
+
+    /* Accent colors*/
+    --accent-primary: #0066cc;
+    --accent-primary-hover: #0053a6;
+    --accent-secondary: #00a674;
+    --accent-secondary-hover: #c6faeb;
+    --accent-tertiary: #eef5ff;
+    --warning-1: #8a6d00;
+    --warning-2: #fff1bb;
+    --danger-1: #ff0059;
+    --danger-2: #cc0047;
+    --danger-3: #fecbdd;
+    --danger-accent: #ffeef3;
+
+    /* Background colors */
+    --bg-grey: #f7f7f7;
+
+    /* Border colors */
+    --border-light: 1px solid #ddd;
+    --border-strong: 1px solid #bdbdbd;
+
+    /* Shadows */
+    --box-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --box-shadow-md: 0 4px 10px rgba(0, 0, 0, 0.15);
+    --box-shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.2);
+
+    /* Icons */
+    --size-icon: 18px;
+
+    /* Paddings / margin */
+    --auth-padding: 3.75rem;
+    --panel-spacing: 1.25rem;
+    --detail-page-p-m: 1.5rem;
+
+    /* z-index */
+    --z-background: 0;
+
+    --z-content: 10;
+
+    --z-sticky: 100;
+
+    --z-floating: 1000;
+    --z-floating-top: 1100;
+
+    --z-overlay: 2000;
+    --z-toast: 2100;
+
+    --z-tooltip: 3000;
+}

@@ -1,0 +1,19 @@
+/* ======================================================
+   EMPTY STATE
+   ====================================================== */
+
+.no-data {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.875rem;
+    font-style: italic;
+    color: var(--color-tertiary);
+}
+
+.no-data--error {
+    color: var(--danger-1);
+}
+
+.no-data--error i {
+    margin-right: 6px;
+}

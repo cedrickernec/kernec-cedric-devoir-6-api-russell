@@ -1,0 +1,141 @@
+/**
+ * --------------------------------------------------------------------
+ * Controlleur de vue - Users
+ * --------------------------------------------------------------------
+ * - Pages EJS
+ * - Panel latéral
+ */
+
+import User from "../../../api/models/User.js";
+import { PASSWORD_RULES } from "../../utils/users/userValidator.js";
+import { mapUserDetail } from "../../utils/users/userMapper.js";
+import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
+import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
+
+// ==================================================
+// USERS LIST
+// ==================================================
+
+export const getUsersPage = async (req, res, next) => {
+  try {
+    const users = await User
+    .find()
+    .select("-password")
+    .collation({ locale: "fr", strength: 1 })
+    .sort({ username: 1 });
+
+    res.render("users/usersList", {
+      title: "Utilisateurs",
+      activePage: "users",
+      users
+    });
+
+  } catch (error) {
+    next(error)
+  }
+};
+
+/* ==================================================
+  USER DETAILS - FULL PAGE
+================================================== */
+
+export const getUserById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select("-password");
+
+    if (!user) {
+      const error = new Error(USER_MESSAGES.NOT_FOUND)
+      error.status = 404;
+      return next(error);
+    }
+
+    const userViewModel = mapUserDetail(user);
+
+    res.render("users/userDetails", {
+      title: "Détail utilisateur",
+      activePage: "users",
+      user: userViewModel
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* ==================================================
+  USER PANEL
+================================================== */
+
+export const getUserPanel = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select("-password");
+    
+    if (!user) {
+      return res.status(404).render("partials/panels/panelError", {
+        layout: false,
+        message: USER_MESSAGES.NOT_FOUND
+      });
+    }
+
+    const userViewModel = mapUserDetail(user);
+
+    res.render("partials/panels/userPanel", {
+      layout: false,
+      entity: userViewModel
+    });
+    
+  } catch (error) {
+    console.error("Erreur chargement panel utilisateur :", error);
+
+    res.status(500).render("partials/panels/panelError", {
+      layout: false,
+      message: COMMON_MESSAGES.LOAD_ERROR
+    })
+  }
+};
+
+/* ==================================================
+  CREATE USER PAGE
+================================================== */
+
+export const getCreateUserPage = (req, res, next) => {
+  try {
+    res.render("users/userCreate", {
+      title: "Création d'un utilisateur",
+      activePage: "users",
+      errors: {},
+      formData: {},
+      passwordRules: PASSWORD_RULES
+    });
+    
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* ==================================================
+  EDIT USER PAGE
+================================================== */
+
+export const getEditUserPage = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return next();
+    }
+
+    res.render("users/userEdit", {
+      title: "Éditer un utilisateur",
+      activePage: "users",
+      user,
+      errors: {},
+      passwordRules: PASSWORD_RULES
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};

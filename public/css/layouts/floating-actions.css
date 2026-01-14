@@ -1,0 +1,25 @@
+/* ======================================================
+   FLOATING ACTIONS
+   ====================================================== */
+
+.floating-actions {
+    position: fixed;
+    top: 0;
+    right: 30px;
+    width: 160px;
+
+    display: flex;
+    justify-content: space-between;
+
+    background: white;
+    padding: 10px;
+    border-radius: 0 0 8px 8px;
+    box-shadow: var(--box-shadow-sm);
+
+    transition: margin-right 0.4s ease;
+}
+
+.floating-actions a.btn.btn--primary {
+    font-size: var(--size-icon);
+    padding: 12px 12px;
+}

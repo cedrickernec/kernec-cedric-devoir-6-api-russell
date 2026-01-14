@@ -1,0 +1,36 @@
+<h1 id="page-title">Détails utilisateur</h1>
+
+<section class="detail-card" aria-labelledby="page-title">
+  <dl class="detail-list">
+    <div class="detail-row">
+      <dt>Nom</dt>
+      <dd><%= user.username %></dd>
+    </div>
+
+    <div class="detail-row">
+      <dt>Email</dt>
+      <dd><%= user.email %></dd>
+    </div>
+
+    <div class="detail-row">
+      <dt>Créé le</dt>
+      <dd class="muted">
+        <%= user.createdAtFormatted %>
+      </dd>
+    </div>
+  </dl>
+
+  <nav class="detail-action" aria-label="Actions utilisateur">
+    <a href="/users" class="btn btn--primary" aria-label="Retour à la liste des utilisateurs"
+      ><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>Retour à la
+      liste</a
+    >
+    <a
+      href="/users/<%= user.id %>/edit"
+      class="btn btn--primary"
+      title="Éditer l'utilisateur"
+      aria-label="Éditer l'utilisateur <%= user.username %>"
+      ><i class="fa-solid fa-pen" aria-hidden="true"></i>Éditer</a
+    >
+  </nav>
+</section>
