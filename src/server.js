@@ -20,6 +20,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import expressLayouts from "express-ejs-layouts";
+import morgan from "morgan";
 
 // ============================================
 // APPLICATION MIDDLEWARE
@@ -75,6 +76,7 @@ app.set("views", path.join(__dirname, "web/views"));
 // GLOBAL MIDDLEWARES
 // ============================================
 
+app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -101,8 +103,8 @@ registerApiRoutes(app);
 // ERROR HANDLERS
 // ============================================
 
-// app.use(notFoundHandler); // 404 - route inexistante
-// app.use(errorHandler); // 500 - Erreur serveur
+app.use(notFoundHandler); // 404 - route inexistante
+app.use(errorHandler); // 500 - Erreur serveur
 
 // ============================================
 // SERVER START
