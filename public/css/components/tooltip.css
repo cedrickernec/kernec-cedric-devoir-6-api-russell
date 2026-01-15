@@ -1,0 +1,58 @@
+/* ======================================================
+   TOOLTIP
+   ====================================================== */
+
+.tooltip {
+  position: relative;
+}
+
+/* Contenu tooltip */
+.tooltip__content {
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 260px;
+  min-width: 240px;
+
+  background: var(--color-primary);
+  color: white;
+  font-weight: bold;
+  font-size: 0.75rem;
+  line-height: 1.4;
+
+  padding: 10px 12px;
+  border-radius: 6px;
+
+  white-space: normal;
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: var(--z-tooltip);
+}
+
+/* Flèche par défaut (tooltip à droite) */
+.tooltip__content::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--color-primary);
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+/* Flèche à droite (tooltip à gauche) */
+.tooltip__content.is-left::before {
+  left: auto;
+  right: -4px;
+}
+
+/* Flèche en haut (tooltip en bas) */
+.tooltip__content.is-bottom::before {
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}

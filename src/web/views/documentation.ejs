@@ -1,0 +1,973 @@
+<!-- ======================================================
+  AUTH 
+  ========================================================= -->
+
+<h2 id="auth">Authentification</h2>
+
+<div class="route-block">
+  <p id="signup">
+    <span class="method">POST</span> <code>/api/auth/signup</code> - Créer un
+    utilisateur
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Exemple requête :</p>
+<pre><code>{
+  "username": "John",
+  "email": "john@doe.com",
+  "password": "Password123!"
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">201 Created</span> :
+    </p>
+    <pre><code>{
+  "message": "Utilisateur créé avec succès.",
+  "user": {
+    "id": "...",
+    "username": "john",
+    "email": "john@doe.com"
+  }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <p class="error-type">Contrôle des champs obligatoires</p>
+    <p></p>
+    <pre><code>{
+  "message": "Tous les champs sont obligatoires."
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation du nom d'utilisateur</p>
+    <p></p>
+    <pre><code>{
+  "message": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères (lettres, chiffres, - ou _)."
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation de l'email</p>
+    <p></p>
+    <pre><code>{
+  "message": "Format d'email invalide (ex : nom@domaine.com)."
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation de l'email</p>
+    <p></p>
+    <pre><code>{
+  "message": "Un utilisateur avec cet email existe déjà."
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation du mot de passe</p>
+    <p></p>
+    <pre><code>{
+  "message": "Le mot de passe ne respecte pas les règles de sécurité.",
+  "error": {
+    "minLength": "8 caractères minimum requis",
+    "uppercase": "1 lettre majuscule requise",
+    "lowercase": "1 lettre minuscule requise",
+    "number": "1 chiffre requis",
+    "special": "1 caractère spécial requis"
+  }
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="login">
+    <span class="method">POST</span> <code>/api/auth/login</code> - Se connecter
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Exemple requête :</p>
+    <pre><code>{
+  "email": "john@doe.com",
+  "password": "Password123!"
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+    <pre><code>{
+  "message": "Connexion réussie",
+  "token": "xxxx.yyyy.zzzz"
+  "user": {
+    "id": "6938210540eed7411e9356d1",
+    "username": "John",
+    "email": "john@doe.com"
+  }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+    <pre><code>{
+  "message": "Email ou mot de passe incorrect."
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="logout">
+    <span class="method">GET</span> <code>api/auth/logout</code> - Se
+    déconnecter
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+  "message": "Déconnecté avec succès."
+}</code></pre>
+  </details>
+</div>
+
+<!-- ======================================================
+  USERS
+  ========================================================= -->
+
+<h2 id="users">Utilisateurs</h2>
+
+<div class="route-block">
+  <p id="users-list">
+    <span class="method">GET</span> <code>/api/users</code> - Liste des
+    utilisateurs
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>[
+  {
+    "id": "...",
+    "username": "John",
+    "email": "john@doe.com"
+  }
+  ...
+]</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="users-get">
+    <span class="method">GET</span> <code>/api/users/:id</code> - Récupérer un
+    utilisateur
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+  "id": "...",
+  "username": "John",
+  "email": "john@doe.com"
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="users-create">
+    <span class="method">POST</span> <code>/api/users</code> - Créer un
+    utilisateur
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Exemple requête :</p>
+    <pre><code>{
+    "username": "John",
+    "email": "john@doe.com",
+    "password": "Password123!"
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">201 Created</span> :
+    </p>
+    <pre><code>{
+  "message": "Utilisateur créé avec succès.",
+  "user": {
+    "id": "...",
+    "username": "john",
+    "email": "john@doe.com"
+  }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <p class="error-type">Contrôle des champs obligatoires</p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+      "username": "Le nom d'utilisateur est requis.",
+      "email": "L'email est requis.",
+      "password": {
+          "general": "Le mot de passe est requis."
+      }
+  }
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation du nom d'utilisateur</p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+      "username": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères (lettres, chiffres, - ou _)."
+  }
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation de l'email</p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+      "email": "Format d'email invalide (ex : nom@domaine.com)."
+  }
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation de l'email</p>
+    <p></p>
+    <pre><code>{
+  "message": "Un utilisateur avec cet email existe déjà."
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation du mot de passe</p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+      "password": {
+          "minLength": "8 caractères minimum requis",
+          "lowercase": "1 lettre minuscule requise",
+          "uppercase": "1 lettre majuscule requise",
+          "number": "1 chiffre requis",
+          "special": "1 caractère spécial requis"
+      }
+  }
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="users-update">
+    <span class="method">PUT</span> <code>/api/users/:id</code> - Modifier
+    username / email
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Exemple requête :</p>
+    <pre><code>{
+  "username": "Johnatan"
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+  "message": "Utilisateur mis à jour.",
+  "user": {
+    "id": "...",
+    "username": "Johnatan",
+    "email": "john@doe.com"
+  }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <p class="error-type">
+      Contrôle de validation du nouveau nom d'utilisateur
+    </p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+    "username": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères (lettres, chiffres, - ou _)."
+  }
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation du nouvel email</p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+    "email": "Format d'email invalide (ex : nom@domaine.com)."
+  }
+}</code></pre>
+
+    <p class="error-type">Modification du mot de passe</p>
+    <p></p>
+    <pre><code>{
+  "message": "La modification du mot de passe doit se faire via la route dédiée."
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="users-password">
+    <span class="method">PUT</span> <code>/api/users/:id/password</code> -
+    Modifier mot de passe
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Exemple requête :</p>
+    <pre><code>{
+  "newPassword": "Nouveau123!"
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+  "message": "Nouveau mot de passe enregistré.",
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <p class="error-type">Contrôle du champ obligatoire</p>
+    <p></p>
+    <pre><code>{
+  "message": "Le nouveau mot de passe est requis."
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation du nouveau mot de passe</p>
+    <p></p>
+    <pre><code>{
+  "message": "Mot de passe invalide.",
+  "errors": {
+    "minLength": "8 caractères minimum requis",
+    "uppercase": "1 lettre majuscule requise",
+    "lowercase": "1 lettre majuscule requise",
+    "number": "1 chiffre requis",
+    "special": "1 caractère spécial requis"
+  }
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="users-delete">
+    <span class="method">DELETE</span> <code>/api/users/:id</code> - Supprimer
+    un utilisateur
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+  "message": "Utilisateur supprimé avec succès."
+}</code></pre>
+  </details>
+</div>
+
+<!-- ======================================================
+  CATWAYS
+  ========================================================= -->
+
+<h2 id="catways">Catways</h2>
+
+<div class="route-block">
+  <p id="catways-list">
+    <span class="method">GET</span> <code>/api/catways</code> - Liste des
+    catways
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>[
+  {
+    "catwayNumber": 5,
+    "catwayType": "long",
+    "catwayState": "Bon état"
+  }
+  ...
+]</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="catways-get">
+    <span class="method">GET</span> <code>/api/catways/:id</code> - Détails d'un
+    catway
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+  "id": "...",
+  "catwayNumber": 9,
+  "catwayType": "long",
+  "catwayState": "Plusieurs grandes tâches de peinture bleue sur le ponton"
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <p class="error-type">Contrôleur de validation de l'ID du catway</p>
+    <p></p>
+    <pre><code>{
+  "message": "Catway introuvable."
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="catways-create">
+    <span class="method">POST</span> <code>/api/catways</code> - Créer un catway
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Requête :</p>
+    <pre><code>{
+  "catwayNumber": 25,
+  "catwayType": "long",
+  "catwayState": "Bon état"
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">201 Created</span> :
+    </p>
+    <pre><code>{
+  "message": "Catway créé avec succès.",
+  "catway": {
+      "catwayNumber": 25,
+      "catwayType": "long",
+      "catwayState": "Bon état",
+      "_id": "..."
+  }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <p class="error-type">Contrôle des champs obligatoires</p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+    "catwayNumber": "Champ obligatoire manquant : Numéro de catway",
+    "catwayType": "Champ obligatoire manquant : Type de catway",
+    "catwayState": "Champ obligatoire manquant ou invalide : État du catway"
+  }
+}</code></pre>
+
+    <p class="error-type">Contrôle de conflit entre deux catways</p>
+    <p></p>
+    <pre><code>{
+  "message": "Un catway avec ce numéro existe déjà.",
+  "existingCatway": {
+    "_id": "...",
+    "catwayNumber": 2,
+    "catwayType": "short",
+    "catwayState": "bon état",
+  }
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="catways-update">
+    <span class="method">PUT</span> <code>/api/catways/:id</code> - Modifier un
+    catway
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Requête :</p>
+    <pre><code>{
+  "catwayState": "En cours de réparation. Ne peut être réservé."
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+    <pre><code>{
+  "message": "Catway mis à jour.",
+  "catway": {
+    "_id": "6938389622c45c33cffe5131",
+    "catwayNumber": 25,
+    "catwayType": "long",
+    "catwayState": "En cours de réparation. Ne peut être réservé."
+  }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <p class="error-type">Contrôle des champs obligatoires</p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+    "catwayNumber": "Champ obligatoire manquant : Numéro de catway",
+    "catwayType": "Champ obligatoire manquant : Type de catway",
+    "catwayState": "Champ obligatoire manquant ou invalide : État du catway"
+  }
+}</code></pre>
+
+    <p class="error-type">Contrôle de conflit entre deux catways</p>
+    <p></p>
+    <pre><code>{
+  "message": "Un catway avec ce numéro existe déjà.",
+  "existingCatway": {
+    "_id": "...",
+    "catwayNumber": 2,
+    "catwayType": "short",
+    "catwayState": "bon état",
+  }
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <p class="error-type">Contrôleur de validation de l'ID du catway</p>
+    <p></p>
+    <pre><code>{
+  "message": "Catway introuvable."
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="catways-delete">
+    <span class="method">DELETE</span> <code>/api/catways/:id</code> - Supprimer
+    un catway
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+  "message": "Catway supprimé avec succès."
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <p class="error-type">Contrôleur de validation de l'ID du catway</p>
+    <p></p>
+    <pre><code>{
+  "message": "Catway introuvable."
+}</code></pre>
+  </details>
+</div>
+
+<!-- ======================================================
+  RESERVATIONS
+  ========================================================= -->
+
+<h2 id="reservations">Réservations</h2>
+
+<div class="route-block">
+  <p id="reservations-list">
+    <span class="method">GET</span> <code>/api/reservations</code> - Liste
+    globale des réservations
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>[
+  {
+    "_id": "...",
+    "catwayNumber": 1,
+    "clientName": "Thomas Martin",
+    "boatName": "Carolina",
+    "startDate": "2024-05-21T06:00:00.000Z",
+    "endDate": "2024-10-27T06:00:00.000Z"
+  }
+  ...
+]</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="reservations-catway">
+    <span class="method">GET</span> <code>/api/catways/:id/reservations</code> -
+    Liste des réservations d'un catway
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>[
+  {
+    "_id": "...",
+    "catwayNumber": 2,
+    "clientName": "John Doe",
+    "boatName": "Groeland",
+    "startDate": "2024-05-18T06:00:00.000Z",
+    "endDate": "2024-11-30T06:00:00.000Z"
+  }
+]</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="reservations-get">
+    <span class="method">GET</span>
+    <code>/api/catways/:id/reservations/:idReservation</code> - Voir une
+    réservation
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+  "_id": "...",
+  "catwayNumber": 2,
+  "clientName": "John Doe",
+  "boatName": "Groeland",
+  "startDate": "2024-05-18T06:00:00.000Z",
+  "endDate": "2024-11-30T06:00:00.000Z"
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <p class="error-type">Contrôleur de validation de l'ID de la réservation</p>
+    <p></p>
+    <pre><code>{
+  "message": "Réservation introuvable."
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="reservations-create">
+    <span class="method">POST</span>
+    <code>/api/catways/:id/reservations</code> - Créer une réservation
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Requête :</p>
+    <pre><code>{
+  "catwayNumber": 2,
+  "clientName": "Jeanne Doe",
+  "boatName": "Appolica",
+  "startDate": "2025-01-18T06:00:00.000Z",
+  "endDate": "2025-11-30T06:00:00.000Z"
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">201 Created</span> :
+    </p>
+    <pre><code>{
+  "message": "Réservation créée avec succès.",
+  "reservation": {
+    "catwayNumber": 2,
+    "clientName": "Jeanne Doe",
+    "boatName": "Appolica",
+    "startDate": "2025-01-18T06:00:00.000Z",
+    "endDate": "2025-11-30T06:00:00.000Z",
+    "_id": "..."
+  }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <p class="error-type">Contrôle des champs obligatoires</p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+    "clientName": "Champ obligatoire manquant : Nom du client",
+    "boatName": "Champ obligatoire manquant : Nom du bateau",
+    "startDate": "Champ obligatoire manquant : Date d'entrée",
+    "endDate": "Champ obligatoire manquant : Date de sortie"
+  }
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation de format des dates</p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+    "startDate": "Format de la date d'entrée invalide.",
+    "endDate": "Format de la date de sortie invalide."
+  }
+}</code></pre>
+
+    <p class="error-type">
+      Contrôle de validation de réservabilité du catway (hors service ?)
+    </p>
+    <p></p>
+    <pre><code>{
+  "message": "Catway hors service.",
+  "catwayState": "En cours de réparation. Ne peut être réservée actuellement"
+}</code></pre>
+
+    <p class="error-type">Contrôle de validation des dates de réservation</p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+    "dateOrder": "La date d'entrée doit être antérieure à la date de sortie."
+  }
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <p class="error-type">Contrôle de validation du catway existant</p>
+    <p></p>
+    <pre><code>{
+  "message": "Catway inexistant.",
+  "detail": "Aucun catway ne correspond au numéro 99."
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">409 Conflict</span> :
+    </p>
+
+    <p class="error-type">Contrôle de conflit avec une réservation existante</p>
+    <p></p>
+    <pre><code>{
+  "message": "Ce catway est déjà réservé sur ce créneau.",
+  "conflictWith": {
+    "_id": "...",
+    "catwayNumber": 2,
+    "clientName": "John Doe",
+    "boatName": "Groeland",
+    "startDate": "2024-05-18T06:00:00.000Z",
+    "endDate": "2024-11-30T06:00:00.000Z",
+  }
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="reservations-update">
+    <span class="method">PUT</span>
+    <code>/api/catways/:id/reservations/:idReservation</code> - Modifier une
+    réservation
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Requête :</p>
+    <pre><code>{
+  "startDate": "2025-02-18T06:00:00.000Z",
+  "endDate": "2025-09-30T06:00:00.000Z"
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+    <pre><code>{
+  "message": "Réservation mise à jour",
+  "reservation": {
+    "_id": "...",
+    "catwayNumber": 2,
+    "clientName": "Jeanne Doe",
+    "boatName": "Appolica",
+    "startDate": "2025-02-18T06:00:00.000Z",
+    "endDate": "2025-09-30T06:00:00.000Z"
+  }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <p class="error-type">Contrôle des champs obligatoires</p>
+    <p></p>
+    <pre><code>{
+  "message": "Données invalides",
+  "errors": {
+    "clientName": "Champ obligatoire manquant : Nom du client",
+    "boatName": "Champ obligatoire manquant : Nom du bateau",
+    "startDate": "Champ obligatoire manquant : Date d'entrée",
+    "endDate": "Champ obligatoire manquant : Date de sortie"
+  }
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <p class="error-type">Contrôle de validation de la réservation existante</p>
+    <p></p>
+    <pre><code>{
+  "message": "Réservation introuvable."
+}</code></pre>
+  </details>
+</div>
+
+<div class="route-block">
+  <p id="reservations-delete">
+    <span class="method">DELETE</span>
+    <code>/api/catways/:id/reservations/:idReservation</code> - Supprimer une
+    réservation
+  </p>
+
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+  "message": "Réservation supprimée avec succès."
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>Erreurs courantes</summary>
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <p class="error-type">Contrôle de validation de la réservation existante</p>
+    <p></p>
+    <pre><code>{
+  "message": "Réservation introuvable."
+}</code></pre>
+  </details>
+</div>
+
+<!-- ======================================================
+  GLOBAL ERRORS
+  ========================================================= -->
+
+<h2 id="errors">Erreurs globales de l'API</h2>
+
+<div class="route-block">
+  <p class="example-title">
+    Erreur <span class="badge badge--error">401 Unauthorized</span> :
+  </p>
+
+  <p class="error-type">Token invalide, manquant ou expiré</p>
+  <p></p>
+  <pre><code>{
+  "message": "Accès refusé: aucun token fourni."
+}</code></pre>
+
+  <p class="example-title">
+    Erreur <span class="badge badge--500">500 Internal Serveur Error</span> :
+  </p>
+
+  <p class="error-type">Erreur interne serveur</p>
+  <p></p>
+  <pre><code>{
+  "message": "Erreur serveur",
+  "error": "..."
+}</code></pre>
+</div>

@@ -1,0 +1,99 @@
+/* ======================================================
+   TOAST CONTAINER
+   ====================================================== */
+
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    z-index: var(--z-toast);
+    pointer-events: none;
+}
+
+/* ======================================================
+   TOAST BASE
+   ====================================================== */
+
+.toast {
+    pointer-events: auto;
+    min-width: 280px;
+    max-width: 520px;
+    padding: 12px 16px;
+    border-radius: 6px;
+    box-shadow: var(--box-shadow-md);
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    animation: toast-in 0.25s ease;
+}
+
+/* ======================================================
+   TOAST VARIANTS
+   ====================================================== */
+
+.toast--success {
+    border-left: 4px solid var(--accent-primary);
+}
+
+.toast--error {
+    border-left: 4px solid var(--danger-1);
+}
+
+.toast--info {
+    border-left: 4px solid var(--color-tertiary);
+}
+
+/* ======================================================
+   TOAST CONTENT
+   ====================================================== */
+
+.toast-message {
+    font-size: 0.875rem;
+}
+
+.toast-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ======================================================
+   TOAST STATE
+   ====================================================== */
+
+.toast--closing {
+    animation: toast-out 1s ease forwards;
+}
+
+/* ======================================================
+   TOAST ANIMATIONS
+   ====================================================== */
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toast-out {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(12px);
+    }
+}

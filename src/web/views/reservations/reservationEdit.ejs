@@ -1,0 +1,146 @@
+<h1>Modification de la réservation</h1>
+
+<div class="split-view">
+  <form
+    method="POST"
+    action="/reservations/<%= reservation.id %>/edit"
+    class="form form--side"
+  >
+    <!-- ===== INFORMATIONS FIXES ===== -->
+    <div class="detail-list">
+      <dl class="detail-row">
+        <dt>Catway</dt>
+        <dd class="bold">
+          #<%= reservation.catway.number %> (<%= reservation.catway.type %>)
+        </dd>
+      </dl>
+    </div>
+
+    <!-- ===== CLIENT ===== -->
+    <div class="form-group <%= errors?.clientName ? 'has-error' : '' %>">
+      <label for="clientName">Client</label>
+      <input
+        type="text"
+        id="clientName"
+        name="clientName"
+        value="<%= formData?.clientName ?? reservation.clientName %>"
+        required
+      />
+      <% if (errors?.clientName) { %>
+      <p class="form-error"><%= errors.clientName %></p>
+      <% } %>
+    </div>
+
+    <!-- ===== BATEAU ===== -->
+    <div class="form-group <%= errors?.boatName ? 'has-error' : '' %>">
+      <label for="boatName">Nom du bateau</label>
+      <input
+        type="text"
+        id="boatName"
+        name="boatName"
+        value="<%= formData?.boatName ?? reservation.boatName %>"
+        required
+      />
+      <% if (errors?.boatName) { %>
+      <p class="form-error"><%= errors.boatName %></p>
+      <% } %>
+    </div>
+
+    <!-- ===== DATES ===== -->
+    <div class="form-group form-group--dates">
+      <div class="form-group--row">
+        <!-- DATE DE DÉBUT -->
+        <div class="form-group <%= errors?.startDate ? 'has-error' : '' %>">
+          <label for="startDate">
+            Date de début <% if (reservation.isStartDateLocked) { %>
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+            <% } %>
+          </label>
+          <input
+            type="date"
+            id="startDate"
+            name="startDate"
+            class="<%= reservation.isStartDateLocked ? 'locked-field' : '' %>"
+            value="<%= formData?.startDate ?? reservation.startDateISO %>"
+            <%= reservation.isStartDateLocked ? 'disabled aria-disabled="true"' : '' %>
+          />
+        </div>
+
+        <!-- DATE DE FIN -->
+        <div class="form-group <%= errors?.endDate ? 'has-error' : '' %>">
+          <label for="endDate">Date de fin</label>
+          <input
+            type="date"
+            id="endDate"
+            name="endDate"
+            value="<%= formData?.endDate ?? reservation.endDateISO %>"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- MESSAGE D’ERREUR GLOBAL (DATES) -->
+      <% if (errors?.startDate || errors?.endDate) { %>
+      <p class="form-error" data-error-scope="dates">
+        <%= errors.startDate || errors.endDate %>
+      </p>
+      <% } %>
+    </div>
+
+    <% if (reservation.isStartDateLocked) { %>
+    <p class="form-hint muted">
+      La date de début ne peut être modifiée car la réservation a commencé
+    </p>
+    <% } %>
+
+    <!-- ===== ACTIONS ===== -->
+    <div class="form-actions">
+      <a href="/reservations" class="btn btn-cancel"> Annuler </a>
+      <button type="submit" class="btn btn-confirm">Enregistrer</button>
+    </div>
+  </form>
+
+  <!-- ===== RESERVATIONS EXISTANTES (MÊME CATWAY) ===== -->
+  <aside class="table-section">
+    <h2>Liste des réservations existantes</h2>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th class="align-center border-col-right">Client</th>
+            <th class="align-center separator">Début</th>
+            <th class="align-center">&ndash;</th>
+            <th class="align-center">Fin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!otherReservations || otherReservations.length === 0) { %>
+          <tr>
+            <td colspan="4" class="no-data">
+              Aucune autre réservation existante.
+            </td>
+          </tr>
+          <% } else { %> <% for (let i = 0; i < otherReservations.length; i++) {
+          %>
+          <tr>
+            <td class="align-center border-col-right">
+              <%= otherReservations[i].clientName %>
+            </td>
+            <td class="align-center bold">
+              <%= otherReservations[i].startDateFormatted %>
+            </td>
+            <td class="align-center">&ndash;</td>
+            <td class="align-center bold">
+              <%= otherReservations[i].endDateFormatted %>
+            </td>
+          </tr>
+          <% } %> <% } %>
+        </tbody>
+      </table>
+    </div>
+  </aside>
+</div>
+
+<!--====== SCRIPTS ======-->
+<script src="/js/ui/form/formErrorCleanup.js" defer></script>

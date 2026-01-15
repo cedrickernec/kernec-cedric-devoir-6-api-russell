@@ -1,0 +1,96 @@
+<h1>Modification du catway</h1>
+
+<form
+  method="POST"
+  action="/catways/<%= catway._id %>/edit"
+  class="form"
+  data-catway-id="<%= catway._id %>"
+>
+  <!-- ===== NUMBER ===== -->
+  <div class="form-group">
+    <label for="catwayNumber">Numéro du catway</label>
+
+    <!-- Champ affiché (lecture seul) -->
+    <input
+      type="number"
+      id="catwayNumber"
+      value="<%= catway.catwayNumber %>"
+      aria-disabled="true"
+      disabled
+    >
+
+    <!-- Champ envoyé au serveur -->
+    <input
+      type="hidden"
+      name="catwayNumber"
+      value="<%= catway.catwayNumber %>"
+    >
+  </div>
+
+  <!-- ===== TYPE ===== -->
+  <div class="form-group">
+    <label for="catwayType">Type</label>
+
+    <!-- Champ affiché (lecture seul) -->
+    <input
+      type="text"
+      id="catwayType"
+      value="<%= catway.catwayType === 'short' ? 'short' : 'long' %>"
+      aria-disabled="true"
+      disabled
+    >
+
+    <!-- Champ envoyé au serveur -->
+    <input
+      type="hidden"
+      name="catwayType"
+      value="<%= catway.catwayType === 'short' ? 'short' : 'long' %>"
+    >
+  </div>
+
+  <!-- ===== STATE ===== -->
+  <div class="form-group">
+    <label for="goodStateCheckbox">
+      <input
+        type="checkbox"
+        id="goodStateCheckbox"
+        data-toggle-checkbox="catwayState"
+        data-toggle-value="bon état"
+      >
+      Catway en bon état
+    </label>
+  </div>
+
+  <div class="form-group" id="stateTextGroup">
+    <label for="catwayState">État du catway</label>
+    <textarea
+      id="catwayState"
+      name="catwayState"
+      rows="3"
+      required
+    ><%= catway.catwayState %></textarea>
+  </div>
+
+  <div class="form-group" id="outOfServiceGroup">
+    <label for="OutOfServiceCheckbox">
+      <input
+        type="checkbox"
+        id="OutOfServiceCheckbox"
+        name="isOutOfService"
+        <%= catway.isOutOfService ? "checked" : "" %>
+      >
+      Catway hors service
+    </label>
+  </div>
+
+  <!-- ===== ACTIONS ===== -->
+  <div class="form-actions">
+    <a href="/catways" class="btn btn-cancel"> Annuler </a>
+    <button type="submit" class="btn btn-confirm">Enregistrer</button>
+  </div>
+</form>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="/js/form/availableCatway.js" defer></script>
+<script src="/js/form/checkboxTextToggle.js" defer></script>
+<script src="/js/ui/form/formErrorCleanup.js" defer></script>

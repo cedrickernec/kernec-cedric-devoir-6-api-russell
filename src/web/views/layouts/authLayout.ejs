@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <meta
+      name="description"
+      content="Page de connexion sécurisée à l'API du port de plaisance Russell;"
+    />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <!-- Hero image preload -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/pexels-robert-stokoe-105922-714666.jpg"
+    />
+
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="/css/layouts/auth-layout.css" />
+    <link rel="stylesheet" href="/css/pages/auth.css" />
+  </head>
+
+  <body
+    class="<%= (typeof disableAnimations !== 'undefined' && disableAnimations) ? 'no-animations' : '' %>"
+  >
+    <div class="auth-container">
+      <!-- ======================== HERO =========================== -->
+
+      <header class="auth-hero">
+        <span class="hero-kicker reveal delay-1">API Russell</span>
+
+        <div class="auth-hero-text">
+          <span class="hero-title reveal delay-2">Gérez votre port.</span>
+          <span class="hero-subtitle reveal delay-3">
+            Simplement. Efficacement.
+          </span>
+
+          <p class="hero-intro reveal delay-4">
+            Conçu pour les gestionnaires du port de plaisance Russell, cette API
+            centralise la gestion des utilisateurs, des catways et des
+            réservations au sein d'une interface sécurisée et dédiée. Elle
+            permet une interface fluide, fiable et autonome des opérations du
+            port.
+          </p>
+        </div>
+      </header>
+
+      <!-- ======================== CONTENT =========================== -->
+
+      <main class="auth-content"><%- body %></main>
+    </div>
+    
+    <!--====== SCRIPTS ======-->
+
+    <script type="module" src="/js/bootstrap/auth.bootstrap.js"></script>
+  </body>
+</html>

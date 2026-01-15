@@ -1,0 +1,148 @@
+/* ==================================================
+   SIDE PANEL — LAYOUT
+================================================== */
+
+.side-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+
+    width: 420px;
+    height: 100vh;
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--panel-spacing);
+
+    background: white;
+    box-shadow: -16px 0 24px rgba(0, 0, 0, 0.08);
+
+    transform: translateX(100%);
+    transition: transform 0.35s ease;
+
+    z-index: var(--z-floating);
+}
+
+.side-panel.open {
+    transform: translateX(0);
+}
+
+/* ==================================================
+   SIDE PANEL — TOGGLE BUTTON
+================================================== */
+
+.side-panel-toggle {
+    position: fixed;
+    top: 50%;
+    right: 400px;
+    transform: translateY(-50%);
+
+    width: 36px;
+    height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: white;
+    border: none;
+    border-radius: 8px 0 0 8px;
+
+    cursor: pointer;
+    z-index: var(--z-floating-top);
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 0.25s ease;
+}
+
+body.side-panel-open .side-panel-toggle {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ==================================================
+   LAYOUT INTERACTION — MAIN PUSH
+================================================== */
+
+body.side-panel-open main,
+body.side-panel-open .floating-actions {
+    margin-right: 420px;
+}
+
+body.side-panel-open {
+    overflow-x: hidden;
+}
+
+/* ==================================================
+   SIDE PANEL — HEADER
+================================================== */
+
+#side-panel-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 6px;
+    margin-bottom: 0;
+
+    font-size: 1.1rem;
+
+    padding-bottom: var(--panel-spacing);
+    border-bottom: var(--border-strong);
+}
+
+/* ==================================================
+   SIDE PANEL — CONTENT
+================================================== */
+
+.side-panel-content {
+    overflow-y: auto;
+}
+
+.side-panel-list {
+    display: grid;
+    gap: 8px;
+}
+
+.side-panel-list dt {
+    font-weight: bold;
+}
+
+.side-panel-list dt::after {
+    content: " :";
+}
+
+.side-panel-list dd {
+    margin: 0;
+    word-break: break-word;
+}
+
+.side-panel-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+.side-panel-actions {
+    display: flex;
+    justify-content: space-between;
+
+    padding-top: var(--panel-spacing);
+    border-top: var(--border-strong);
+}
+
+/* ==================================================
+   SIDE PANEL — FOCUS KEYBOARD
+================================================== */
+.side-panel:focus-visible {
+    outline: none;
+}
+
+.side-panel button:focus-visible {
+    outline: 3px solid var(--color-secondary);
+    outline-offset: 3px;
+}

@@ -1,33 +1,112 @@
-import express from "express";
-import dotenv from "dotenv";
-import { connectDB } from "./config/db.js";
-import cors from "cors";
+// ============================================
+// BOOTSTRAP & ENV.
+// ============================================
 
-import authRoutes from "./routes/authRoutes.js";
-import catwayRoutes from "./routes/catwayRoutes.js";
-import reservationGlobalRoutes from "./routes/reservationGlobalRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import documentationRoutes from "./routes/documentationRoutes.js";
+import "dotenv/config";
 
-dotenv.config();
+// ============================================
+// DATABASE
+// ============================================
 
+import { connectDB } from "./api/config/db.js";
 connectDB();
+
+// ============================================
+// CORE DEPENDENCIES
+// ============================================
+
+import express from "express";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+import expressLayouts from "express-ejs-layouts";
+
+// ============================================
+// APPLICATION MIDDLEWARE
+// ============================================
+
+import sidebarClock from "./web/middlewares/sidebarClock.js";
+import { sessionMiddleware } from "./web/configs/sessionConfig.js";
+import { exposeSessionData } from "./web/middlewares/sessionExpose.js";
+import { normalizeRequest } from "./web/middlewares/normalizeRequest.js";
+import { exposeFlash } from "./web/middlewares/flashExpose.js";
+
+// ============================================
+// ROUTES
+// ============================================
+
+import { registerWebRoutes } from "./web/routes/index.js";
+import { registerApiRoutes } from "./api/routes/index.js";
+
+// ============================================
+// ERROR HANDLING
+// ============================================
+
+import { notFoundHandler, errorHandler } from "./web/middlewares/errorHandlers.js";
+
+// ============================================
+// APP INIT.
+// ============================================
 
 const app = express();
 
-app.use(express.json());
+// ============================================
+// PROXY CONFIG. (prod.)
+// ============================================
+
+if (process.env.NODE_ENV === "production") {
+    app.set("trust proxy", 1);
+}
+
+// ============================================
+// TEMPLATE ENGINE CONFIG.
+// ============================================
+
+app.use(expressLayouts);
+app.set("layout", "layouts/appLayout"); // → Layout par défaut
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "web/views"));
+
+// ============================================
+// GLOBAL MIDDLEWARES
+// ============================================
+
 app.use(cors());
-app.use("/auth", authRoutes);
-app.use("/api/catways", catwayRoutes);
-app.use("/api/reservations", reservationGlobalRoutes);
-app.use("/api/users", userRoutes);
-app.use("/documentation", documentationRoutes);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(normalizeRequest);
+app.use(express.static("public")); // Fichier statique → accessible via /css, /js, /images
+app.use(sidebarClock);
 
-// Route d'accueil pour vérification du serveur
-app.get("/", (req, res) => {
-    res.send("API Russell - Serveur opérationnel");
-});
+// ============================================
+// SESSION & UI MIDDLEWARES
+// ============================================
 
+app.use(sessionMiddleware);
+app.use(exposeSessionData);
+app.use(exposeFlash);
+
+// ============================================
+// ROUTES
+// ============================================
+
+registerWebRoutes(app);
+registerApiRoutes(app);
+
+// ============================================
+// ERROR HANDLERS
+// ============================================
+
+// app.use(notFoundHandler); // 404 - route inexistante
+// app.use(errorHandler); // 500 - Erreur serveur
+
+// ============================================
+// SERVER START
+// ============================================
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {

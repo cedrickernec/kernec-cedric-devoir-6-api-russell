@@ -1,0 +1,68 @@
+<div class="login-card-wrapper">
+  <section class="login-card">
+    <!--====== HEADER =======-->
+
+    <header class="login-card-text">
+      <h1 class="visually-hidden">Connexion à l'application</h1>
+      <p class="login-title">
+        Bienvenue sur l'API du port de plaisance Russell
+      </p>
+      <p class="login-description">
+        Connectez-vous pour accéder à l'interface de gestion. Si vous ne
+        possédez pas de compte, veuillez contacter un administrateur.
+      </p>
+    </header>
+
+    <!--====== AUTH FORM =======-->
+
+    <form action="/auth/login" method="POST" class="login-form">
+      <label for="email">Email :</label>
+      <input
+        id="email"
+        type="email"
+        name="email"
+        autocomplete="username"
+        autocapitalize="none"
+        spellcheck="false"
+        aria-invalid="<%= error ? 'true' : 'false' %>"
+        required
+      >
+
+      <label for="password">Mot de passe :</label>
+      <div class="password-wrapper">
+        <input
+          id="password"
+          type="password"
+          name="password"
+          autocomplete="current-password"
+          aria-invalid="<%= error ? 'true' : 'false' %>"
+          required
+        >
+        <button
+          type="button"
+          class="toggle-password"
+        >
+          <i class="fa-solid fa-eye" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <button type="submit" class="btn btn-confirm">Se connecter</button>
+    </form>
+
+    <% if (error) { %>
+    <p class="error-message" role="alert"><%= error %></p>
+    <% } %>
+  </section>
+
+  <!--====== DOCUMENTATION =======-->
+
+  <a
+    href="/documentation"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="doc-link"
+    title="Consulter la documentation API"
+  >
+    <i class="fa-solid fa-book"></i>
+  </a>
+</div>

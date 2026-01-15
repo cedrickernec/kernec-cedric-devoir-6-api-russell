@@ -1,0 +1,269 @@
+/* =====================================================
+   FORM CONTAINER
+   ===================================================== */
+
+.form {
+    width: 520px;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+}
+
+/* =====================================================
+   FORM GROUPS
+   ===================================================== */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin-bottom: 1.125rem;
+}
+
+.form-group label {
+    font-weight: bold;
+    font-size: 0.875rem;
+}
+
+.form-group label > i {
+    margin-left: 8px;
+}
+
+.form-hint {
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+/* =====================================================
+   FORM CONTROLS
+   ===================================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: var(--border-strong);
+    font-size: 0.875rem;
+    transition: border 0.2s ease, background 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    background: var(--accent-tertiary);
+    border-color: var(--accent-primary);
+}
+
+/* =====================================================
+   CHECKBOX
+   ===================================================== */
+
+input[type="checkbox"] {
+    accent-color: var(--accent-primary);
+}
+
+.checkbox-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.3;
+    cursor: pointer;
+}
+
+.checkbox-inline input[type="checkbox"] {
+    flex-shrink: 0;
+    margin: 0;
+}
+
+/* =====================================================
+   FORM STATES
+   ===================================================== */
+
+.form-group.has-error input {
+    border-color: var(--danger-2);
+    background-color: var(--danger-accent);
+}
+
+.form-group.has-error label {
+    color: var(--danger-2);
+}
+
+/* =====================================================
+   FORM MESSAGES
+   ===================================================== */
+
+.form-error,
+.form-feedback,
+.password-rules,
+.password-rules-error {
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.form-error,
+.form-feedback.error {
+    color: var(--danger-2);
+}
+
+.form-feedback:empty {
+    display: none;
+}
+
+/* =====================================================
+   LOCKED FIELD
+   ===================================================== */
+
+.locked-field {
+    color: var(--color-secondary);
+    cursor: default;
+}
+
+/* =====================================================
+   PASSWORD FIELD
+   ===================================================== */
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--color-secondary);
+}
+
+.toggle-password:hover {
+    color: var(--accent-primary);
+}
+
+/* =====================================================
+   PASSWORD RULES (DYNAMIC)
+   ===================================================== */
+
+.password-rules {
+    display: none;
+    padding-left: 1rem;
+}
+
+.password-rules.visible {
+    display: block;
+}
+
+.password-rules li {
+    list-style: none;
+    margin-bottom: 4px;
+}
+
+/* Règle validée → masquée */
+.password-rules li.valid {
+    display: none;
+}
+
+/* Règle invalide */
+.password-rules li.error {
+    color: var(--color-secondary);
+}
+
+/* Erreur backend affichée au-dessus des règles */
+.password-rules-error {
+    padding-left: 18px;
+    color: var(--danger-2);
+}
+
+/* =====================================================
+   PASSWORD STRENGTH BAR
+   ===================================================== */
+
+.password-strength,
+.password-strength-label {
+    display: none;
+}
+
+.password-strength.visible,
+.password-strength-label.visible {
+    display: block;
+}
+
+.password-strength {
+    height: 6px;
+    background: #e6e6e6;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.password-strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.password-strength-label.visible {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--color-tertiary);
+}
+
+/* =====================================================
+   FORM ACTIONS
+   ===================================================== */
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 13px;
+    margin-top: 24px;
+}
+
+/* =====================================================
+   VARIANTS
+   ===================================================== */
+
+.form--side {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 260px;
+}
+
+.form--btn-only {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    max-width: none;
+}
+
+.form-group--row {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+}
+
+.form-group--dates,
+.form-group--dates .form-group {
+    margin-bottom: 0;
+}
+
+.form-actions--split {
+    justify-content: space-between;
+    margin-top: auto;
+    border-top: var(--border-strong);
+    padding-top: 18px;
+}

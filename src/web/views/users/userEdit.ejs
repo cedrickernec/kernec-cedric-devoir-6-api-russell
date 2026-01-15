@@ -1,0 +1,96 @@
+<h1>Modification de l'utilisateur</h1>
+
+<form
+  method="POST"
+  action="/users/<%= user._id %>/edit"
+  class="form"
+  data-password-rules="<%- JSON.stringify(passwordRules || []) %>"
+  data-entity-id="<%= user._id %>"
+>
+  <!--====== USERNAME =======-->
+
+  <div class="form-group <%= errors.username ? 'has-error' : '' %>">
+    <label for="username">Nom d'utilisateur</label>
+    <input
+      type="text"
+      id="username"
+      name="username"
+      value="<%= user.username %>"
+      aria-invalid="<%= errors.username ? 'true' : 'false' %>"
+      required
+    >
+    <% if (errors.username) { %>
+    <p class="form-error"><%= errors.username %></p>
+    <% } %>
+  </div>
+
+  <!--====== EMAIL =======-->
+
+  <div class="form-group <%= errors.email ? 'has-error' : '' %>">
+    <label for="email">Email</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      aria-describedby="email-feedback"
+      value="<%= user.email %>"
+      aria-invalid="<%= errors.email ? 'true' : 'false' %>"
+      autocomplete="off"
+      required
+    >
+    <p
+      id="email-feedback"
+      class="form-feedback <%= errors.email ? '' : 'hidden' %>"
+    >
+      <%= errors.email || "" %>
+    </p>
+  </div>
+
+  <!--====== PASSWORD =======-->
+
+  <div class="form-group <%= errors.password ? 'has-error' : '' %>">
+    <label for="password">
+      Mot de passe <small>(laisser vide pour ne pas modifier)</small>
+    </label>
+    <div class="password-wrapper">
+      <input
+        type="password"
+        id="password"
+        name="password"
+        autocomplete="new-password"
+        aria-invalid="<%= errors.password ? 'true' : 'false' %>"
+      >
+      <button
+        type="button"
+        class="toggle-password"
+        aria-label="Afficher/Masquer le mot de passe"
+      >
+        <i class="fa-solid fa-eye"></i>
+      </button>
+    </div>
+
+    <div class="password-strength">
+      <div id="password-strength-bar" class="password-strength-bar"></div>
+    </div>
+    <p id="password-strength-label" class="password-strength-label"></p>
+
+    <% if (errors.password?.message) { %>
+    <p class="form-error"><%= errors.password.message %></p>
+    <% } %>
+    <%- include("../partials/passwordRules.ejs", { passwordRules, errors }) %>
+  </div>
+
+  <!--====== BUTTONS ACTIONS =======-->
+
+  <div class="form-actions">
+    <a href="/users" class="btn btn-cancel">Annuler</a>
+    <button type="submit" class="btn btn-confirm">Enregistrer</button>
+  </div>
+</form>
+
+<!--====== SCRIPTS =======-->
+
+<script src="/js/form/availableEmail.js" defer></script>
+<script src="/js/form/passwordValidation.js" defer></script>
+<script src="/js/ui/form/passwordEye.js" defer></script>
+<script src="/js/ui/form/formErrorCleanup.js" defer></script>

@@ -1,0 +1,110 @@
+/* =====================================================
+   SESSION WARNING WRAPPER
+   ===================================================== */
+
+.session-warning {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-overlay);
+
+    transition: opacity 0.3s ease;
+}
+
+/* =====================================================
+   SESSION WARNING CONTENT
+   ===================================================== */
+
+.session-warning-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background: white;
+    width: 420px;
+    max-width: 90%;
+    border-radius: 12px;
+    padding: 24px 28px;
+
+    box-shadow: var(--box-shadow-lg);
+    animation: popupFadeIn 0.35s ease;
+}
+
+/* =====================================================
+   SESSION WARNING HEADER
+   ===================================================== */
+
+.session-warning-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.session-warning-header i {
+    font-size: 22px;
+    color: var(--accent-primary);
+}
+
+.session-warning-header h3 {
+    font-size: 1.125rem;
+    margin: 0;
+}
+
+/* =====================================================
+   SESSION WARNING TEXT
+   ===================================================== */
+
+.session-warning-text {
+    font-size: 0.875rem;
+    color: var(--color-secondary);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.session-warning-text p:last-child {
+    font-weight: bold;
+}
+
+/* =====================================================
+   SESSSION WARNING ACTIONS
+   ===================================================== */
+
+.session-warning-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.session-warning-actions .btn {
+    min-width: 150px;
+    font-size: 0.875rem;
+}
+
+/* =====================================================
+   SESSION WARNING DEV HINT
+   ===================================================== */
+
+.dev-hint {
+    font-size: 0.6875rem;
+    opacity: 0.6;
+    margin-top: 16px;
+}
+
+/* =====================================================
+   SESSION WARNING ANIMATION
+   ===================================================== */
+
+@keyframes popupFadeIn {
+    from {
+        transform: translateY(10px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}

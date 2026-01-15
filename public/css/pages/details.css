@@ -1,0 +1,48 @@
+/* ======================================================
+   DETAILS CARD
+   ====================================================== */
+
+.detail-card {
+    max-width: 752px;
+    padding: var(--detail-page-p-m);
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow-sm);
+}
+
+/* ======================================================
+   DETAILS CONTENT
+   ====================================================== */
+
+.detail-list {
+    display: grid;
+    gap: 16px;
+    border-bottom: var(--border-strong);
+    padding-bottom: var(--detail-page-p-m);
+    margin-bottom: var(--detail-page-p-m);
+}
+
+.detail-list dt {
+    font-weight: bold;
+}
+
+.detail-list dd {
+    margin: 0;
+    word-break: break-word;
+}
+
+.detail-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+/* ======================================================
+   DETAILS BUTTONS ACTIONS
+   ====================================================== */
+
+.detail-action {
+    display: flex;
+    justify-content: space-between;
+}

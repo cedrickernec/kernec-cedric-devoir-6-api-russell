@@ -22,10 +22,14 @@
   "homepage": "https://github.com/cedrickernec/kernec-cedric-devoir-6-api-russell#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "connect-mongo": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
     "espress": "^0.0.0",
     "express": "^5.2.1",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.0.1"
   },

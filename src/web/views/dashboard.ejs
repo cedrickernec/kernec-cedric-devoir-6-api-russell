@@ -1,0 +1,88 @@
+<h1>Tableau de bord</h1>
+
+<!-- ======================== USER INFO =========================== -->
+
+<section class="user-info" aria-labelledby="user-info-title">
+  <h2 id="user-info-title" class="visually-hidden">Informations utilisateur</h2>
+
+  <div class="user-box">
+    <p>
+      <i class="fa-solid fa-user"></i> <%= user.username %> (<%= user.email %>)
+    </p>
+    <p><%= today %></p>
+  </div>
+</section>
+
+<!-- ======================== RESERVATIONS =========================== -->
+
+<h2>Réservations en cours / à venir</h2>
+
+<section class="table-section">
+
+  <div class="table-wrapper">
+  <table class="data-table data-table--fixed">
+    <caption class="sr-only">
+      Liste des réservations en cours et à venir avec client, bateau, catway, période et statut
+    </caption>
+    <colgroup>
+      <col class="col-auto">
+      <col class="col-auto">
+      <col class="col-catway">
+      <col class="col-date">
+      <col class="col-dash">
+      <col class="col-date">
+      <col class="col-status">
+    </colgroup>
+      <thead>
+        <tr>
+          <th scope="col" class="align-right">Client</th>
+          <th scope="col" class="align-left">Bateau</th>
+          <th scope="col" class="align-center border-col-left border-col-right">Catway</th>
+          <th scope="col" class="align-center separator">Début</th>
+          <th aria-hidden="true" class="align-center">&ndash;</th>
+          <th scope="col" class="align-center">Fin</th>
+          <th scope="col" class="align-center border-col-left">Statut</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if (dashboardError) { %>
+          <tr>
+            <td colspan="7" class="no-data no-data--error">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <%= dashboardError %>
+            </td>
+          </tr>
+
+        <% } else if (reservations.length === 0) { %>
+        <tr>
+          <td colspan="7" class="no-data">Aucune réservation à venir.</td>
+        </tr>
+        
+        <% } else { %> <% for (let i = 0; i < reservations.length; i++) { %>
+        <tr>
+          <td class="align-right"><%= reservations[i].clientName %></td>
+          <td class="align-left bold"><%= reservations[i].boatName %></td>
+          <td class="align-center border-col-left border-col-right"><%= reservations[i].catwayNumber %></td>
+          <td class="align-center separator">
+            <%= reservations[i].startDateFormatted %>
+          </td>
+          <td class="align-center" aria-hidden="true">&ndash;</td>
+          <td class="align-center">
+            <%= reservations[i].endDateFormatted %>
+          </td>
+          <td class="align-center border-col-left">
+            <% const now = new Date(); const start = new
+            Date(reservations[i].startDate); const end = new
+            Date(reservations[i].endDate); %> <% if (now < start) { %>
+            <span class="status status--upcoming" aria-label="Réservation à venir">À venir</span>
+            <% } else if (now >= start && now <= end) { %>
+            <span class="status status--active" aria-label="Réservation en cours">En cours</span>
+            <% } %>
+          </td>
+        </tr>
+        <% } %> <% } %>
+      </tbody>
+    </table>
+  </div>
+</section>

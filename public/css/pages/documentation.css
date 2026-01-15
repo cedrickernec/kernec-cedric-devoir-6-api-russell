@@ -1,0 +1,150 @@
+/* ======================================================
+   DOC - MENU (SIDEBAR)
+   ====================================================== */
+
+.menu-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #0066cc;
+    margin: 8px 0;
+    font-size: 1.15rem;
+    background: none;
+    border: none;
+}
+
+.menu-title::before {
+    content: "▶ ";
+    font-size: 0.7em;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.menu-title.open::before {
+    transform: rotate(90deg);
+}
+
+.menu-list {
+    max-height: 0;
+    overflow: hidden;
+    list-style: none;
+    margin: 0;
+    padding-left: 12px;
+    transition: max-height 0.3s ease;
+}
+
+.menu-list.open {
+    display: block;
+    max-height: 500px;
+}
+
+.menu-list li {
+    margin: 4px 0;
+}
+
+.menu-list a {
+    text-decoration: none;
+    color: #333;
+    font-size: 0.875rem;
+}
+
+.menu-list a:hover {
+    color: #0066cc;
+}
+
+.menu-group:last-child {
+    margin-bottom: 0;
+}
+
+/* ======================================================
+   DOC - CONTENT
+   ====================================================== */
+
+.content h2 {
+    margin-top: 40px;
+    color: #333;
+    font-size: 1.375rem;
+    border-left: 4px solid #0066cc;
+    padding-left: 10px;
+    border-radius: 5px 0 0 5px;
+}
+
+.content h2:first-child {
+    margin-top: 0;
+}
+
+[id] {
+    scroll-margin-top: 80px;
+}
+
+/* ======================================================
+   DOC - ROUTE BLOCKS
+   ====================================================== */
+
+.route-block {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.method {
+    font-weight: bold;
+    color: #0066cc;
+}
+
+.example-title {
+    font-weight: bold;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ======================================================
+   DOC - DETAILS (ACCORDIONS)
+   ====================================================== */
+
+details {
+    margin-top: 10px;
+}
+
+details summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+    list-style: none;
+}
+
+details summary::before {
+    content: "▶ ";
+    font-size: 0.75em;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+details[open] summary::before {
+    transform: rotate(90deg);
+}
+
+/* ======================================================
+   DOC - ERROR TYPES
+   ====================================================== */
+
+.error-type {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 12px 0;
+    border-left: 4px solid #ed6767ff;
+    padding-left: 10px;
+}
