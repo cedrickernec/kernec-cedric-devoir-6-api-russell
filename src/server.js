@@ -43,7 +43,8 @@ import { registerApiRoutes } from "./api/routes/index.js";
 // ERROR HANDLING
 // ============================================
 
-import { notFoundHandler, errorHandler } from "./web/middlewares/errorHandlers.js";
+import { webNotFoundHandler, webErrorHandler } from "./web/middlewares/webErrorHandlers.js";
+import { apiNotFoundHandler, apiErrorHandler } from "./api/middlewares/apiErrorHandlers.js";
 
 // ============================================
 // APP INIT.
@@ -103,8 +104,10 @@ registerApiRoutes(app);
 // ERROR HANDLERS
 // ============================================
 
-app.use(notFoundHandler); // 404 - route inexistante
-app.use(errorHandler); // 500 - Erreur serveur
+app.use("/api", apiNotFoundHandler); // 404 - route inexistante
+app.use("/api", webErrorHandler); // 500 - Erreur serveur
+app.use(webNotFoundHandler); // 404 - route inexistante
+app.use(webErrorHandler); // 500 - Erreur serveur
 
 // ============================================
 // SERVER START
