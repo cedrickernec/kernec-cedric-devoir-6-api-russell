@@ -16,7 +16,7 @@ initEntityPanel({
   editBaseUrl: "/catways",
   editTitle: "Éditer le catway",
   deleteConfig: {
-    baseUrl: "/catways",
+    baseUrl: "/catways/ajax",
     confirmMessage: CATWAY_MESSAGES.DELETE_CONFIRM,
     type: "catway"
   },

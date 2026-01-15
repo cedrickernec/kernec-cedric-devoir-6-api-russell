@@ -33,6 +33,37 @@ export const getCatwaysPage = async (req, res, next) => {
 };
 
 /* ==================================================
+  CATWAY DETAILS - FULL PAGE (BY ID)
+================================================== */
+
+export const getCatwayById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { from, id: reservationId } = req.query;
+    const catway = await Catway.findById(id);
+
+    if (!catway) {
+      const error = new Error(CATWAY_MESSAGES.NOT_FOUND)
+      error.status = 404;
+      return next(error);
+    }
+
+    const catwayViewModel = mapCatwayToDetail(catway);
+
+    res.render("catways/catwayDetails", {
+      title: "Détail catway",
+      activePage: "catways",
+      catway: catwayViewModel,
+      from,
+      reservationId
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* ==================================================
   CATWAY DETAILS - FULL PAGE (BY NUMBER)
 ================================================== */
 
@@ -54,6 +85,7 @@ export const getCatwayByNumber = async (req, res, next) => {
       title: "Détail catway",
       activePage: "catways",
       catway: catwayViewModel,
+      catwayId: catway._id,
       from,
       reservationId
     });
@@ -69,8 +101,8 @@ export const getCatwayByNumber = async (req, res, next) => {
 
 export const getCatwayPanel = async (req, res) => {
   try {
-    const catwayNumber = Number(req.params.catwayNumber);
-    const catway = await Catway.findOne({ catwayNumber });
+    const { id } = req.params;
+    const catway = await Catway.findById(id);
 
     if (!catway) {
       return res.status(404).render("partials/panels/panelError", {
@@ -118,12 +150,41 @@ export const getCreateCatwayPage = async (req, res, next) => {
 };
 
 /* ==================================================
-  EDIT CATWAY PAGE
+  EDIT CATWAY PAGE (BY ID)
 ================================================== */
 
-export const getEditCatwayPage = async (req, res, next) => {
+export const getEditCatwayById = async (req, res, next) => {
+  try {
+    const catway = await Catway.findById(req.params.id);
+
+    if (!catway) {
+      return next();
+    }
+
+    res.render("catways/catwayEdit", {
+      title: "Éditer un catway",
+      activePage: "catways",
+      catway,
+      errors: {},
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* ==================================================
+  EDIT CATWAY PAGE (BY NUMBER)
+================================================== */
+
+export const getEditCatwayByNumber = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
+
+    if (Number.isNaN(catwayNumber)) {
+      return next();
+    }
+
     const catway = await Catway.findOne({ catwayNumber });
 
     if (!catway) {

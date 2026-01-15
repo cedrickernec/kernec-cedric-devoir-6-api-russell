@@ -35,13 +35,13 @@ export function registerWebRoutes(app) {
 
     app.use("/users", usersViewRoutes);
     app.use("/users", usersFormRoutes);
-    app.use("/users", usersAjaxRoutes);
+    app.use("/users/ajax", usersAjaxRoutes);
 
     app.use("/catways", catwaysViewRoutes);
     app.use("/catways", catwaysFormRoutes);
-    app.use("/catways", catwaysAjaxRoutes);
+    app.use("/catways/ajax", catwaysAjaxRoutes);
 
     app.use("/reservations", reservationsViewRoutes);
     app.use("/reservations", reservationsFormRoutes);
-    app.use("/reservations", reservationsAjaxRoutes);
+    app.use("/reservations/ajax", reservationsAjaxRoutes);
 }

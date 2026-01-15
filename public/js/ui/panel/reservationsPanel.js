@@ -16,7 +16,7 @@ initEntityPanel({
   editBaseUrl: "/reservations",
   editTitle: "Éditer la réservation",
   deleteConfig: {
-    baseUrl: "/reservations",
+    baseUrl: "/reservations/ajax",
     confirmMessage: RESERVATION_MESSAGES.DELETE_CONFIRM,
     type: "reservation"
   },

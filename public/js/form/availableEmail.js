@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const res = await fetch(
-          `/users/check-email?${params.toString()}`,
+          `/users/ajax/check-email?${params.toString()}`,
           { credentials: "same-origin" }
         );
 
