@@ -1,18 +1,15 @@
 /**
- * --------------------------------------------------------------------
- * Gestionnaires d'erreurs globales (API)
- * --------------------------------------------------------------------
+ * ===================================================================
+ * API ERROR HANDLERS
+ * ===================================================================
  * - Gestion des erreurs 404
- * - Gestion centralisée des erreurs
+ * - Gestion centralisée des erreurs globales
+ * ===================================================================
  */
-
-// ==================================================
-// 404 - ROAD NOT FOUND
-// ==================================================
 
 export const apiNotFoundHandler = (req, res) => {
     res.status(404).json({
-        success: "false",
+        success: false,
         error: "Route API introuvable",
         path: req.originalUrl
     });
@@ -27,8 +24,14 @@ export const apiErrorHandler = (err, req, res, next) => {
 
     const response = {
         success: false,
-        error: err.message || "Erreur serveur"
+        error: status === 500
+          ? "Erreur serveur"
+          : err.message
     };
+
+    if (err.details) {
+        response.details = err.details;
+    }
 
     if (process.env.NODE_ENV === "development") {
         response.stack = err.stack;
