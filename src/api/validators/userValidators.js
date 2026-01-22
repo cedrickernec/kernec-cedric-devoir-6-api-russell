@@ -45,7 +45,7 @@ export const validatePassword = (password) => {
   };
 
   if (!password) {
-    return { valid: false, errors: { general: "Le mot de passe est requis." } };
+    return { valid: false, errors: "Le mot de passe est requis." };
   }
 
   const validations = {
@@ -100,7 +100,7 @@ export function validateUserUpdate(body) {
   }
 
   return errors
-}
+};
 
 // =====================================
 // VALIDATION CRÉATION UTILISATEUR
@@ -126,4 +126,4 @@ export function validateUserCreate({ username, email, password }) {
   }
 
   return errors;
-}
+};

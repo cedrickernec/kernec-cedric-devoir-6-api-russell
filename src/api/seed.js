@@ -3,9 +3,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 
-import { connectDB } from "../config/db.js";
-import Catway from "../models/Catway.js";
-import Reservation from "../models/Reservation.js";
+import { connectDB } from "./config/db.js";
+import Catway from "./models/Catway.js";
+import Reservation from "./models/Reservation.js";
 
 dotenv.config();
 

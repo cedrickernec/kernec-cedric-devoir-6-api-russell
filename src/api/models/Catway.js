@@ -8,6 +8,7 @@ const CatwaySchema = new mongoose.Schema({
     },
     catwayType: {
         type: String,
+        enum: ["short", "long"],
         required: true,
     },
     catwayState: {
@@ -23,5 +24,9 @@ const CatwaySchema = new mongoose.Schema({
     timestamps: true
 }
 );
+
+CatwaySchema.methods.isUnavailable = function () {
+    return this.isOutOfService === true;
+};
 
 export default mongoose.model("Catway", CatwaySchema);

@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import {
-    getReservationsForCatway,
+    getReservationsByCatway,
     getReservationById,
     createReservation,
     updateReservation,
@@ -11,9 +11,8 @@ import {
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = Router({ mergeParams: true });
-
 // Routes Reservation → /api/catways/:id/reservations
-router.get("/", authMiddleware, getReservationsForCatway);
+router.get("/", authMiddleware, getReservationsByCatway);
 router.get("/:idReservation", authMiddleware, getReservationById);
 router.post("/", authMiddleware, createReservation);
 router.put("/:idReservation", authMiddleware, updateReservation);

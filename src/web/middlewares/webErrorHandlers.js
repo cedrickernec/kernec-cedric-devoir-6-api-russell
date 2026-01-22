@@ -1,6 +1,6 @@
 /**
  * --------------------------------------------------------------------
- * Gestionnaires d'erreurs globales
+ * Gestionnaires d'erreurs globales (WEB)
  * --------------------------------------------------------------------
  * - Gestion des erreurs 404
  * - Gestion centralisée des erreurs
@@ -11,7 +11,7 @@
 // 404 - PAGE NOT FOUND
 // ==================================================
 
-export const notFoundHandler = (req, res) => {
+export const webNotFoundHandler = (req, res) => {
     res.status(404).render("errors/404", {
         layout: "layouts/errorLayout",
         title: "Page introuvable"
@@ -22,7 +22,7 @@ export const notFoundHandler = (req, res) => {
 // GLOBAL ERROR
 // ==================================================
 
-export const errorHandler = (err, req, res, next) => {
+export const webErrorHandler = (err, req, res, next) => {
     const status = err.status || 500;
 
     const ui =

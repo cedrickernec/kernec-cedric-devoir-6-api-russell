@@ -1,0 +1,36 @@
+<!-- ======================================================
+  CATWAYS - GET ALL
+  ========================================================= -->
+
+<div class="route-block">
+  <p id="catways-list">
+    <span class="method">GET</span> <code>/api/catways</code> - Liste des
+    catways
+  </p>
+
+  <!-- ========== SUCCESS ========== -->
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+    "success": true,
+    "count": 24,
+    "catways": [
+      {
+        "id": "...",
+        "Number": 1,
+        "Type": "short",
+        "State": "bon état",
+        "isOutOfService": false,
+        "createdAt": "2026-01-13T00:05:11.320Z",
+        "updatedAt": "2026-01-13T00:06:20.674Z"
+      },
+      ...
+  ]
+}</code></pre>
+  </details>
+</div>

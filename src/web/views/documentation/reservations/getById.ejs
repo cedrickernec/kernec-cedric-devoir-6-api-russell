@@ -1,0 +1,91 @@
+<!-- ======================================================
+  RESERVATIONS - GET BY ID
+  ========================================================= -->
+
+<div class="route-block">
+  <p id="reservations-get">
+    <span class="method">GET</span>
+    <code>/api/catways/:id/reservations/:idReservation</code> - Voir une
+    réservation
+  </p>
+
+  <!-- ========== SUCCESS ========= -->
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+    "success": true,
+    "reservation": {
+        "catway": {
+            "number": 1
+        },
+        "client": {
+            "name": "Thomas Martin",
+            "boat": "Carolina"
+        },
+        "reservation": {
+            "id": "...",
+            "start": "2024-05-21T06:00:00.000Z",
+            "end": "2024-10-27T06:00:00.000Z",
+            "createdAt": "2026-01-08T12:56:04.016Z",
+            "updatedAt": "2026-01-09T18:24:25.845Z"
+        }
+    }
+}</code></pre>
+  </details>
+
+  <!-- ========== ERRORS ========= -->
+  <details>
+    <summary>Erreurs possibles</summary>
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <!-- ID CATWAY INVALIDE -->
+    <p class="error-type">Identifiant catway invalide</p>
+    
+    <pre><code>{
+    "success": false,
+    "error": "Numéro de catway invalide."
+}</code></pre>
+
+    <!-- ID RESERVATION INVALIDE -->
+    <p class="error-type">Identifiant réservation invalide</p>
+    
+    <pre><code>{
+    "success": false,
+    "error": "Identifiant reservation invalide."
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <!-- CATWAY INTROUVABLE -->
+    <p class="error-type">Catway introuvable</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Catway introuvable.",
+    "details": {
+        "catwayNumber": 32
+    }
+}</code></pre>
+
+    <!-- RÉSERVATION INTROUVABLE -->
+    <p class="error-type">Réservation introuvable</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Réservation introuvable.",
+    "details": {
+        "catwayNumber": 5,
+        "idReservation": "..."
+    }
+}</code></pre>
+  </details>
+</div>

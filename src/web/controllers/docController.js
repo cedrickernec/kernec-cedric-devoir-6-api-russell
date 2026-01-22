@@ -8,7 +8,7 @@
 
 export const getDocumentation = (req, res, next) => {
     try {
-        res.render("documentation", {
+        res.render("documentation/documentation", {
             title: "Documentation de l'API Russell",
             layout: "layouts/docLayout"
         });
