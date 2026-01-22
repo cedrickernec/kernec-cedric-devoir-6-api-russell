@@ -1,116 +1,45 @@
+/**
+ * ===================================================================
+ * AUTH CONTROLLERS
+ * ===================================================================
+ * - Fait le lien entre l'API et la logique métier :
+ *      - Gère les requêtes HTTP
+ *      - Appelle les services
+ *      - Construit les réponses HTTP
+ * ===================================================================
+ */
+
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import User from "../models/User.js";
-
-import { validateUsername, validateEmail, validatePassword } from "../utils/validators/userValidators.js";
-
-// ===============================================
-// INSCRIPTION
-// ===============================================
-export const signup = async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
-
-        // 1) Vérification → Email déjà utilisé ?
-        const existingUser = await User.findOne({ email });
-
-        if (existingUser) {
-            return res.status(400).json({
-                message: "Un utilisateur avec cet email existe déjà."
-            });
-        }
-
-        // 2) Vérification champs obligatoires
-        if (!username || !email || !password) {
-            return res.status(400).json({
-                message: "Tous les champs sont obligatoires."
-            })
-        }
-
-        // 3) Validation du nom d'utilisateur
-        const usernameError = validateUsername(username);
-
-        if (usernameError) {
-            return res.status(400).json({ message: usernameError });
-        }
-
-        // 4) Validation de l'email
-        const emailError = validateEmail(email);
-
-        if (emailError) {
-            return res.status(400).json({ message: emailError });
-        }
-
-        // 5) Validation du password
-        const passwordValidation = validatePassword(password);
-
-        if (!passwordValidation.valid) {
-            return res.status(400).json({
-                message: "Le mot de passe ne respecte pas les règles de sécurité.",
-                error: passwordValidation.errors
-            });
-        }
-
-        // 6) Hash du password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // 7) Création du nouvel utilisateur
-        const newUser = await User.create({
-            username,
-            email,
-            password: hashedPassword,
-        })
-
-        // 8) Réponse → succès
-        res.status(201).json({
-            message: "Utilisateur créé avec succès.",
-            user: {
-                id: newUser._id,
-                username: newUser.username,
-                email: newUser.email
-            }
-        })
-
-    } catch (error) {
-        res.status(500).json({ message: "Erreur serveur", error: error.message });
-    }
-};
+import { loginService } from "../services/authService.js";
+import { pickAllowedFields } from "../utils/errors/pickAllowedFields.js";
 
 // ===============================================
 // CONNEXION
 // ===============================================
-export const login = async (req, res) => {
+
+export const login = async (req, res, next) => {
     try {
+      // 1) Filtrage strict
+        const allowedFields = [
+            "email",
+            "password"
+        ];
+
+        const cleanData = pickAllowedFields(req.body, allowedFields);
+
+        // 2) Validation
         const { email, password } = req.body;
 
-        // 1) Vérification → utilisateur existant ?
-        const user = await User.findOne({ email });
-
-        if (!user) {
-            return res.status(400).json({
-                message: "Email ou mot de passe incorrect."
-            });
+        if (!email || !password) {
+            throw new ApiError(400, "Email et mot de passe requis.")
         }
 
-        // 2) Vérification du mot de passe
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid) {
-            return res.status(400).json({
-                message: "Email ou mot de passe incorrect."
-            });
-        }
-
-        // 3) Génération du token JWT
-        const token = jwt.sign(
-            { id: user._id, email: user.email },
-            process.env.JWT_SECRET,
-            { expiresIn: "1h" }
-        )
+        // 3) Authentification
+        const { token, user} = await loginService(email, password);
 
         // 4) Réponse
         res.status(200).json({
+            success: true,
             message: "Connexion réussi.",
             token,
             user: {
@@ -121,17 +50,22 @@ export const login = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ message: "Erreur serveur", error: error.message });
+        next(error);
     }
 };
 
 // ===============================================
 // DÉCONNEXION
 // ===============================================
-export const logout = async (req, res) => {
+
+export const logout = async (req, res, next) => {
     try {
-        return res.status(200).json({ message: "Déconnecté avec succès."});
+        return res.status(200).json({
+            success: true,
+            message: "Déconnecté avec succès."
+        });
+
     } catch (error) {
-        res.status(500).json({ message: "Serveur erreur", error: error.message });
+        next(error);
     }
 };

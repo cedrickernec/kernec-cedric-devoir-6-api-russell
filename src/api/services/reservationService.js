@@ -1,0 +1,269 @@
+/**
+ * ============================================================
+ * RESERVATION SERVICE
+ * ============================================================
+ * - Décide si une action métier est autorisée :
+ *      - Contient la logique métier de l'application
+ *      - Applique les règles fonctionnelles
+ *      - Appelle les validators, les rules et les repositories
+ * ============================================================
+ */
+
+import {
+    getAllReservations,
+    getReservationsByCatway,
+    findReservationById,
+    createReservation,
+    deleteReservation,
+    findReservationConflict,
+} from "../repositories/reservationRepo.js";
+
+import { findCatwayByNumber } from "../repositories/catwayRepo.js";
+
+import {
+    canUpdateReservation,
+    canDeleteReservation,
+    hasReservationStarted
+} from "./reservationRules.js";
+
+import { parseDate } from "../utils/dates/parseDate.js";
+import { validateReservationPeriod } from "../validators/reservationValidators.js";
+import { normalizeDayRange } from "../utils/dates/normalizeDayRange.js";
+
+import { ApiError } from "../utils/errors/apiError.js";
+
+// ===============================================
+// GET ALL RESERVATION
+// ===============================================
+
+export async function getAllReservationsService() {
+
+    return getAllReservations();
+}
+
+// ===============================================
+// GET RESERVATIONS BY CATWAY
+// ===============================================
+
+export async function getReservationsByCatwayService(catwayNumber) {
+
+    const catway = await findCatwayByNumber(catwayNumber);
+
+    if(!catway) {
+        throw new ApiError(
+            404,
+            "Catway introuvable.",
+            { catwayNumber }
+        )
+    }
+
+    return getReservationsByCatway(catwayNumber);
+}
+
+// ===============================================
+// GET RESERVATION BY ID
+// ===============================================
+
+export async function getReservationByIdService(catwayNumber, idReservation) {
+
+    const catway = await findCatwayByNumber(catwayNumber);
+
+    if (!catway) {
+        throw new ApiError(
+            404,
+            "Catway introuvable",
+            { catwayNumber }
+        );
+    }
+
+    const reservation = await findReservationById(catwayNumber, idReservation);
+
+    if (!reservation) {
+        throw new ApiError(
+            404,
+            "Réservation introuvable.",
+            { catwayNumber, idReservation }
+        );
+    }
+
+    return reservation;
+}
+
+// ===============================================
+// CREATE RESERVATION
+// ===============================================
+
+export async function createReservationService(catwayNumber, data) {
+
+    const catway = await findCatwayByNumber(catwayNumber);
+
+    if (!catway) {
+        throw new ApiError(
+            404,
+            "Catway introuvable",
+            { catwayNumber }
+        );
+    }
+
+    if (catway.isUnavailable()) {
+        throw new ApiError(
+            409,
+            "Catway hors service."
+        );
+    }
+
+    const rawStart = parseDate(data.startDate);
+    const rawEnd = parseDate(data.endDate);
+
+    validateReservationPeriod(rawStart, rawEnd);
+
+    const { start, end } = normalizeDayRange(rawStart, rawEnd);
+
+    const conflict = await findReservationConflict({ catwayNumber, start, end });
+
+    if (conflict) {
+        throw new ApiError(
+            409,
+            "Ce catway est déjà réservé sur ce créneau.",
+            { conflictWith: {
+                id: conflict._id,
+                clientName: conflict.clientName,
+                boatName: conflict.boatName,
+                startDate: conflict.startDate,
+                endDate: conflict.endDate,
+                createdAt: conflict.createdAt,
+                updatedAt: conflict.updatedAt
+                }
+            }
+        );
+    }
+
+    return createReservation({ catwayNumber, data });
+}
+
+// ===============================================
+// UPDATE RESERVATION
+// ===============================================
+
+export async function updateReservationService(catwayNumber, idReservation, data) {
+
+    const catway = await findCatwayByNumber(catwayNumber);
+
+    if (!catway) {
+        throw new ApiError(
+            404,
+            "Catway introuvable",
+            { catwayNumber }
+        );
+    }
+
+    const reservation = await findReservationById(catwayNumber, idReservation);
+
+    if (!reservation) {
+        throw new ApiError(
+            404,
+            "Réservation introuvable.",
+            { catwayNumber, idReservation }
+        );
+    }
+
+    if (!canUpdateReservation(reservation)) {
+        throw new ApiError(
+            403,
+            "Cette réservation est terminée et ne peut plus être modifiée."
+        );
+    }
+
+    if (hasReservationStarted(reservation) && data.startDate) {
+
+        const attemptedStart = parseDate(data.startDate);
+
+        if (attemptedStart.getTime() !== reservation.startDate.getTime()) {
+            throw new ApiError(
+                403,
+                "La date de début ne peut plus être modifiée une fois la réservation commencée."
+            );
+        }
+    }
+
+    const rawStart = data.startDate
+        ? parseDate(data.startDate)
+        : reservation.startDate;
+
+    const rawEnd = data.endDate
+        ? parseDate(data.endDate)
+        : reservation.endDate;
+
+    validateReservationPeriod(rawStart, rawEnd);
+
+    const { start, end } = normalizeDayRange(rawStart, rawEnd);
+
+    const conflict = await findReservationConflict({
+        catwayNumber,
+        start,
+        end,
+        excludeId: reservation._id
+    })
+
+    if (conflict) {
+        throw new ApiError(
+            409,
+            "Ce catway est déjà réservé sur ce créneau.",
+            { conflictWith: {
+                id: conflict._id,
+                clientName: conflict.clientName,
+                boatName: conflict.boatName,
+                startDate: conflict.startDate,
+                endDate: conflict.endDate,
+                createdAt: conflict.createdAt,
+                updatedAt: conflict.updatedAt
+                }
+            }
+        );
+    }
+
+    reservation.clientName = data.clientName ?? reservation.clientName;
+    reservation.boatName = data.boatName ?? reservation.boatName;
+    reservation.startDate = start;
+    reservation.endDate = end;
+
+    await reservation.save();
+
+    return reservation;
+}
+
+// ===============================================
+// DELETE RESERVATION
+// ===============================================
+
+export async function deleteReservationService(catwayNumber, idReservation) {
+
+    const catway = await findCatwayByNumber(catwayNumber);
+
+    if (!catway) {
+        throw new ApiError(
+            404,
+            "Catway introuvable",
+            { catwayNumber }
+        );
+    }
+
+    const reservation = await findReservationById(catwayNumber, idReservation);
+
+    if (!reservation) {
+        throw new ApiError(
+            404,
+            "Réservation introuvable.",
+            { catwayNumber, idReservation }
+        );
+    }
+
+    if (!canDeleteReservation(reservation)) {
+        throw new ApiError(
+            403,
+            "Impossible de supprimer une réservation en cours ou terminée."
+        );
+    }
+
+    return deleteReservation(catwayNumber, idReservation);
+}

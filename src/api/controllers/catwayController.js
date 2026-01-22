@@ -1,145 +1,187 @@
-import Catway from "../models/Catway.js";
-import { validateCatwayData } from "../utils/validators/catwayValidators.js";
-import mongoose from "mongoose";
+/**
+ * ===================================================================
+ * CATWAY CONTROLLERS
+ * ===================================================================
+ * - Fait le lien entre l'API et la logique métier :
+ *      - Gère les requêtes HTTP
+ *      - Valide les entrées via les validators
+ *      - Appelle les services
+ *      - Construit les réponses HTTP
+ * ===================================================================
+ */
 
-// ===============================
-// RÉCUPÉRER TOUS LES CATWAYS
-// ===============================
-export const getAllCatways = async (req, res) => {
+import {
+    createCatwayService,
+    deleteCatwayService,
+    getAllCatwaysService,
+    getCatwayByNumberService,
+    updateCatwayService
+} from "../services/catwayService.js";
+
+import {
+    validateCatwayCreate,
+    validateCatwayUpdate
+} from "../validators/catwayValidators.js";
+
+import { validateCatwayNumber } from "../validators/params/idValidator.js";
+
+import {
+    formatCatway, 
+    formatCatwaysList
+} from "../utils/formatters/catwayFormatter.js";
+
+import { pickAllowedFields } from "../utils/errors/pickAllowedFields.js";
+import { ApiError } from "../utils/errors/apiError.js";
+
+// ===============================================
+// GET ALL CATWAYS
+// ===============================================
+
+export const getAllCatways = async (req, res, next) => {
     try {
-        const catways = await Catway.find();
-        res.status(200).json(catways);
+        // 1) Service
+        const catways = await getAllCatwaysService();
 
-    } catch (error) {
-        res.status(500).json({ message: "Erreur serveur", error: error.message });
-    }
-};
-
-// ===============================
-// RÉCUPÉRER UN CATWAY UNIQUE PAR ID
-// ===============================
-export const getCatwayById = async (req, res) => {
-    try {
-        const { id } = req.params;
-        
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(404).json({ message: "Catway introuvable."});
-        }
-        
-        const catway = await Catway.findById(id);
-
-        if (!catway) {
-            return res.status(404).json({ message: "Catway introuvable." });
-        }
-
-        res.status(200).json(catway);
-
-    } catch (error) {
-        res.status(500).json({ message: "Erreur serveur", error: error.message });
-    }
-};
-
-// ===============================
-// CRÉER UN CATWAY
-// ===============================
-export const createCatway = async (req, res) => {
-    try {
-        // 1) Validation
-        const errors = validateCatwayData(req.body);
-
-        if (Object.keys(errors).length > 0) {
-            return res.status(400).json({ message: "Données invalides", errors });
-        }
-
-        // 2) Création
-        const newCatway = await Catway.create(req.body);
-
-        // 3) Réponse → Succès
-        res.status(201).json({
-            message: "Catway créé avec succès.",
-            catway: newCatway
+        // 2) Réponse
+        res.status(200).json({
+            success: true,
+            count: catways.length,
+            message: catways.length === 0
+              ? "Aucun catway trouvé."
+              : undefined,
+            catways: formatCatwaysList(catways)
         });
 
     } catch (error) {
-        // Numéro de catway déjà utilisé
-        if (error.code === 11000 && error.keyPattern?.catwayNumber) {
-
-            // Récupérer le catway existant
-            const existing = await Catway.findOne({ catwayNumber: req.body.catwayNumber });
-
-            return res.status(400).json({
-                message: "Un catway avec ce numéro existe déjà.",
-                existingCatway: existing
-            });
-        }
-
-        res.status(500).json({ message: "Erreur serveur", error: error.message });
+        next(error);
     }
 };
 
-// ===============================
-// MODIFIER UN CATWAY
-// ===============================
-export const updateCatway = async (req, res) => {
+// ===============================================
+// GET CATWAY BY NUMBER
+// ===============================================
+
+export const getCatwayByNumber = async (req, res, next) => {
     try {
-        const {id} = req.params;
+        // 1) Validation ID
+        const catwayNumber = validateCatwayNumber(req.params.id);
+        
+        // 2) Service
+        const catway = await getCatwayByNumberService(catwayNumber);
 
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(404).json({ message: "Catway introuvable."});
+        // 3) Réponse
+        res.status(200).json({
+            success: true,
+            catway: formatCatway(catway)
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+// ===============================================
+// CREATE CATWAY
+// ===============================================
+
+export const createCatway = async (req, res, next) => {
+    try {
+        // 1) Filtrage strict
+        const allowedFields = [
+            "catwayNumber",
+            "catwayType",
+            "catwayState"
+        ];
+
+        const cleanData = pickAllowedFields(req.body, allowedFields);
+
+        // 2) Validation
+        const errors = validateCatwayCreate(cleanData);
+        if (Object.keys(errors).length > 0) {
+            throw new ApiError(400, "Données invalides.", errors);
         }
 
-        // 1) Empêcher la modification du numéro et du type
-        if(req.body.catwayNumber !== undefined || req.body.catwayType !== undefined) {
-            return res.status(400).json({ message: "Le numéro et le type de catway ne peuvent être modifiés."});
+        // 3) Service
+        const created = await createCatwayService(cleanData);
+
+        // 3) Réponse
+        res.status(201).json({
+            success: true,
+            message: "Catway créé avec succès.",
+            catway: formatCatway(created)
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+// ===============================================
+// UPDATE CATWAY
+// ===============================================
+
+export const updateCatway = async (req, res, next) => {
+    try {
+        // 1) Validation ID
+        const catwayNumber = validateCatwayNumber(req.params.id);
+
+        // 2) Filtrage strict
+        const allowedFields = [
+            "catwayState",
+            "isOutOfService"
+        ];
+
+        const cleanData = pickAllowedFields(req.body, allowedFields);
+
+        if (Object.keys(cleanData).length === 0) {
+            throw new ApiError(400, "Aucune donnée valide à mettre à jour.")
         }
 
-        // 2) Filtrer les champs autorisés
-        const updates = {};
-        if (req.body.catwayState)
-            updates.catwayState = req.body.catwayState;
+        // 3) Validation
+        const errors = validateCatwayUpdate(cleanData);
+        if (Object.keys(errors).length > 0) {
+            throw new ApiError(400, "Données invalides.", errors);
+        }
 
-        // 3) Mise à jour
-        const updated = await Catway.findByIdAndUpdate(
-            id,
-            updates,
-            { new: true }
+        // 4) Service
+        const updated = await updateCatwayService(
+            catwayNumber,
+            req.body,
+            cleanData
         );
 
-        if (!updated) {
-            return res.status(404).json({ message: "Catway introuvable."});
-        };
-
-        // 4) Réponse → Succès
+        // 5) Réponse
         res .status(200).json({
+            success: true,
             message: "Catway mis à jour.",
-            catway: updated
+            catway: formatCatway(updated)
         });
 
     } catch (error) {
-        res.status(500).json({ message: "Erreur serveur", error: error.message });
+        next(error);
     }
 };
 
-// ===============================
-// SUPPRIMER UN CATWAY
-// ===============================
-export const deleteCatway = async (req, res) => {
+// ===============================================
+// DELETE CATWAY
+// ===============================================
+
+export const deleteCatway = async (req, res, next) => {
     try{
-        const {id} = req.params;
+        // 1) Validation ID
+        const catwayNumber = validateCatwayNumber(req.params.id);
 
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(404).json({ message: "Catway introuvable."});
-        }
+        // 2) Service
+        const deleted = await deleteCatwayService(catwayNumber);
 
-        const deleted = await Catway.findByIdAndDelete(id);
-        
-        if (!deleted) {
-            return res.status(404).json({ message: "Catway introuvable." });
-        }
-
-        res.status(200).json({ message: "Catway supprimé avec succès." });
+        // 3) Réponse
+        res.status(200).json({
+            success: true,
+            message: "Catway supprimé avec succès.",
+            catway: formatCatway(deleted)
+        });
 
     } catch (error) {
-        res.status(500).json({ message: "Erreur serveur", error: error.message });
+        next(error);
     }
 };
