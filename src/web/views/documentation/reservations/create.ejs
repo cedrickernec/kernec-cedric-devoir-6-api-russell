@@ -1,0 +1,158 @@
+<!-- ======================================================
+  RESERVATIONS - CREATE
+  ========================================================= -->
+
+<div class="route-block">
+  <p id="reservations-create">
+    <span class="method">POST</span>
+    <code>/api/catways/:id/reservations</code> - Créer une réservation
+  </p>
+
+  <!-- ========== SUCCESS ========= -->
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Exemple requête :</p>
+    <pre><code>{
+    "clientName": "Jeanne Doe",
+    "boatName": "Appolica",
+    "startDate": "2026-01-18",
+    "endDate": "2026-11-30"
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">201 Created</span> :
+    </p>
+    <pre><code>{
+    "success": true,
+    "message": "Réservation créée avec succès.",
+    "details": {
+        "catway": {
+            "number": 5
+        },
+        "client": {
+            "name": "Test",
+            "boat": "Test"
+        },
+        "reservation": {
+            "id": "...",
+            "start": "2026-02-01T05:00:00.000Z",
+            "end": "2026-03-15T05:00:00.000Z",
+            "createdAt": "2026-01-21T15:22:23.556Z",
+            "updatedAt": "2026-01-21T15:22:23.556Z"
+        }
+    }
+}</code></pre>
+  </details>
+
+  <!-- ========== ERRORS ========= -->
+  <details>
+    <summary>Erreurs possibles</summary>
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <!-- ID INVALIDE -->
+    <p class="error-type">Identifiant invalide</p>
+    
+    <pre><code>{
+    "success": false,
+    "error": "Numéro de catway invalide."
+}</code></pre>
+
+    <!-- CHAMP NON AUTORISÉ -->
+    <p class="error-type">Champ(s) non autorisé(e)</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Champ(s) non autorisé(s) : nom_du_champ."
+}</code></pre>
+
+    <!-- CHAMPS REQUIS -->
+    <p class="error-type">Contrôle des champs requis</p>
+    
+    <pre><code>{
+    "success": false,
+    "error": "Données invalides.",
+    "details": {
+        "clientName": "Champ obligatoire manquant : Nom du client.",
+        "boatName": "Champ obligatoire manquant : Nom du bateau.",
+        "startDate": "Champ obligatoire manquant : Date d'entrée.",
+        "endDate": "Champ obligatoire manquant : Date de sortie."
+    }
+}</code></pre>
+
+    <!-- FORMATS DATES -->
+    <p class="error-type">Contrôle du format des dates</p>
+    
+    <pre><code>{
+    "success": false,
+    "error": "Format de date invalide. Format attendu : YYYY-MM-DD."
+}</code></pre>
+
+    <!-- DATES CALENDAIRES -->
+    <p class="error-type">Contrôle de validation des dates</p>
+    
+    <pre><code>{
+    "success": false,
+    "error": "Date invalide : le mois et le jour sont incorrects."
+}</code></pre>
+
+    <!-- DATE ENTRÉE < DATE SORTIE -->
+    <p class="error-type">Date d'entrée antérieure à la date de sortie</p>
+    
+    <pre><code>{
+    "success": false,
+    "error": "La date d'entrée doit être antérieure à la date de sortie."
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <!-- CATWAY INTROUVABLE -->
+    <p class="error-type">Catway introuvable</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Catway introuvable.",
+    "details": {
+        "catwayNumber": 32
+    }
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">409 Conflict</span> :
+    </p>
+
+    <!-- CATWAY DÉJÀ RÉSERVÉ -->
+    <p class="error-type">Catway déjà réservé</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Ce catway est déjà réservé sur ce créneau.",
+    "details": {
+        "conflictWith": {
+            "id": "...",
+            "clientName": "Marc Le Goff",
+            "boatName": "Bavaria Cruiser",
+            "startDate": "2026-01-12T06:00:00.000Z",
+            "endDate": "2026-01-14T06:00:00.000Z",
+            "createdAt": "2026-01-08T12:56:04.016Z",
+            "updatedAt": "2026-01-09T18:24:25.845Z"
+        }
+    }
+}</code></pre>
+
+    <!-- CATWAY HS -->
+    <p class="error-type">Catway hors service</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Catway hors service.",
+    "details": {
+        "state": "En cours de réparation. Ne peut être réservée actuellement"
+    }
+}</code></pre>
+  </details>
+</div>

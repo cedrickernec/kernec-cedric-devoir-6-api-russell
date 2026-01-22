@@ -1,0 +1,103 @@
+<!-- ======================================================
+  CATWAYS - UDPATE
+  ========================================================= -->
+
+<div class="route-block">
+  <p id="catways-update">
+    <span class="method">PUT</span> <code>/api/catways/:id</code> - Modifier un
+    catway
+  </p>
+
+  <!-- ========== SUCCESS ========== -->
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Exemple requête :</p>
+    <pre><code>{
+    "isOutOfService": true,
+    "catwayState": "catway instable. À consolider avant de remettre en service."
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+    <pre><code>{
+    "success": true,
+    "message": "Catway mis à jour.",
+    "catway": {
+        "id": "...",
+        "number": 25,
+        "type": "long",
+        "state": "catway instable. À consolider avant de remettre en service.",
+        "isOutOfService": true,
+        "createdAt": "2026-01-21T13:03:12.095Z",
+        "updatedAt": "2026-01-21T13:15:56.410Z"
+    }
+}</code></pre>
+  </details>
+
+  <!-- ========== ERRORS ========== -->
+  <details>
+    <summary>Erreurs possibles</summary>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <!-- IDENTIFIANT INVALIDE -->
+    <p class="error-type">Numéro de catway invalide</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Numéro de catway invalide."
+}</code></pre>
+
+    <!-- CHAMP NON AUTORISÉ -->
+    <p class="error-type">Champ(s) non autorisé(e)</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Champ(s) non autorisé(s) : nom_du_champ."
+}</code></pre>
+
+<!-- CHAMP(S) INVALIDE(S) -->
+<p class="error-type">Contrôle de format des champs</p>
+
+<pre><code>{
+"success": false,
+"error": "Données invalides.",
+"details": {
+    "isOutOfService": "Le champ isOutOfService doit être un booléen.",
+    "catwayState": "L'état du catway doit être une chaîne de caractère non vide."
+}
+}</code></pre>
+
+    <!-- AUCUNE DONNÉE VALIDE À METTRE À JOUR -->
+    <p class="error-type">Aucune donnée valide à mettre à jour</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Aucune donnée valide à mettre à jour."
+}</code></pre>
+
+    <!-- NUMERO ET TYPE NON ÉDITABLE -->
+    <p class="error-type">Numéro et type de catway non éditable</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Le numéro et le type de catway ne peuvent être modifiés."
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <!-- UTILISATEUR INTROUVABLE -->
+    <p class="error-type">Utilisateur introuvable</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Utilisateur introuvable."
+}</code></pre>
+  </details>
+</div>

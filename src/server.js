@@ -105,7 +105,7 @@ registerApiRoutes(app);
 // ============================================
 
 app.use("/api", apiNotFoundHandler); // 404 - route inexistante
-app.use("/api", webErrorHandler); // 500 - Erreur serveur
+app.use("/api", apiErrorHandler); // 500 - Erreur serveur
 app.use(webNotFoundHandler); // 404 - route inexistante
 app.use(webErrorHandler); // 500 - Erreur serveur
 

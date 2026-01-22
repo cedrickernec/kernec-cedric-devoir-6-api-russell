@@ -1,0 +1,106 @@
+<!-- ======================================================
+  USERS - UPDATE (without password)
+  ========================================================= -->
+
+<div class="route-block">
+  <p id="users-update">
+    <span class="method">PUT</span> <code>/api/users/:id</code> - Modifier
+    username / email
+  </p>
+
+  <!-- ========== SUCCESS ========== -->
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">Exemple requête :</p>
+    <pre><code>{
+    "username": "aLeFebvre",
+    "email" : "aurelie@lefebvre.com"
+}</code></pre>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+    "success": true,
+    "message": "Utilisateur mis à jour.",
+    "user": {
+        "id": "...",
+        "username": "nouvelUsername",
+        "email": "nouvel@email.com",
+        "createdAt": "2026-01-15T19:51:21.057Z",
+        "updatedAt": "2026-01-16T14:15:36.570Z"
+
+}</code></pre>
+  </details>
+
+  <!-- ========== ERRORS ========== -->
+  <details>
+    <summary>Erreurs possibles</summary>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+
+    <!-- IDENTIFIANT INVALIDE -->
+    <p class="error-type">Identifiant invalide</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Identifiant utilisateur invalide."
+}</code></pre>
+
+    <!-- CHAMP NON AUTORISÉ -->
+    <p class="error-type">Champ(s) non autorisé(e)</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Champ(s) non autorisé(s) : nom_du_champ."
+}</code></pre>
+
+    <!-- AUCUNE DONNÉE VALIDE À METTRE À JOUR -->
+    <p class="error-type">Aucune donnée valide à mettre à jour</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Aucune donnée valide à mettre à jour."
+}</code></pre>
+
+    <!-- NOM D'UTILISATEUR OU FORMAT D'EMAIL INVALIDE -->
+    <p class="error-type">Nom d'utilisateur ou format d'email invalide</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Données invalides.",
+    "details": {
+        "username": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères (lettres, chiffres, - ou _).",
+        "email": "Format d'email invalide (ex : nom@domaine.com)."
+    }
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <!-- UTILISATEUR INTROUVABLE -->
+    <p class="error-type">Utilisateur introuvable</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Utilisateur introuvable."
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">409 Conflict</span> :
+    </p>
+    
+    <!-- CONFLIT EMAIL -->
+    <p class="error-type">Conflit d'email déjà utilisé</p>
+
+    <pre><code>{
+    "success": false,
+    "error": "Un utilisateur avec cet email existe déjà."
+}</code></pre>
+  </details>
+</div>

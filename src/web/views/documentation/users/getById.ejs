@@ -1,0 +1,59 @@
+<!-- ======================================================
+  USERS - GET BY ID
+  ========================================================= -->
+
+  <div class="route-block">
+  <p id="users-get">
+    <span class="method">GET</span> <code>/api/users/:id</code> - Récupérer un
+    utilisateur
+  </p>
+
+  <!-- ========== SUCCESS ========== -->
+  <details>
+    <summary>Réponses valides</summary>
+
+    <p class="example-title">
+      Réponse <span class="badge badge--success">200 OK</span> :
+    </p>
+
+    <pre><code>{
+    "success": true,
+    "user": {
+        "id": "...",
+        "username": "jdupont",
+        "email": "jean@dupont.com",
+        "createdAt": "2025-12-20T18:59:00.839Z",
+        "updatedAt": "2025-12-20T18:59:00.839Z"
+    }
+}</code></pre>
+  </details>
+
+  <!-- ========== ERRORS ========== -->
+  <details>
+    <summary>Erreurs possibles</summary>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">400 Bad Request</span> :
+    </p>
+    
+    <!-- IDENTIFIANT UTILISATEUR INVALIDE-->
+    <p class="error-type">Identifiant utilisateur invalide</p>
+    
+    <pre><code>{
+    "success": false,
+    "error": "Identifiant utilisateur invalide."
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">404 Not Found</span> :
+    </p>
+
+    <!-- UTILISATEUR INTROUVABLE -->
+    <p class="error-type">Utilisateur introuvable</p>
+    
+    <pre><code>{
+    "success": false,
+    "error": "Utilisateur introuvable."
+}</code></pre>
+  </details>
+</div>

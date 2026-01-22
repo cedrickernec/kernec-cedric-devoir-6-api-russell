@@ -14,7 +14,7 @@ import {
   validateUsername,
   validateEmail,
   validatePassword
-} from "../../../api/utils/validators/userValidators.js";
+} from "../../../api/validators/userValidators.js";
 import { PASSWORD_RULES } from "../../utils/users/userValidator.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
