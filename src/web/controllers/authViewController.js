@@ -38,6 +38,7 @@ export const postLoginView = async (req, res) => {
         // Session utilisateur
         req.session.user = {
             id: data.user.id,
+            username: data.user.username,
             email: data.user.email,
             token: data.token
         };
