@@ -6,7 +6,7 @@
  * - Panel latéral
  */
 
-import Catway from "../../../api/models/Catway.js";
+import { fetchCatways } from "../../services/api/catwayApi.js";
 import { findNextCatwayNumber } from "../../utils/catways/findNextCatwayNumber.js";
 import { mapCatwayToDetail, mapCatwayToList } from "../../utils/catways/catwayMapper.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
@@ -18,14 +18,26 @@ import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.j
 
 export const getCatwaysPage = async (req, res, next) => {
     try {
-        const catways = await Catway.find().sort({ catwayNumber: 1 });
-        const catwaysView = catways.map(mapCatwayToList);
+      console.log("SESSION USER :", req.session.user);
+      const token = req.session?.user?.token;
 
-        res.render("catways/catwaysList", {
-            title: "Liste des catways",
-            activePage: "catways",
-            catways: catwaysView
-        });
+      if (!token) {
+        return next(new Error("Token manquant en session"));
+      }
+
+      const catwaysApi = await fetchCatways(token);
+
+      if (!catwaysApi) {
+        return next(new Error("Impossible de charger les catways depuis l'API"));
+      }
+
+      const catwaysView = catwaysApi.data.map(mapCatwayToList);
+
+      res.render("catways/catwaysList", {
+          title: "Liste des catways",
+          activePage: "catways",
+          catways: catwaysView
+      });
 
     } catch (error) {
         next(error);

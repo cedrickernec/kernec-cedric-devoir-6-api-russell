@@ -106,9 +106,9 @@
       <tr
         class="js-catway-row js-panel-row"
         data-entity-id="<%= catways[i].id %>"
-        data-highlight="<%= flash?.highlightId === catways[i].id.toString() ? 'true' : 'false' %>"
+        data-highlight="<%= flash?.highlightId === catways[i].id ? 'true' : 'false' %>"
         data-number="<%= catways[i].catwayNumber %>"
-        data-type="<%= catways[i].catwayType.toLowerCase() %>"
+        data-type="<%= catways[i].catwayType %>"
         data-state="
         <%= catways[i].isOutOfService ? 'hs' : (catways[i].status.className === 'status--ok' ? 'ok' : 'warning') %>"
       >

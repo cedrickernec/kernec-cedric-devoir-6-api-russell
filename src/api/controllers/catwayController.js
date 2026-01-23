@@ -49,7 +49,7 @@ export const getAllCatways = async (req, res, next) => {
             message: catways.length === 0
               ? "Aucun catway trouvé."
               : undefined,
-            catways: formatCatwaysList(catways)
+            data: formatCatwaysList(catways)
         });
 
     } catch (error) {
