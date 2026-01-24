@@ -157,6 +157,11 @@ export const getCatwayPanel = async (req, res) => {
 export const getCreateCatwayPage = async (req, res, next) => {
   try {
     const suggestedNumber = await findNextCatwayNumber();
+    const token = req.session?.user?.token;
+
+    if (!token) {
+      return res.redirect("/login");
+    }
 
     res.render("catways/catwayCreate", {
         title: "Créer un catway",

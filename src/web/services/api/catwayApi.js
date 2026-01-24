@@ -41,6 +41,26 @@ export async function fetchCatwaysByNumber(number, token) {
 }
 
 // ==================================================
+// CREATE CATWAY
+// ==================================================
+
+export async function createCatway(data, token) {
+
+    const res = await fetch("http://localhost:3000/api/catways", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!res.ok) return null;
+
+    return res.json();
+}
+
+// ==================================================
 // UPDATE CATWAY
 // ==================================================
 

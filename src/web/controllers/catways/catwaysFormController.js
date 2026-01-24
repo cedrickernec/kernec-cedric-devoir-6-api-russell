@@ -7,7 +7,7 @@
  */
 
 import Catway from "../../../api/models/Catway.js";
-import { updateCatway } from "../../services/api/catwayApi.js";
+import { updateCatway, createCatway } from "../../services/api/catwayApi.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 
 // ==================================================
@@ -36,62 +36,33 @@ const renderCreateCatwayPage = (res, {
 
 export const postCreateCatway = async (req, res, next) => {
     try {
+        const token = req.session?.user?.token;
+
+        if (!token) {
+            return res.redirect("/login");
+        }
+
         const { catwayNumber, catwayType, catwayState, isOutOfService } = req.body;
+        const payload = {
+            catwayNumber: Number(catwayNumber),
+            catwayType,
+            catwayState
+        };
+
+        const response = await createCatway(payload, token);
         const errors = {};
-        const catwayNumberInt = Number(catwayNumber);
 
-        let isOutOfServiceBool = isOutOfService === "on";
-
-        // Validation numéro
-        if (!catwayNumber) {
-            errors.catwayNumber = CATWAY_MESSAGES.CATWAY_REQUIRED;
-        } else if (Number.isNaN(catwayNumberInt) || catwayNumberInt < 1) {
-            errors.catwayNumber = CATWAY_MESSAGES.INVALID_CATWAY;
-        } else {
-            const existing = await Catway.findOne({
-                catwayNumber: catwayNumberInt
-            });
-
-            if (existing) {
-                errors.catwayNumber = CATWAY_MESSAGES.CATWAY_CONFLICT;
-            }
-        }
-
-        // Validation type
-        if (!["short", "long"].includes(catwayType)) {
-            return next(new Error(CATWAY_MESSAGES.INVALID_TYPE));
-        }
-
-        // Validation état
-        if (catwayState === "bon état") {
-            isOutOfServiceBool = false
-        }
-
-        if (!catwayState || !catwayState.trim()) {
-            errors.catwayState = CATWAY_MESSAGES.STATE_REQUIRED;
-        }
-
-        // Erreurs → retour formulaire
-        if (Object.keys(errors).length > 0) {
+        if (!response?.success) {
             return renderCreateCatwayPage(res, {
-                errors,
+                errors: response?.errors ?? errors,
                 formData: req.body
             });
         }
 
-        // Création
-        const createdCatway = await Catway.create({
-            catwayNumber: catwayNumberInt,
-            catwayType,
-            catwayState,
-            isOutOfService: isOutOfServiceBool
-        });
-
-        // Flash + redirect
         req.session.flash = {
             type: "success",
             message: CATWAY_MESSAGES.CREATE_SUCCESS,
-            highlightNumber: createdCatway.catwayNumber
+            highlightNumber: payload.catwayNumber
         };
 
         res.redirect("/catways");

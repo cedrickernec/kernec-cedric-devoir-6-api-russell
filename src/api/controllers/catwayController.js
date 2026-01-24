@@ -95,6 +95,10 @@ export const createCatway = async (req, res, next) => {
 
         const cleanData = pickAllowedFields(req.body, allowedFields);
 
+        if (cleanData.catwayState) {
+            cleanData.catwayState = cleanData.catwayState.trim();
+        }
+        
         // 2) Validation
         const errors = validateCatwayCreate(cleanData);
         if (Object.keys(errors).length > 0) {
@@ -132,6 +136,10 @@ export const updateCatway = async (req, res, next) => {
         ];
 
         const cleanData = pickAllowedFields(req.body, allowedFields);
+
+        if (cleanData.catwayState) {
+            cleanData.catwayState = cleanData.catwayState.trim();
+        }
 
         if (Object.keys(cleanData).length === 0) {
             throw new ApiError(400, "Aucune donnée valide à mettre à jour.")
