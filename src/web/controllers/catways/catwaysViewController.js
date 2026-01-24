@@ -123,17 +123,24 @@ export const getCatwayByNumber = async (req, res, next) => {
 
 export const getCatwayPanel = async (req, res) => {
   try {
-    const { id } = req.params;
-    const catway = await Catway.findById(id);
+    const catwayNumber = Number(req.params.catwayNumber);
+    const token = req.session?.user?.token;
 
-    if (!catway) {
+    if (!token) {
+      return res.redirect("/login");
+    }
+
+    const response = await fetchCatwaysByNumber(catwayNumber, token);
+
+    if (!response?.data) {
       return res.status(404).render("partials/panels/panelError", {
         layout: false,
         message: CATWAY_MESSAGES.NOT_FOUND
       });
     }
-
-    const catwayViewModel = mapCatwayToDetail(catway);
+    
+    const catwayApi = response.data;
+    const catwayViewModel = mapCatwayToDetail(catwayApi);
 
     res.render("partials/panels/catwayPanel", {
       layout: false,
@@ -141,12 +148,7 @@ export const getCatwayPanel = async (req, res) => {
     });
     
   } catch (error) {
-    console.error("Erreur chargement panel catway :", error);
-
-    res.status(500).render("partials/panels/panelError", {
-      layout: false,
-      message: COMMON_MESSAGES.LOAD_ERROR
-    })
+    next(error);
   }
 };
 
