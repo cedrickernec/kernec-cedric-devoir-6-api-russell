@@ -7,6 +7,7 @@
  */
 
 import Catway from "../../../api/models/Catway.js";
+import { updateCatway } from "../../services/api/catwayApi.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 
 // ==================================================
@@ -27,22 +28,6 @@ const renderCreateCatwayPage = (res, {
     startNumber,
     endNumber
   });
-};
-
-// ==================================================
-// VIEW HELPER - EDIT PAGE RENDER
-// ==================================================
-
-const renderEditCatwayPage = (res, {
-    catway,
-    errors = {},
-}) => {
-    res.render("catways/catwayEdit", {
-        title: "Modification du catway",
-        activePage: "catways",
-        catway,
-        errors
-    });
 };
 
 // ==================================================
@@ -122,65 +107,31 @@ export const postCreateCatway = async (req, res, next) => {
 
 export const postEditCatway = async (req, res, next) => {
     try {
-        const { catwayNumber, catwayType, catwayState, isOutOfService } = req.body;
-        const errors = {}
-        
-        const catway = await Catway.findById(req.params.id);
-        if (!catway) return next();
-        
-        const catwayNumberInt = Number(catwayNumber);
+        const token = req.session?.user?.token;
 
-        const isOutOfServiceBool = catwayState === "bon état" ? false : req.body.isOutOfService === "on";
-
-        // Validation numéro
-        if (!catwayNumber) {
-            errors.catwayNumber = CATWAY_MESSAGES.CATWAY_REQUIRED;
-        } else if (Number.isNaN(catwayNumberInt) || catwayNumberInt < 1) {
-            errors.catwayNumber = CATWAY_MESSAGES.INVALID_CATWAY;
-        } else {
-            const existing = await Catway.findOne({
-                catwayNumber: catwayNumberInt,
-                _id: { $ne: req.params.id }
-            });
-
-            if (existing) {
-                errors.catwayNumber = CATWAY_MESSAGES.CATWAY_CONFLICT;
-            }
+        if (!token) {
+            return res.redirect("/login");
         }
 
-        // Validation type
-        if (!["short", "long"].includes(catwayType)) {
-            errors.catwayType = CATWAY_MESSAGES.INVALID_TYPE;
-        }
-        
-        // Validation état
-        if (!catwayState || !catwayState.trim()) {
-            errors.catwayState = CATWAY_MESSAGES.STATE_REQUIRED;
-        }
+        const { catwayNumber, catwayState, isOutOfService } = req.body;
 
-        // Erreur → Retour formulaire
-        if (Object.keys(errors).length > 0) {
-            return renderEditCatwayPage(res, {
-                catway,
-                errors
-            });
-        }
-
-        // Update
-        await Catway.findByIdAndUpdate(req.params.id, {
-            catwayNumber: catwayNumberInt,
-            catwayType,
+        const payload = {
             catwayState,
-            isOutOfService: isOutOfServiceBool
-        });
+            isOutOfService: isOutOfService === "on"
+        };
 
-        // Flash + redirect
+        const response = await updateCatway(catwayNumber, payload, token);
+
+        if (!response) {
+            return next(new Error("Erreur lors de la mise à jour du catway."));
+        }
+
         req.session.flash = {
             type: "success",
-            message: CATWAY_MESSAGES.UPDATE_SUCCESS
-        }
+            message: "Catway mis à jour avec succès."
+        };
 
-        res.redirect("/catways");
+        res.redirect(`/catways/number/${catwayNumber}`);
 
     } catch (error) {
         next(error);

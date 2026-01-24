@@ -5,6 +5,6 @@ import { authGuard } from "../../middlewares/authGuard.js";
 const router = express.Router();
 
 router.post("/create", authGuard, postCreateCatway);
-router.post("/:id/edit", authGuard, postEditCatway);
+router.post("/:catwayNumber/edit", authGuard, postEditCatway);
 
 export default router;

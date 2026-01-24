@@ -12,17 +12,17 @@ import docViewRoutes from "./docRoutes.js";
 
 import dashboardRoutes from "./dashboardRoutes.js";
 
+import usersFormRoutes from "../routes/users/usersFormRoutes.js";
 import usersViewRoutes from "../routes/users/usersViewRoutes.js";
 import usersAjaxRoutes from "../routes/users/usersAjaxRoutes.js";
-import usersFormRoutes from "../routes/users/usersFormRoutes.js";
 
+import catwaysFormRoutes from "../routes/catways/catwaysFormRoutes.js";
 import catwaysViewRoutes from "../routes/catways/catwaysViewRoutes.js";
 import catwaysAjaxRoutes from "../routes/catways/catwaysAjaxRoutes.js";
-import catwaysFormRoutes from "../routes/catways/catwaysFormRoutes.js";
 
+import reservationsFormRoutes from "../routes/reservations/reservationsFormRoutes.js";
 import reservationsViewRoutes from "../routes/reservations/reservationsViewRoutes.js";
 import reservationsAjaxRoutes from "./reservations/reservationsAjaxRoutes.js";
-import reservationsFormRoutes from "../routes/reservations/reservationsFormRoutes.js";
 
 export function registerWebRoutes(app) {
     app.use("/", homeRoutes);

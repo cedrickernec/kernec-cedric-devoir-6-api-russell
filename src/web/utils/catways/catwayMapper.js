@@ -99,3 +99,16 @@ export function mapCatwayToList(catway) {
     status
   };
 }
+
+/* ==================================================
+  MAPPER CATWAY FORM
+================================================== */
+
+export function mapCatwayToForm(catway) {
+  return {
+    number: catway.number,
+    type: catway.type,
+    state: catway.state?.label ?? catway.state,
+    isOutOfService: catway.isOutOfService
+  };
+}

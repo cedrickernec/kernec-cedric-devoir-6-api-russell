@@ -11,7 +11,7 @@ import {
   fetchCatwaysByNumber
 } from "../../services/api/catwayApi.js";
 import { findNextCatwayNumber } from "../../utils/catways/findNextCatwayNumber.js";
-import { mapCatwayToDetail, mapCatwayToList } from "../../utils/catways/catwayMapper.js";
+import { mapCatwayToDetail, mapCatwayToForm, mapCatwayToList } from "../../utils/catways/catwayMapper.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 
@@ -202,21 +202,27 @@ export const getCreateCatwayPage = async (req, res, next) => {
 export const getEditCatwayByNumber = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
+    const token = req.session?.user?.token;
 
-    if (Number.isNaN(catwayNumber)) {
-      return next();
+    if (!token) {
+      return res.redirect("/login");
     }
 
-    const catway = await Catway.findOne({ catwayNumber });
+    const response = await fetchCatwaysByNumber(catwayNumber, token);
 
-    if (!catway) {
-      return next();
+    if (!response?.data) {
+      const error = new Error("Catway introuvable.");
+      error.status = 404;
+      return next(error);
     }
+
+    const catwayApi = response.data;
+    const catwayViewModel = mapCatwayToForm(catwayApi);
 
     res.render("catways/catwayEdit", {
       title: "Éditer un catway",
       activePage: "catways",
-      catway,
+      catway: catwayViewModel,
       errors: {},
     });
 

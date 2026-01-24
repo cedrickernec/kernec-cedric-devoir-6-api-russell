@@ -2,9 +2,9 @@
 
 <form
   method="POST"
-  action="/catways/<%= catway._id %>/edit"
+  action="/catways/<%= catway.number %>/edit"
   class="form"
-  data-catway-id="<%= catway._id %>"
+  data-catway-id="<%= catway.number %>"
 >
   <!-- ===== NUMBER ===== -->
   <div class="form-group">
@@ -14,7 +14,7 @@
     <input
       type="number"
       id="catwayNumber"
-      value="<%= catway.catwayNumber %>"
+      value="<%= catway.number %>"
       aria-disabled="true"
       disabled
     >
@@ -23,7 +23,7 @@
     <input
       type="hidden"
       name="catwayNumber"
-      value="<%= catway.catwayNumber %>"
+      value="<%= catway.number %>"
     >
   </div>
 
@@ -35,7 +35,7 @@
     <input
       type="text"
       id="catwayType"
-      value="<%= catway.catwayType === 'short' ? 'short' : 'long' %>"
+      value="<%= catway.type === 'short' ? 'short' : 'long' %>"
       aria-disabled="true"
       disabled
     >
@@ -44,7 +44,7 @@
     <input
       type="hidden"
       name="catwayType"
-      value="<%= catway.catwayType === 'short' ? 'short' : 'long' %>"
+      value="<%= catway.type === 'short' ? 'short' : 'long' %>"
     >
   </div>
 
@@ -68,7 +68,7 @@
       name="catwayState"
       rows="3"
       required
-    ><%= catway.catwayState %></textarea>
+    ><%= catway.state %></textarea>
   </div>
 
   <div class="form-group" id="outOfServiceGroup">
