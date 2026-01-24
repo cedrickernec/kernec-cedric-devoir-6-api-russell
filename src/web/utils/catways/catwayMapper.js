@@ -11,39 +11,41 @@ import { formatDateFR } from "../dateFormatter.js";
 ================================================== */
 
 export function mapCatwayToDetail(catway) {
+  const catwayState = catway.state;
+  const isOutOfService = catway.isOutOfService;
   const createdAt = catway.createdAt
     ? new Date(catway.createdAt)
     : null;
 
   let status;
 
-  if (catway.isOutOfService) {
+  if (isOutOfService) {
     status = {
-      label: catway.catwayState,
+      label: catwayState,
       className: "status--danger",
       aria: "Catway hors service, non réservable",
     };
   } 
-  else if (catway.catwayState === "bon état") {
+  else if (catwayState === "bon état") {
     status = {
-      label: catway.catwayState,
+      label: catwayState,
       className: "status--ok",
       aria: "Catway en bon état",
     };
   } 
   else {
     status = {
-      label: catway.catwayState,
+      label: catwayState,
       className: "status--warning",
       aria: "Catway réservable nécessitant une attention",
     };
   }
 
   return {
-    id: catway._id,
+    id: catway.id,
 
-    catwayNumber: catway.catwayNumber,
-    catwayType: catway.catwayType,
+    catwayNumber: catway.number,
+    catwayType: catway.type,
 
     isOutOfService: catway.isOutOfService,
 

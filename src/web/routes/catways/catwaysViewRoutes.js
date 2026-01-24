@@ -1,11 +1,11 @@
 import express from "express";
 import {
     getCatwaysPage,
-    getCatwayById,
+    /* getCatwayById, */
     getCatwayByNumber,
     getCatwayPanel,
     getCreateCatwayPage,
-    getEditCatwayById,
+    /* getEditCatwayById, */
     getEditCatwayByNumber
 } from "../../controllers/catways/catwaysViewController.js";
 import { authGuard } from "../../middlewares/authGuard.js";
@@ -17,7 +17,7 @@ router.get("/create", authGuard, getCreateCatwayPage);
 router.get("/number/:catwayNumber", authGuard, getCatwayByNumber);
 router.get("/number/:catwayNumber/edit", authGuard, getEditCatwayByNumber);
 router.get("/:id/panel", authGuard, getCatwayPanel);
-router.get("/:id/edit", authGuard, getEditCatwayById);
-router.get("/:id", authGuard, getCatwayById);
+/* router.get("/:id/edit", authGuard, getEditCatwayById);
+router.get("/:id", authGuard, getCatwayById); */
 
 export default router;

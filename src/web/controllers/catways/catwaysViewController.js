@@ -6,7 +6,10 @@
  * - Panel latéral
  */
 
-import { fetchCatways } from "../../services/api/catwayApi.js";
+import {
+  fetchCatways,
+  fetchCatwaysByNumber
+} from "../../services/api/catwayApi.js";
 import { findNextCatwayNumber } from "../../utils/catways/findNextCatwayNumber.js";
 import { mapCatwayToDetail, mapCatwayToList } from "../../utils/catways/catwayMapper.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
@@ -48,7 +51,7 @@ export const getCatwaysPage = async (req, res, next) => {
   CATWAY DETAILS - FULL PAGE (BY ID)
 ================================================== */
 
-export const getCatwayById = async (req, res, next) => {
+/* export const getCatwayById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { from, id: reservationId } = req.query;
@@ -73,7 +76,7 @@ export const getCatwayById = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
+}; */
 
 /* ==================================================
   CATWAY DETAILS - FULL PAGE (BY NUMBER)
@@ -83,21 +86,28 @@ export const getCatwayByNumber = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
     const { from, id: reservationId } = req.query;
-    const catway = await Catway.findOne({ catwayNumber });
+    const token = req.session?.user?.token;
 
-    if (!catway) {
-      const error = new Error("Catway introuvable");
+    if (!token) {
+      return res.redirect("/login");
+    }
+
+    const response = await fetchCatwaysByNumber(catwayNumber, token);
+
+    if (!response?.data) {
+      const error = new Error("Catway introuvable.");
       error.status = 404;
       return next(error);
     }
 
-    const catwayViewModel = mapCatwayToDetail(catway);
+    const catwayApi = response.data;
+    const catwayViewModel = mapCatwayToDetail(catwayApi);
 
     res.render("catways/catwayDetails", {
       title: "Détail catway",
       activePage: "catways",
       catway: catwayViewModel,
-      catwayId: catway._id,
+      catwayId: catwayApi.id,
       from,
       reservationId
     });
@@ -165,7 +175,7 @@ export const getCreateCatwayPage = async (req, res, next) => {
   EDIT CATWAY PAGE (BY ID)
 ================================================== */
 
-export const getEditCatwayById = async (req, res, next) => {
+/* export const getEditCatwayById = async (req, res, next) => {
   try {
     const catway = await Catway.findById(req.params.id);
 
@@ -183,7 +193,7 @@ export const getEditCatwayById = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
+}; */
 
 /* ==================================================
   EDIT CATWAY PAGE (BY NUMBER)

@@ -72,7 +72,7 @@ export const getCatwayByNumber = async (req, res, next) => {
         // 3) Réponse
         res.status(200).json({
             success: true,
-            catway: formatCatway(catway)
+            data: formatCatway(catway)
         });
 
     } catch (error) {
