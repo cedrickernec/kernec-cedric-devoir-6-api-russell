@@ -25,13 +25,13 @@ export const getCatwaysPage = async (req, res, next) => {
       const token = req.session?.user?.token;
 
       if (!token) {
-        return next(new Error("Token manquant en session"));
+        return res.redirect("/login");
       }
 
       const catwaysApi = await fetchCatways(token);
 
       if (!catwaysApi) {
-        return next(new Error("Impossible de charger les catways depuis l'API"));
+        return next(new Error("Impossible de charger les catways depuis l'API."));
       }
 
       const catwaysView = catwaysApi.data.map(mapCatwayToList);
