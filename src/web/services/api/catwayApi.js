@@ -18,10 +18,10 @@ export async function fetchCatways(req, res) {
 }
 
 // ==================================================
-// FETCH CATWAYS BY NUMBER
+// FETCH CATWAY BY NUMBER
 // ==================================================
 
-export async function fetchCatwaysByNumber(number, req, res) {
+export async function fetchCatwayByNumber(number, req, res) {
 
     return apiFetch(`/api/catways/${number}`, {}, req, res);
 }

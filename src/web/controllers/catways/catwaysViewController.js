@@ -8,7 +8,7 @@
 
 import {
   fetchCatways,
-  fetchCatwaysByNumber
+  fetchCatwayByNumber
 } from "../../services/api/catwayApi.js";
 
 import {
@@ -57,7 +57,7 @@ export const getCatwayByNumber = async (req, res, next) => {
     const catwayNumber = Number(req.params.catwayNumber);
     const { from, id: reservationId } = req.query;
 
-    const apiData = await fetchCatwaysByNumber(catwayNumber, req, res);
+    const apiData = await fetchCatwayByNumber(catwayNumber, req, res);
 
     if (apiData?.authExpired) return;
 
@@ -96,7 +96,7 @@ export const getCatwayPanel = async (req, res) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
 
-    const apiData = await fetchCatwaysByNumber(catwayNumber, req, res);
+    const apiData = await fetchCatwayByNumber(catwayNumber, req, res);
 
     if (apiData?.authExpired) return;
 
@@ -153,7 +153,7 @@ export const getEditCatwayByNumber = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
 
-    const apiData = await fetchCatwaysByNumber(catwayNumber, req, res);
+    const apiData = await fetchCatwayByNumber(catwayNumber, req, res);
 
     if (apiData?.authExpired) return;
 
