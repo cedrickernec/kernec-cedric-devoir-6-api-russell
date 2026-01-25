@@ -135,7 +135,7 @@ export const postEditCatway = async (req, res, next) => {
             message: CATWAY_MESSAGES.UPDATE_SUCCESS
         };
 
-        res.redirect(`/catways/number/${catwayNumber}`);
+        res.redirect(`/catways/${catwayNumber}`);
 
     } catch (error) {
         next(error);
