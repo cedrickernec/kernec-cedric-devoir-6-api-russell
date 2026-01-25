@@ -34,3 +34,16 @@ export function mapUserDetail(user) {
     createdAtFormatted: formatDateFR(createdAt)
   };
 }
+
+/* ==================================================
+  MAPPER USER LIST (TABLE)
+================================================== */
+
+export function mapUserToList(user) {
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    createdAt: user.createdAt
+  }
+}

@@ -8,9 +8,10 @@
 
 import User from "../../../api/models/User.js";
 import { PASSWORD_RULES } from "../../utils/users/userValidator.js";
-import { mapUserDetail } from "../../utils/users/userMapper.js";
+import { mapUserDetail, mapUserToList } from "../../utils/users/userMapper.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
+import { fetchUsers } from "../../services/api/userApi.js";
 
 // ==================================================
 // USERS LIST
@@ -18,16 +19,31 @@ import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.j
 
 export const getUsersPage = async (req, res, next) => {
   try {
-    const users = await User
-    .find()
-    .select("-password")
-    .collation({ locale: "fr", strength: 1 })
-    .sort({ username: 1 });
+    const token = req.session?.user?.token;
+
+    if (!token) {
+      return res.redirect("/login");
+    }
+
+    const usersApi = await fetchUsers(token);
+
+    if (usersApi?.authExpired) {
+      req.session.destroy(() => {
+        res.redirect("/login");
+      });
+      return;
+    }
+
+    if (!usersApi) {
+      return next(new Error("Impossible de charger les utilisateurs depuis l'API."));
+    }
+
+    const userView = usersApi.data.map(mapUserToList);
 
     res.render("users/usersList", {
       title: "Utilisateurs",
       activePage: "users",
-      users
+      users: userView
     });
 
   } catch (error) {

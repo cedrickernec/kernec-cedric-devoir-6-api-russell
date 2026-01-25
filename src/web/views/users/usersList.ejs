@@ -85,8 +85,8 @@
       <% } else { %> <% for (let i = 0; i < users.length; i++) { %>
       <tr
         class="js-user-row js-panel-row"
-        data-entity-id="<%= users[i]._id %>"
-        data-highlight="<%= flash?.highlightId === users[i]._id.toString() ? 'true' : 'false' %>"
+        data-entity-id="<%= users[i].id %>"
+        data-highlight="<%= flash?.highlightId === users[i].id ? 'true' : 'false' %>"
         data-user="<%= users[i].username.toLowerCase() %>"
         data-email="<%= users[i].email.toLowerCase() %>"
       >

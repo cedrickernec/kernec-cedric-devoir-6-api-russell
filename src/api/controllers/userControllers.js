@@ -51,7 +51,7 @@ export const getAllUsers = async (req, res, next) => {
             message: users.length === 0
               ? "Aucun utilisateur trouvé."
               : undefined,
-            users: formatUsersList(users)
+            data: formatUsersList(users)
         });
 
     } catch (error) {
