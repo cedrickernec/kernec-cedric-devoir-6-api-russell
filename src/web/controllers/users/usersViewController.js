@@ -47,15 +47,23 @@ export const getUsersPage = async (req, res, next) => {
 export const getUserById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id).select("-password");
 
-    if (!user) {
-      const error = new Error(USER_MESSAGES.NOT_FOUND)
+    const apiData = await fetchUserById(id, req, res);
+
+    if (apiData?.authExpired) return;
+
+    if (!apiData || apiData?.error) {
+      return next (new Error(COMMON_MESSAGES.SERVER_ERROR_LONG));
+    }
+
+    if (!apiData.data) {
+      const error = new Error(USER_MESSAGES.NOT_FOUND);
       error.status = 404;
       return next(error);
     }
 
-    const userViewModel = mapUserDetail(user);
+    const userApi = apiData.data;
+    const userViewModel = mapUserDetail(userApi);
 
     res.render("users/userDetails", {
       title: "Détail utilisateur",
