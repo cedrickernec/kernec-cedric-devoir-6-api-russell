@@ -26,7 +26,7 @@ export function mapUserDetail(user) {
     : null;
 
   return {
-    id: user._id.toString(),
+    id: user.id,
 
     username: user.username ?? "-",
     email: user.email ?? "-",

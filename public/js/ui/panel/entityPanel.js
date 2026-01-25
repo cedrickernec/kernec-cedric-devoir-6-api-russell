@@ -64,7 +64,8 @@ export function initEntityPanel({
       // ==================================================
 
       try {
-        const res = await fetch(`${panelUrl}/number/${entityId}/panel`);
+        console.log("PANEL ID =", entityId);
+        const res = await fetch(`${panelUrl}/${entityId}/panel`);
 
         // ---------- Gestion erreurs ----------
         if (!res.ok) {

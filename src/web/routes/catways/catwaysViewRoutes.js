@@ -12,8 +12,8 @@ const router = express.Router();
 
 router.get("/", authGuard, getCatwaysPage);
 router.get("/create", authGuard, getCreateCatwayPage);
-router.get("/number/:catwayNumber", authGuard, getCatwayByNumber);
-router.get("/number/:catwayNumber/edit", authGuard, getEditCatwayByNumber);
-router.get("/number/:catwayNumber/panel", authGuard, getCatwayPanel);
+router.get("/:catwayNumber", authGuard, getCatwayByNumber);
+router.get("/:catwayNumber/edit", authGuard, getEditCatwayByNumber);
+router.get("/:catwayNumber/panel", authGuard, getCatwayPanel);
 
 export default router;

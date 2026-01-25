@@ -15,7 +15,7 @@ export function formatUser(user) {
     const object = user.toObject();
 
     return {
-        id: object._id,
+        id: object._id.toString(),
         username: object.username,
         email: object.email,
         createdAt: object.createdAt,

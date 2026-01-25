@@ -77,7 +77,7 @@ export const getUserById = async (req, res, next) => {
         // 3) Réponse
         res.status(200).json({
             success: true,
-            user: formatUser(user)
+            data: formatUser(user)
         });
 
     } catch (error) {

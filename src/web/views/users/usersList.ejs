@@ -94,7 +94,7 @@
           <input
             type="checkbox"
             name="selectedUsers"
-            value="<%= users[i]._id %>"
+            value="<%= users[i].id %>"
             aria-label="Sélectionner <%= users[i].username %>"
           />
         </td>
@@ -106,9 +106,9 @@
         </td>
         <td class="align-center actions border-col-left">
           <a
-            href="/users/<%= users[i]._id %>"
+            href="/users/<%= users[i].id %>"
             class="btn btn--primary btn-icon"
-            data-entity-id="<%= users[i]._id %>"
+            data-entity-id="<%= users[i].id %>"
             title="Ouvrir la fiche utilisateur complète"
             aria-label="Voir le détail de l'utilisateur <%= users[i].username %>"
           >
@@ -120,7 +120,7 @@
         </td>
         <td class="align-center actions">
           <a
-            href="/users/<%= users[i]._id %>/edit"
+            href="/users/<%= users[i].id %>/edit"
             class="btn btn--primary btn-icon"
             title="Éditer l'utilisateur"
             aria-label="Éditer l'utilisateur <%= users[i].username %>"

@@ -11,7 +11,7 @@ import { PASSWORD_RULES } from "../../utils/users/userValidator.js";
 import { mapUserDetail, mapUserToList } from "../../utils/users/userMapper.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
-import { fetchUsers } from "../../services/api/userApi.js";
+import { fetchUserById, fetchUsers } from "../../services/api/userApi.js";
 
 // ==================================================
 // USERS LIST
@@ -75,16 +75,24 @@ export const getUserById = async (req, res, next) => {
 export const getUserPanel = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id).select("-password");
-    
-    if (!user) {
+
+    const apiData = await fetchUserById(id, req, res);
+
+    if (apiData?.authExpired) return;
+
+    if (!apiData || apiData?.error) {
+      return next (new Error(COMMON_MESSAGES.SERVER_ERROR_LONG));
+    }
+
+    if (!apiData.data) {
       return res.status(404).render("partials/panels/panelError", {
         layout: false,
         message: USER_MESSAGES.NOT_FOUND
       });
     }
 
-    const userViewModel = mapUserDetail(user);
+    const userApi = apiData.data;
+    const userViewModel = mapUserDetail(userApi);
 
     res.render("partials/panels/userPanel", {
       layout: false,
@@ -92,12 +100,7 @@ export const getUserPanel = async (req, res) => {
     });
     
   } catch (error) {
-    console.error("Erreur chargement panel utilisateur :", error);
-
-    res.status(500).render("partials/panels/panelError", {
-      layout: false,
-      message: COMMON_MESSAGES.LOAD_ERROR
-    })
+    next(error);
   }
 };
 
