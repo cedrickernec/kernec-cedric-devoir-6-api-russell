@@ -106,7 +106,7 @@
       <tr
         class="js-catway-row js-panel-row"
         data-entity-id="<%= catways[i].catwayNumber %>"
-        data-highlight="<%= flash?.highlightId === catways[i].id ? 'true' : 'false' %>"
+        data-highlight="<%= Number(flash?.highlightNumber) === Number(catways[i].catwayNumber) ? 'true' : 'false' %>"
         data-number="<%= catways[i].catwayNumber %>"
         data-type="<%= catways[i].catwayType %>"
         data-state="

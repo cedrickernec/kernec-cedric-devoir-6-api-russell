@@ -6,28 +6,44 @@
  * - Redirections + flash messages
  */
 
-import Catway from "../../../api/models/Catway.js";
 import { updateCatway, createCatway } from "../../services/api/catwayApi.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
+import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 
 // ==================================================
 // VIEW HELPER - CREATE PAGE RENDER
 // ==================================================
 
 const renderCreateCatwayPage = (res, {
-  errors = {},
-  formData = {},
-  startNumber = null,
-  endNumber = null
+    errors = {},
+    formData = {},
+    startNumber = null,
+    endNumber = null
 }) => {
-  res.render("catways/catwayCreate", {
-    title: "Création d'un catway",
-    activePage : "catways",
-    errors,
-    formData,
-    startNumber,
-    endNumber
-  });
+    res.render("catways/catwayCreate", {
+        title: "Création d'un catway",
+        activePage : "catways",
+        errors,
+        formData,
+        startNumber,
+        endNumber
+    });
+};
+
+// ==================================================
+// VIEW HELPER - EDIT PAGE RENDER
+// ==================================================
+
+const renderEditCatwayPage = (res, {
+    catway,
+    errors = {},
+}) => {
+    res.render("catways/catwayEdit", {
+        title: "Édition d'un catway",
+        activePage : "catways",
+        catway,
+        errors
+    });
 };
 
 // ==================================================
@@ -36,25 +52,28 @@ const renderCreateCatwayPage = (res, {
 
 export const postCreateCatway = async (req, res, next) => {
     try {
-        const token = req.session?.user?.token;
+        const { catwayNumber, catwayType, catwayState } = req.body;
 
-        if (!token) {
-            return res.redirect("/login");
-        }
-
-        const { catwayNumber, catwayType, catwayState, isOutOfService } = req.body;
         const payload = {
             catwayNumber: Number(catwayNumber),
             catwayType,
             catwayState
         };
 
-        const response = await createCatway(payload, token);
-        const errors = {};
+        const apiData = await createCatway(payload, req, res);
 
-        if (!response?.success) {
+        if (apiData?.authExpired) return;
+
+        if (!apiData || apiData?.error) {
             return renderCreateCatwayPage(res, {
-                errors: response?.errors ?? errors,
+                errors: { global: COMMON_MESSAGES.SERVER_ERROR_LONG },
+                formData: req.body
+            });
+        }
+
+        if (apiData?.success === false) {
+            return renderCreateCatwayPage(res, {
+                errors: apiData.errors || {},
                 formData: req.body
             });
         }
@@ -78,12 +97,6 @@ export const postCreateCatway = async (req, res, next) => {
 
 export const postEditCatway = async (req, res, next) => {
     try {
-        const token = req.session?.user?.token;
-
-        if (!token) {
-            return res.redirect("/login");
-        }
-
         const { catwayNumber, catwayState, isOutOfService } = req.body;
 
         const payload = {
@@ -91,15 +104,35 @@ export const postEditCatway = async (req, res, next) => {
             isOutOfService: isOutOfService === "on"
         };
 
-        const response = await updateCatway(catwayNumber, payload, token);
+        const apiData = await updateCatway(Number(catwayNumber), payload, req, res);
 
-        if (!response) {
-            return next(new Error("Erreur lors de la mise à jour du catway."));
+        if (apiData?.authExpired) return;
+
+        if (!apiData || apiData?.error) {
+            return renderEditCatwayPage(res, {
+                catway: {
+                    catwayNumber,
+                    catwayState,
+                    isOutOfService
+                },
+                errors: { global: COMMON_MESSAGES.SERVER_ERROR_LONG }
+            });
+        }
+
+        if (apiData?.success === false) {
+            return renderEditCatwayPage(res, {
+                catway: {
+                    catwayNumber,
+                    catwayState,
+                    isOutOfService
+                },
+                errors: apiData.errors
+            });
         }
 
         req.session.flash = {
             type: "success",
-            message: "Catway mis à jour avec succès."
+            message: CATWAY_MESSAGES.UPDATE_SUCCESS
         };
 
         res.redirect(`/catways/number/${catwayNumber}`);

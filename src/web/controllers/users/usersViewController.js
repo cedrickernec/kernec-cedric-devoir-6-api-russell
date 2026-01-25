@@ -19,26 +19,15 @@ import { fetchUsers } from "../../services/api/userApi.js";
 
 export const getUsersPage = async (req, res, next) => {
   try {
-    const token = req.session?.user?.token;
+    const apiData = await fetchUsers(req, res);
 
-    if (!token) {
-      return res.redirect("/login");
+    if (apiData?.authExpired) return;
+
+    if (apiData?.error) {
+      return next (new Error(COMMON_MESSAGES.API_ERROR));
     }
 
-    const usersApi = await fetchUsers(token);
-
-    if (usersApi?.authExpired) {
-      req.session.destroy(() => {
-        res.redirect("/login");
-      });
-      return;
-    }
-
-    if (!usersApi) {
-      return next(new Error("Impossible de charger les utilisateurs depuis l'API."));
-    }
-
-    const userView = usersApi.data.map(mapUserToList);
+    const userView = apiData.data.map(mapUserToList);
 
     res.render("users/usersList", {
       title: "Utilisateurs",

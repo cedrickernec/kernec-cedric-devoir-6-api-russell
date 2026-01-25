@@ -63,3 +63,13 @@
     </a>
   </div>
 </section>
+
+<!-- ====== SCRIPTS ====== -->
+
+<% if (flash) { %>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    showToast("<%= flash.type %>", "<%= flash.message %>");
+  });
+</script>
+<% } %>

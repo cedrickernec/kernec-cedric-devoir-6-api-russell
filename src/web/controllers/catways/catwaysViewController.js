@@ -10,8 +10,14 @@ import {
   fetchCatways,
   fetchCatwaysByNumber
 } from "../../services/api/catwayApi.js";
+
+import {
+  mapCatwayToDetail,
+  mapCatwayToForm,
+  mapCatwayToList
+} from "../../utils/catways/catwayMapper.js";
+
 import { findNextCatwayNumber } from "../../utils/catways/findNextCatwayNumber.js";
-import { mapCatwayToDetail, mapCatwayToForm, mapCatwayToList } from "../../utils/catways/catwayMapper.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 
@@ -21,20 +27,15 @@ import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.j
 
 export const getCatwaysPage = async (req, res, next) => {
     try {
-      console.log("SESSION USER :", req.session.user);
-      const token = req.session?.user?.token;
+      const apiData = await fetchCatways(req, res);
 
-      if (!token) {
-        return res.redirect("/login");
+      if (apiData?.authExpired) return;
+
+      if (!apiData || apiData?.error) {
+        return next (new Error(COMMON_MESSAGES.SERVER_ERROR_LONG));
       }
 
-      const catwaysApi = await fetchCatways(token);
-
-      if (!catwaysApi) {
-        return next(new Error("Impossible de charger les catways depuis l'API."));
-      }
-
-      const catwaysView = catwaysApi.data.map(mapCatwayToList);
+      const catwaysView = apiData.data.map(mapCatwayToList);
 
       res.render("catways/catwaysList", {
           title: "Liste des catways",
@@ -48,37 +49,6 @@ export const getCatwaysPage = async (req, res, next) => {
 };
 
 /* ==================================================
-  CATWAY DETAILS - FULL PAGE (BY ID)
-================================================== */
-
-/* export const getCatwayById = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { from, id: reservationId } = req.query;
-    const catway = await Catway.findById(id);
-
-    if (!catway) {
-      const error = new Error(CATWAY_MESSAGES.NOT_FOUND)
-      error.status = 404;
-      return next(error);
-    }
-
-    const catwayViewModel = mapCatwayToDetail(catway);
-
-    res.render("catways/catwayDetails", {
-      title: "Détail catway",
-      activePage: "catways",
-      catway: catwayViewModel,
-      from,
-      reservationId
-    });
-
-  } catch (error) {
-    next(error);
-  }
-}; */
-
-/* ==================================================
   CATWAY DETAILS - FULL PAGE (BY NUMBER)
 ================================================== */
 
@@ -86,21 +56,22 @@ export const getCatwayByNumber = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
     const { from, id: reservationId } = req.query;
-    const token = req.session?.user?.token;
 
-    if (!token) {
-      return res.redirect("/login");
+    const apiData = await fetchCatwaysByNumber(catwayNumber, req, res);
+
+    if (apiData?.authExpired) return;
+
+    if (!apiData || apiData?.error) {
+      return next (new Error(COMMON_MESSAGES.SERVER_ERROR_LONG));
     }
 
-    const response = await fetchCatwaysByNumber(catwayNumber, token);
-
-    if (!response?.data) {
-      const error = new Error("Catway introuvable.");
+    if (!apiData.data) {
+      const error = new Error(CATWAY_MESSAGES.NOT_FOUND);
       error.status = 404;
       return next(error);
     }
 
-    const catwayApi = response.data;
+    const catwayApi = apiData.data;
     const catwayViewModel = mapCatwayToDetail(catwayApi);
 
     res.render("catways/catwayDetails", {
@@ -124,22 +95,23 @@ export const getCatwayByNumber = async (req, res, next) => {
 export const getCatwayPanel = async (req, res) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
-    const token = req.session?.user?.token;
 
-    if (!token) {
-      return res.redirect("/login");
+    const apiData = await fetchCatwaysByNumber(catwayNumber, req, res);
+
+    if (apiData?.authExpired) return;
+
+    if (!apiData || apiData?.error) {
+      return next (new Error(COMMON_MESSAGES.SERVER_ERROR_LONG));
     }
 
-    const response = await fetchCatwaysByNumber(catwayNumber, token);
-
-    if (!response?.data) {
+    if (!apiData.data) {
       return res.status(404).render("partials/panels/panelError", {
         layout: false,
         message: CATWAY_MESSAGES.NOT_FOUND
       });
     }
     
-    const catwayApi = response.data;
+    const catwayApi = apiData.data;
     const catwayViewModel = mapCatwayToDetail(catwayApi);
 
     res.render("partials/panels/catwayPanel", {
@@ -159,11 +131,6 @@ export const getCatwayPanel = async (req, res) => {
 export const getCreateCatwayPage = async (req, res, next) => {
   try {
     const suggestedNumber = await findNextCatwayNumber();
-    const token = req.session?.user?.token;
-
-    if (!token) {
-      return res.redirect("/login");
-    }
 
     res.render("catways/catwayCreate", {
         title: "Créer un catway",
@@ -179,51 +146,28 @@ export const getCreateCatwayPage = async (req, res, next) => {
 };
 
 /* ==================================================
-  EDIT CATWAY PAGE (BY ID)
-================================================== */
-
-/* export const getEditCatwayById = async (req, res, next) => {
-  try {
-    const catway = await Catway.findById(req.params.id);
-
-    if (!catway) {
-      return next();
-    }
-
-    res.render("catways/catwayEdit", {
-      title: "Éditer un catway",
-      activePage: "catways",
-      catway,
-      errors: {},
-    });
-
-  } catch (error) {
-    next(error);
-  }
-}; */
-
-/* ==================================================
   EDIT CATWAY PAGE (BY NUMBER)
 ================================================== */
 
 export const getEditCatwayByNumber = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
-    const token = req.session?.user?.token;
 
-    if (!token) {
-      return res.redirect("/login");
+    const apiData = await fetchCatwaysByNumber(catwayNumber, req, res);
+
+    if (apiData?.authExpired) return;
+
+    if (!apiData || apiData?.error) {
+      return next (new Error(COMMON_MESSAGES.SERVER_ERROR_LONG));
     }
 
-    const response = await fetchCatwaysByNumber(catwayNumber, token);
-
-    if (!response?.data) {
-      const error = new Error("Catway introuvable.");
+    if (!apiData.data) {
+      const error = new Error(CATWAY_MESSAGES.NOT_FOUND);
       error.status = 404;
       return next(error);
     }
 
-    const catwayApi = response.data;
+    const catwayApi = apiData.data;
     const catwayViewModel = mapCatwayToForm(catwayApi);
 
     res.render("catways/catwayEdit", {

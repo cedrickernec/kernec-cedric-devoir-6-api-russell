@@ -6,76 +6,50 @@
  * ===================================================================
  */
 
+import { apiFetch } from "./apiClient.js";
+
 // ==================================================
 // FETCH CATWAYS
 // ==================================================
 
-export async function fetchCatways(token) {
+export async function fetchCatways(req, res) {
 
-    const res = await fetch("http://localhost:3000/api/catways", {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-
-    if (!res.ok) return null;
-
-    return res.json();
+    return apiFetch("/api/catways", {}, req, res);
 }
 
 // ==================================================
 // FETCH CATWAYS BY NUMBER
 // ==================================================
 
-export async function fetchCatwaysByNumber(number, token) {
+export async function fetchCatwaysByNumber(number, req, res) {
 
-    const res = await fetch(`http://localhost:3000/api/catways/${number}`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-
-    if (!res.ok) return null;
-
-    return res.json();
+    return apiFetch(`/api/catways/${number}`, {}, req, res);
 }
 
 // ==================================================
 // CREATE CATWAY
 // ==================================================
 
-export async function createCatway(data, token) {
+export async function createCatway(data, req, res) {
 
-    const res = await fetch("http://localhost:3000/api/catways", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(data)
-    });
-
-    if (!res.ok) return null;
-
-    return res.json();
+    return apiFetch(
+        "/api/catways", {
+            method: "POST",
+            body: JSON.stringify(data)
+            }, req, res
+    );
 }
 
 // ==================================================
 // UPDATE CATWAY
 // ==================================================
 
-export async function updateCatway(number, data, token) {
+export async function updateCatway(number, data, req, res) {
 
-    const res = await fetch(`http://localhost:3000/api/catways/${number}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(data)
-    });
-
-    if (!res.ok) return null;
-
-    return res.json();
+    return apiFetch(
+        `/api/catways/${number}`, {
+            method: "PUT",
+            body: JSON.stringify(data)
+        }, req, res
+    );
 }
