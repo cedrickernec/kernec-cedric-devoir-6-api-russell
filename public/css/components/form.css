@@ -106,12 +106,11 @@ input[type="checkbox"] {
     margin-top: 4px;
 }
 
-.form-error,
-.form-feedback.error {
+.form-error {
     color: var(--danger-2);
 }
 
-.form-feedback:empty {
+.form-error.hidden {
     display: none;
 }
 

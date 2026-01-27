@@ -62,16 +62,6 @@ export async function getUserByIdService(id) {
 
 export async function createUserService(data) {
 
-    const existing = await findUserByEmail(data.email);
-
-    if (existing) {
-        throw ApiError.fieldConflict(
-            "email",
-            "Un utilisateur avec cet email existe déjà.",
-            { userId: existing._id }
-        );
-    }
-
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     return createUser({

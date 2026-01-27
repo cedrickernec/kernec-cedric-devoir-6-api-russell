@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // ====================================================
 
         if (formGroup) {
-            const backendError = formGroup.querySelector("p.form-error");
+            const backendError = formGroup.querySelector(".form-error");
             if (backendError) {
                 backendError.remove();
                 formGroup.classList.remove("has-error");

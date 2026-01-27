@@ -9,50 +9,17 @@
 
 import User from "../../../api/models/User.js";
 import bcrypt from "bcrypt";
+
 import {
-  validateUserCreate,
   validateUsername,
   validateEmail,
   validatePassword
 } from "../../../api/validators/userValidators.js";
-import { PASSWORD_RULES } from "../../utils/users/userValidator.js";
+
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 import { createUser } from "../../services/api/userApi.js";
-
-// ==================================================
-// VIEW HELPER - CREATE PAGE RENDER
-// ==================================================
-
-const renderCreateUserPage = (res, {
-  errors = {},
-  formData = {}
-}) => {
-  res.render("users/userCreate", {
-    title: "Création d'un utilisateur",
-    activePage : "users",
-    errors,
-    formData,
-    passwordRules: PASSWORD_RULES
-  });
-};
-
-// ==================================================
-// VIEW HELPER - EDIT PAGE RENDER
-// ==================================================
-
-const renderEditUserPage = (res, {
-  user,
-  errors = {}
-}) => {
-  res.render("users/userEdit", {
-      title: "Modification de l'utilisateur",
-      activePage: "users",
-      user,
-      errors,
-      passwordRules: PASSWORD_RULES
-  });
-};
+import { renderCreateUserPage, renderEditUserPage } from "../../views/helpers/usersViewHelper.js";
 
 // ==================================================
 // CREATE USER
@@ -69,22 +36,32 @@ export const postCreateUser = async (req, res, next) => {
     }
 
     const apiData = await createUser(payload, req, res);
-    console.log("API USER →", apiData);
 
     if (apiData?.authExpired) return;
 
-    if (!apiData || apiData?.error) {
-        return renderCreateUserPage(res, {
-            errors: { global: COMMON_MESSAGES.SERVER_ERROR_LONG },
-            formData: { username, email }
-        });
-    }
+    if (apiData.success === false) {
 
-    if (apiData?.success === false) {
+      // Erreurs de champs
+      if (Object.keys(apiData.errors).length > 0) {
         return renderCreateUserPage(res, {
-            errors: apiData.errors || {},
-            formData: { username, email }
+          errors: apiData.errors,
+          formData: { username, email }
         });
+      }
+
+      // Erreur métier
+      if (apiData.context || apiData.message) {
+        return renderCreateUserPage(res, {
+          globalError: apiData.message,
+          formData: { username, email }
+        });
+      }
+
+      // Fallback sécurité
+      return renderCreateUserPage(res, {
+        globalError: COMMON_MESSAGES.SERVER_ERROR_LONG,
+        formData: { username, email }
+      });
     }
 
     req.session.flash = {

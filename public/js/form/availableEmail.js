@@ -13,23 +13,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const input = document.getElementById("email");
   const feedback = document.getElementById("email-feedback");
-  const form = input?.closest("form");
+/*   const form = input?.closest("form"); */
 
   if (!input || !feedback) return;
 
   // Présent en mode édition uniquement
-  const currentUserId = form?.dataset.entityId;
-  let timeout;
+/*   const currentUserId = form?.dataset.entityId;
+ */  let timeout;
 
   input.addEventListener("input", () => {
     clearTimeout(timeout);
 
     const email = input.value.trim();
+    const formGroup = input.closest(".form-group");
 
     // Reset
     feedback.textContent = "";
     feedback.classList.add("hidden");
-    feedback.classList.remove("error");
+    formGroup.classList.remove("has-error");
 
     // Champ vide ou format invalide → pas de requête
     if (!email || !input.checkValidity()) return;
@@ -41,7 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Débounce pour éviter les requêtes à chaque frappe
     timeout = setTimeout(async () => {
       try {
-        const params = new URLSearchParams({
+        const res = await fetch(
+          `/users/ajax/check-email?email=${encodeURIComponent(email)}`,
+          { credentials: "same-origin"}
+        );
+
+/*         const params = new URLSearchParams({
           email: email
         });
 
@@ -52,14 +58,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const res = await fetch(
           `/users/ajax/check-email?${params.toString()}`,
           { credentials: "same-origin" }
-        );
+        ); */
 
         const data = await res.json();
 
         if (!data.available) {
           feedback.textContent = "Cet email est déjà utilisé.";
           feedback.classList.remove("hidden");
-          feedback.classList.add("error");
+          formGroup.classList.add("has-error");
         }
         
       } catch (err) {

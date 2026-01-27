@@ -7,11 +7,11 @@
  */
 
 import User from "../../../api/models/User.js";
-import { PASSWORD_RULES } from "../../utils/users/userValidator.js";
 import { mapUserDetail, mapUserToList } from "../../utils/users/userMapper.js";
+import { renderCreateUserPage, renderEditUserPage } from "../../views/helpers/usersViewHelper.js";
+import { fetchUserById, fetchUsers } from "../../services/api/userApi.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
-import { fetchUserById, fetchUsers } from "../../services/api/userApi.js";
 
 // ==================================================
 // USERS LIST
@@ -88,8 +88,12 @@ export const getUserPanel = async (req, res) => {
 
     if (apiData?.authExpired) return;
 
-    if (!apiData.success) {
-      return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
+    if (!apiData?.success) {
+      return res.status(500).render("partials/panels/panelError", {
+        layout: false,
+        message: apiData?.message ||
+        COMMON_MESSAGES.SERVER_ERROR_LONG
+      });
     }
 
     if (!apiData.data) {
@@ -118,14 +122,7 @@ export const getUserPanel = async (req, res) => {
 
 export const getCreateUserPage = (req, res, next) => {
   try {
-    res.render("users/userCreate", {
-      title: "Création d'un utilisateur",
-      activePage: "users",
-      errors: {},
-      formData: {},
-      passwordRules: PASSWORD_RULES
-    });
-    
+    renderCreateUserPage(res, {});
   } catch (error) {
     next(error);
   }
@@ -143,13 +140,7 @@ export const getEditUserPage = async (req, res, next) => {
       return next();
     }
 
-    res.render("users/userEdit", {
-      title: "Éditer un utilisateur",
-      activePage: "users",
-      user,
-      errors: {},
-      passwordRules: PASSWORD_RULES
-    });
+    renderEditUserPage(res, {});
 
   } catch (error) {
     next(error);

@@ -1,4 +1,9 @@
 <h1>Création d'un utilisateur</h1>
+<% if (globalError) { %>
+  <div class="form-global-error" role="alert">
+    <%= globalError %>
+  </div>
+<% } %>
 
 <form
   method="POST"
@@ -43,7 +48,7 @@
     >
     <p
       id="email-feedback"
-      class="form-feedback <%= errors.email ? '' : 'hidden' %>"
+      class="form-error <%= errors.email ? '' : 'hidden' %>"
     >
       <%= errors.email || "" %>
     </p>
