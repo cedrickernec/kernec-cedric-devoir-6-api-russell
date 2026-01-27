@@ -16,16 +16,16 @@ export function formatReservation(reservation) {
 
     return {
         catway: {
-            number: object.catwayNumber
+            catwayNumber: object.catwayNumber
         },
         client: {
-            name: object.clientName,
-            boat: object.boatName
+            clientName: object.clientName,
+            boatName: object.boatName
         },
         reservation: {
             id: object._id,
-            start: object.startDate,
-            end: object.endDate,
+            startDate: object.startDate,
+            endDate: object.endDate,
             createdAt : object.createdAt,
             updatedAt : object.updatedAt
         },
@@ -41,10 +41,10 @@ export function formatReservationsList(reservations) {
         return {
             id: object._id,
             catwayNumber: object.catwayNumber,
-            client: object.clientName,
-            boat: object.boatName,
-            start: object.startDate,
-            end: object.endDate,
+            clientName: object.clientName,
+            boatName: object.boatName,
+            startDate: object.startDate,
+            endDate: object.endDate,
             createdAt : object.createdAt,
             updatedAt : object.updatedAt
         };

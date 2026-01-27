@@ -25,10 +25,10 @@ export const postLoginView = async (req, res) => {
             body: JSON.stringify({ email, password })
         });
 
-        const data = await apiResponse.json();
+        const apiData = await apiResponse.json();
 
         // Erreur d'authentification
-        if (!apiResponse.ok || !data.user || !data.token) {
+        if (!apiResponse.ok || !apiData.data || !apiData.token) {
             req.session.authError = "Identifiants incorrects.";
             req.session.disableAnimations = true;
             
@@ -37,10 +37,10 @@ export const postLoginView = async (req, res) => {
 
         // Session utilisateur
         req.session.user = {
-            id: data.user.id,
-            username: data.user.username,
-            email: data.user.email,
-            token: data.token
+            id: apiData.data.id,
+            username: apiData.data.username,
+            email: apiData.data.email,
+            token: apiData.token
         };
 
         res.redirect("/dashboard");

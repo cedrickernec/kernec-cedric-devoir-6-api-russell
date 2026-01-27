@@ -16,6 +16,7 @@ import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.j
 
 const renderCreateCatwayPage = (res, {
     errors = {},
+    globalError = null,
     formData = {},
     startNumber = null,
     endNumber = null
@@ -24,6 +25,7 @@ const renderCreateCatwayPage = (res, {
         title: "Création d'un catway",
         activePage : "catways",
         errors,
+        globalError,
         formData,
         startNumber,
         endNumber
@@ -62,18 +64,29 @@ export const postCreateCatway = async (req, res, next) => {
 
         const apiData = await createCatway(payload, req, res);
 
-        if (apiData?.authExpired) return;
+        if (apiData.authExpired) return;
 
-        if (!apiData || apiData?.error) {
-            return renderCreateCatwayPage(res, {
-                errors: { global: COMMON_MESSAGES.SERVER_ERROR_LONG },
-                formData: req.body
-            });
-        }
+        if (apiData.success === false) {
 
-        if (apiData?.success === false) {
+            // Erreurs de champs
+            if (Object.keys(apiData.errors).length > 0) {
+                return renderCreateCatwayPage(res, {
+                    errors: apiData.errors,
+                    formData: req.body
+                });
+            }
+
+            // Erreur métier
+            if (apiData.context || apiData.message) {
+                return renderCreateCatwayPage(res, {
+                    globalError: apiData.message,
+                    formData: req.body
+                });
+            }
+
+            // Fallback sécurité
             return renderCreateCatwayPage(res, {
-                errors: apiData.errors || {},
+                globalError: COMMON_MESSAGES.SERVER_ERROR_LONG,
                 formData: req.body
             });
         }
@@ -108,25 +121,41 @@ export const postEditCatway = async (req, res, next) => {
 
         if (apiData?.authExpired) return;
 
-        if (!apiData || apiData?.error) {
-            return renderEditCatwayPage(res, {
-                catway: {
-                    catwayNumber,
-                    catwayState,
-                    isOutOfService
-                },
-                errors: { global: COMMON_MESSAGES.SERVER_ERROR_LONG }
-            });
-        }
+        if (apiData.success === false) {
 
-        if (apiData?.success === false) {
+            // Erreurs de champs
+            if (Object.keys(apiData.errors).length > 0) {
+                return renderEditCatwayPage(res, {
+                    catway: {
+                        catwayNumber,
+                        catwayState,
+                        isOutOfService
+                    },
+                    errors: apiData.errors
+                });
+            }
+
+            // Erreur métier
+            if (apiData.message) {
+                return renderEditCatwayPage(res, {
+                    catway: {
+                        catwayNumber,
+                        catwayState,
+                        isOutOfService
+                    },
+                    errors: {},
+                    globalError: apiData.message
+                });
+            }
+
+            // Fallback sécurité
             return renderEditCatwayPage(res, {
                 catway: {
                     catwayNumber,
                     catwayState,
                     isOutOfService
                 },
-                errors: apiData.errors
+                globalError: COMMON_MESSAGES.SERVER_ERROR_LONG
             });
         }
 

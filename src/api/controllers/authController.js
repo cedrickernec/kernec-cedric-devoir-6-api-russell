@@ -9,7 +9,7 @@
  * ===================================================================
  */
 
-import bcrypt from "bcrypt";
+import { ApiError } from "../utils/errors/apiError.js";
 import { loginService } from "../services/authService.js";
 import { pickAllowedFields } from "../utils/errors/pickAllowedFields.js";
 
@@ -31,7 +31,9 @@ export const login = async (req, res, next) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            throw new ApiError(400, "Email et mot de passe requis.")
+            throw ApiError.badRequest(
+                "Email et mot de passe requis."
+            );
         }
 
         // 3) Authentification
@@ -42,7 +44,7 @@ export const login = async (req, res, next) => {
             success: true,
             message: "Connexion réussi.",
             token,
-            user: {
+            data: {
                 id: user._id,
                 username: user.username,
                 email: user.email

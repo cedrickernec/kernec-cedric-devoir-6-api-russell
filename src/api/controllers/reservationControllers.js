@@ -19,10 +19,7 @@ import {
     deleteReservationService
 } from "../services/reservationService.js"
 
-import {
-    validateReservationCreate,
-    validateReservationUpdate
-} from "../validators/reservationValidators.js";
+import { validateReservationCreate } from "../validators/reservationValidators.js";
 
 import {
     validateCatwayNumber,
@@ -51,7 +48,7 @@ export const getAllReservations = async (req, res, next) => {
             message: reservations.length === 0
               ? "Aucune réservation trouvée."
               : undefined,
-            reservations: formatReservationsList(reservations)
+            data: formatReservationsList(reservations)
         });
 
     } catch (error) {
@@ -78,7 +75,7 @@ export const getReservationsByCatway = async (req, res, next) => {
             message: reservations.length === 0
               ? "Aucune réservation trouvée."
               : undefined,
-            reservations: formatReservationsList(reservations)
+            data: formatReservationsList(reservations)
         });
 
     } catch (error) {
@@ -105,7 +102,7 @@ export const getReservationById = async (req, res, next) => {
         // 3) Réponse
         res.status(200).json({
             success: true,
-            reservation: formatReservation(reservation)
+            data: formatReservation(reservation)
         });
 
     } catch (error) {
@@ -135,7 +132,9 @@ export const createReservation = async (req, res, next) => {
         // 3) Validation
         const errors = validateReservationCreate(cleanData);
         if (Object.keys(errors).length > 0) {
-            throw new ApiError(400, "Données invalides.", errors);
+            throw ApiError.validation(
+                errors
+            );
         }
 
         // 4) Service
@@ -145,7 +144,7 @@ export const createReservation = async (req, res, next) => {
         res.status(201).json({
             success: true,
             message: "Réservation créée avec succès.",
-            details: formatReservation(created)
+            data: formatReservation(created)
         });
 
     } catch (error) {
@@ -177,28 +176,23 @@ export const updateReservation = async (req, res, next) => {
         const cleanData = pickAllowedFields(req.body, allowedFields);
 
         if (Object.keys(cleanData).length === 0) {
-            throw new ApiError(400, "Aucune donnée valide à mettre à jour.")
+            throw ApiError.badRequest(
+                "Aucune donnée valide à mettre à jour."
+            );
         }
 
-        // 3) Validation formats des dates
-        const formatErrors = validateReservationUpdate(cleanData);
-
-        if (Object.keys(formatErrors).length > 0) {
-            throw new ApiError(400, "Donnée invalides.", formatErrors);
-        }
-
-        // 4) Service
+        // 3) Service
         const updated = await updateReservationService(
             catwayNumber,
             idReservation,
             cleanData
         );
 
-        // 5) Réponse
+        // 4) Réponse
         res.status(200).json({
             success: true,
-            message: "Réservation mise à jour",
-            details: formatReservation(updated)
+            message: "Réservation mise à jour.",
+            data: formatReservation(updated)
         });
 
     } catch (error) {
@@ -226,7 +220,7 @@ export const deleteReservation = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Réservation supprimée avec succès.",
-            details: formatReservation(deleted)
+            data: formatReservation(deleted)
         });
 
     } catch (error) {

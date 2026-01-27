@@ -1,4 +1,9 @@
 <h1>Modification du catway</h1>
+<% if (globalError) { %>
+  <div class="form-global-error" role="alert">
+    <%= globalError %>
+  </div>
+<% } %>
 
 <form
   method="POST"

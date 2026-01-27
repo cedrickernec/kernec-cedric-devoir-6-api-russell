@@ -1,4 +1,9 @@
 <h1>Création d'un catway</h1>
+<% if (globalError) { %>
+  <div class="form-global-error" role="alert">
+    <%= globalError %>
+  </div>
+<% } %>
 
 <form method="POST" action="/catways/create" class="form">
   <!--====== NUMBER ======-->
@@ -18,7 +23,7 @@
 
     <p
       id="catwayNumber-feedback"
-      class="form-feedback <%= errors.catwayNumber ? '' : 'hidden' %>"
+      class="form-feedback <%= errors.catwayNumber ? 'error' : 'hidden' %>"
     >
       <%= errors.catwayNumber %>
     </p>
@@ -30,8 +35,18 @@
     <label for="catwayType">Type</label>
     <select id="catwayType" name="catwayType" required>
       <option value="">- Choisir -</option>
-      <option value="short">Short</option>
-      <option value="long">Long</option>
+      <option
+        value="short"
+        <%= formData?.catwayType === "short" ? "selected" : '' %>
+        >
+        Short
+      </option>
+      <option
+        value="long"
+        <%= formData?.catwayType === "long" ? "selected" : '' %>
+        >
+        Long
+      </option>
     </select>
   </div>
 
@@ -44,7 +59,7 @@
         id="goodStateCheckbox"
         data-toggle-checkbox="catwayState"
         data-toggle-value="bon état"
-        checked
+        <%= formData?.catwayState === "bon état" ? "checked" : '' %>
       />
       Catway en bon état
     </label>
@@ -60,7 +75,7 @@
       aria-readonly="true"
       required
     >
-bon état
+<%= formData?.catwayState || "bon état" %>
     </textarea>
 
     <% if (errors?.catwayState) { %>

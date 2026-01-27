@@ -11,27 +11,35 @@
 
 import { ApiError } from "../errors/apiError.js";
 
+const RESERVATION_HOUR = 6;
+
 export const parseDate = (dateStr) => {
 
-    // 1) Format strict
+    // 1) Type
     if (typeof dateStr !== "string") {
-        throw new ApiError(400, "Format de date invalide. Format attendu : YYYY-MM-DD.");
+        throw ApiError.validation(
+            "Format de date invalide. Format attendu : YYYY-MM-DD."
+        );
     }
 
     const raw = dateStr.trim();
+
+    // 2) Format strict
     const regex = /^(\d{4})-(\d{2})-(\d{2})$/;
     const match = raw.match(regex);
 
     if (!match) {
-        throw new ApiError(400, "Format de date invalide. Format attendu : YYYY-MM-DD.");
+        throw ApiError.validation(
+            "Format de date invalide. Format attendu : YYYY-MM-DD."
+        );
     }
 
-    // 2) Extraction
+    // 3) Extraction
     const year  = Number(match[1]);
     const month = Number(match[2]);
     const day   = Number(match[3]);
 
-    // 3) Validation date
+    // 4) Validation date
     const errors = [];
 
     if (month < 1 || month > 12) {
@@ -47,7 +55,7 @@ export const parseDate = (dateStr) => {
         errors.push("jour");
     }
 
-    // 4) Date invalide
+    // 5) Date invalide
     if (errors.length > 0) {
         let message = "Date invalide : ";
 
@@ -57,9 +65,11 @@ export const parseDate = (dateStr) => {
             message += "le mois et le jour sont incorrects.";
         }
 
-        throw new ApiError(400, message);
+        throw ApiError.validation(
+            message
+        );
     }
 
-    // 5) Date valide
-    return new Date(year, month -1, day);
+    // 6) Date valide
+    return new Date(Date.UTC(year, month - 1, day, RESERVATION_HOUR));
 };

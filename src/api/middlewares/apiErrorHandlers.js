@@ -10,7 +10,7 @@
 export const apiNotFoundHandler = (req, res) => {
     res.status(404).json({
         success: false,
-        error: "Route API introuvable",
+        error: "Route API introuvable.",
         path: req.originalUrl
     });
 };
@@ -21,16 +21,31 @@ export const apiNotFoundHandler = (req, res) => {
 
 export const apiErrorHandler = (err, req, res, next) => {
     const status = err.status || 500;
+    const response =  { success: false };
 
-    const response = {
-        success: false,
-        error: status === 500
-          ? "Erreur serveur"
-          : err.message
-    };
+    if (status === 500) {
+        response.message = "Erreur interne du serveur.";
+    } else if (err.message) {
+        response.message = err.message;
+    }
 
-    if (err.details) {
-        response.details = err.details;
+    if (err.detail?.fields && Object.keys(err.detail.fields).length > 0) {
+        response.errors = err.detail.fields;
+    }
+
+    if (err.detail?.conflictWith) {
+        response.conflictWith = err.detail.conflictWith;
+    }
+
+    if (err.detail?.context) {
+        response.context = err.detail.context;
+    }
+
+    if (err.detail &&
+        !err.detail.fields &&
+        !err.detail.conflictWith &&
+        !err.detail.context) {
+        response.context = err.detail;
     }
 
     if (process.env.NODE_ENV === "development") {

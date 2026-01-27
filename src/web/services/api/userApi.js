@@ -25,3 +25,17 @@ export async function fetchUserById(id, req, res) {
 
     return apiFetch(`/api/users/${id}`, {}, req, res);
 }
+
+// ==================================================
+// CREATE USER
+// ==================================================
+
+export async function createUser(data, req, res) {
+
+    return apiFetch(
+        "/api/users", {
+            method: "POST",
+            body: JSON.stringify(data)
+            }, req, res
+    );
+}

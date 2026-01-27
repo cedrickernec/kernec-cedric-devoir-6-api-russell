@@ -18,6 +18,7 @@ import {
 import { PASSWORD_RULES } from "../../utils/users/userValidator.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
+import { createUser } from "../../services/api/userApi.js";
 
 // ==================================================
 // VIEW HELPER - CREATE PAGE RENDER
@@ -57,62 +58,45 @@ const renderEditUserPage = (res, {
 // CREATE USER
 // ==================================================
 
-export const postCreateUser = async (req, res) => {
-  const { username, email, password } = req.body;
-
+export const postCreateUser = async (req, res, next) => {
   try {
-    // Validation standard
-    const errors = validateUserCreate({ username, email, password });
-
-    // Vérification email unique
-    if (email) {
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        errors.email = USER_MESSAGES.EMAIL_CONFLICT;
-      }
-    }
-
-    // Normalisation du format d'erreur password
-    if (errors.password && typeof errors.password === "object") {
-      errors.password = {
-        message: USER_MESSAGES.INVALID_PASSWORD,
-        failed: Object.values(errors.password)
-      };
-    }
-
-    // Erreurs → retour formulaire
-    if (Object.keys(errors).length > 0) {
-      return renderCreateUserPage(res, {
-        errors,
-        formData: { username, email }
-      });
-    }
-
-    // Hash et création
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const createdUser = await User.create({
+    const { username, email, password } = req.body;
+    
+    const payload = {
       username,
       email,
-      password: hashedPassword
-    })
+      password
+    }
 
-    // Flash + redirect
+    const apiData = await createUser(payload, req, res);
+    console.log("API USER →", apiData);
+
+    if (apiData?.authExpired) return;
+
+    if (!apiData || apiData?.error) {
+        return renderCreateUserPage(res, {
+            errors: { global: COMMON_MESSAGES.SERVER_ERROR_LONG },
+            formData: { username, email }
+        });
+    }
+
+    if (apiData?.success === false) {
+        return renderCreateUserPage(res, {
+            errors: apiData.errors || {},
+            formData: { username, email }
+        });
+    }
+
     req.session.flash = {
       type : "success",
       message : USER_MESSAGES.CREATE_SUCCESS,
-      highlightId: createdUser._id.toString()
+      highlightId: apiData.data.id
     };
 
     res.redirect("/users");
 
   } catch (error) {
-    console.error("Erreur création utilisateur :", error);
-
-    return renderCreateUserPage(res, {
-      errors: { global: COMMON_MESSAGES.SERVER_ERROR_LONG},
-      formData: { username, email }
-    });
+    next(error);
   }
 };
 

@@ -26,7 +26,9 @@ export async function loginService(email, password) {
     const user = await findUserByEmailWithPassword(email);
 
     if (!user) {
-        throw new ApiError(401, "Email ou mot de passe incorrect.");
+        throw ApiError.unauthorized(
+            "Email ou mot de passe incorrect."
+        );
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -35,7 +37,9 @@ export async function loginService(email, password) {
     );
 
     if (!isPasswordValid) {
-        throw new ApiError(401, "Email ou mot de passe incorrect.");
+        throw ApiError.unauthorized(
+            "Email ou mot de passe incorrect."
+        );
     }
 
     const token = jwt.sign(

@@ -9,6 +9,7 @@
  */
 
 import { parseDate } from "../utils/dates/parseDate.js";
+import { ApiError } from "../utils/errors/apiError.js";
 
 // Champs obligatoires
 export function validateReservationCreate(body) {
@@ -56,12 +57,14 @@ export function validateReservationUpdate(cleanData) {
 // Validation cohérence période
 export function validateReservationPeriod(start, end) {
     if (!start || !end) {
-        throw new Error("Dates de réservation invalides.");
+        throw ApiError.badRequest(
+            "Dates de réservation invalides."
+        );
     }
 
     if (start >= end) {
-        throw new Error(
-            "La date de début doit être antérieure à la date de fin."
-        );
+        throw ApiError.validation({
+            startDate: "La date de début doit être antérieure à la date de fin."
+        });
     }
 }

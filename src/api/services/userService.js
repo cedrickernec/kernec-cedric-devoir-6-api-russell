@@ -22,9 +22,11 @@ import {
 } from "../repositories/userRepo.js";
 
 import {
-    canDeleteUser
-} from "./userRules.js";
+    validateUserUpdate,
+    validatePassword
+} from "../validators/userValidators.js";
 
+import { canDeleteUser } from "./userRules.js";
 import { ApiError } from "../utils/errors/apiError.js";
 
 // ===============================================
@@ -45,7 +47,10 @@ export async function getUserByIdService(id) {
     const user = await findUserById(id);
 
     if (!user) {
-        throw new ApiError(404, "Utilisateur introuvable.");
+        throw ApiError.notFound(
+            "Utilisateur introuvable.",
+            { userId: id }
+        );
     }
 
     return user;
@@ -60,7 +65,11 @@ export async function createUserService(data) {
     const existing = await findUserByEmail(data.email);
 
     if (existing) {
-        throw new ApiError(409, "Un utilisateur avec cet email existe déjà.");
+        throw ApiError.fieldConflict(
+            "email",
+            "Un utilisateur avec cet email existe déjà.",
+            { userId: existing._id }
+        );
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -81,14 +90,29 @@ export async function updateUserService(id, cleanData, rawBody) {
     const user = await findUserById(id);
 
     if (!user) {
-        throw new ApiError(404, "Utilisateur introuvable.")
+        throw ApiError.notFound(
+            "Utilisateur introuvable.",
+            { userId: id }
+        );
+    }
+
+    const errors = validateUserUpdate(cleanData);
+
+    if (Object.keys(errors).length > 0) {
+        throw ApiError.validation(
+            errors
+        );
     }
 
     if (cleanData.email) {
         const existing = await findUserByEmail(cleanData.email);
 
         if (existing && existing._id.toString() !== id) {
-            throw new ApiError(409, "Un utilisateur avec cet email existe déjà.");
+            throw ApiError.fieldConflict(
+                "email",
+                "Un utilisateur avec cet email existe déjà.",
+                { userId: existing._id }
+            );
         }
     }
 
@@ -104,7 +128,19 @@ export async function updatePasswordService(id, newPassword) {
     const user = await findUserByIdWithPassword(id);
 
     if (!user) {
-        throw new ApiError(404, "Utilisateur introuvable.")
+        throw ApiError.notFound(
+            "Utilisateur introuvable.",
+            { userId: id }
+        );
+    }
+
+    const validation = validatePassword(newPassword);
+
+    if (!validation.valid) {
+        throw ApiError.validation(
+            validation.errors,
+            "Mot de passe invalide."
+        );
     }
 
     const isSamePassword = await bcrypt.compare(
@@ -113,7 +149,9 @@ export async function updatePasswordService(id, newPassword) {
     );
 
     if (isSamePassword) {
-        throw new ApiError(400, "Le nouveau mot de passe doit être différent de l'ancien.");
+        throw ApiError.badRequest(
+            "Le nouveau mot de passe doit être différent de l'ancien."
+        );
     }
 
     user.password = await bcrypt.hash(newPassword, 10);
@@ -127,15 +165,20 @@ export async function updatePasswordService(id, newPassword) {
 // ===============================================
 
 export async function deleteUserService(currentUserId, targetUserId) {
-
-    if (!canDeleteUser(currentUserId, targetUserId)) {
-        throw new ApiError(403, "Vous ne pouvez pas supprimer votre propre compte.");
-    }
-
+    
     const user = await findUserById(targetUserId);
 
     if (!user) {
-        throw new ApiError(404, "Utilisateur introuvable.")
+        throw ApiError.notFound(
+            "Utilisateur introuvable.",
+            { userId: targetUserId }
+        );
+    }
+
+    if (!canDeleteUser(currentUserId, targetUserId)) {
+        throw ApiError.forbidden(
+            "Vous ne pouvez pas supprimer votre propre compte."
+        );
     }
 
     return deleteUserById(targetUserId);

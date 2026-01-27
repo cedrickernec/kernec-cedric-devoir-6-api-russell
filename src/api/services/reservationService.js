@@ -26,8 +26,12 @@ import {
     hasReservationStarted
 } from "./reservationRules.js";
 
+import {
+    validateReservationPeriod,
+    validateReservationUpdate
+} from "../validators/reservationValidators.js";
+
 import { parseDate } from "../utils/dates/parseDate.js";
-import { validateReservationPeriod } from "../validators/reservationValidators.js";
 import { normalizeDayRange } from "../utils/dates/normalizeDayRange.js";
 
 import { ApiError } from "../utils/errors/apiError.js";
@@ -50,11 +54,10 @@ export async function getReservationsByCatwayService(catwayNumber) {
     const catway = await findCatwayByNumber(catwayNumber);
 
     if(!catway) {
-        throw new ApiError(
-            404,
+        throw ApiError.notFound(
             "Catway introuvable.",
             { catwayNumber }
-        )
+        );
     }
 
     return getReservationsByCatway(catwayNumber);
@@ -69,8 +72,7 @@ export async function getReservationByIdService(catwayNumber, idReservation) {
     const catway = await findCatwayByNumber(catwayNumber);
 
     if (!catway) {
-        throw new ApiError(
-            404,
+        throw ApiError.notFound(
             "Catway introuvable",
             { catwayNumber }
         );
@@ -79,8 +81,7 @@ export async function getReservationByIdService(catwayNumber, idReservation) {
     const reservation = await findReservationById(catwayNumber, idReservation);
 
     if (!reservation) {
-        throw new ApiError(
-            404,
+        throw ApiError.notFound(
             "Réservation introuvable.",
             { catwayNumber, idReservation }
         );
@@ -98,17 +99,20 @@ export async function createReservationService(catwayNumber, data) {
     const catway = await findCatwayByNumber(catwayNumber);
 
     if (!catway) {
-        throw new ApiError(
-            404,
+        throw ApiError.notFound(
             "Catway introuvable",
             { catwayNumber }
         );
     }
 
     if (catway.isUnavailable()) {
-        throw new ApiError(
-            409,
-            "Catway hors service."
+        throw ApiError.businessConflict(
+            "Catway hors service.",
+            {
+                catwayNumber: catwayNumber,
+                isOutOfService: catway.isOutOfService,
+                catwayState: catway.catwayState
+            }
         );
     }
 
@@ -122,10 +126,9 @@ export async function createReservationService(catwayNumber, data) {
     const conflict = await findReservationConflict({ catwayNumber, start, end });
 
     if (conflict) {
-        throw new ApiError(
-            409,
+        throw ApiError.resourceConflict(
             "Ce catway est déjà réservé sur ce créneau.",
-            { conflictWith: {
+            { reservation: {
                 id: conflict._id,
                 clientName: conflict.clientName,
                 boatName: conflict.boatName,
@@ -138,7 +141,13 @@ export async function createReservationService(catwayNumber, data) {
         );
     }
 
-    return createReservation({ catwayNumber, data });
+    return createReservation({
+        catwayNumber,
+        clientName: data.clientName,
+        boatName: data.boatName,
+        startDate: start,
+        endDate: end
+    });
 }
 
 // ===============================================
@@ -150,8 +159,7 @@ export async function updateReservationService(catwayNumber, idReservation, data
     const catway = await findCatwayByNumber(catwayNumber);
 
     if (!catway) {
-        throw new ApiError(
-            404,
+        throw ApiError.notFound(
             "Catway introuvable",
             { catwayNumber }
         );
@@ -160,17 +168,23 @@ export async function updateReservationService(catwayNumber, idReservation, data
     const reservation = await findReservationById(catwayNumber, idReservation);
 
     if (!reservation) {
-        throw new ApiError(
-            404,
+        throw ApiError.notFound(
             "Réservation introuvable.",
             { catwayNumber, idReservation }
         );
     }
 
     if (!canUpdateReservation(reservation)) {
-        throw new ApiError(
-            403,
+        throw ApiError.forbidden(
             "Cette réservation est terminée et ne peut plus être modifiée."
+        );
+    }
+
+    const formatErrors = validateReservationUpdate(data);
+
+    if (Object.keys(formatErrors).length > 0) {
+        throw ApiError.validation(
+            formatErrors
         );
     }
 
@@ -179,8 +193,7 @@ export async function updateReservationService(catwayNumber, idReservation, data
         const attemptedStart = parseDate(data.startDate);
 
         if (attemptedStart.getTime() !== reservation.startDate.getTime()) {
-            throw new ApiError(
-                403,
+            throw ApiError.forbidden(
                 "La date de début ne peut plus être modifiée une fois la réservation commencée."
             );
         }
@@ -206,10 +219,9 @@ export async function updateReservationService(catwayNumber, idReservation, data
     })
 
     if (conflict) {
-        throw new ApiError(
-            409,
+        throw ApiError.resourceConflict(
             "Ce catway est déjà réservé sur ce créneau.",
-            { conflictWith: {
+            { reservation: {
                 id: conflict._id,
                 clientName: conflict.clientName,
                 boatName: conflict.boatName,
@@ -241,8 +253,7 @@ export async function deleteReservationService(catwayNumber, idReservation) {
     const catway = await findCatwayByNumber(catwayNumber);
 
     if (!catway) {
-        throw new ApiError(
-            404,
+        throw ApiError.notFound(
             "Catway introuvable",
             { catwayNumber }
         );
@@ -251,16 +262,14 @@ export async function deleteReservationService(catwayNumber, idReservation) {
     const reservation = await findReservationById(catwayNumber, idReservation);
 
     if (!reservation) {
-        throw new ApiError(
-            404,
+        throw ApiError.notFound(
             "Réservation introuvable.",
             { catwayNumber, idReservation }
         );
     }
 
     if (!canDeleteReservation(reservation)) {
-        throw new ApiError(
-            403,
+        throw ApiError.forbidden(
             "Impossible de supprimer une réservation en cours ou terminée."
         );
     }

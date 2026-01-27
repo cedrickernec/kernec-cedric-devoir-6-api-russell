@@ -18,11 +18,7 @@ import {
     updateCatwayService
 } from "../services/catwayService.js";
 
-import {
-    validateCatwayCreate,
-    validateCatwayUpdate
-} from "../validators/catwayValidators.js";
-
+import { validateCatwayCreate } from "../validators/catwayValidators.js";
 import { validateCatwayNumber } from "../validators/params/idValidator.js";
 
 import {
@@ -102,17 +98,19 @@ export const createCatway = async (req, res, next) => {
         // 2) Validation
         const errors = validateCatwayCreate(cleanData);
         if (Object.keys(errors).length > 0) {
-            throw new ApiError(400, "Données invalides.", errors);
+            throw ApiError.validation(
+                errors
+            );
         }
 
         // 3) Service
         const created = await createCatwayService(cleanData);
 
-        // 3) Réponse
+        // 4) Réponse
         res.status(201).json({
             success: true,
             message: "Catway créé avec succès.",
-            catway: formatCatway(created)
+            data: formatCatway(created)
         });
 
     } catch (error) {
@@ -142,27 +140,23 @@ export const updateCatway = async (req, res, next) => {
         }
 
         if (Object.keys(cleanData).length === 0) {
-            throw new ApiError(400, "Aucune donnée valide à mettre à jour.")
+            throw ApiError.badRequest(
+                "Aucune donnée valide à mettre à jour."
+            );
         }
 
-        // 3) Validation
-        const errors = validateCatwayUpdate(cleanData);
-        if (Object.keys(errors).length > 0) {
-            throw new ApiError(400, "Données invalides.", errors);
-        }
-
-        // 4) Service
+        // 3) Service
         const updated = await updateCatwayService(
             catwayNumber,
             req.body,
             cleanData
         );
 
-        // 5) Réponse
+        // 4) Réponse
         res .status(200).json({
             success: true,
             message: "Catway mis à jour.",
-            catway: formatCatway(updated)
+            data: formatCatway(updated)
         });
 
     } catch (error) {
@@ -186,7 +180,7 @@ export const deleteCatway = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Catway supprimé avec succès.",
-            catway: formatCatway(deleted)
+            data: formatCatway(deleted)
         });
 
     } catch (error) {

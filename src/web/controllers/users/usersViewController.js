@@ -23,8 +23,8 @@ export const getUsersPage = async (req, res, next) => {
 
     if (apiData?.authExpired) return;
 
-    if (apiData?.error) {
-      return next (new Error(COMMON_MESSAGES.API_ERROR));
+    if (!apiData.success) {
+      return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
     }
 
     const userView = apiData.data.map(mapUserToList);
@@ -52,8 +52,8 @@ export const getUserById = async (req, res, next) => {
 
     if (apiData?.authExpired) return;
 
-    if (!apiData || apiData?.error) {
-      return next (new Error(COMMON_MESSAGES.SERVER_ERROR_LONG));
+    if (!apiData.success) {
+      return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
     }
 
     if (!apiData.data) {
@@ -88,8 +88,8 @@ export const getUserPanel = async (req, res) => {
 
     if (apiData?.authExpired) return;
 
-    if (!apiData || apiData?.error) {
-      return next (new Error(COMMON_MESSAGES.SERVER_ERROR_LONG));
+    if (!apiData.success) {
+      return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
     }
 
     if (!apiData.data) {

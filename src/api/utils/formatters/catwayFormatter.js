@@ -16,9 +16,9 @@ export function formatCatway(catway) {
 
     return {
         id: object._id,
-        number: object.catwayNumber,
-        type: object.catwayType,
-        state: object.catwayState,
+        catwayNumber: object.catwayNumber,
+        catwayType: object.catwayType,
+        catwayState: object.catwayState,
         isOutOfService: object.isOutOfService,
         createdAt : object.createdAt,
         updatedAt : object.updatedAt
