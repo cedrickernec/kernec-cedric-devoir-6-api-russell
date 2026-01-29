@@ -7,46 +7,9 @@
  */
 
 import { updateCatway, createCatway } from "../../services/api/catwayApi.js";
+import { renderCreateCatwayPage, renderEditCatwayPage } from "../../views/helpers/catwaysViewHelper.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
-
-// ==================================================
-// VIEW HELPER - CREATE PAGE RENDER
-// ==================================================
-
-const renderCreateCatwayPage = (res, {
-    errors = {},
-    globalError = null,
-    formData = {},
-    startNumber = null,
-    endNumber = null
-}) => {
-    res.render("catways/catwayCreate", {
-        title: "Création d'un catway",
-        activePage : "catways",
-        errors,
-        globalError,
-        formData,
-        startNumber,
-        endNumber
-    });
-};
-
-// ==================================================
-// VIEW HELPER - EDIT PAGE RENDER
-// ==================================================
-
-const renderEditCatwayPage = (res, {
-    catway,
-    errors = {},
-}) => {
-    res.render("catways/catwayEdit", {
-        title: "Édition d'un catway",
-        activePage : "catways",
-        catway,
-        errors
-    });
-};
 
 // ==================================================
 // CREATE CATWAY
@@ -110,27 +73,32 @@ export const postCreateCatway = async (req, res, next) => {
 
 export const postEditCatway = async (req, res, next) => {
     try {
-        const { catwayNumber, catwayState, isOutOfService } = req.body;
+        const catwayNumber = Number(req.params.catwayNumber);
+        const { catwayState, isOutOfService } = req.body;
 
         const payload = {
             catwayState,
             isOutOfService: isOutOfService === "on"
         };
 
-        const apiData = await updateCatway(Number(catwayNumber), payload, req, res);
+        const apiData = await updateCatway(catwayNumber, payload, req, res);
+        const errors = apiData.errors || {};
+
+        const catway = {
+            number: catwayNumber,
+            type: req.body.catwayType,
+            state: catwayState,
+            isOutOfService: payload.isOutOfService
+        }
 
         if (apiData?.authExpired) return;
 
         if (apiData.success === false) {
 
             // Erreurs de champs
-            if (Object.keys(apiData.errors).length > 0) {
+            if (Object.keys(errors).length > 0) {
                 return renderEditCatwayPage(res, {
-                    catway: {
-                        catwayNumber,
-                        catwayState,
-                        isOutOfService
-                    },
+                    catway,
                     errors: apiData.errors
                 });
             }
@@ -138,23 +106,14 @@ export const postEditCatway = async (req, res, next) => {
             // Erreur métier
             if (apiData.message) {
                 return renderEditCatwayPage(res, {
-                    catway: {
-                        catwayNumber,
-                        catwayState,
-                        isOutOfService
-                    },
-                    errors: {},
+                    catway,
                     globalError: apiData.message
                 });
             }
 
             // Fallback sécurité
             return renderEditCatwayPage(res, {
-                catway: {
-                    catwayNumber,
-                    catwayState,
-                    isOutOfService
-                },
+                catway,
                 globalError: COMMON_MESSAGES.SERVER_ERROR_LONG
             });
         }

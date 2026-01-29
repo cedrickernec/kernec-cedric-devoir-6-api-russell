@@ -1,5 +1,4 @@
-export function buildCatwayStatus(catway) {
-    const { catwayState, isOutOfService } = catway;
+export function buildCatwayStatus({ catwayState, isOutOfService }) {
 
     if (isOutOfService) {
         return {

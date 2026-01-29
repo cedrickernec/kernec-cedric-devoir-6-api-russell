@@ -4,23 +4,23 @@
   <dl class="detail-list">
     <div class="detail-row">
       <dt>Numéro</dt>
-      <dd><%= catway.catwayNumber %></dd>
+      <dd><%= catway.number %></dd>
     </div>
 
     <div class="detail-row">
       <dt>Type</dt>
-      <dd><%= catway.catwayType %></dd>
+      <dd><%= catway.type %></dd>
     </div>
 
     <div class="detail-row">
       <dt>État</dt>
       <dd>
         <span
-          class="status <%= catway.state.className %>"
-          aria-label="<%= catway.state.aria %>"
+          class="status <%= catway.status.className %>"
+          aria-label="<%= catway.status.aria %>"
           role="status"
           >
-          <%= catway.state.label %>
+          <%= catway.status.label %>
         </span>
       </dd>
     </div>
@@ -53,9 +53,9 @@
     </a>
     <% } %>
     <a
-      href="/catways/<%= catway.catwayNumber %>/edit"
+      href="/catways/<%= catway.number %>/edit"
       class="btn btn--primary"
-      aria-label="Éditer le catway numéro <%= catway.catwayNumber %>"
+      aria-label="Éditer le catway numéro <%= catway.number %>"
       title="Éditer le catway"
     >
       <i class="fa-solid fa-pen"></i>

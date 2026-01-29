@@ -17,6 +17,11 @@ import {
   mapCatwayToList
 } from "../../utils/catways/catwayMapper.js";
 
+import {
+  renderCreateCatwayPage,
+  renderEditCatwayPage
+} from "../../views/helpers/catwaysViewHelper.js";
+
 import { findNextCatwayNumber } from "../../utils/catways/findNextCatwayNumber.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
@@ -149,14 +154,9 @@ export const getCreateCatwayPage = async (req, res, next) => {
   try {
     const suggestedNumber = await findNextCatwayNumber();
 
-    res.render("catways/catwayCreate", {
-        title: "Créer un catway",
-        activePage: "catways",
-        suggestedNumber,
-        errors: {},
-        globalError: null,
-        formData: {}
-    });
+    renderCreateCatwayPage(res, {
+      startNumber: suggestedNumber
+    })
 
   } catch (error) {
     next(error);
@@ -194,11 +194,8 @@ export const getEditCatwayByNumber = async (req, res, next) => {
     const catwayApi = apiData.data;
     const catwayViewModel = mapCatwayToForm(catwayApi);
 
-    res.render("catways/catwayEdit", {
-      title: "Éditer un catway",
-      activePage: "catways",
-      catway: catwayViewModel,
-      errors: {},
+    renderEditCatwayPage(res, {
+      catway: catwayViewModel
     });
 
   } catch (error) {

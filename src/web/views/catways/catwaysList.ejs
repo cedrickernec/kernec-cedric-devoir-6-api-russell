@@ -105,24 +105,23 @@
       <% } else { %> <% for (let i = 0; i < catways.length; i++) { %>
       <tr
         class="js-catway-row js-panel-row"
-        data-entity-id="<%= catways[i].catwayNumber %>"
-        data-highlight="<%= Number(flash?.highlightNumber) === Number(catways[i].catwayNumber) ? 'true' : 'false' %>"
-        data-number="<%= catways[i].catwayNumber %>"
-        data-type="<%= catways[i].catwayType %>"
-        data-state="
-        <%= catways[i].isOutOfService ? 'hs' : (catways[i].status.className === 'status--ok' ? 'ok' : 'warning') %>"
+        data-entity-id="<%= catways[i].number %>"
+        data-highlight="<%= Number(flash?.highlightNumber) === Number(catways[i].number) ? 'true' : 'false' %>"
+        data-number="<%= catways[i].number %>"
+        data-type="<%= catways[i].type %>"
+        data-state="<%= catways[i].stateKey %>"
       >
         <td class="align-center">
           <input
             type="checkbox"
             name="selectedCatways"
-            value="<%= catways[i].id %>"
+            value="<%= catways[i].number %>"
           />
         </td>
 
-        <td class="align-center bold"><%= catways[i].catwayNumber %></td>
+        <td class="align-center bold"><%= catways[i].number %></td>
 
-        <td class="align-center"><%= catways[i].catwayType %></td>
+        <td class="align-center"><%= catways[i].type %></td>
 
         <td class="align-left">
           <span class="cell-ellipsis cell-ellipsis--flex">
@@ -137,9 +136,9 @@
 
         <td class="align-center actions border-col-left">
           <a
-            href="/catways/<%= catways[i].catwayNumber %>"
+            href="/catways/<%= catways[i].number %>"
             class="btn btn--primary btn-icon"
-            aria-label="Voir le détail du catway <%= catways[i].catwayNumber %>"
+            aria-label="Voir le détail du catway <%= catways[i].number %>"
           >
             <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
           </a>
@@ -147,9 +146,9 @@
 
         <td class="align-center actions">
           <a
-            href="/catways/<%= catways[i].catwayNumber %>/edit"
+            href="/catways/<%= catways[i].number %>/edit"
             class="btn btn--primary btn-icon"
-            aria-label="Éditer le catway <%= catways[i].catwayNumber %>"
+            aria-label="Éditer le catway <%= catways[i].number %>"
           >
             <i class="fa-solid fa-pen" aria-hidden="true"></i>
           </a>

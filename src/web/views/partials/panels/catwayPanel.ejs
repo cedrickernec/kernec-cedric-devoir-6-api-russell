@@ -1,23 +1,23 @@
 <dl class="side-panel-list">
   <div class="side-panel-row">
     <dt>Numéro</dt>
-    <dd><%= entity.catwayNumber %></dd>
+    <dd><%= entity.number %></dd>
   </div>
 
   <div class="side-panel-row">
     <dt>Type</dt>
-    <dd><%= entity.catwayType %></dd>
+    <dd><%= entity.type %></dd>
   </div>
 
   <div class="side-panel-row">
     <dt>État</dt>
     <dd>
       <span
-        class="status status--plain <%= entity.catwayState.className %>"
+        class="status status--plain <%= entity.status.className %>"
         role="status"
-        aria-label="<%= entity.catwayState.aria %>"
+        aria-label="<%= entity.status.aria %>"
       >
-        <%= entity.catwayState.label %>
+        <%= entity.status.label %>
       </span>
     </dd>
   </div>

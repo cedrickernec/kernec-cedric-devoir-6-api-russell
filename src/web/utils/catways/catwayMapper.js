@@ -1,35 +1,5 @@
-/**
- * --------------------------------------------------------------------
- * Mapper de vue - Catway
- * --------------------------------------------------------------------
- */
-
-import { formatDateFR } from "../dateFormatter.js";
 import { buildCatwayStatus } from "./catwayStatus.js";
-
-/* ==================================================
-  MAPPER CATWAY DETAIL
-================================================== */
-
-export function mapCatwayToDetail(catway) {
-
-  const createdAt = catway.createdAt
-    ? new Date(catway.createdAt)
-    : null;
-
-  return {
-    id: catway.id,
-
-    catwayNumber: catway.catwayNumber,
-    catwayType: catway.catwayType,
-
-    isOutOfService: catway.isOutOfService,
-
-    catwayState: buildCatwayStatus(catway),
-
-    createdAtFormatted: formatDateFR(createdAt)
-  };
-}
+import { formatDateFR } from "../dateFormatter.js";
 
 /* ==================================================
   MAPPER CATWAY LIST (TABLE)
@@ -37,16 +7,35 @@ export function mapCatwayToDetail(catway) {
 
 export function mapCatwayToList(catway) {
 
+    const status = buildCatwayStatus({
+        catwayState: catway.catwayState,
+        isOutOfService: catway.isOutOfService
+    });
+
   return {
-    id: catway.id,
+    number: catway.catwayNumber,
+    type: catway.catwayType,
+    status,
+    stateKey: status.className
+  };
+}
 
-    catwayNumber: catway.catwayNumber,
-    catwayType: catway.catwayType,
-    catwayState: catway.catwayState,
+/* ==================================================
+  MAPPER CATWAY DETAIL
+================================================== */
 
-    isOutOfService: catway.isOutOfService,
+export function mapCatwayToDetail(catway) {
 
-    status: buildCatwayStatus(catway)
+  const status = buildCatwayStatus({
+      catwayState: catway.catwayState,
+      isOutOfService: catway.isOutOfService
+  });
+
+  return {
+    number: catway.catwayNumber,
+    type: catway.catwayType,
+    status,
+    createdAtFormatted: formatDateFR(catway.createdAt)
   };
 }
 
@@ -55,10 +44,10 @@ export function mapCatwayToList(catway) {
 ================================================== */
 
 export function mapCatwayToForm(catway) {
-  return {
-    number: catway.catwayNumber,
-    type: catway.catwayType,
-    state: catway.state?.label ?? catway.catwayState,
-    isOutOfService: catway.isOutOfService
-  };
+    return {
+        number: catway.catwayNumber,
+        type: catway.catwayType,
+        state: catway.catwayState,
+        isOutOfService: catway.isOutOfService
+    };
 }
