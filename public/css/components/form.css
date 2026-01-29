@@ -6,6 +6,7 @@
     width: 520px;
     background: white;
     padding: 1.5rem;
+    margin-bottom: 1.5rem;
     border-radius: 10px;
     box-shadow: var(--box-shadow-sm);
     display: flex;
@@ -85,13 +86,17 @@ input[type="checkbox"] {
    FORM STATES
    ===================================================== */
 
-.form-group.has-error input {
-    border-color: var(--danger-2);
-    background-color: var(--danger-accent);
+.form-group input[data-invalid="true"],
+.form-group select[data-invalid="true"],
+.form-group textarea[data-invalid="true"] {
+  border-color: var(--danger-2);
+  background-color: var(--danger-accent);
 }
 
-.form-group.has-error label {
-    color: var(--danger-2);
+.form-group:has(input[data-invalid="true"]) label,
+.form-group:has(select[data-invalid="true"]) label,
+.form-group:has(textarea[data-invalid="true"]) label {
+  color: var(--danger-2);
 }
 
 /* =====================================================

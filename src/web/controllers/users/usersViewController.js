@@ -6,10 +6,22 @@
  * - Panel latéral
  */
 
-import User from "../../../api/models/User.js";
-import { mapUserDetail, mapUserToList } from "../../utils/users/userMapper.js";
-import { renderCreateUserPage, renderEditUserPage } from "../../views/helpers/usersViewHelper.js";
-import { fetchUserById, fetchUsers } from "../../services/api/userApi.js";
+import {
+  fetchUserById,
+  fetchUsers
+} from "../../services/api/userApi.js";
+
+import {
+  mapUserDetail,
+  mapUserToForm,
+  mapUserToList
+} from "../../utils/users/userMapper.js";
+
+import {
+  renderCreateUserPage,
+  renderEditUserPage
+} from "../../views/helpers/usersViewHelper.js";
+
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 
@@ -134,13 +146,31 @@ export const getCreateUserPage = (req, res, next) => {
 
 export const getEditUserPage = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id);
+    const { id } = req.params;
+    const apiData = await fetchUserById(id, req, res);
 
-    if (!user) {
+    if (!apiData) {
       return next();
     }
 
-    renderEditUserPage(res, {});
+    if (apiData?.authExpired) return;
+
+    if (!apiData.success) {
+      return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
+    }
+
+    if (!apiData.data) {
+      const error = new Error(USER_MESSAGES.NOT_FOUND);
+      error.status = 404;
+      return next(error);
+    }
+
+    const userApi = apiData.data;
+    const userViewModel = mapUserToForm(userApi);
+
+    renderEditUserPage(res, {
+      user: userViewModel
+    });
 
   } catch (error) {
     next(error);

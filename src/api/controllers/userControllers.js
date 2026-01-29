@@ -20,7 +20,7 @@ import {
 } from "../services/userService.js";
 
 import { findUserByEmail } from "../repositories/userRepo.js";
-import { validateUserCreate } from "../validators/userValidators.js";
+import { validateUserCreate, validateUserUpdate } from "../validators/userValidators.js";
 import { validateObjectId } from "../validators/params/idValidator.js";
 
 import {
@@ -150,10 +150,27 @@ export const updateUser = async (req, res, next) => {
             );
         }
 
-        // 3) Service
-        const updated = await updateUserService(id, cleanData, req.body)
+        // 3) Validation
+        const errors = validateUserUpdate(cleanData);
 
-        // 4) Réponse
+        if (cleanData.email) {
+            const existing = await findUserByEmail(cleanData.email);
+
+            if (existing && existing._id.toString() !== id) {
+                errors.email = "Un utilisateur avec cet email existe déjà.";
+            }
+        }
+
+        if (Object.keys(errors).length > 0) {
+            throw ApiError.validation(
+                errors
+            );
+        }
+
+        // 4) Service
+        const updated = await updateUserService(id, cleanData)
+
+        // 5) Réponse
         res.status(200).json({
             success: true,
             message: "Utilisateur mis à jour.",

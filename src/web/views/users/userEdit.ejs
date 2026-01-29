@@ -1,22 +1,28 @@
 <h1>Modification de l'utilisateur</h1>
 
+<% if (globalError) { %>
+  <div class="form-global-error" role="alert">
+    <%= globalError %>
+  </div>
+<% } %>
+
 <form
   method="POST"
-  action="/users/<%= user._id %>/edit"
+  action="/users/<%= user.id %>/edit"
   class="form"
-  data-password-rules="<%- JSON.stringify(passwordRules || []) %>"
-  data-entity-id="<%= user._id %>"
+  data-entity-id="<%= user.id %>"
 >
   <!--====== USERNAME =======-->
 
-  <div class="form-group <%= errors.username ? 'has-error' : '' %>">
+  <div class="form-group">
     <label for="username">Nom d'utilisateur</label>
     <input
       type="text"
       id="username"
       name="username"
       value="<%= user.username %>"
-      aria-invalid="<%= errors.username ? 'true' : 'false' %>"
+      aria-invalid="<%= errors.username ? 'true' : '' %>"
+      data-invalid="<%= errors.username ? 'true' : '' %>"
       required
     >
     <% if (errors.username) { %>
@@ -26,7 +32,7 @@
 
   <!--====== EMAIL =======-->
 
-  <div class="form-group <%= errors.email ? 'has-error' : '' %>">
+  <div class="form-group">
     <label for="email">Email</label>
     <input
       type="email"
@@ -34,23 +40,42 @@
       name="email"
       aria-describedby="email-feedback"
       value="<%= user.email %>"
-      aria-invalid="<%= errors.email ? 'true' : 'false' %>"
+      aria-invalid="<%= errors.email ? 'true' : '' %>"
+      data-invalid="<%= errors.email ? 'true' : '' %>"
       autocomplete="off"
       required
     >
-    <p
-      id="email-feedback"
-      class="form-feedback <%= errors.email ? '' : 'hidden' %>"
-    >
+    <p id="email-error" class="form-error <%= errors.email ? '' : 'hidden' %>">
       <%= errors.email || "" %>
     </p>
+
+    <p
+      id="email-feedback"
+      class="form-error hidden"
+      data-source="ajax"
+    ></p>
   </div>
 
-  <!--====== PASSWORD =======-->
+  <!--====== BUTTONS ACTIONS =======-->
 
-  <div class="form-group <%= errors.password ? 'has-error' : '' %>">
+  <div class="form-actions">
+    <a href="/users" class="btn btn-cancel">Annuler</a>
+    <button type="submit" class="btn btn-confirm">Enregistrer</button>
+  </div>
+</form>
+
+<!--====== PASSWORD =======-->
+
+<form
+  method="POST"
+  action="/users/<%= user.id %>/edit/password"
+  class="form"
+  data-password-rules="<%- JSON.stringify(passwordRules || []) %>"
+  data-entity-id="<%= user.id %>"
+>
+  <div class="form-group">
     <label for="password">
-      Mot de passe <small>(laisser vide pour ne pas modifier)</small>
+      Mot de passe
     </label>
     <div class="password-wrapper">
       <input
@@ -58,7 +83,8 @@
         id="password"
         name="password"
         autocomplete="new-password"
-        aria-invalid="<%= errors.password ? 'true' : 'false' %>"
+        aria-invalid="<%= errors.password ? 'true' : '' %>"
+        data-invalid="<%= errors.password ? 'true' : '' %>"
       >
       <button
         type="button"

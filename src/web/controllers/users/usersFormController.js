@@ -7,19 +7,10 @@
  * - Redirections + flash messages
  */
 
-import User from "../../../api/models/User.js";
-import bcrypt from "bcrypt";
-
-import {
-  validateUsername,
-  validateEmail,
-  validatePassword
-} from "../../../api/validators/userValidators.js";
-
+import { createUser, fetchUserById, updatePassword, updateUser } from "../../services/api/userApi.js";
+import { renderCreateUserPage, renderEditUserPage } from "../../views/helpers/usersViewHelper.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
-import { createUser } from "../../services/api/userApi.js";
-import { renderCreateUserPage, renderEditUserPage } from "../../views/helpers/usersViewHelper.js";
 
 // ==================================================
 // CREATE USER
@@ -37,6 +28,11 @@ export const postCreateUser = async (req, res, next) => {
 
     const apiData = await createUser(payload, req, res);
 
+    const formData = {
+      username,
+      email
+    }
+
     if (apiData?.authExpired) return;
 
     if (apiData.success === false) {
@@ -44,8 +40,8 @@ export const postCreateUser = async (req, res, next) => {
       // Erreurs de champs
       if (Object.keys(apiData.errors).length > 0) {
         return renderCreateUserPage(res, {
-          errors: apiData.errors,
-          formData: { username, email }
+          errors,
+          formData
         });
       }
 
@@ -53,14 +49,14 @@ export const postCreateUser = async (req, res, next) => {
       if (apiData.context || apiData.message) {
         return renderCreateUserPage(res, {
           globalError: apiData.message,
-          formData: { username, email }
+          formData
         });
       }
 
       // Fallback sécurité
       return renderCreateUserPage(res, {
         globalError: COMMON_MESSAGES.SERVER_ERROR_LONG,
-        formData: { username, email }
+        formData
       });
     }
 
@@ -83,78 +79,133 @@ export const postCreateUser = async (req, res, next) => {
 
 export const postEditUser = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
-    const errors = {};
+    const { username, email } = req.body;
+    const userId = req.params.id;
+
+    const payload = {
+      username,
+      email
+    }
+
+    const apiData = await updateUser(userId, payload, req, res);
+    const errors = apiData.errors || {};
     
-    const user = await User.findById(req.params.id);
-    if (!user) return next();
+    const user = {
+      id: userId,
+      username,
+      email
+    };
 
-    // Validation nom d'utilisateur
-    const usernameError = validateUsername(username);
-    if (usernameError) {
-      errors.username = usernameError;
-    }
+    if (apiData?.authExpired) return;
 
-    // Validation email
-    const emailError = validateEmail(email);
-    if (emailError) {
-      errors.email = emailError;
-    } else {
-      const existingUser = await User.findOne({
-        email,
-        _id: { $ne: req.params.id }
-      });
-      if (existingUser) {
-        errors.email = USER_MESSAGES.EMAIL_CONFLICT
-      };
-    }
+    if (apiData.success === false) {
 
-    // Validation mot de passe (optionnel)
-    if (password && password.trim()) {
-      const passwordValidation = validatePassword(password);
-
-      // Règles non respectées
-      if (!passwordValidation.valid) {
-        errors.password = {
-          message: USER_MESSAGES.INVALID_PASSWORD,
-          failed: passwordValidation.errors
-        };
-      } else {
-        // Bloque un password identique à l'ancien
-        const isSamePassword = await bcrypt.compare(password, user.password);
-        if (isSamePassword) {
-          errors.password = {
-            message: USER_MESSAGES.PASSWORD_CONFLICT
-          }
-        }
+      // Erreurs de champs
+      if (Object.keys(errors).length > 0) {
+        return renderEditUserPage(res, {
+          user,
+          errors
+        });
       }
-    }
 
-    // Erreur → Retour formulaire
-    if (Object.keys(errors).length > 0) {
+      // Erreur métier
+      if (apiData.context || apiData.message) {
+        return renderEditUserPage(res, {
+          user,
+          globalError: apiData.message
+        });
+      }
 
+      // Fallback sécurité
       return renderEditUserPage(res, {
         user,
-        errors
+        globalError: COMMON_MESSAGES.SERVER_ERROR_LONG
       });
     }
 
-    // Update
-    const update = { username, email };
-
-    if (password && password.trim()) {
-      update.password = await bcrypt.hash(password, 10);
-    }
-
-    await User.findByIdAndUpdate(req.params.id, update);
-
-    // Flash + redirect
     req.session.flash = {
       type: "success",
       message: USER_MESSAGES.UPDATE_SUCCESS
     };
 
-    res.redirect("/users");
+    res.redirect(`/users/${userId}`);
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* ==================================================
+  EDIT USER PASSWORD
+================================================== */
+
+export const postEditUserPassword = async (req, res, next) => {
+  try {
+    const { password } = req.body;
+    const userId = req.params.id;
+
+    const apiUser = await fetchUserById(userId, req, res);
+
+    if (apiUser?.authExpired) return;
+
+    if (!apiUser.success || !apiUser.data) {
+      return renderEditUserPage(res, {
+        user: { id: userId },
+        globalError: COMMON_MESSAGES.SERVER_ERROR_LONG
+      });
+    }
+
+    const user = apiUser.data;
+
+    const payload = {
+      newPassword: password
+    };
+
+    const apiData = await updatePassword(userId, payload, req, res);
+    const errors = apiData.errors || {};
+
+    if (apiData?.authExpired) return;
+
+    if (apiData.success === false) {
+
+      // Erreur de règles password
+      if (Object.keys(errors).length > 0) {
+        return renderEditUserPage(res, {
+          user,
+          errors: {
+            password: {
+              message: apiData.message,
+              errors
+            }
+          }
+        });
+      }
+
+      // Erreur métier
+      if (apiData.message) {
+        return renderEditUserPage(res, {
+          user,
+          errors: {
+            password: {
+              message: apiData.message
+            }
+          }
+        });
+      }
+
+      // Fallback sécurité
+      return renderEditUserPage(res, {
+        user,
+        globalError: COMMON_MESSAGES.SERVER_ERROR_LONG
+      });
+    }
+
+    req.session.flash = {
+      type: "success",
+      message: USER_MESSAGES.PASSWORD_UPDATE_SUCCESS
+    };
+
+    res.redirect(`/users/${userId}`);
 
   } catch (error) {
     next(error);

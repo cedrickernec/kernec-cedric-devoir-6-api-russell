@@ -14,7 +14,6 @@ import bcrypt from "bcrypt";
 import {
     getAllUsers,
     findUserById,
-    findUserByEmail,
     createUser,
     updateUserById,
     deleteUserById,
@@ -22,7 +21,6 @@ import {
 } from "../repositories/userRepo.js";
 
 import {
-    validateUserUpdate,
     validatePassword
 } from "../validators/userValidators.js";
 
@@ -75,7 +73,7 @@ export async function createUserService(data) {
 // UPDATE USER
 // ===============================================
 
-export async function updateUserService(id, cleanData, rawBody) {
+export async function updateUserService(id, cleanData) {
 
     const user = await findUserById(id);
 
@@ -84,26 +82,6 @@ export async function updateUserService(id, cleanData, rawBody) {
             "Utilisateur introuvable.",
             { userId: id }
         );
-    }
-
-    const errors = validateUserUpdate(cleanData);
-
-    if (Object.keys(errors).length > 0) {
-        throw ApiError.validation(
-            errors
-        );
-    }
-
-    if (cleanData.email) {
-        const existing = await findUserByEmail(cleanData.email);
-
-        if (existing && existing._id.toString() !== id) {
-            throw ApiError.fieldConflict(
-                "email",
-                "Un utilisateur avec cet email existe déjà.",
-                { userId: existing._id }
-            );
-        }
     }
 
     return updateUserById(id, cleanData);

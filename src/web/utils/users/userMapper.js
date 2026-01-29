@@ -47,3 +47,15 @@ export function mapUserToList(user) {
     createdAt: user.createdAt
   }
 }
+
+/* ==================================================
+  MAPPER USER FORM
+================================================== */
+
+export function mapUserToForm(user) {
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email
+  };
+}

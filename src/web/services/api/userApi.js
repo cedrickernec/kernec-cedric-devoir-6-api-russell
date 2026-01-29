@@ -39,3 +39,31 @@ export async function createUser(data, req, res) {
             }, req, res
     );
 }
+
+// ==================================================
+// UPDATE USER
+// ==================================================
+
+export async function updateUser(id, data, req, res) {
+
+    return apiFetch(
+        `/api/users/${id}`, {
+            method: "PUT",
+            body: JSON.stringify(data)
+        }, req, res
+    );
+}
+
+// ==================================================
+// UPDATE USER (PASSWORD)
+// ==================================================
+
+export async function updatePassword(id, data, req, res) {
+
+    return apiFetch(
+        `/api/users/${id}/password`, {
+            method: "PUT",
+            body: JSON.stringify(data)
+        }, req, res
+    );
+}

@@ -25,13 +25,15 @@ export const renderCreateUserPage = (res, {
 
 export const renderEditUserPage = (res, {
   user,
-  errors = {}
+  errors = {},
+  globalError = null
 }) => {
   res.render("users/userEdit", {
       title: "Modification de l'utilisateur",
       activePage: "users",
       user,
       errors,
+      globalError,
       passwordRules: PASSWORD_RULES
   });
 };
