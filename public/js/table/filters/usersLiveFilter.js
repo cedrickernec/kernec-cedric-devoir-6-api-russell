@@ -10,6 +10,8 @@
  * ===================================================================
  */
 
+import { normalizeString } from "../../utils/normalizeString.js";
+
 export function initUsersLiveFilter() {
     const rows = Array.from(document.querySelectorAll(".js-user-row"));
 
@@ -29,12 +31,12 @@ export function initUsersLiveFilter() {
     }
 
     function applyFilters() {
-        const search = searchInput.value.trim().toLowerCase();
+        const search = normalizeString(searchInput.value.trim());
         let visibleCount = 0;
 
         rows.forEach(row => {
-            const username = row.dataset.user || "";
-            const email = row.dataset.email || "";
+            const username = normalizeString(row.dataset.user);
+            const email = normalizeString(row.dataset.email);
 
             const visible =
             !search ||
