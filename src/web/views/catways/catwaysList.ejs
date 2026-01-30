@@ -106,6 +106,7 @@
       <tr
         class="js-catway-row js-panel-row"
         data-entity-id="<%= catways[i].number %>"
+        data-entity-db-id="<%= catways[i].id %>"
         data-highlight="<%= Number(flash?.highlightNumber) === Number(catways[i].number) ? 'true' : 'false' %>"
         data-number="<%= catways[i].number %>"
         data-type="<%= catways[i].type %>"
@@ -115,7 +116,7 @@
           <input
             type="checkbox"
             name="selectedCatways"
-            value="<%= catways[i].number %>"
+            value="<%= catways[i].id %>"
           />
         </td>
 

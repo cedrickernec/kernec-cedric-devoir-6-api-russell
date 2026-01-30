@@ -9,6 +9,7 @@
 import User from "../../../api/models/User.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
+import mongoose from "mongoose";
 
 // ==================================================
 // CHECK - EMAIL AVAILABILITY
@@ -25,7 +26,10 @@ export const checkEmailAvailability = async (req, res) => {
 
     // Requête dynamique
     const query = { email };
-    if (excludeId) {
+    if (
+      excludeId &&
+      excludeId !== "undefined" &&
+      mongoose.Types.ObjectId.isValid(excludeId)) {
       query._id = { $ne: excludeId };
     }
 

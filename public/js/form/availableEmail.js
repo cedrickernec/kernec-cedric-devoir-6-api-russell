@@ -13,24 +13,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const input = document.getElementById("email");
   const feedback = document.getElementById("email-feedback");
-/*   const form = input?.closest("form"); */
-
   if (!input || !feedback) return;
 
-  // Présent en mode édition uniquement
-/*   const currentUserId = form?.dataset.entityId;
- */  let timeout;
+  let timeout;
+  let lastChecked = "";
+
+  const showError = (msg) => {
+    input.dataset.invalid = "true";
+    input.dataset.locked = "true";
+    input.setAttribute("aria-invalid", "true");
+    feedback.textContent = msg;
+    feedback.classList.remove("hidden");
+  };
+
+  const clearError = () => {
+    delete input.dataset.invalid;
+    delete input.dataset.locked;
+    input.removeAttribute("aria-invalid");
+    feedback.textContent = "";
+    feedback.classList.add("hidden");
+  };
 
   input.addEventListener("input", () => {
+
+    delete input.dataset.locked;
+    
     clearTimeout(timeout);
 
     const email = input.value.trim();
-    const formGroup = input.closest(".form-group");
 
-    // Reset
-    feedback.textContent = "";
-    feedback.classList.add("hidden");
-    formGroup.classList.remove("has-error");
+    // Reset visuel
+    clearError();
 
     // Champ vide ou format invalide → pas de requête
     if (!email || !input.checkValidity()) return;
@@ -41,36 +54,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Débounce pour éviter les requêtes à chaque frappe
     timeout = setTimeout(async () => {
+
+      // Anti-requêtes inutiles
+      if (email === lastChecked) return;
+      lastChecked = email;
+
       try {
-        const res = await fetch(
-          `/users/ajax/check-email?email=${encodeURIComponent(email)}`,
-          { credentials: "same-origin"}
-        );
+        const form = input.closest("form");
+        const userId = form?.dataset.entityId;
 
-/*         const params = new URLSearchParams({
-          email: email
-        });
+        let url = `/users/ajax/check-email?email=${encodeURIComponent(email)}`;
 
-        if (currentUserId) {
-          params.append("excludeId", currentUserId);
+        if (userId) {
+          url += `&excludeId=${userId}`;
         }
 
-        const res = await fetch(
-          `/users/ajax/check-email?${params.toString()}`,
-          { credentials: "same-origin" }
-        ); */
+        const res = await fetch(url, { credentials: "same-origin" });
 
         const data = await res.json();
 
         if (!data.available) {
-          feedback.textContent = "Cet email est déjà utilisé.";
-          feedback.classList.remove("hidden");
-          formGroup.classList.add("has-error");
+          showError("Cet email est déjà utilisé.")
+        } else {
+          clearError();
         }
         
       } catch (err) {
         // Le backend valide au submit
       }
     }, 400);
+  });
+
+  // Au blur, si invalide HTML → aria-ivalid "true" pour garder l'erreur
+  input.addEventListener("blur", () => {
+    if (input.value.trim() && !input.checkValidity()) {
+      input.dataset.invalid = "true";
+    }
   });
 });

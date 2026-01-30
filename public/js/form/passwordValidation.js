@@ -34,20 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     passwordInput.addEventListener("input", () => {
 
+        rulesContainer.classList.add("visible");
+
         const value = passwordInput.value;
-        const formGroup = passwordInput.closest(".form-group");
-
-        // ====================================================
-        // BACKEND ERROR CLEANUP
-        // ====================================================
-
-        if (formGroup) {
-            const backendError = formGroup.querySelector(".form-error");
-            if (backendError) {
-                backendError.remove();
-                formGroup.classList.remove("has-error");
-            }
-        }
 
         // ====================================================
         // EMPTY STATE

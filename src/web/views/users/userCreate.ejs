@@ -1,4 +1,5 @@
 <h1>Création d'un utilisateur</h1>
+
 <% if (globalError) { %>
   <div class="form-global-error" role="alert">
     <%= globalError %>
@@ -13,14 +14,15 @@
 >
   <!--====== USERNAME =======-->
 
-  <div class="form-group <%= errors.username ? 'has-error' : '' %>">
+  <div class="form-group">
     <label for="username">Nom d'utilisateur</label>
     <input
       type="text"
       id="username"
       name="username"
       value="<%= formData.username || '' %>"
-      aria-invalid="<%= errors.username ? 'true' : 'false' %>"
+      aria-invalid="<%= errors.username ? 'true' : '' %>"
+      data-invalid="<%= errors.username ? 'true' : '' %>"
       placeholder="John Doe"
       required
     >
@@ -31,32 +33,37 @@
 
   <!--====== EMAIL =======-->
 
-  <div class="form-group <%= errors.email ? 'has-error' : '' %>">
+  <div class="form-group">
     <label for="email">Email</label>
     <input
       type="email"
       id="email"
       name="email"
-      aria-describedby="email-feedback"
+      aria-describedby="email-error email-feedback"
       value="<%= formData.email || '' %>"
-      aria-invalid="<%= errors.email ? 'true' : 'false' %>"
+      aria-invalid="<%= errors.email ? 'true' : '' %>"
+      data-invalid="<%= errors.email ? 'true' : '' %>"
       autocapitalize="none"
       autocomplete="off"
       spellcheck="false"
       placeholder="john@doe.com"
       required
     >
-    <p
-      id="email-feedback"
-      class="form-error <%= errors.email ? '' : 'hidden' %>"
-    >
+
+    <p id="email-error" class="form-error <%= errors.email ? '' : 'hidden' %>">
       <%= errors.email || "" %>
     </p>
+
+    <p
+      id="email-feedback"
+      class="form-error hidden"
+      data-source="ajax"
+    ></p>
   </div>
 
   <!--====== PASSWORD =======-->
 
-  <div class="form-group <%= errors.password ? 'has-error' : '' %>">
+  <div class="form-group">
     <label for="password">Mot de passe</label>
     <div class="password-wrapper">
       <input
@@ -64,7 +71,8 @@
         id="password"
         name="password"
         autocomplete="new-password"
-        aria-invalid="<%= errors.password ? 'true' : 'false' %>"
+        aria-invalid="<%= errors.password ? 'true' : '' %>"
+        data-invalid="<%= errors.password ? 'true' : '' %>"
         required
       >
       <button
@@ -82,8 +90,7 @@
 
     <% if (errors.password?.message) { %>
     <p class="form-error"><%= errors.password.message %></p>
-    <% } %> <%- include("../partials/passwordRules.ejs", { passwordRules, errors
-    }) %>
+    <% } %> <%- include("../partials/passwordRules.ejs", { passwordRules, errors }) %>
   </div>
 
   <!--====== BUTTONS ACTIONS =======-->

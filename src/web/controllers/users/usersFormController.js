@@ -40,7 +40,7 @@ export const postCreateUser = async (req, res, next) => {
       // Erreurs de champs
       if (Object.keys(apiData.errors).length > 0) {
         return renderCreateUserPage(res, {
-          errors,
+          errors: apiData.errors,
           formData
         });
       }

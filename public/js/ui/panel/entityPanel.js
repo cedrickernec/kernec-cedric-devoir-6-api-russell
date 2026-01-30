@@ -51,6 +51,7 @@ export function initEntityPanel({
       if (e.target.closest("a, button, input, .actions")) return;
 
       const entityId = row.dataset.entityId;
+      const dbId = row.dataset.entityDbId;
 
       // Toggle panel si déjà ouvert sur la même entité
       if (isSidePanelOpen() && getCurrentEntityId() === entityId) {
@@ -104,7 +105,7 @@ export function initEntityPanel({
           actions: deleteConfig
             ? {
                 delete: {
-                  url: `${deleteConfig.baseUrl}/${entityId}`,
+                  url: `${deleteConfig.baseUrl}/${dbId}`,
                   rowSelector: `.js-panel-row[data-entity-id="${entityId}"]`,
                   confirmMessage: deleteConfig.confirmMessage,
                   type: deleteConfig.type

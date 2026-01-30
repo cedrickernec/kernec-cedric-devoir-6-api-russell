@@ -13,6 +13,7 @@ export function mapCatwayToList(catway) {
     });
 
   return {
+    id: catway.id,
     number: catway.catwayNumber,
     type: catway.catwayType,
     status,
@@ -32,6 +33,7 @@ export function mapCatwayToDetail(catway) {
   });
 
   return {
+    id: catway.id,
     number: catway.catwayNumber,
     type: catway.catwayType,
     status,
@@ -45,9 +47,10 @@ export function mapCatwayToDetail(catway) {
 
 export function mapCatwayToForm(catway) {
     return {
-        number: catway.catwayNumber,
-        type: catway.catwayType,
-        state: catway.catwayState,
-        isOutOfService: catway.isOutOfService
+      id: catway.id,
+      number: catway.catwayNumber,
+      type: catway.catwayType,
+      state: catway.catwayState,
+      isOutOfService: catway.isOutOfService
     };
 }

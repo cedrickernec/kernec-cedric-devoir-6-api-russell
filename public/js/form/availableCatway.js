@@ -21,39 +21,44 @@ document.addEventListener("DOMContentLoaded", () => {
   let timeout;
 
   const showError = (msg) => {
+    input.dataset.invalid = "true";
+    input.dataset.locked = "true";
+    input.setAttribute("aria-invalid", "true");
     feedback.textContent = msg;
     feedback.classList.remove("hidden");
-    feedback.classList.add("error");
   };
 
-  const hideError = () => {
+  const clearError = () => {
+    delete input.dataset.invalid;
+    delete input.dataset.locked;
+    input.removeAttribute("aria-invalid");
     feedback.textContent = "";
     feedback.classList.add("hidden");
-    feedback.classList.remove("error");
   }
 
   input.addEventListener("input", () => {
+
     clearTimeout(timeout);
+
+    delete input.dataset.locked;
 
     const value = input.value.trim();
 
     // Reset visuel
-    hideError();
+    clearError();
 
     // Champ vide → pas de requête
-    if (!value) return;
+    if (!value) {
+      clearError();
+      return
+    };
     
     // Validation du format
     const normalized = value.replace(",", ".");
     const number = Number(normalized);
 
-    if (!Number.isFinite(number)) {
-      showError("Le numéro du catway doit être un nombre valide.");
-      return;
-    }
-
     if (!Number.isInteger(number)) {
-      showError("Le numéro du catway doit être un entier.");
+      showError("Le numéro du catway doit être un nombre entier.");
       return;
     };
 

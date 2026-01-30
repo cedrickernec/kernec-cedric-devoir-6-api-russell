@@ -11,23 +11,33 @@
 export function validateCatwayCreate(body) {
     const errors = {};
 
-    // N° catway obligatoire
-    if(!body.catwayNumber && body.catwayNumber !== 0) {
-        errors.catwayNumber = "Champ obligatoire manquant : Numéro de catway";
+    // N° catway
+    if(!body.catwayNumber === undefined || body.catwayNumber === "") {
+        errors.catwayNumber = "Champ obligatoire manquant : Numéro de catway.";
+    } else {
+        const number = Number(body.catwayNumber);
+
+        if (!Number.isFinite(number)) {
+            errors.catwayNumber = "Le numéro du catway doit être un nombre valide."
+        } else if (!Number.isInteger(number)) {
+            errors.catwayNumber = "Le numéro du catway doit être un nombre entier."
+        } else if (number <1) {
+            errors.catwayNumber = "Le numéro du catway doit être supérieur ou égal à 1."
+        }
     }
 
-    // Type obligatoire
+    // Type de catway
     const ALLOWED_TYPES = ["short", "long"];
     if (!body.catwayType) {
-        errors.catwayType = "Champ obligatoire manquant : Type de catway";
+        errors.catwayType = "Champ obligatoire manquant : Type de catway.";
     } else if (!ALLOWED_TYPES.includes(body.catwayType)) {
-        errors.catwayType = "Type de catway invalide. Valeurs autorisées : short ou long";
+        errors.catwayType = "Type de catway invalide. Valeurs autorisées : short ou long.";
     }
 
-    // État obligatoire
+    // État du catway
     if (!body.catwayState) {
-        errors.catwayState = "Champ obligatoire manquant : État du catway"
-    }
+        errors.catwayState = "Champ obligatoire manquant : État du catway."
+    }    
 
     return errors
 };

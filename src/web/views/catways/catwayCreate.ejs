@@ -9,7 +9,7 @@
 <form method="POST" action="/catways/create" class="form">
   <!--====== NUMBER ======-->
 
-  <div class="form-group <%= errors.catwayNumber ? 'has-error' : '' %>">
+  <div class="form-group">
     <label for="catwayNumber">Numéro du catway</label>
     <input
       type="number"
@@ -18,16 +18,20 @@
       min="1"
       step="1"
       value="<%= formData.catwayNumber || startNumber %>"
-      aria-invalid="<%= errors.catwayNumber ? 'true' : 'false' %>"
+      aria-invalid="<%= errors.catwayNumber ? 'true' : '' %>"
+      data-invalid="<%= errors.catwayNumber ? 'true' : '' %>"
       required
     />
 
-    <p
-      id="catwayNumber-feedback"
-      class="form-feedback <%= errors.catwayNumber ? 'error' : 'hidden' %>"
-    >
+    <p id="catwayNumber-error" class="form-error <%= errors.catwayNumber ? '' : 'hidden' %>">
       <%= errors.catwayNumber %>
     </p>
+
+    <p
+      id="catwayNumber-feedback"
+      class="form-error hidden"
+      data-source="ajax"
+    ></p>
   </div>
 
   <!--====== TYPE ======-->
