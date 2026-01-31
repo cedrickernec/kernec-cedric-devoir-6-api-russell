@@ -87,7 +87,7 @@ export async function getReservationByIdService(catwayNumber, idReservation) {
         );
     }
 
-    return reservation;
+    return { reservation, catway };
 }
 
 // ===============================================

@@ -44,7 +44,7 @@
     </a>
     <% if (from === "reservation" && reservationId) { %>
     <a
-      href="/reservations/<%= reservationId %>"
+      href="/reservations/<%= reservationId %>?catway=<%= catwayNumber %>"
       class="btn btn--primary"
       aria-label="Retour à la réservation"
     >

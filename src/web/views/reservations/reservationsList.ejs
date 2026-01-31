@@ -104,11 +104,11 @@
       <tr
         class="js-reservation-row js-panel-row"
         data-entity-id="<%= reservations[i].id %>"
-        data-catway="<%= reservations[i].catway.number %>"
-        data-client="<%= reservations[i].clientName.toLowerCase() %>"
-        data-boat="<%= reservations[i].boatName.toLowerCase() %>"
-        data-start="<%= reservations[i].startDate.toISOString().split('T')[0] %>"
-        data-end="<%= reservations[i].endDate.toISOString().split('T')[0] %>"
+        data-catway="<%= reservations[i].catwayNumber %>"
+        data-client="<%= reservations[i].clientName %>"
+        data-boat="<%= reservations[i].boatName %>"
+        data-start="<%= reservations[i].startDateISO %>"
+        data-end="<%= reservations[i].endDateISO %>"
         data-highlight="<%= (flash?.highlightIds || []).includes(reservations[i].id.toString()) ? 'true' : 'false' %>"
       >
         <td class="align-center checkbox">
@@ -130,14 +130,14 @@
 
         <td class="align-right"><%= reservations[i].clientName %></td>
         <td class="align-left bold"><%= reservations[i].boatName %></td>
-        <td class="align-center"><%= reservations[i].catway.number %></td>
+        <td class="align-center"><%= reservations[i].catwayNumber %></td>
         <td class="align-center"><%= reservations[i].startDateFormatted %></td>
         <td class="align-center" aria-hidden="true">&ndash;</td>
         <td class="align-center"><%= reservations[i].endDateFormatted %></td>
 
         <td class="align-center actions border-col-left">
           <a
-            href="/reservations/<%= reservations[i].id %>"
+            href="/reservations/<%= reservations[i].id %>?catway=<%= reservations[i].catwayNumber %>"
             class="btn btn--primary btn-icon"
             aria-label="Voir le détail de la réservation de <%= reservations[i].clientName %>, bateau <%= reservations[i].boatName %>, du <%= reservations[i].startDateFormatted %> au <%= reservations[i].endDateFormatted %>"
           >

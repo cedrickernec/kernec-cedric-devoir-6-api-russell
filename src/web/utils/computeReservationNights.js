@@ -7,16 +7,20 @@
  * ===================================================================
  */
 
-export function computeDurationDays(startDate, endDate) {
+export function computeNightsBetweenDates(startDate, endDate) {
     if (!startDate || !endDate) return null;
 
+    const DAY = 1000 * 60 * 60 * 24;
     const start = new Date(startDate);
     const end = new Date(endDate);
 
     if(isNaN(start) || isNaN(end)) return null;
 
-    const diffMs = end-start;
-    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24)) + 1;
+    const diff = end - start;
 
-    return diffDays;
+    if (diff <= 0) return 0;
+
+    const result = Math.round(diff / DAY);
+
+    return result;
 }

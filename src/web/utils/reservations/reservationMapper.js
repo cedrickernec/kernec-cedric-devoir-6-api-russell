@@ -2,18 +2,66 @@
  * ===================================================================
  * VIEW MAPPER - RESERVATIONS
  * ===================================================================
- */
+*/
 
-import { computeDurationDays } from "../computeDurationDays.js";
+import { computeNightsBetweenDates } from "../computeReservationNights.js";
 import { computeReservationStatus } from "./reservationStatus.js";
 import { formatDateFR } from "../dateFormatter.js";
+
+// ==================================================
+// MAPPER RESERVATION LIST (TABLE)
+// ==================================================
+
+export function mapReservationToList(reservation) {
+  
+  const startDate =
+  reservation.startDate
+  ? new Date(reservation.startDate)
+  : null;
+  
+  const endDate =
+  reservation.endDate
+  ? new Date(reservation.endDate)
+  : null;
+
+  const status = computeReservationStatus({
+    startDate,
+    endDate
+  });
+
+  return {
+    id: reservation.id,
+    catwayNumber: reservation.catwayNumber,
+
+    clientName: reservation.clientName,
+    boatName: reservation.boatName,
+
+    // Date ISO
+    startDateISO: startDate
+    ? startDate.toISOString().slice(0,10)
+    : "",
+
+    endDateISO: endDate
+    ? endDate.toISOString().slice(0,10)
+    : "",
+
+    // Date formatée pour l'affichage
+    startDateFormatted: formatDateFR(startDate),
+    endDateFormatted: formatDateFR(endDate),
+
+    status
+  };
+}
 
 // ==================================================
 // MAPPER RESERVATION DETAIL
 // ==================================================
 
-export function mapReservationToDetail(reservation) {
-  const status = computeReservationStatus(reservation);
+export function mapReservationToDetail(apiReservation) {
+
+  const reservation = apiReservation.reservation;
+  const client = apiReservation.client;
+  const catway = apiReservation.catway;
   
   const startDate =
   reservation.startDate
@@ -30,29 +78,36 @@ export function mapReservationToDetail(reservation) {
   ? new Date(reservation.createdAt)
   : null;
   
-  const days = computeDurationDays(startDate, endDate);
+  const nights = computeNightsBetweenDates(startDate, endDate);
+
+  const status = computeReservationStatus({
+    startDate,
+    endDate
+  });
 
   return {
-    id: reservation._id.toString(),
+    id: reservation.id,
 
     status,
 
-    clientName: reservation.clientName,
-    boatName: reservation.boatName,
+    clientName: client.clientName,
+    boatName: client.boatName,
 
     catway: {
-      number: reservation.catwayNumber,
-      type: reservation.catwayType
+      number: catway.catwayNumber,
+      type: catway.catwayType
     },
-
+    
     startDateFormatted: formatDateFR(startDate),
     endDateFormatted: formatDateFR(endDate),
-
-    duration: days
-      ? `${days} jour${days > 1 ? "s" : ""}`
-      : "-",
-
-    createdAtFormatted: formatDateFR(createdAt)
+    
+    duration: nights
+    ? `${nights} nuit${nights > 1 ? "s" : ""}`
+    : "-",
+    
+    createdAtFormatted: createdAt
+    ? formatDateFR(createdAt)
+    : "-"
   };
 }
 
@@ -60,79 +115,51 @@ export function mapReservationToDetail(reservation) {
 // MAPPER RESERVATION EDIT
 // ==================================================
 
-export function mapReservationEdit(reservation) {
-  const now = new Date();
-  const startDate = reservation.startDate
-    ? new Date(reservation.startDate)
-    : null;
+export function mapReservationEdit(apiReservation) {
 
-  const isStartDateLocked = startDate ? startDate <= now : false;
+  const reservation = apiReservation.reservation;
+  const client = apiReservation.client;
+  const catway = apiReservation.catway;
+
+  const now = new Date();
+  
+  const startDate =
+  reservation.startDate
+  ? new Date(reservation.startDate)
+  : null;
+
+  const isStartDateLocked =
+  startDate
+  ? startDate <= now
+  : false;
 
   return {
-    id: reservation._id.toString(),
+    id: reservation.id,
 
-    clientName: reservation.clientName,
-    boatName: reservation.boatName,
+    clientName: client.clientName,
+    boatName: client.boatName,
 
     catway: {
-      number: reservation.catwayNumber,
-      type: reservation.catwayType
+      number: catway.catwayNumber,
+      type: catway.catwayType
     },
 
     startDateISO: reservation.startDate
-      ? reservation.startDate.toISOString().split("T")[0]
+      ? reservation.startDate.split("T")[0]
       : "",
 
     endDateISO: reservation.endDate
-      ? reservation.endDate.toISOString().split("T")[0]
+      ? reservation.endDate.split("T")[0]
       : "",
 
-    createdAtFormatted: reservation.createdAt
-      ? reservation.createdAt.toLocaleDateString("fr-FR")
+    createdAtFormatted: formatDateFR(reservation.createdAt)
+      ? new Date(reservation.createdAt)
       : "-",
 
     isStartDateLocked
   };
 }
 
-// ==================================================
-// MAPPER RESERVATION LIST (TABLE)
-// ==================================================
-
-export function mapReservationToList(reservation) {
-  const status = computeReservationStatus(reservation);
-
-  const startDate =
-  reservation.startDate
-  ? new Date(reservation.startDate)
-  : null;
-  
-  const endDate =
-  reservation.endDate
-  ? new Date(reservation.endDate)
-  : null;
-
-  return {
-    id: reservation._id.toString(),
-
-    status,
-
-    clientName: reservation.clientName,
-    boatName: reservation.boatName,
-    catway: {
-      number: reservation.catwayNumber,
-      type: reservation.catwayType
-    },
-
-    // Date brute
-    startDate,
-    endDate,
-
-    // Date formatée pour l'affichage
-    startDateFormatted: formatDateFR(startDate),
-    endDateFormatted: formatDateFR(endDate)
-  };
-}
 
 // ==================================================
 // MAPPER AVAILABILITY (TABLE)

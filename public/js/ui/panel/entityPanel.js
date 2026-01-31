@@ -51,6 +51,7 @@ export function initEntityPanel({
       if (e.target.closest("a, button, input, .actions")) return;
 
       const entityId = row.dataset.entityId;
+      const catway = row.dataset.catway;
       const dbId = row.dataset.entityDbId;
 
       // Toggle panel si déjà ouvert sur la même entité
@@ -65,7 +66,7 @@ export function initEntityPanel({
       // ==================================================
 
       try {
-        const res = await fetch(`${panelUrl}/${entityId}/panel`);
+        const res = await fetch(`${panelUrl}/${entityId}/panel?catway=${catway}`);
 
         // ---------- Gestion erreurs ----------
         if (!res.ok) {

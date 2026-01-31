@@ -90,7 +90,7 @@ export const getCatwayByNumber = async (req, res, next) => {
       title: "Détail catway",
       activePage: "catways",
       catway: catwayViewModel,
-      catwayId: catwayApi.id,
+      catwayNumber,
       from,
       reservationId
     });

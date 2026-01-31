@@ -1,0 +1,81 @@
+/**
+ * ===================================================================
+ * RESERVATION API
+ * ===================================================================
+ * - Récupération des réservations dans l'API
+ * ===================================================================
+ */
+
+import { apiFetch } from "./apiClient.js";
+
+// ==================================================
+// FETCH RESERVATIONS
+// ==================================================
+
+export function fetchReservations(req, res) {
+    return apiFetch("/api/reservations", {
+        method: "GET"
+    }, req, res);
+}
+
+// ==================================================
+// FETCH RESERVATIONS BY CATWAY
+// ==================================================
+
+export function fetchReservationsByCatway(catwayNumber, req, res) {
+    return apiFetch(`/api/catways/${catwayNumber}/reservations`, {
+        method: "GET"
+    }, req, res);
+}
+
+// ==================================================
+// FETCH RESERVATIONS BY ID
+// ==================================================
+
+export function fetchReservationById(catwayNumber, reservationId, req, res) {
+    return apiFetch(
+        `/api/catways/${catwayNumber}/reservations/${reservationId}`, {
+            method: "GET"
+        }, req, res
+    );
+}
+
+// ==================================================
+// CREATE RESERVATION
+// ==================================================
+
+export function createReservation(catwayNumber, payload, req, res) {
+    return apiFetch(
+        `/api/catways/${catwayNumber}/reservations`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        }, req, res
+    );
+}
+
+// ==================================================
+// UPDATE RESERVATION
+// ==================================================
+
+export function updateReservation(catwayNumber, reservationId, payload, req, res) {
+    return apiFetch(
+        `/api/catways/${catwayNumber}/reservations/${reservationId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        }, req, res
+    );
+}
+
+// ==================================================
+// DELETE RESERVATION
+// ==================================================
+
+export function deleteReservation(catwayNumber, reservationId, req, res) {
+    return apiFetch(
+        `/catways/${catwayNumber}/reservations/${reservationId}`, {
+            method: "DELETE"
+        }, req, res
+    );
+}

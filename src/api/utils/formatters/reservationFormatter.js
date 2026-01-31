@@ -9,25 +9,27 @@
  * ============================================================
  */
 
-export function formatReservation(reservation) {
-    if (!reservation) return null;
+export function formatReservation({ reservation, catway }) {
+    if (!reservation || !catway) return null;
 
-    const object = reservation.toObject();
+    const rObject = reservation.toObject();
+    const cObject = catway.toObject();
 
     return {
         catway: {
-            catwayNumber: object.catwayNumber
+            catwayNumber: cObject.catwayNumber,
+            catwayType: cObject.catwayType
         },
         client: {
-            clientName: object.clientName,
-            boatName: object.boatName
+            clientName: rObject.clientName,
+            boatName: rObject.boatName
         },
         reservation: {
-            id: object._id,
-            startDate: object.startDate,
-            endDate: object.endDate,
-            createdAt : object.createdAt,
-            updatedAt : object.updatedAt
+            id: rObject._id,
+            startDate: rObject.startDate,
+            endDate: rObject.endDate,
+            createdAt : rObject.createdAt,
+            updatedAt : rObject.updatedAt
         },
     };
 }
