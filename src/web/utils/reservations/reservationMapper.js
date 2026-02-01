@@ -165,23 +165,24 @@ export function mapReservationEdit(apiReservation) {
 // MAPPER AVAILABILITY (TABLE)
 // ==================================================
 
-export function mapAvailabilityToTable({ catway, compatibility }) {
+export function mapAvailabilityToTable({ catway, availability }) {
   const from =
-  compatibility.from
-  ? new Date(compatibility.from)
+  availability.from
+  ? new Date(availability.from)
   : null;
   
   const to =
-  compatibility.to
-  ? new Date(compatibility.to)
+  availability.to
+  ? new Date(availability.to)
   : null;
 
-  const slots = (compatibility.slots || []).map(slot => ({
+  const slots = (availability.slots || []).map(slot => ({
     from: slot.from,
     to: slot.to,
     fromFormatted: formatDateFR(new Date(slot.from)),
     toFormatted: formatDateFR(new Date(slot.to)),
   }));
+  
   const slotsCount = slots.length;
 
   return {
@@ -193,9 +194,9 @@ export function mapAvailabilityToTable({ catway, compatibility }) {
     fromFormatted: formatDateFR(from),
     toFormatted: formatDateFR(to),
 
-    status: compatibility.status,
-    isPartial: compatibility.status === "partial",
-    isFull: compatibility.status === "full",
+    status: availability.status,
+    isPartial: availability.status === "partial",
+    isFull: availability.status === "full",
 
     slotsCount,
     slots

@@ -7,7 +7,7 @@
  * ===================================================================
  */
 
-import { computeNightsBetweenDates } from "../../../../src/web/utils/computeReservationNights.js";
+import { computeNightsBetweenDates } from "../../utils/computeReservationNights.js";
 
 function formatDateFR(date) {
   return date instanceof Date && !isNaN(date)

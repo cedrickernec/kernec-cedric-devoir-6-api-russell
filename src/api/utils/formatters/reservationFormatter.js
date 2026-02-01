@@ -9,6 +9,8 @@
  * ============================================================
  */
 
+import { formatDateISO } from "../dates/formatDateISO.js";
+
 export function formatReservation({ reservation, catway }) {
     if (!reservation || !catway) return null;
 
@@ -51,4 +53,50 @@ export function formatReservationsList(reservations) {
             updatedAt : object.updatedAt
         };
     });
+}
+
+export function formatAvailability(apiAvailability) {
+
+  return apiAvailability.map(({ catway, compatibility }) => {
+
+    const catwayKeys = {
+        catwayNumber: catway.catwayNumber,
+        catwayType: catway.catwayType,
+        catwayState: catway.catwayState
+    }
+
+    // FULL
+    if (compatibility.status === "full") {
+      return {
+        catway: catwayKeys,
+        availability: {
+          status: "full",
+          from: formatDateISO(compatibility.from),
+          to: formatDateISO(compatibility.to)
+        }
+      };
+    }
+
+    // PARTIAL
+    if (compatibility.status === "partial") {
+      return {
+        catway: catwayKeys,
+        availability: {
+          status: "partial",
+          slots: compatibility.slots.map(slot => ({
+            from: formatDateISO(slot.from),
+            to: formatDateISO(slot.to)
+          }))
+        }
+      };
+    }
+
+    // NONE
+    return {
+      catway: catwayKeys,
+      availability: {
+        status: "none"
+      }
+    };
+  });
 }

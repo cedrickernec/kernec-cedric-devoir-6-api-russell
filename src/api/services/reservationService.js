@@ -16,9 +16,13 @@ import {
     createReservation,
     deleteReservation,
     findReservationConflict,
+    getReservationsOverlappingPeriod,
 } from "../repositories/reservationRepo.js";
 
-import { findCatwayByNumber } from "../repositories/catwayRepo.js";
+import {
+    findCatwayByNumber,
+    getAllCatways
+} from "../repositories/catwayRepo.js";
 
 import {
     canUpdateReservation,
@@ -35,6 +39,8 @@ import { parseDate } from "../utils/dates/parseDate.js";
 import { normalizeDayRange } from "../utils/dates/normalizeDayRange.js";
 
 import { ApiError } from "../utils/errors/apiError.js";
+import { getAvailableCatways } from "../utils/availability/getAvailableCatway.js";
+import { parseReservationPeriod } from "../utils/availability/parseReservationPeriod.js";
 
 // ===============================================
 // GET ALL RESERVATION
@@ -91,6 +97,32 @@ export async function getReservationByIdService(catwayNumber, idReservation) {
 }
 
 // ===============================================
+// GET AVAILABILITY
+// ===============================================
+
+export async function getReservationAvailabilityService({
+    startDate,
+    endDate,
+    catwayType,
+    allowPartial
+}) {
+
+    const { start, end } = parseReservationPeriod(startDate, endDate);
+
+    const reservations = await getReservationsOverlappingPeriod({ start, end });
+    const catways = await getAllCatways();
+
+    return getAvailableCatways({
+        catways,
+        reservations,
+        startDate: start,
+        endDate: end,
+        allowPartial: Boolean(allowPartial),
+        selectedType: catwayType !== "all" ? catwayType : null
+    });
+}
+
+// ===============================================
 // CREATE RESERVATION
 // ===============================================
 
@@ -115,13 +147,8 @@ export async function createReservationService(catwayNumber, data) {
             }
         );
     }
-
-    const rawStart = parseDate(data.startDate);
-    const rawEnd = parseDate(data.endDate);
-
-    validateReservationPeriod(rawStart, rawEnd);
-
-    const { start, end } = normalizeDayRange(rawStart, rawEnd);
+    
+    const { start, end } = parseReservationPeriod(data.startDate, data.endDate);
 
     const conflict = await findReservationConflict({ catwayNumber, start, end });
 
@@ -141,13 +168,15 @@ export async function createReservationService(catwayNumber, data) {
         );
     }
 
-    return createReservation({
+    const reservation = await createReservation({
         catwayNumber,
         clientName: data.clientName,
         boatName: data.boatName,
         startDate: start,
-        endDate: end
-    });
+        endDate: end  
+    })
+
+    return { reservation, catway };
 }
 
 // ===============================================
@@ -199,17 +228,7 @@ export async function updateReservationService(catwayNumber, idReservation, data
         }
     }
 
-    const rawStart = data.startDate
-        ? parseDate(data.startDate)
-        : reservation.startDate;
-
-    const rawEnd = data.endDate
-        ? parseDate(data.endDate)
-        : reservation.endDate;
-
-    validateReservationPeriod(rawStart, rawEnd);
-
-    const { start, end } = normalizeDayRange(rawStart, rawEnd);
+    const { start, end } = parseReservationPeriod(startDate, endDate);
 
     const conflict = await findReservationConflict({
         catwayNumber,

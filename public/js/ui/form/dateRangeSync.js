@@ -16,12 +16,19 @@ document.addEventListener("DOMContentLoaded", () => {
     startDateInput.addEventListener("change", () => {
         if (!startDateInput.value) return;
 
-        // Empêche une date de fin antérieure
-        endDateInput.min = startDateInput.value;
+        const start = new Date(startDateInput.value);
+
+        // + 1 jour minimum (logique "nuit")
+        start.setDate(start.getDate() + 1);
+
+        const minEndDate = start.toISOString().split("T")[0];
+
+        // Empêche une date de fin invalide
+        endDateInput.min = minEndDate;
 
         // Si la date de fin est vide ou invalide → on la synchronise
-        if (!endDateInput.value || endDateInput.value < startDateInput.value) {
-            endDateInput.value = startDateInput.value;
+        if (!endDateInput.value || endDateInput.value < minEndDate) {
+            endDateInput.value = minEndDate;
         }
     });
 });

@@ -31,6 +31,20 @@ export function validateReservationCreate(body) {
     return errors;
 }
 
+// Champs obligatoires
+export function validateAvailabilityInput(body) {
+    const errors = {};
+    const { startDate, endDate } = body;
+    
+    if (!startDate)
+        errors.startDate = "Champ obligatoire manquant : Date d'entrée.";
+
+    if (!endDate)
+        errors.endDate = "Champ obligatoire manquant : Date de sortie.";
+
+    return errors;
+}
+
 // Validation update
 export function validateReservationUpdate(cleanData) {
     const errors = {};
@@ -64,7 +78,7 @@ export function validateReservationPeriod(start, end) {
 
     if (start >= end) {
         throw ApiError.validation({
-            startDate: "La date de début doit être antérieure à la date de fin."
+            Dates: "La date de fin doit être strictement postérieure à la date de début (minimum 1 nuit)."
         });
     }
 }

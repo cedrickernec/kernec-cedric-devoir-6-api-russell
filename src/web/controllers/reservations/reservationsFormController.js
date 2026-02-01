@@ -8,40 +8,18 @@
  */
 
 import Reservation from "../../../api/models/Reservation.js";
-import Catway from "../../../api/models/Catway.js";
-import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservationMessage.js";
-import { getReservationConflicts } from "../../utils/reservations/reservationConflict.js";
-import { getAvailableCatways } from "../../utils/reservations/getAvailableCatway.js";
+
 import {
     mapAvailabilityToTable,
     mapReservationToList,
     mapReservationEdit
 } from "../../utils/reservations/reservationMapper.js";
+
+import { createReservation, fetchReservationAvailability } from "../../services/api/reservationApi.js";
 import { normalizeDateRange } from "../../utils/normalizeDateRange.js";
 import { validateReservationDates } from "../../utils/reservations/validateReservationDates.js";
-
-// ==================================================
-// VIEW HELPER - CREATE PAGE RENDER
-// ==================================================
-
-const renderCreateReservationPage = (res, {
-    step = "client",
-    errors = {},
-    formData = {},
-    hasSearched = false,
-    availableCatways = []
-}) => {
-    res.render("reservations/reservationCreate", {
-        title: "Création d'une réservation",
-        activePage: "reservations",
-        step,
-        errors,
-        formData,
-        hasSearched,
-        availableCatways
-    });
-};
-
+import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservationMessage.js";
+import { renderCreateReservationPage } from "../../views/helpers/reservationsViewHelper.js";
 
 // ==================================================
 // CREATE RESERVATION
@@ -66,7 +44,7 @@ export const postCreateReservation = async (req, res, next) => {
             ? catwayType
             : null;
 
-        // Validation client
+        // STEP 1 : Validation client
         if (step === "client") {
             if (!clientName?.trim()) {
                 errors.clientName = RESERVATION_MESSAGES.CLIENT_REQUIRED;
@@ -84,6 +62,7 @@ export const postCreateReservation = async (req, res, next) => {
                 });
             }
 
+            // Sauvegarde brouillon
             req.session.reservationDraft = {
                 clientName,
                 boatName
@@ -95,20 +74,13 @@ export const postCreateReservation = async (req, res, next) => {
             });
         }
 
-        // Validation dates
-        const dateCheck = validateReservationDates({
-            startDate,
-            endDate,
-            messages: {
-                DATES_REQUIRED: RESERVATION_MESSAGES.DATES_REQUIRED,
-                INVALID_DATES: RESERVATION_MESSAGES.INVALID_DATES
-            }
-        });
-
-        if (!dateCheck.isValid) {
+        // STEP 2 : Dates
+        if (!startDate || !endDate) {
             return renderCreateReservationPage(res, {
                 step: "dates",
-                errors: dateCheck.errors,
+                errors: {
+                    date: RESERVATION_MESSAGES.DATES_REQUIRED
+                },
                 formData: req.body,
                 hasSearched: false,
                 availableCatways: []
@@ -122,53 +94,80 @@ export const postCreateReservation = async (req, res, next) => {
             for (const rawSelection of catways) {
                 const parts = rawSelection.split("|");
 
+                let catwayNumber;
+                let payload;
+
                 // Réservation complète
                 if (parts.length === 1) {
-                    const catwayNumber = Number(parts[0]);
+                    catwayNumber = Number(parts[0]);
 
-                    const catway = await Catway.findOne({ catwayNumber });
-                    if (!catway) {
-                        throw new Error(`Catway ${catwayNumber} introuvable`);
-                    }
-
-                    const reservation = await Reservation.create({
+                    payload = {
                         clientName,
                         boatName,
-                        catwayNumber: catway.catwayNumber,
-                        catwayType: catway.catwayType,
                         startDate,
                         endDate
-                    });
-
-                    createdReservations.push(reservation);
-                    continue;
+                    };
                 }
 
                 // Réservation partielle
-                const [catwayNumberRaw, from, to] = parts;
-                const catwayNumber = Number(catwayNumberRaw);
+                else {
+                    const [number, from, to] = parts;
 
-                const catway = await Catway.findOne({ catwayNumber });
-                if (!catway) {
-                    throw new Error(`Catway ${catwayNumber} introuvable`);
+                    catwayNumber = Number(number);
+
+                    payload = {
+                        clientName,
+                        boatName,
+                        startDate: from,
+                        endDate: to
+                    };
                 }
 
-                const reservation = await Reservation.create({
-                    clientName,
-                    boatName,
-                    catwayNumber: catway.catwayNumber,
-                    catwayType: catway.catwayType,
-                    startDate: new Date(from),
-                    endDate: new Date(to)
-                });
+                const apiData = await createReservation(catwayNumber, payload, req, res);
 
-                createdReservations.push(reservation);
+                if (apiData?.authExpired) return;
+
+                if (apiData.success === false) {
+
+                    // Erreur de champs
+                    if (apiData.errors && Object.keys(apiData.errors).length > 0) {
+                        return renderCreateReservationPage(res, {
+                            step: "dates",
+                            errors: apiData.errors,
+                            formData: req.body,
+                            hasSearched: true,
+                            availableCatways: []
+                        });
+                    }
+
+                    // Erreur métier
+                    if (apiData.message) {
+                        return renderCreateReservationPage(res, {
+                            step: "dates",
+                            globalError: apiData.message,
+                            formData: req.body,
+                            hasSearched: true,
+                            availableCatways: []
+                        });
+                    }
+
+                    // Fallback sécurité
+                    return renderCreateReservationPage(res, {
+                        step: "dates",
+                        globalError: "Erreur lors de la création de la réservation.",
+                        formData: req.body,
+                        hasSearched: true,
+                        availableCatways: []
+                    });
+                }
+
+                createdReservations.push(apiData.data.reservation);
             }
 
             req.session.flash = {
                 type: "success",
                 message: `${createdReservations.length} réservation(s) créée(s) avec succès`,
-                highlightIds: createdReservations.map(r => r._id.toString())
+                highlightIds: createdReservations.map(r => r.id.toString())
             };
 
             delete req.session.reservationDraft;
@@ -176,31 +175,31 @@ export const postCreateReservation = async (req, res, next) => {
         }
 
         // Recherche
-        const normalizedStart = normalizeDateRange(startDate, "start");
-        const normalizedEnd = normalizeDateRange(endDate, "end");
+        const availabilityPayload = {
+            startDate,
+            endDate,
+            catwayType: selectedType ?? "all",
+            allowPartial : allowPartial === "on"
+        }
 
-        const allowPartialBool = allowPartial === "on";
+        const apiData = await fetchReservationAvailability(availabilityPayload, req, res);
 
-        const relevantReservations = await Reservation.find({
-            startDate: { $lte: new Date(normalizedEnd) },
-            endDate: { $gte: new Date(normalizedStart) }
-        });
+        if (apiData?.authExpired) return;
 
-        const allCatways = await Catway.find().sort({ catwayNumber: 1 });
+        if (!apiData.success) {
+            return renderCreateReservationPage(res, {
+                step: "dates",
+                formData: req.body,
+                hasSearched: false,
+                errors: {},
+                globalError: apiData.message || "Erreur lors de la recherche de disponibilité."
+            })
+        }
 
-        const availableCatways = getAvailableCatways({
-            catways: allCatways,
-            reservations: relevantReservations,
-            startDate: normalizedStart,
-            endDate: normalizedEnd,
-            allowPartial: allowPartialBool,
-            selectedType
-        });
-
-        const mappedCatways = availableCatways.map(({ catway, compatibility }) =>
+        const mappedCatways = apiData.data.map(item =>
             mapAvailabilityToTable({
-                catway,
-                compatibility
+                catway: item.catway,
+                availability: item.availability
             })
         );
 

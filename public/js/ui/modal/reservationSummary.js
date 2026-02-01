@@ -65,7 +65,9 @@ export function reservationSummary({ data }) {
         </span>
 
         <span class="summary-duration">
-            ${r.duration ? `${r.duration} jours` : "—"}
+            ${typeof r.duration === "number"
+                ? `${r.duration} nuit${r.duration > 1 ? "s" :""}`
+                : "—"}
         </span>
         `;
 
@@ -75,14 +77,14 @@ export function reservationSummary({ data }) {
     wrapper.appendChild(list);
 
     /* ================= TOTAL DURATION ================= */
-    const totalDays = data.reservations.reduce((sum, r) => {
+    const totalNights = data.reservations.reduce((sum, r) => {
         return typeof r.duration === "number" ? sum + r.duration : sum;
     }, 0);
 
     const total = document.createElement("div");
     total.className = "summary-total";
     total.innerHTML = `
-    <span class="bold">Total :</span> ${totalDays} jours
+    <span class="bold">Total :</span> ${totalNights} nuit${totalNights > 1 ? "s" : ""}
     `;
 
     wrapper.appendChild(total);

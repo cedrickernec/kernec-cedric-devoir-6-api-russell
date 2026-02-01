@@ -3,7 +3,7 @@ import {
     postCreateReservation,
     postEditReservation,
     cancelCreateReservation
-} from "../../controllers/reservations/reservationFormController.js";
+} from "../../controllers/reservations/reservationsFormController.js";
 import { authGuard } from "../../middlewares/authGuard.js";
 
 const router = express.Router();

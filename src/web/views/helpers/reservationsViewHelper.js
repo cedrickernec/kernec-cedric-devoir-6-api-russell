@@ -3,19 +3,21 @@
 // ==================================================
 
 export const renderCreateReservationPage = (res, {
+    step = "client",
     errors = {},
     globalError = null,
     formData = {},
-    step = "client",
+    hasSearched = false,
     availableCatways = []
 }) => {
-    res.render("catways/catwayCreate", {
+    res.render("reservations/reservationCreate", {
         title: "Création d'une réservation",
         activePage : "reservations",
         step,
         errors,
         globalError,
         formData,
+        hasSearched,
         availableCatways
     });
 };
@@ -31,7 +33,7 @@ export const renderEditReservationPage = (res, {
     globalError = null,
     formData = {}
 }) => {
-    res.render("catways/catwayEdit", {
+    res.render("reservations/reservationEdit", {
         title: "Édition d'une réservation",
         activePage : "reservations",
         reservation,

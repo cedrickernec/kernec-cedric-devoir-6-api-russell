@@ -14,12 +14,11 @@ import {
     getAllReservationsService,
     getReservationsByCatwayService,
     getReservationByIdService,
+    getReservationAvailabilityService,
     createReservationService,
     updateReservationService,
     deleteReservationService
 } from "../services/reservationService.js"
-
-import { validateReservationCreate } from "../validators/reservationValidators.js";
 
 import {
     validateCatwayNumber,
@@ -27,6 +26,12 @@ import {
 } from "../validators/params/idValidator.js";
 
 import {
+    validateReservationCreate,
+    validateAvailabilityInput
+} from "../validators/reservationValidators.js";
+
+import {
+    formatAvailability,
     formatReservation,
     formatReservationsList
 } from "../utils/formatters/reservationFormatter.js";
@@ -109,6 +114,52 @@ export const getReservationById = async (req, res, next) => {
         next(error);
     }
 };
+
+// ===============================================
+// GET AVAILABILITY 
+// ===============================================
+
+export const getReservationAvailability = async (req, res, next) => {
+    try {
+        // 1) Filtrage strict
+        const allowedFields = [
+            "startDate",
+            "endDate",
+            "catwayType",
+            "allowPartial"
+        ];
+
+        const cleanData = pickAllowedFields(req.body, allowedFields)
+
+        // 3) Validation
+        const errors = validateAvailabilityInput(cleanData);
+        if (Object.keys(errors).length > 0) {
+            throw ApiError.validation(
+                errors
+            );
+        }
+
+        // 3) Service
+        const availability = await getReservationAvailabilityService(cleanData);
+
+        // 4) Réponse
+        if (availability.length === 0) {
+            return res.status(200).json({
+                success: true,
+                message: "Aucun catway disponible pour la période demandée.",
+                data: []
+            });
+        }
+        
+        res.status(200).json({
+            success: true,
+            data: formatAvailability(availability)
+        });
+
+    } catch (error) {
+        next(error);
+    }
+}
 
 // ===============================================
 // CREATE RESERVATION

@@ -41,6 +41,20 @@ export function fetchReservationById(catwayNumber, reservationId, req, res) {
 }
 
 // ==================================================
+// FETCH RESERVATION AVAILABILITY
+// ==================================================
+
+export function fetchReservationAvailability(payload, req, res) {
+    return apiFetch(
+        "/api/reservations/availability", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        }, req, res
+    );
+}
+
+// ==================================================
 // CREATE RESERVATION
 // ==================================================
 
