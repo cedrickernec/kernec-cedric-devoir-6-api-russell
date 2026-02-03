@@ -72,7 +72,7 @@ export function validateReservationUpdate(cleanData) {
 export function validateReservationPeriod(start, end) {
     if (!start || !end) {
         throw ApiError.badRequest(
-            "Dates de réservation invalides."
+            "Dates de réservation ou formats invalides."
         );
     }
 

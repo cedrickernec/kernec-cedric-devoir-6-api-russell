@@ -3,23 +3,26 @@
 <h1>Création d'une réservation</h1>
 
 <form method="POST" action="/reservations/create" class="form">
-  <input type="hidden" name="step" value="client">
-
+  
   <div class="form-group <%= errors.clientName ? 'has-error' : '' %>">
     <div>
       <label for="clientName">Client</label>
       <p id="client-hint" class="form-hint muted">Prénom & Nom</p>
     </div>
+
+    <!-- Champ affiché (lecture seul) -->
     <input
-      id="clientName"
-      type="text"
-      name="clientName"
-      value="<%= formData.clientName || '' %>"
-      placeholder="John Doe"
-      autocomplete="off"
-      aria-describedby="client-hint"
-      required
+    id="clientName"
+    type="text"
+    name="clientName"
+    value="<%= formData.clientName || '' %>"
+    placeholder="John Doe"
+    autocomplete="off"
+    aria-describedby="client-hint"
+    required
     >
+    <!-- Champ envoyé au serveur -->
+    <input type="hidden" name="step" value="client">
   </div>
 
   <div class="form-group <%= errors.boatName ? 'has-error' : '' %>">
@@ -40,15 +43,13 @@
 
   <div class="form-actions">
     <button
-      type="submit"
-      formmethod="POST"
-      formaction="/reservations/create/cancel"
-      formnovalidate
+      type="button"
+      onclick="window.location='/reservations/create/cancel'"
       class="btn btn-cancel">
       Annuler
     </button>
 
-    <button type="submit" class="btn btn-confirm">
+    <button type="submit" class="btn btn-confirm" autofocus>
       Continuer
     </button>
   </div>

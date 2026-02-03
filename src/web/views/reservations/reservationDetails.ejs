@@ -73,7 +73,7 @@
     </a>
 
     <a
-      href="/reservations/<%= reservation.id %>/edit"
+      href="/catways/<%= reservation.catway.number %>/reservations/<%= reservation.id %>/edit"
       class="btn btn--primary"
       aria-label="Éditer la réservation"
       title="Éditer la réservation"
@@ -83,3 +83,13 @@
     </a>
   </div>
 </section>
+
+<!-- ====== SCRIPTS ====== -->
+
+<% if (flash) { %>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    showToast("<%= flash.type %>", "<%= flash.message %>");
+  });
+</script>
+<% } %>

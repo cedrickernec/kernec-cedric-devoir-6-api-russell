@@ -21,7 +21,7 @@
       id="username"
       name="username"
       value="<%= user.username %>"
-      aria-invalid="<%= errors.username ? 'true' : '' %>"
+      aria-invalid="<%= errors.username ? 'true' : 'false' %>"
       data-invalid="<%= errors.username ? 'true' : '' %>"
       required
     >
@@ -40,7 +40,7 @@
       name="email"
       aria-describedby="email-feedback"
       value="<%= user.email %>"
-      aria-invalid="<%= errors.email ? 'true' : '' %>"
+      aria-invalid="<%= errors.email ? 'true' : 'false' %>"
       data-invalid="<%= errors.email ? 'true' : '' %>"
       autocomplete="off"
       required
@@ -83,7 +83,7 @@
         id="password"
         name="password"
         autocomplete="new-password"
-        aria-invalid="<%= errors.password ? 'true' : '' %>"
+        aria-invalid="<%= errors.password ? 'true' : 'false' %>"
         data-invalid="<%= errors.password ? 'true' : '' %>"
       >
       <button

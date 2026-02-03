@@ -9,8 +9,8 @@
 
 import {
   fetchReservations,
-  fetchReservationsByCatway,
-  fetchReservationById
+  fetchReservationById,
+  fetchReservationsByCatway
 } from "../../services/api/reservationApi.js";
 
 import {
@@ -19,8 +19,11 @@ import {
   mapReservationEdit
 } from "../../utils/reservations/reservationMapper.js";
 
+import { renderEditReservationPage } from "../../views/helpers/reservationsViewHelper.js";
+
 import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservationMessage.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
+import { loadOtherReservations } from "../../utils/reservations/loadOtherReservations.js";
 
 // ==================================================
 // RESERVATIONS LIST
@@ -119,10 +122,13 @@ export const getReservationsPage = async (req, res, next) => {
 
 export const getReservationById = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { catway } = req.query;
+    const { id, catwayNumber } = req.params;
 
-    const apiData = await fetchReservationById(catway, id, req, res);
+    if (!catwayNumber) {
+      return next(new Error("Numéro de catway manquant."));
+    }
+
+    const apiData = await fetchReservationById(catwayNumber, id, req, res);
 
     if (apiData?.authExpired) return;
 
@@ -156,10 +162,13 @@ export const getReservationById = async (req, res, next) => {
 
 export const getReservationPanel = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { catway } = req.query;
+    const { id, catwayNumber } = req.params;
 
-    const apiData = await fetchReservationById(catway, id, req, res);
+    if (!catwayNumber) {
+      return next(new Error("Numéro de catway manquant."));
+    }
+
+    const apiData = await fetchReservationById(catwayNumber, id, req, res);
 
     if (apiData?.authExpired) return;
 
@@ -223,23 +232,34 @@ export const getCreateReservationPage = async (req, res, next) => {
 
 export const getEditReservationPage = async (req, res, next) => {
   try {
-    const reservation = await Reservation.findById(req.params.id);
-    if (!reservation) return next();
+    const { id, catwayNumber } = req.params;
 
-    const otherReservations = await Reservation.find({
-      catwayNumber: reservation.catwayNumber,
-      _id: { $ne: reservation._id }
-    }).sort({ startDate: 1 });
+    if (!catwayNumber) {
+      return next(new Error("Numéro de catway manquant."));
+    }
 
-    res.render("reservations/reservationEdit", {
-      title: "Éditer une réservation",
-      activePage: "reservations",
+    const apiData = await fetchReservationById(catwayNumber, id, req, res);
+    
+    if (apiData?.authExpired) return;
+    
+    if (!apiData?.success) {
+      return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
+    }
+    
+    if (!apiData.data) {
+      const error = new Error(RESERVATION_MESSAGES.NOT_FOUND);
+      error.status = 404;
+      return next(error);
+    }
+    
+    const otherReservations = await loadOtherReservations(catwayNumber, id, req, res);
 
-      reservation: mapReservationEdit(reservation),
-      otherReservations: otherReservations.map(mapReservationToList),
+    const reservationApi = apiData.data;
+    const reservation = mapReservationEdit(reservationApi);
 
-      errors: {},
-      formData: {}
+    renderEditReservationPage(res, {
+      reservation,
+      otherReservations
     });
 
   } catch (error) {

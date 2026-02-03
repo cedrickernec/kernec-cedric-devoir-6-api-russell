@@ -160,28 +160,30 @@ export function mapReservationEdit(apiReservation) {
   };
 }
 
-
 // ==================================================
 // MAPPER AVAILABILITY (TABLE)
 // ==================================================
 
 export function mapAvailabilityToTable({ catway, availability }) {
-  const from =
-  availability.from
-  ? new Date(availability.from)
-  : null;
-  
-  const to =
-  availability.to
-  ? new Date(availability.to)
+
+  const from = availability.from || null;
+  const to = availability.to ||  null;
+
+  const isFull = availability.status === "full";
+  const isPartial = availability.status === "partial";
+
+  const formatISODate = (iso) => iso
+  ? iso.split("-").reverse().join("/")
   : null;
 
-  const slots = (availability.slots || []).map(slot => ({
+  const slots = isPartial
+  ? (availability.slots || []).map(slot => ({
     from: slot.from,
     to: slot.to,
-    fromFormatted: formatDateFR(new Date(slot.from)),
-    toFormatted: formatDateFR(new Date(slot.to)),
-  }));
+    fromFormatted: formatISODate(slot.from),
+    toFormatted: formatISODate(slot.to),
+  }))
+  : [];
   
   const slotsCount = slots.length;
 
@@ -191,14 +193,38 @@ export function mapAvailabilityToTable({ catway, availability }) {
       type: catway.catwayType
     },
 
-    fromFormatted: formatDateFR(from),
-    toFormatted: formatDateFR(to),
+    fromFormatted: isFull && from ? formatISODate(from) : null,
+    toFormatted: isFull && to ? formatISODate(to) : null,
 
     status: availability.status,
-    isPartial: availability.status === "partial",
-    isFull: availability.status === "full",
+
+    isFull,
+    isPartial,
 
     slotsCount,
     slots
   };
+}
+
+// ==================================================
+// MAPPER ERRORS (EDIT RESERVATION)
+// ==================================================
+
+export function mapReservationErrors(apiData, reservation, rawErrors = {}) {
+
+  const errors = rawErrors || {};
+
+  const dateError = errors.Dates || errors.startDate || errors.endDate;
+
+  const viewErrors = {
+    ...errors,
+    dateError
+  };
+
+  if (reservation?.isStartDateLocked) {
+    viewErrors.endDate = dateError;
+    delete viewErrors.startDate;
+  }
+
+  return { viewErrors };
 }

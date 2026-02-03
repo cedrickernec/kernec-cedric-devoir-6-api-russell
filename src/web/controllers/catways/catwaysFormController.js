@@ -99,7 +99,7 @@ export const postEditCatway = async (req, res, next) => {
             if (Object.keys(errors).length > 0) {
                 return renderEditCatwayPage(res, {
                     catway,
-                    errors: apiData.errors
+                    errors
                 });
             }
 

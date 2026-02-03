@@ -12,7 +12,6 @@
 
 import { closeSidePanel } from "../ui/panel/sidePanel.js";
 import { COMMON_MESSAGES } from "../messages/commonMessages.js";
-import { confirmDelete } from "../ui/modal/confirmDelete.js";
 
 const panel = document.getElementById("side-panel");
 

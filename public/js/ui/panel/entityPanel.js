@@ -16,9 +16,31 @@ import {
   getCurrentEntityId
 } from "./sidePanel.js";
 
+// ==================================================
+// URL RESOLVER
+// ==================================================
+
+export function resolveNestedUrl(template, params = {}) {
+  let url = template;
+
+  Object.entries(params).forEach(([key, value]) => {
+    url = url.replace(`:${key}`, value);
+  });
+
+  return url
+}
+
+// ==================================================
+// INIT
+// ==================================================
+
 export function initEntityPanel({
   panelTitle,
   panelUrl,
+  nestedPanelUrl,
+  nestedParams,
+  nestedEditUrl,
+  nestedEditParams,
   deleteConfig,
   editBaseUrl,
   editTitle,
@@ -66,7 +88,18 @@ export function initEntityPanel({
       // ==================================================
 
       try {
-        const res = await fetch(`${panelUrl}/${entityId}/panel?catway=${catway}`);
+        let url;
+        
+        if (nestedPanelUrl && nestedParams) {
+          url = resolveNestedUrl(nestedPanelUrl, {
+            id: entityId,
+            ...nestedParams(row)
+          });
+        } else {
+          url = `${panelUrl}/${entityId}/panel`;
+        }
+        
+        const res = await fetch(url);
 
         // ---------- Gestion erreurs ----------
         if (!res.ok) {
@@ -101,8 +134,17 @@ export function initEntityPanel({
           title: panelTitle,
           content: html,
           entityId,
-          editBaseUrl,
+
           editTitle,
+          editBaseUrl,
+          nestedEditUrl: nestedEditUrl || null,
+          nestedEditParams: nestedEditParams
+            ? JSON.stringify({
+              id: entityId,
+              ...nestedEditParams(row)
+            })
+            : null,
+            
           actions: deleteConfig
             ? {
                 delete: {

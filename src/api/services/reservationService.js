@@ -40,7 +40,7 @@ import { normalizeDayRange } from "../utils/dates/normalizeDayRange.js";
 
 import { ApiError } from "../utils/errors/apiError.js";
 import { getAvailableCatways } from "../utils/availability/getAvailableCatway.js";
-import { parseReservationPeriod } from "../utils/availability/parseReservationPeriod.js";
+import { parseReservationPeriod, parseReservationUpdatePeriod } from "../utils/availability/parseReservationPeriod.js";
 
 // ===============================================
 // GET ALL RESERVATION
@@ -228,7 +228,12 @@ export async function updateReservationService(catwayNumber, idReservation, data
         }
     }
 
-    const { start, end } = parseReservationPeriod(startDate, endDate);
+    const { start, end } = parseReservationUpdatePeriod(
+        reservation.startDate,
+        reservation.endDate,
+        data.startDate,
+        data.endDate
+    );
 
     const conflict = await findReservationConflict({
         catwayNumber,
@@ -260,7 +265,7 @@ export async function updateReservationService(catwayNumber, idReservation, data
 
     await reservation.save();
 
-    return reservation;
+    return { reservation, catway };
 }
 
 // ===============================================

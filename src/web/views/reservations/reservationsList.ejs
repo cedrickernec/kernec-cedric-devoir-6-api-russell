@@ -104,6 +104,7 @@
       <tr
         class="js-reservation-row js-panel-row"
         data-entity-id="<%= reservations[i].id %>"
+        data-entity-db-id="<%= reservations[i].id %>"
         data-catway="<%= reservations[i].catwayNumber %>"
         data-client="<%= reservations[i].clientName %>"
         data-boat="<%= reservations[i].boatName %>"
@@ -117,6 +118,7 @@
             name="selectedReservations"
             value="<%= reservations[i].id %>"
             aria-label="Sélectionner la réservation de <%= reservations[i].clientName %>, bateau <%= reservations[i].boatName %>, du <%= reservations[i].startDateFormatted %> au <%= reservations[i].endDateFormatted %>"
+          >
         </td>
 
         <td class="align-center border-col-left border-col-right">
@@ -137,7 +139,7 @@
 
         <td class="align-center actions border-col-left">
           <a
-            href="/reservations/<%= reservations[i].id %>?catway=<%= reservations[i].catwayNumber %>"
+            href="/catways/<%= reservations[i].catwayNumber %>/reservations/<%= reservations[i].id %>"
             class="btn btn--primary btn-icon"
             aria-label="Voir le détail de la réservation de <%= reservations[i].clientName %>, bateau <%= reservations[i].boatName %>, du <%= reservations[i].startDateFormatted %> au <%= reservations[i].endDateFormatted %>"
           >
@@ -150,7 +152,7 @@
 
         <td class="align-center actions">
           <a
-            href="/reservations/<%= reservations[i].id %>/edit"
+            href="/catways/<%= reservations[i].catwayNumber %>/reservations/<%= reservations[i].id %>/edit"
             class="btn btn--primary btn-icon"
             aria-label="Éditer la réservation de <%= reservations[i].clientName %>, bateau <%= reservations[i].boatName %>, du <%= reservations[i].startDateFormatted %> au <%= reservations[i].endDateFormatted %>"
           >

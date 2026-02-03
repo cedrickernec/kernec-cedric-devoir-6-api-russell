@@ -23,15 +23,6 @@ function dayStart(date) {
   ));
 }
 
-function nextDay(date) {
-  const d = dayStart(date);
-  return new Date(Date.UTC(
-    d.getUTCFullYear(),
-    d.getUTCMonth(),
-    d.getUTCDate() + 1
-  ));
-}
-
 export function getCatwayCompatibility({
   catwayNumber,
   reservations,
@@ -57,29 +48,34 @@ export function getCatwayCompatibility({
   for (const b of blocked) {
 
     // Réservation hors période
-    if (b.end < periodStart || b.start > periodEnd) {
+    if (b.end <= periodStart || b.start >= periodEnd) {
       continue;
     }
 
-    // Trou disponible avant le blocage
+    // Créneau disponible avant le blocage
     if (cursor < b.start) {
-      slots.push({
-        from: new Date(cursor),
-        to: new Date(b.start)
-      });
+
+      const slotEnd = b.start < periodEnd ? b.start : periodEnd;
+
+      if (cursor < slotEnd) {
+        slots.push({
+          from: new Date(cursor),
+          to: new Date(slotEnd)
+        });
+      }
     }
 
-    // Saut au lendemain du dernier jour bloqué
-    if (b.end >= cursor) {
-      cursor = nextDay(b.end);
+    // Avancer le curseur
+    if (b.end > cursor) {
+      cursor = new Date(b.end);
     }
   }
 
-  // Trou final
-  if (cursor <= periodEnd) {
+  // Slot final
+  if (cursor < periodEnd) {
     slots.push({
       from: new Date(cursor),
-      to: nextDay(periodEnd)
+      to: new Date(periodEnd)
     });
   }
 
@@ -91,11 +87,11 @@ export function getCatwayCompatibility({
     return { status: "none", slots: [] };
   }
 
-  // Full si un seul slot = toute la période
+  // FULL: un seul slot qui couvre exactement la période demandée
   if (
     slots.length === 1 &&
     slots[0].from.getTime() === periodStart.getTime() &&
-    slots[0].to.getTime() === nextDay(periodEnd).getTime()
+    slots[0].to.getTime() === periodEnd.getTime()
   ) {
     return {
       status: "full",
@@ -104,15 +100,9 @@ export function getCatwayCompatibility({
     };
   }
 
-  // Partial → plus long créneau
-  const bestSlot = slots.reduce((a, b) =>
-    (b.to - b.from) > (a.to - a.from) ? b : a
-  );
-
+  // PARTIAL: renvoie tous les slots possibles dans la période
   return {
     status: "partial",
-    from: bestSlot.from,
-    to: bestSlot.to,
     slots
   };
 }
