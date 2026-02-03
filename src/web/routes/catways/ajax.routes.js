@@ -1,9 +1,17 @@
+/**
+ * ===================================================================
+ * CATWAYS AJAX ROUTES (WEB)
+ * ===================================================================
+ */
+
 import express from "express";
+
 import {
     deleteCatways,
     deleteCatwayById,
     checkCatwayNumberAvailability
 } from "../../controllers/catways/catwaysAjaxController.js";
+
 import { authGuard } from "../../middlewares/authGuard.js";
 
 const router = express.Router();

@@ -1,3 +1,9 @@
+/**
+ * ===================================================================
+ * DASHBOARD ROUTE (WEB)
+ * ===================================================================
+ */
+
 import express from "express";
 import { getDashboard } from "../controllers/dashboardController.js";
 import { authGuard } from "../middlewares/authGuard.js";

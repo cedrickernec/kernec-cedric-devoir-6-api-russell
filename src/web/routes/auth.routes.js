@@ -1,3 +1,9 @@
+/**
+ * ===================================================================
+ * AUTHENTIFICATION ROUTES (WEB)
+ * ===================================================================
+ */
+
 import express from "express";
 import { postLoginView, getLogoutView } from "../controllers/authViewController.js";
 

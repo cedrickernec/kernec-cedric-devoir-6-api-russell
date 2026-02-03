@@ -1,3 +1,10 @@
+/**
+ * ===================================================================
+ * SESSION AJAX ROUTES (WEB)
+ * ===================================================================
+ */
+
+
 import express from "express";
 import { authGuard } from "../middlewares/authGuard.js";
 

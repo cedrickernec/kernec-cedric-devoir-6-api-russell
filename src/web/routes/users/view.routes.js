@@ -1,4 +1,11 @@
+/**
+ * ===================================================================
+ * USERS VIEW ROUTES (WEB)
+ * ===================================================================
+ */
+
 import express from "express";
+
 import {
     getUsersPage,
     getCreateUserPage,
@@ -6,6 +13,7 @@ import {
     getUserById,
     getUserPanel
 } from "../../controllers/users/usersViewController.js";
+
 import { authGuard } from "../../middlewares/authGuard.js";
 
 const router = express.Router();

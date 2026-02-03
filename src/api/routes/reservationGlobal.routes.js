@@ -1,3 +1,9 @@
+/**
+ * ===================================================================
+ * RESERVATIONS GLOBAL ROUTES (API)
+ * ===================================================================
+ */
+
 import { Router } from "express";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import {

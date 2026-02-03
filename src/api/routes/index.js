@@ -1,7 +1,13 @@
-import authApiRoutes from "../routes/authRoutes.js"
-import userApiRoutes from "../routes/userRoutes.js";
-import catwayApiRoutes from "../routes/catwayRoutes.js";
-import reservationGlobalApiRoutes from "../routes/reservationGlobalRoutes.js";
+/**
+ * ===================================================================
+ * REGISTER API ROUTES
+ * ===================================================================
+ */
+
+import authApiRoutes from "./auth.routes.js"
+import userApiRoutes from "./user.routes.js";
+import catwayApiRoutes from "./catway.routes.js";
+import reservationGlobalApiRoutes from "./reservationGlobal.routes.js";
 
 export function registerApiRoutes(app) {
     app.use("/api/auth", authApiRoutes);

@@ -1,28 +1,30 @@
 /**
- * --------------------------------------------------------------------
- * Enregistrement des routes WEB
- * --------------------------------------------------------------------
+ * ===================================================================
+ * REGISTER WEB ROUTES
+ * ===================================================================
+ * - Registre de toutes les routes web
+ * ===================================================================
  */
 
-import homeRoutes from "./homeRoutes.js"
-import authViewRoutes from "./authRoutes.js";
-import sessionAjaxRoutes from "./sessionAjaxRoutes.js";
+import homeRoutes from "./home.routes.js"
+import authViewRoutes from "./auth.routes.js";
+import sessionAjaxRoutes from "./sessionAjax.routes.js";
 
-import docViewRoutes from "./docRoutes.js";
+import docViewRoutes from "./doc.routes.js";
 
-import dashboardRoutes from "./dashboardRoutes.js";
+import dashboardRoutes from "./dashboard.routes.js";
 
-import usersFormRoutes from "../routes/users/usersFormRoutes.js";
-import usersViewRoutes from "../routes/users/usersViewRoutes.js";
-import usersAjaxRoutes from "../routes/users/usersAjaxRoutes.js";
+import usersFormRoutes from "./users/form.routes.js";
+import usersViewRoutes from "./users/view.routes.js";
+import usersAjaxRoutes from "./users/ajax.routes.js";
 
-import catwaysFormRoutes from "../routes/catways/catwaysFormRoutes.js";
-import catwaysViewRoutes from "../routes/catways/catwaysViewRoutes.js";
-import catwaysAjaxRoutes from "../routes/catways/catwaysAjaxRoutes.js";
+import catwaysFormRoutes from "./catways/form.routes.js";
+import catwaysViewRoutes from "./catways/view.routes.js";
+import catwaysAjaxRoutes from "./catways/ajax.routes.js";
 
-import reservationsFormRoutes from "../routes/reservations/reservationsFormRoutes.js";
-import reservationsViewRoutes from "../routes/reservations/reservationsViewRoutes.js";
-import reservationsAjaxRoutes from "./reservations/reservationsAjaxRoutes.js";
+import reservationsFormRoutes from "./reservations/form.routes.js";
+import reservationsViewRoutes from "./reservations/view.routes.js";
+import reservationsAjaxRoutes from "./reservations/ajax.routes.js";
 
 export function registerWebRoutes(app) {
     app.use("/", homeRoutes);
@@ -37,8 +39,8 @@ export function registerWebRoutes(app) {
     app.use("/users", usersFormRoutes);
     app.use("/users/ajax", usersAjaxRoutes);
 
-    app.use("/catways", catwaysViewRoutes);
-    app.use("/catways", catwaysFormRoutes);
+    app.use("/catways", catwaysViewRoutes); // → avec routes Réservations imbriquées
+    app.use("/catways", catwaysFormRoutes); // → avec routes Réservations imbriquées
     app.use("/catways/ajax", catwaysAjaxRoutes);
 
     app.use("/reservations", reservationsViewRoutes);

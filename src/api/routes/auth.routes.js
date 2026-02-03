@@ -1,3 +1,9 @@
+/**
+ * ===================================================================
+ * AUTHENTIFICATION ROUTES (API)
+ * ===================================================================
+ */
+
 import express from "express";
 import { login, logout } from "../controllers/authController.js";
 

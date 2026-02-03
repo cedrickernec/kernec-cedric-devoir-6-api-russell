@@ -1,4 +1,10 @@
-import reservationRoutes from "./reservationRoutes.js";
+/**
+ * ===================================================================
+ * CATWAYS ROUTES (API)
+ * ===================================================================
+ */
+
+import reservationRoutes from "./reservationNested.routes.js";
 
 import { Router } from "express";
 
