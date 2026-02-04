@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const form = input.closest("form");
         const userId = form?.dataset.entityId;
 
-        let url = `/users/ajax/check-email?email=${encodeURIComponent(email)}`;
+        let url = `/ajax/users/check-email?email=${encodeURIComponent(email)}`;
 
         if (userId) {
           url += `&excludeId=${userId}`;

@@ -14,19 +14,18 @@ initEntityPanel({
   panelTitle: "Détail de la réservation",
   nestedPanelUrl: "/catways/:catwayNumber/reservations/:id/panel",
   nestedParams: (row) => ({
-    catwayNumber: row.dataset.catway
+    catwayNumber: row.dataset.catwayNumber
   }),
 
   editTitle: "Éditer la réservation",
   editBaseUrl: "/reservations",
   nestedEditUrl: "/catways/:catwayNumber/reservations/:id/edit",
   nestedEditParams: (row) => ({
-    catwayNumber: row.dataset.catway
+    catwayNumber: row.dataset.catwayNumber
   }),
   
-
   deleteConfig: {
-    baseUrl: "/reservations/ajax",
+    deleteUrlTemplate: "/catways/:catwayNumber/reservations/:id",
     confirmMessage: RESERVATION_MESSAGES.DELETE_CONFIRM,
     type: "reservation"
   },

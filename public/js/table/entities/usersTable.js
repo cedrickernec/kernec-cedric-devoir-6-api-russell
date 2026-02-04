@@ -20,7 +20,7 @@ export function initUsersTable() {
         checkboxName: "selectedUsers",
         deleteBtnId: "delete-selected",
         selectAllId: "select-all",
-        deleteUrl: "/users/ajax/",
+        deleteUrl: "/ajax/users",
         deleteType: "user",
 
         messages: {

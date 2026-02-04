@@ -90,7 +90,8 @@
 
     <% if (errors.password?.message) { %>
     <p class="form-error"><%= errors.password.message %></p>
-    <% } %> <%- include("../partials/passwordRules.ejs", { passwordRules, errors }) %>
+    <% } %>
+    <%- include("../partials/passwordRules.ejs", { passwordRules, errors }) %>
   </div>
 
   <!--====== BUTTONS ACTIONS =======-->

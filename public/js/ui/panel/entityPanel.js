@@ -73,8 +73,7 @@ export function initEntityPanel({
       if (e.target.closest("a, button, input, .actions")) return;
 
       const entityId = row.dataset.entityId;
-      const catway = row.dataset.catway;
-      const dbId = row.dataset.entityDbId;
+      const catwayNumber = row.dataset.catwayNumber;
 
       // Toggle panel si déjà ouvert sur la même entité
       if (isSidePanelOpen() && getCurrentEntityId() === entityId) {
@@ -130,6 +129,15 @@ export function initEntityPanel({
         clearActiveRows();
         row.classList.add("is-active");
 
+        let deleteUrl = null;
+
+        if (deleteConfig?.deleteUrlTemplate) {
+          deleteUrl = resolveNestedUrl(deleteConfig.deleteUrlTemplate, {
+            id: entityId,
+            catwayNumber
+          });
+        }
+
         openSidePanel({
           title: panelTitle,
           content: html,
@@ -148,7 +156,7 @@ export function initEntityPanel({
           actions: deleteConfig
             ? {
                 delete: {
-                  url: `${deleteConfig.baseUrl}/${dbId}`,
+                  url: deleteUrl,
                   rowSelector: `.js-panel-row[data-entity-id="${entityId}"]`,
                   confirmMessage: deleteConfig.confirmMessage,
                   type: deleteConfig.type

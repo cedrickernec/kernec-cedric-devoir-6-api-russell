@@ -7,9 +7,10 @@
  */
 
 import User from "../../../api/models/User.js";
-import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import mongoose from "mongoose";
+import { deleteUser } from "../../services/api/userApi.js";
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
 
 // ==================================================
 // CHECK - EMAIL AVAILABILITY
@@ -48,15 +49,38 @@ export const checkEmailAvailability = async (req, res) => {
 // ==================================================
 
 export const deleteUsers = async (req, res) => {
+  console.log(">>> DELETE BULK USERS HIT", {
+    url: req.originalUrl,
+    method: req.method,
+    ids: req.body?.ids,
+    accept: req.headers.accept,
+    contentType: req.headers["content-type"]
+  });
+
   try {
     const { ids } = req.body;
 
+    console.log("IDS envoyées:", ids);
     // Sécurité payload
     if (!Array.isArray(ids) || ids.length === 0) {
-      return res.status(400).json({ success: false, message: COMMON_MESSAGES.INVALID_REQUEST });
+      return res.status(400).json({
+        success: false,
+        message: COMMON_MESSAGES.INVALID_REQUEST
+      });
     }
 
-    await User.deleteMany({ _id: { $in: ids } });
+    for (const id of ids) {
+      const apiResponse = await deleteUser(id, req, res);
+
+      if (handleAuthExpired(apiResponse, req, res)) return;
+
+      if (apiResponse.success === false) {
+        return res.status(500).json({
+          success: false,
+          message: apiResponse.message
+        });
+      }
+    }
 
     res.json({
       success: true,
@@ -65,30 +89,6 @@ export const deleteUsers = async (req, res) => {
 
   } catch (error) {
     console.error("Suppression échouée :", error);
-    res.status(500).json({ success: false });
-  }
-};
-
-// ==================================================
-// DELETE - SIDE PANEL
-// ==================================================
-
-export const deleteUserById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleteUser = await User.findByIdAndDelete(id);
-
-    if (!deleteUser) {
-      return res.status(404).json({
-        success: false,
-        message: USER_MESSAGES.NOT_FOUND
-      });
-    }
-
-    res.status(204).end();
-
-  } catch (error) {
-    console.error("Suppression utilisateur :", error);
     res.status(500).json({ success: false });
   }
 };

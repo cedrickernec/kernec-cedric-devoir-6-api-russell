@@ -10,7 +10,8 @@ import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
 
 import {
     updateCatway,
-    createCatway
+    createCatway,
+    deleteCatway
 } from "../../services/api/catwayApi.js";
 
 import {
@@ -135,6 +136,54 @@ export const postEditCatway = async (req, res, next) => {
         };
 
         res.redirect(`/catways/${catwayNumber}`);
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+// ==================================================
+// DELETE CATWAY
+// ==================================================
+
+export const deleteCatwayAction = async (req, res, next) => {
+    try {
+        const catwayNumber = Number(req.params.catwayNumber);
+
+        const apiResponse = await deleteCatway(catwayNumber, req, res);
+
+        if (handleAuthExpired(apiResponse, req, res)) return;
+
+        if (apiResponse.success === false) {
+
+        // SI REQUÊTE AJAX
+        if (req.headers.accept?.includes("application/json")) {
+            return res.status(500).json({
+                success: false,
+                message: apiResponse.message
+            });
+        }
+
+        // SINON MODE HTML
+        return res.status(500).render("errors/error", {
+            message: apiResponse.message
+        });
+        }
+
+        // MODE AJAX
+        if (req.headers.accept?.includes("application/json")) {
+            return res.status(200).json({
+                success: true
+            });
+        }
+
+        // MODE CLASSIQUE
+        req.session.flash = {
+            type: "success",
+            message: CATWAY_MESSAGES.DELETE_SUCCESS,
+        };
+
+        return res.redirect("/catways");
 
     } catch (error) {
         next(error);

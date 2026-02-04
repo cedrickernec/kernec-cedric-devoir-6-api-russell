@@ -11,6 +11,7 @@ import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
 
 import {
   createUser,
+  deleteUser,
   fetchUserById,
   updatePassword,
   updateUser
@@ -212,6 +213,8 @@ export const postEditUserPassword = async (req, res, next) => {
       });
     }
 
+    console.log("erreur backend", errors);
+
     req.session.flash = {
       type: "success",
       message: USER_MESSAGES.PASSWORD_UPDATE_SUCCESS
@@ -222,4 +225,52 @@ export const postEditUserPassword = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+// ==================================================
+// DELETE USER
+// ==================================================
+
+export const deleteUserAction = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const apiResponse = await deleteUser(id, req, res);
+
+        if (handleAuthExpired(apiResponse, req, res)) return;
+
+        if (apiResponse.success === false) {
+
+        // SI REQUÊTE AJAX
+        if (req.headers.accept?.includes("application/json")) {
+            return res.status(500).json({
+                success: false,
+                message: apiResponse.message
+            });
+        }
+
+        // SINON MODE HTML
+        return res.status(500).render("errors/error", {
+            message: apiResponse.message
+        });
+        }
+
+        // MODE AJAX
+        if (req.headers.accept?.includes("application/json")) {
+            return res.status(200).json({
+                success: true
+            });
+        }
+
+        // MODE CLASSIQUE
+        req.session.flash = {
+            type: "success",
+            message: USER_MESSAGES.DELETE_SUCCESS,
+        };
+
+        return res.redirect("/users");
+
+    } catch (error) {
+        next(error);
+    }
 };

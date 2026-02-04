@@ -14,17 +14,17 @@ import docViewRoutes from "./doc.routes.js";
 
 import dashboardRoutes from "./dashboard.routes.js";
 
+import usersAjaxRoutes from "./users/ajax.routes.js";
 import usersFormRoutes from "./users/form.routes.js";
 import usersViewRoutes from "./users/view.routes.js";
-import usersAjaxRoutes from "./users/ajax.routes.js";
 
+import catwaysAjaxRoutes from "./catways/ajax.routes.js";
 import catwaysFormRoutes from "./catways/form.routes.js";
 import catwaysViewRoutes from "./catways/view.routes.js";
-import catwaysAjaxRoutes from "./catways/ajax.routes.js";
 
+import reservationsAjaxRoutes from "./reservations/ajax.routes.js";
 import reservationsFormRoutes from "./reservations/form.routes.js";
 import reservationsViewRoutes from "./reservations/view.routes.js";
-import reservationsAjaxRoutes from "./reservations/ajax.routes.js";
 
 export function registerWebRoutes(app) {
     app.use("/", homeRoutes);
@@ -35,15 +35,15 @@ export function registerWebRoutes(app) {
 
     app.use("/dashboard", dashboardRoutes);
 
+    app.use("/ajax/users", usersAjaxRoutes);
     app.use("/users", usersViewRoutes);
     app.use("/users", usersFormRoutes);
-    app.use("/users/ajax", usersAjaxRoutes);
 
+    app.use("/ajax/catways", catwaysAjaxRoutes);
     app.use("/catways", catwaysViewRoutes); // → avec routes Réservations imbriquées
     app.use("/catways", catwaysFormRoutes); // → avec routes Réservations imbriquées
-    app.use("/catways/ajax", catwaysAjaxRoutes);
 
+    app.use("/ajax/reservations", reservationsAjaxRoutes);
     app.use("/reservations", reservationsViewRoutes);
     app.use("/reservations", reservationsFormRoutes);
-    app.use("/reservations/ajax", reservationsAjaxRoutes);
 }

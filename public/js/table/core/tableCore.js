@@ -166,7 +166,10 @@ export function initBulkTable({
       onConfirm: async () => {
         const res = await fetch(deleteUrl, {
           method: "DELETE",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
           body: JSON.stringify({ ids })
         });
 

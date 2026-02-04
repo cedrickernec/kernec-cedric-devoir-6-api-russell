@@ -36,7 +36,12 @@ panel?.addEventListener("click", (e) => {
     content: p,
 
     onConfirm: async () => {
-      const res = await fetch(deleteUrl, { method: "DELETE" });
+      const res = await fetch(deleteUrl, {
+        method: "DELETE",
+        headers: {
+          "Accept": "application/json"
+        }
+      });
 
       if (!res.ok) {
         window.showToast("error", COMMON_MESSAGES.DELETE_ERROR);

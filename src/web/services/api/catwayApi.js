@@ -53,3 +53,16 @@ export async function updateCatway(number, data, req, res) {
         }, req, res
     );
 }
+
+// ==================================================
+// DELETE CATWAY
+// ==================================================
+
+export async function deleteCatway(number, req, res) {
+
+    return apiFetch(
+        `/api/catways/${number}`, {
+            method: "DELETE",
+        }, req, res
+    );
+}

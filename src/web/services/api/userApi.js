@@ -67,3 +67,16 @@ export async function updatePassword(id, data, req, res) {
         }, req, res
     );
 }
+
+// ==================================================
+// DELETE USER
+// ==================================================
+
+export async function deleteUser(id, req, res) {
+
+    return apiFetch(
+        `/api/users/${id}`, {
+            method: "DELETE",
+        }, req, res
+    );
+}

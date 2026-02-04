@@ -104,8 +104,7 @@
       <tr
         class="js-reservation-row js-panel-row"
         data-entity-id="<%= reservations[i].id %>"
-        data-entity-db-id="<%= reservations[i].id %>"
-        data-catway="<%= reservations[i].catwayNumber %>"
+        data-catway-number="<%= reservations[i].catwayNumber %>"
         data-client="<%= reservations[i].clientName %>"
         data-boat="<%= reservations[i].boatName %>"
         data-start="<%= reservations[i].startDateISO %>"
@@ -116,7 +115,7 @@
           <input
             type="checkbox"
             name="selectedReservations"
-            value="<%= reservations[i].id %>"
+            value="<%= reservations[i].catwayNumber %>|<%=reservations[i].id %>"
             aria-label="Sélectionner la réservation de <%= reservations[i].clientName %>, bateau <%= reservations[i].boatName %>, du <%= reservations[i].startDateFormatted %> au <%= reservations[i].endDateFormatted %>"
           >
         </td>

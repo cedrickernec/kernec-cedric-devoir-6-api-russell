@@ -38,7 +38,7 @@ export const login = async (req, res, next) => {
         }
 
         // 3) Authentification
-        const { accessToken, refreshToken, user} = await loginService(email, password);
+        const { accessToken, refreshToken, user } = await loginService(email, password);
 
         // 4) Réponse
         res.status(200).json({

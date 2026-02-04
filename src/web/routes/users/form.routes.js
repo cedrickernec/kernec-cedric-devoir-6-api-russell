@@ -12,12 +12,13 @@ import {
     postEditUserPassword
 } from "../../controllers/users/usersFormController.js";
 
+import { validateMongoIdParam } from "../../middlewares/paramsValidators.js";
 import { authGuard } from "../../middlewares/authGuard.js";
 
 const router = express.Router();
 
 router.post("/create", authGuard, postCreateUser);
-router.post("/:id/edit", authGuard, postEditUser);
-router.post("/:id/edit/password", authGuard, postEditUserPassword);
+router.post("/:id/edit", authGuard, validateMongoIdParam("id"), postEditUser);
+router.post("/:id/edit/password", authGuard, validateMongoIdParam("id"), postEditUserPassword);
 
 export default router;

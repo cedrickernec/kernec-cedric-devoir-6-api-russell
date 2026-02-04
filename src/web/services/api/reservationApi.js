@@ -88,7 +88,7 @@ export function updateReservation(catwayNumber, reservationId, payload, req, res
 
 export function deleteReservation(catwayNumber, reservationId, req, res) {
     return apiFetch(
-        `/catways/${catwayNumber}/reservations/${reservationId}`, {
+        `/api/catways/${catwayNumber}/reservations/${reservationId}`, {
             method: "DELETE"
         }, req, res
     );

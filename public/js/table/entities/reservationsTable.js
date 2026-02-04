@@ -20,7 +20,7 @@ export function initReservationsTable() {
         checkboxName: "selectedReservations",
         deleteBtnId: "delete-selected",
         selectAllId: "select-all",
-        deleteUrl: "/reservations/ajax/",
+        deleteUrl: "/ajax/reservations",
         deleteType: "reservation",
 
         messages: {

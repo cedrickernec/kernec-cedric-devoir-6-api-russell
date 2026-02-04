@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
           params.append("excludeId", currentCatwayId);
         }
         const res = await fetch(
-          `/catways/ajax/check-number?${params.toString()}`,
+          `/ajax/catways/check-number?${params.toString()}`,
           { credentials: "same-origin" }
         );
 

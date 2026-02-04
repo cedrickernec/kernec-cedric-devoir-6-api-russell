@@ -11,6 +11,7 @@ import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
 
 import {
     createReservation,
+    deleteReservation,
     fetchReservationAvailability,
     fetchReservationById,
     updateReservation
@@ -334,6 +335,54 @@ export const postEditReservation = async (req, res, next) => {
             globalError: COMMON_MESSAGES.SERVER_ERROR_LONG,
             otherReservations
         });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+// ==================================================
+// DELETE RESERVATION
+// ==================================================
+
+export const deleteReservationAction = async (req, res, next) => {
+    try {
+        const { id, catwayNumber } = req.params;
+
+        const apiResponse = await deleteReservation(catwayNumber, id, req, res);
+
+        if (handleAuthExpired(apiResponse, req, res)) return;
+
+        if (apiResponse.success === false) {
+
+        // SI REQUÊTE AJAX
+        if (req.headers.accept?.includes("application/json")) {
+            return res.status(500).json({
+                success: false,
+                message: apiResponse.message
+            });
+        }
+
+        // SINON MODE HTML
+        return res.status(500).render("errors/error", {
+            message: apiResponse.message
+        });
+        }
+
+        // MODE AJAX
+        if (req.headers.accept?.includes("application/json")) {
+            return res.status(200).json({
+                success: true
+            });
+        }
+
+        // MODE CLASSIQUE
+        req.session.flash = {
+            type: "success",
+            message: RESERVATION_MESSAGES.DELETE_SUCCESS,
+        };
+
+        return res.redirect("/reservations");
 
     } catch (error) {
         next(error);

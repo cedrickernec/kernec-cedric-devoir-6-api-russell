@@ -18,7 +18,7 @@ initEntityPanel({
   editBaseUrl: "/users",
 
   deleteConfig: {
-    baseUrl: "/users/ajax",
+    deleteUrlTemplate: "/users/:id",
     confirmMessage: USER_MESSAGES.DELETE_CONFIRM,
     type: "user"
   },
