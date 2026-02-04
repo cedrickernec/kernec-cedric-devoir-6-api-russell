@@ -6,6 +6,8 @@
  * - Panel latéral
  */
 
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+
 import {
   fetchUserById,
   fetchUsers
@@ -33,7 +35,7 @@ export const getUsersPage = async (req, res, next) => {
   try {
     const apiData = await fetchUsers(req, res);
 
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (!apiData.success) {
       return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
@@ -62,7 +64,7 @@ export const getUserById = async (req, res, next) => {
 
     const apiData = await fetchUserById(id, req, res);
 
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (!apiData.success) {
       return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
@@ -92,13 +94,13 @@ export const getUserById = async (req, res, next) => {
   USER PANEL
 ================================================== */
 
-export const getUserPanel = async (req, res) => {
+export const getUserPanel = async (req, res, next) => {
   try {
     const { id } = req.params;
 
     const apiData = await fetchUserById(id, req, res);
 
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (!apiData?.success) {
       return res.status(500).render("partials/panels/panelError", {
@@ -149,11 +151,7 @@ export const getEditUserPage = async (req, res, next) => {
     const { id } = req.params;
     const apiData = await fetchUserById(id, req, res);
 
-    if (!apiData) {
-      return next();
-    }
-
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (!apiData.success) {
       return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));

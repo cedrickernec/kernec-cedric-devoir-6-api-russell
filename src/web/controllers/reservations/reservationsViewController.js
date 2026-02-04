@@ -7,10 +7,11 @@
  * ===================================================================
  */
 
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+
 import {
   fetchReservations,
-  fetchReservationById,
-  fetchReservationsByCatway
+  fetchReservationById
 } from "../../services/api/reservationApi.js";
 
 import {
@@ -41,6 +42,8 @@ export const getReservationsPage = async (req, res, next) => {
       const filters = { catway, search, startDate, endDate };
 
       let apiData = await fetchReservations(req, res);
+
+      if (handleAuthExpired(apiData, req, res)) return;
 
       if (!apiData.success) {
         return next(new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
@@ -130,7 +133,7 @@ export const getReservationById = async (req, res, next) => {
 
     const apiData = await fetchReservationById(catwayNumber, id, req, res);
 
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (!apiData?.success) {
       return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
@@ -160,7 +163,7 @@ export const getReservationById = async (req, res, next) => {
 // RESERVATION PANEL
 // ==================================================
 
-export const getReservationPanel = async (req, res) => {
+export const getReservationPanel = async (req, res, next) => {
   try {
     const { id, catwayNumber } = req.params;
 
@@ -170,7 +173,7 @@ export const getReservationPanel = async (req, res) => {
 
     const apiData = await fetchReservationById(catwayNumber, id, req, res);
 
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (!apiData?.success) {
       return res.status(500).render("partials/panels/panelError", {
@@ -240,7 +243,7 @@ export const getEditReservationPage = async (req, res, next) => {
 
     const apiData = await fetchReservationById(catwayNumber, id, req, res);
     
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
     
     if (!apiData?.success) {
       return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));

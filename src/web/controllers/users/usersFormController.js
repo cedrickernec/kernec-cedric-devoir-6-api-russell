@@ -7,8 +7,20 @@
  * - Redirections + flash messages
  */
 
-import { createUser, fetchUserById, updatePassword, updateUser } from "../../services/api/userApi.js";
-import { renderCreateUserPage, renderEditUserPage } from "../../views/helpers/usersViewHelper.js";
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+
+import {
+  createUser,
+  fetchUserById,
+  updatePassword,
+  updateUser
+} from "../../services/api/userApi.js";
+
+import {
+  renderCreateUserPage,
+  renderEditUserPage
+} from "../../views/helpers/usersViewHelper.js";
+
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 
@@ -33,7 +45,7 @@ export const postCreateUser = async (req, res, next) => {
       email
     }
 
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (apiData.success === false) {
 
@@ -96,7 +108,7 @@ export const postEditUser = async (req, res, next) => {
       email
     };
 
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (apiData.success === false) {
 
@@ -146,7 +158,7 @@ export const postEditUserPassword = async (req, res, next) => {
 
     const apiUser = await fetchUserById(userId, req, res);
 
-    if (apiUser?.authExpired) return;
+    if (handleAuthExpired(apiUser, req, res)) return;
 
     if (!apiUser.success || !apiUser.data) {
       return renderEditUserPage(res, {
@@ -164,7 +176,7 @@ export const postEditUserPassword = async (req, res, next) => {
     const apiData = await updatePassword(userId, payload, req, res);
     const errors = apiData.errors || {};
 
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (apiData.success === false) {
 

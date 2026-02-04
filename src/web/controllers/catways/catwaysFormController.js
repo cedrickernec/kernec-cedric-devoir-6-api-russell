@@ -6,8 +6,18 @@
  * - Redirections + flash messages
  */
 
-import { updateCatway, createCatway } from "../../services/api/catwayApi.js";
-import { renderCreateCatwayPage, renderEditCatwayPage } from "../../views/helpers/catwaysViewHelper.js";
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+
+import {
+    updateCatway,
+    createCatway
+} from "../../services/api/catwayApi.js";
+
+import {
+    renderCreateCatwayPage,
+    renderEditCatwayPage
+} from "../../views/helpers/catwaysViewHelper.js";
+
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 
@@ -27,7 +37,7 @@ export const postCreateCatway = async (req, res, next) => {
 
         const apiData = await createCatway(payload, req, res);
 
-        if (apiData.authExpired) return;
+        if (handleAuthExpired(apiData, req, res)) return;
 
         if (apiData.success === false) {
 
@@ -82,6 +92,9 @@ export const postEditCatway = async (req, res, next) => {
         };
 
         const apiData = await updateCatway(catwayNumber, payload, req, res);
+
+        if (handleAuthExpired(apiData, req, res)) return;
+
         const errors = apiData.errors || {};
 
         const catway = {
@@ -90,8 +103,6 @@ export const postEditCatway = async (req, res, next) => {
             state: catwayState,
             isOutOfService: payload.isOutOfService
         }
-
-        if (apiData?.authExpired) return;
 
         if (apiData.success === false) {
 

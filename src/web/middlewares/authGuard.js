@@ -8,10 +8,13 @@
  */
 
 export const authGuard = (req, res, next) => {
-    if (!req.session?.user) {
+
+    const user = req.session?.user;
+
+    if (!user) {
         return res.redirect("/");
     }
 
-    res.locals.user = req.session.user;
+    res.locals.user = user;
     next();
 };

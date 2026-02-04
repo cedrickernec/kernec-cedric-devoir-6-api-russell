@@ -42,14 +42,17 @@ export async function loginService(email, password) {
         );
     }
 
-    const token = jwt.sign(
-        {
-            id: user._id,
-            email: user.email
-        },
+    const accessToken = jwt.sign(
+        { id: user._id, email: user.email },
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: process.env.ACCESS_TOKEN_DURATION || "30m" }
     );
 
-    return { token, user };
+    const refreshToken = jwt.sign(
+        { id: user._id, email: user.email },
+        process.env.JWT_REFRESH_SECRET,
+        { expiresIn: process.env.REFRESH_TOKEN_DURATION || "7d" }
+    )
+
+    return { accessToken, refreshToken, user };
 }

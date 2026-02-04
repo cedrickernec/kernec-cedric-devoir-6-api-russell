@@ -7,11 +7,12 @@
  * ===================================================================
  */
 
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+
 import {
     createReservation,
     fetchReservationAvailability,
     fetchReservationById,
-    fetchReservationsByCatway,
     updateReservation
 } from "../../services/api/reservationApi.js";
 
@@ -22,8 +23,7 @@ import {
 
 import {
     mapAvailabilityToTable,
-    mapReservationEdit,
-    mapReservationToList
+    mapReservationEdit
 } from "../../utils/reservations/reservationMapper.js";
 
 import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservationMessage.js";
@@ -134,7 +134,7 @@ export const postCreateReservation = async (req, res, next) => {
 
                 const apiData = await createReservation(catwayNumber, payload, req, res);
 
-                if (apiData?.authExpired) return;
+                if (handleAuthExpired(apiData, req, res)) return;
 
                 if (apiData.success === false) {
 
@@ -193,7 +193,7 @@ export const postCreateReservation = async (req, res, next) => {
 
         const apiData = await fetchReservationAvailability(availabilityPayload, req, res);
 
-        if (apiData?.authExpired) return;
+        if (handleAuthExpired(apiData, req, res)) return;
 
         if (!apiData.success) {
             return renderCreateReservationPage(res, {
@@ -260,7 +260,7 @@ export const postEditReservation = async (req, res, next) => {
             res
         );
 
-        if (apiData?.authExpired) return;
+        if (handleAuthExpired(apiData, req, res)) return;
 
         if (apiData.success === true) {
 
@@ -275,6 +275,8 @@ export const postEditReservation = async (req, res, next) => {
         // ===== GESTION DES ERREURS =====
 
         const apiReservation = await fetchReservationById(catwayNumber, id, req, res);
+
+        if (handleAuthExpired(apiReservation, req, res)) return;
 
         const otherReservations = await loadOtherReservations(catwayNumber, id, req, res);
 
@@ -298,7 +300,7 @@ export const postEditReservation = async (req, res, next) => {
         if (Object.keys(errors).length > 0) {
             return renderEditReservationPage(res, {
                 reservation,
-                errors: viewErrors,
+                errors,
                 otherReservations
             });
         }

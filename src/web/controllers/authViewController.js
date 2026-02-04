@@ -9,7 +9,7 @@
  */
 
 // ==================================================
-// CONNEXION
+// LOGIN
 // ==================================================
 
 export const postLoginView = async (req, res) => {
@@ -28,19 +28,22 @@ export const postLoginView = async (req, res) => {
         const apiData = await apiResponse.json();
 
         // Erreur d'authentification
-        if (!apiResponse.ok || !apiData.data || !apiData.token) {
+        if (!apiResponse.ok || !apiData.data || !apiData.accessToken) {
             req.session.authError = "Identifiants incorrects.";
             req.session.disableAnimations = true;
             
             return res.redirect("/");
         }
 
+        console.log("API LOGIN RESPONSE:", apiData);
+
         // Session utilisateur
         req.session.user = {
             id: apiData.data.id,
             username: apiData.data.username,
             email: apiData.data.email,
-            token: apiData.token
+            token: apiData.accessToken,
+            refreshToken: apiData.refreshToken
         };
 
         res.redirect("/dashboard");
@@ -54,7 +57,7 @@ export const postLoginView = async (req, res) => {
 }
 
 // ==================================================
-// DÉCONNEXION
+// LOGOUT
 // ==================================================
 
 export const getLogoutView = (req, res) => {

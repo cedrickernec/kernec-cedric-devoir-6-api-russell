@@ -4,11 +4,12 @@
  * ===================================================================
  * - Couche d'abstraction des appels HTTP vers l'API
  * - Injecte automatiquement le token JWT
- * - Déconnecte l'utilisateur si JWT expiré
  * - Centralise la gestion des réponses HTTP
  * - Garantit un format de retour uniforme
  * ===================================================================
  */
+
+import { tryRefreshToken } from "../../utils/refreshToken.js";
 
 export async function apiFetch(url, options = {}, req, res) {
 
@@ -29,24 +30,38 @@ export async function apiFetch(url, options = {}, req, res) {
     // FETCH
     // ==================================================
 
-    const response = await fetch(`http://localhost:3000${url}`, {
-        ...options,
-        headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            ...(options.headers || {})
-        }
-    });
+    let response;
+
+    try {
+        response = await fetch(`http://localhost:3000${url}`, {
+            ...options,
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                ...(options.headers || {})
+            }
+        });
+
+    } catch (error) {
+        return {
+            success: false,
+            message: "Erreur de connexion à l'API.",
+            context: error.message
+        };
+    }
 
     // ==================================================
-    // JWT expiré
+    // JWT expiré → tentative refresh
     // ==================================================
 
     if (response.status === 401) {
-        req.session.destroy(() => {
-            res.redirect("/login");
-        });
+
+        const refreshed = await tryRefreshToken(req);
+
+        if (refreshed) {
+            return apiFetch(url, options, req, res);
+        }
 
         return {
             success: false,

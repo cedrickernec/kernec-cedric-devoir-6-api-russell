@@ -6,6 +6,8 @@
  * - Panel latéral
  */
 
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+
 import {
   fetchCatways,
   fetchCatwayByNumber
@@ -34,7 +36,7 @@ export const getCatwaysPage = async (req, res, next) => {
     try {
       const apiData = await fetchCatways(req, res);
 
-      if (apiData?.authExpired) return;
+      if (handleAuthExpired(apiData, req, res)) return;
 
       if (!apiData?.success) {
         return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
@@ -71,7 +73,7 @@ export const getCatwayByNumber = async (req, res, next) => {
 
     const apiData = await fetchCatwayByNumber(catwayNumber, req, res);
 
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (!apiData?.success) {
       return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
@@ -116,7 +118,7 @@ export const getCatwayPanel = async (req, res, next) => {
 
     const apiData = await fetchCatwayByNumber(catwayNumber, req, res);
 
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (!apiData?.success) {
       return res.status(500).render("partials/panels/panelError", {
@@ -179,7 +181,7 @@ export const getEditCatwayByNumber = async (req, res, next) => {
 
     const apiData = await fetchCatwayByNumber(catwayNumber, req, res);
 
-    if (apiData?.authExpired) return;
+    if (handleAuthExpired(apiData, req, res)) return;
 
     if (!apiData?.success) {
       return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));

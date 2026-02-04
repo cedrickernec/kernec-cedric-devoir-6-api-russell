@@ -28,17 +28,18 @@ export const getDashboard = async (req, res, next) => {
         // ========================================================
 
         try {
-        const rawReservations = await Reservation.find({
-            endDate: { $gte: now },
-        }).sort({ startDate: 1 });
+            const rawReservations = await Reservation.find({
+                endDate: { $gte: now },
+            }).sort({ startDate: 1 });
 
-        reservations = rawReservations.map(mapReservationToDashboard);
+            reservations = rawReservations.map(mapReservationToDashboard);
+
         } catch (error) {
-        console.error(
-            "Erreur de chargement des données de réservations :",
-            error
-        );
-        dashboardError = "Impossible de charger les réservations.";
+            console.error(
+                "Erreur de chargement des données de réservations :",
+                error
+            );
+            dashboardError = "Impossible de charger les réservations.";
         }
 
         // ========================================================
@@ -46,13 +47,14 @@ export const getDashboard = async (req, res, next) => {
         // ========================================================
 
         res.render("dashboard", {
-        title: "Dashboard - API Russell",
-        activePage: "dashboard",
-        user: req.session.user,
-        today: formattedToday,
-        reservations,
-        dashboardError,
+            title: "Dashboard - API Russell",
+            activePage: "dashboard",
+            user: req.session.user,
+            today: formattedToday,
+            reservations,
+            dashboardError,
         });
+
     } catch (error) {
         error.status = 500;
         next(error);

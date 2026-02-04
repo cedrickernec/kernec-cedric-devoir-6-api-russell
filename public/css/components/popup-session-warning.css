@@ -20,15 +20,17 @@
 
 .session-warning-content {
     display: flex;
+    position: relative;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
     background: white;
-    width: 420px;
+    width: fit-content;
+    min-width: 420px;
     max-width: 90%;
     border-radius: 12px;
-    padding: 24px 28px;
+    padding: 24px 28px 77px;
 
     box-shadow: var(--box-shadow-lg);
     animation: popupFadeIn 0.35s ease;
@@ -62,12 +64,7 @@
 .session-warning-text {
     font-size: 0.875rem;
     color: var(--color-secondary);
-    margin-bottom: 20px;
     text-align: center;
-}
-
-.session-warning-text p:last-child {
-    font-weight: bold;
 }
 
 /* =====================================================
@@ -75,13 +72,72 @@
    ===================================================== */
 
 .session-warning-actions {
-    display: flex;
+    display: inline-flex;
+    margin: 20px 0;
     gap: 12px;
 }
 
 .session-warning-actions .btn {
+    white-space: nowrap;
     min-width: 150px;
     font-size: 0.875rem;
+}
+
+/* =====================================================
+   SESSION WARNING COUNTDOWN
+   ===================================================== */
+
+.session-countdown {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    border-radius: 0 0 12px 12px;
+    border-top: 3px solid var(--warning-2);
+
+    width: 100%;
+    padding: 20px 16px;
+    margin-top: 16px;
+
+    background: var(--color-primary);
+    color: var(--color-quaternary);
+
+    font-size: 0.875rem;
+    font-style: italic;
+    letter-spacing: 0.4px;
+}
+
+.session-countdown i {
+    opacity: 0.8;
+}
+
+.countdown-label {
+    font-weight: 500;
+}
+
+.countdown-time {
+    font-weight: bold;
+    padding: 6px 10px;
+    border: 1px solid var(--warning-2);
+    border-radius: 6px;
+    margin-left: 8px;
+    color: var(--warning-2);
+    font-variant-numeric: tabular-nums;
+}
+
+.session-countdown--danger {
+    border-top-color: var(--danger-2);
+}
+
+.session-countdown--danger .countdown-time {
+    color: var(--danger-3);
+    border-color: var(--danger-3);
 }
 
 /* =====================================================
@@ -91,7 +147,6 @@
 .dev-hint {
     font-size: 0.6875rem;
     opacity: 0.6;
-    margin-top: 16px;
 }
 
 /* =====================================================
