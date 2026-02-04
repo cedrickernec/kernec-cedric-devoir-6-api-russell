@@ -38,6 +38,7 @@
       type="email"
       id="email"
       name="email"
+      pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"
       aria-describedby="email-feedback"
       value="<%= user.email %>"
       aria-invalid="<%= errors.email ? 'true' : 'false' %>"

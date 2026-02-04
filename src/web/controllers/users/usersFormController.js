@@ -22,6 +22,7 @@ import {
   renderEditUserPage
 } from "../../views/helpers/usersViewHelper.js";
 
+import { formatApiErrors } from "../../utils/formatApiErrors.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 
@@ -53,7 +54,7 @@ export const postCreateUser = async (req, res, next) => {
       // Erreurs de champs
       if (Object.keys(apiData.errors).length > 0) {
         return renderCreateUserPage(res, {
-          errors: apiData.errors,
+          errors: formatApiErrors(apiData),
           formData
         });
       }
@@ -117,7 +118,7 @@ export const postEditUser = async (req, res, next) => {
       if (Object.keys(errors).length > 0) {
         return renderEditUserPage(res, {
           user,
-          errors
+          errors: formatApiErrors(apiData)
         });
       }
 
@@ -198,11 +199,7 @@ export const postEditUserPassword = async (req, res, next) => {
       if (apiData.message) {
         return renderEditUserPage(res, {
           user,
-          errors: {
-            password: {
-              message: apiData.message
-            }
-          }
+          errors: formatApiErrors(apiData)
         });
       }
 

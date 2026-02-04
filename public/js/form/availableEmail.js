@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Reset visuel
     clearError();
 
-    // Champ vide ou format invalide → pas de requête
-    if (!email || !input.checkValidity()) return;
+    // Champ vide → pas de requête
+    if (!email) return;
 
     // ========================================================
     // BACKEND AVAILABILITY CHECK
@@ -87,8 +87,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Au blur, si invalide HTML → aria-ivalid "true" pour garder l'erreur
   input.addEventListener("blur", () => {
+
     if (input.value.trim() && !input.checkValidity()) {
       input.dataset.invalid = "true";
     }
+
+    // Format invalide → pas de requête mais affichage du message
+    if (!input.checkValidity()) {
+      feedback.textContent = "Format d'email invalide (ex : nom@domaine.com).";
+      feedback.classList.remove("hidden");
+      return;
+    };
+
   });
 });
