@@ -27,9 +27,11 @@ import {
     mapReservationEdit
 } from "../../utils/reservations/reservationMapper.js";
 
+import { handleApiError } from "../../utils/apiErrorHandler.js";
+import { loadOtherReservations } from "../../utils/reservations/loadOtherReservations.js";
+
 import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservationMessage.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
-import { loadOtherReservations } from "../../utils/reservations/loadOtherReservations.js";
 
 // ==================================================
 // CREATE RESERVATION
@@ -348,26 +350,13 @@ export const postEditReservation = async (req, res, next) => {
 export const deleteReservationAction = async (req, res, next) => {
     try {
         const { id, catwayNumber } = req.params;
+        const password = req.body?.password || null;
 
-        const apiResponse = await deleteReservation(catwayNumber, id, req, res);
+        const apiResponse = await deleteReservation(catwayNumber, id, req, res, password);
 
         if (handleAuthExpired(apiResponse, req, res)) return;
 
-        if (apiResponse.success === false) {
-
-        // SI REQUÊTE AJAX
-        if (req.headers.accept?.includes("application/json")) {
-            return res.status(500).json({
-                success: false,
-                message: apiResponse.message
-            });
-        }
-
-        // SINON MODE HTML
-        return res.status(500).render("errors/error", {
-            message: apiResponse.message
-        });
-        }
+        if (!handleApiError(apiResponse, req, res)) return;
 
         // MODE AJAX
         if (req.headers.accept?.includes("application/json")) {
@@ -376,7 +365,7 @@ export const deleteReservationAction = async (req, res, next) => {
             });
         }
 
-        // MODE CLASSIQUE
+        // MODE CLASSIQUE HTML
         req.session.flash = {
             type: "success",
             message: RESERVATION_MESSAGES.DELETE_SUCCESS,

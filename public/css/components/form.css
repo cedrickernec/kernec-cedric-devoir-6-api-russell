@@ -89,14 +89,14 @@ input[type="checkbox"] {
 .form-group input[data-invalid="true"],
 .form-group select[data-invalid="true"],
 .form-group textarea[data-invalid="true"] {
-  border-color: var(--danger-2);
-  background-color: var(--danger-accent);
+    border-color: var(--danger-2);
+    background-color: var(--danger-accent);
 }
 
 .form-group:has(input[data-invalid="true"]) > label,
 .form-group:has(select[data-invalid="true"]) > label,
 .form-group:has(textarea[data-invalid="true"]) > label {
-  color: var(--danger-2);
+    color: var(--danger-2);
 }
 
 /* =====================================================

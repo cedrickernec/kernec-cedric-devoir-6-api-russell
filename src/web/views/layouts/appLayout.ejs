@@ -225,18 +225,26 @@
       <div class="modal-backdrop"></div>
 
       <div class="modal-content" tabindex="-1">
-        <button
-          id="btn-modal-close"
-          class="btn btn-close modal-close"
-          aria-label="Fermer la modale"
-        >
-          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-        </button>
 
-        <h3 id="confirm-title">Confirmation</h3>
-        <div id="confirm-message"></div>
+        <!-- ====== MODAL-HEADER ====== -->
+        <div class="modal-header">
+          <button
+            id="btn-modal-close"
+            class="btn btn-close modal-close"
+            aria-label="Fermer la modale"
+          >
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+          <h3 id="confirm-title">Confirmation</h3>
+        </div>
 
-        <div class="modal-actions">
+        <!-- ====== MODAL-BODY ====== -->
+        <div id="confirm-message" class="modal-body">
+          <!-- Contenu injecté dynamiquement -->
+        </div>
+
+        <!-- ====== MODAL-FOOTER ====== -->
+        <div class="modal-footer modal-actions">
           <button id="btn-modal-cancel" class="btn btn-cancel">Annuler</button>
           <button
             id="btn-modal-confirm"

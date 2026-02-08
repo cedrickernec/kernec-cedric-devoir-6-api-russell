@@ -96,11 +96,35 @@ import { isKeyboardInteraction } from "../accessibility/interactionMode.js";
   };
 
   confirmBtn?.addEventListener("click", async () => {
-    try {
-      if (onConfirmCallback) await onConfirmCallback();
-    } finally {
-      close();
-    }
+
+      if (!onConfirmCallback) {
+        close();
+        return;
+      }
+
+      try {
+        const shouldClose = await onConfirmCallback();
+        if (shouldClose === false) {
+          return;
+        }
+
+        close();
+
+      } catch (err) {
+        if(err?.code === "PASSWORD_INVALID") {
+
+          const passwordField = modal.querySelector("#password-confirm");
+          if (passwordField) {
+            passwordField.setAttribute("data-invalid", "true");
+            passwordField.focus();
+            passwordField.select?.();
+
+            return;
+          }
+
+          console.error(err);
+        }
+      }
   });
 
   cancelBtn?.addEventListener("click", cancel);

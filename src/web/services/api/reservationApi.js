@@ -86,10 +86,18 @@ export function updateReservation(catwayNumber, reservationId, payload, req, res
 // DELETE RESERVATION
 // ==================================================
 
-export function deleteReservation(catwayNumber, reservationId, req, res) {
+export function deleteReservation(catwayNumber, reservationId, req, res, password = null) {
+
+    const options = { method: "DELETE" };
+
+    if (password) {
+        options.body = JSON.stringify({ password });
+    }
+
     return apiFetch(
-        `/api/catways/${catwayNumber}/reservations/${reservationId}`, {
-            method: "DELETE"
-        }, req, res
+        `/api/catways/${catwayNumber}/reservations/${reservationId}`,
+        options,
+        req,
+        res
     );
 }

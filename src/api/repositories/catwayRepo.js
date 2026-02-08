@@ -66,3 +66,12 @@ export async function deleteCatwayByNumber(catwayNumber) {
 export async function catwayHasReservations(catwayNumber) {
     return Reservation.findOne({ catwayNumber });
 }
+
+// ===============================================
+// DELETE ALL RESERVATION BY CATWAY
+// ===============================================
+
+export async function deleteAllReservationsByCatway(catwayNumber) {
+
+    return Reservation.deleteMany({ catwayNumber });
+}

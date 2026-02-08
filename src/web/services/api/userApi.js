@@ -14,7 +14,9 @@ import { apiFetch } from "./apiClient.js";
 
 export async function fetchUsers(req, res) {
 
-    return apiFetch("/api/users", {}, req, res);
+    return apiFetch("/api/users", {
+        method: "GET"
+    }, req, res);
 }
 
 // ==================================================
@@ -23,7 +25,9 @@ export async function fetchUsers(req, res) {
 
 export async function fetchUserById(id, req, res) {
 
-    return apiFetch(`/api/users/${id}`, {}, req, res);
+    return apiFetch(`/api/users/${id}`, {
+        method: "GET"
+    }, req, res);
 }
 
 // ==================================================

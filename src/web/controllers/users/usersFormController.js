@@ -23,6 +23,8 @@ import {
 } from "../../views/helpers/usersViewHelper.js";
 
 import { formatApiErrors } from "../../utils/formatApiErrors.js";
+import { handleApiError } from "../../utils/apiErrorHandler.js";
+
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 
@@ -236,21 +238,7 @@ export const deleteUserAction = async (req, res, next) => {
 
         if (handleAuthExpired(apiResponse, req, res)) return;
 
-        if (apiResponse.success === false) {
-
-        // SI REQUÊTE AJAX
-        if (req.headers.accept?.includes("application/json")) {
-            return res.status(500).json({
-                success: false,
-                message: apiResponse.message
-            });
-        }
-
-        // SINON MODE HTML
-        return res.status(500).render("errors/error", {
-            message: apiResponse.message
-        });
-        }
+        if (!handleApiError(apiResponse, req, res)) return;
 
         // MODE AJAX
         if (req.headers.accept?.includes("application/json")) {

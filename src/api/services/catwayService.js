@@ -15,11 +15,15 @@ import {
     createCatway,
     updateCatwayByNumber,
     deleteCatwayByNumber,
-    catwayHasReservations
+    catwayHasReservations,
+    deleteAllReservationsByCatway
 } from "../repositories/catwayRepo.js";
 
-import { canDeleteCatway } from "./catwayRules.js";
+import { getReservationsByCatway } from "../repositories/reservationRepo.js";
+import { computeReservationStats } from "../utils/reservations/reservationStats.js";
+
 import { validateCatwayUpdate } from "../validators/catwayValidators.js";
+import { verifyUserPassword } from "../utils/security/passwordVerifier.js";
 
 import { ApiError } from "../utils/errors/apiError.js";
 
@@ -107,8 +111,9 @@ export async function updateCatwayService(catwayNumber, data) {
 // DELETE CATWAY
 // ===============================================
 
-export async function deleteCatwayService(catwayNumber) {
+export async function deleteCatwayService(catwayNumber, options = {}) {
 
+    const { userId, password } = options;
     const catway = await findCatwayByNumber(catwayNumber);
 
     if (!catway) {
@@ -120,11 +125,47 @@ export async function deleteCatwayService(catwayNumber) {
 
     const hasReservations = await catwayHasReservations(catwayNumber);
 
-    if (!canDeleteCatway(hasReservations)) {
-        throw ApiError.forbidden(
-            "Impossible de supprimer ce catway : des réservations y sont associées."
+    if (!hasReservations) {
+        
+        const deletedCatway = await deleteCatwayByNumber(catwayNumber);
+
+        return {
+            catway: deletedCatway
+        };
+    }
+    
+    const reservations = await getReservationsByCatway(catwayNumber);
+    const reservationsStats = computeReservationStats(reservations);
+
+    if (!password) {
+
+        throw ApiError.businessConflict(
+            "Ce catway contient des réservations. La suppression nécessite une confirmation par mot de passe.",
+            {
+                reason: "password_required",
+                catwayNumber,
+                reservationsLinked: true,
+                reservationsStats
+            }
         );
     }
 
-    return deleteCatwayByNumber(catwayNumber);
+    const isValid = await verifyUserPassword(userId, password);
+    if (!isValid) {
+        throw ApiError.businessConflict(
+            "Mot de passe incorrect.",
+            {
+                reason: "invalid_password"
+            }
+        )
+    }
+
+    await deleteAllReservationsByCatway(catwayNumber);
+
+    const deletedCatway = await deleteCatwayByNumber(catwayNumber);
+
+    return {
+        catway: deletedCatway,
+        reservationsDeleted: reservationsStats
+    };
 }

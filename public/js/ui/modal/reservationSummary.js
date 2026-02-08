@@ -8,12 +8,12 @@
 
 export function reservationSummary({ data }) {
     const wrapper = document.createElement("div");
-    wrapper.className = "modal-summary";
+    wrapper.className = "modal-context";
 
     /* ================= CONTEXT ================= */
 
     const header = document.createElement("p");
-    header.className = "summary-context";
+    header.className = "modal-context-subheader";
     header.innerHTML = `
         <span class="bold">Client :</span> ${data.clientName}
         <span class="muted"> | </span>
@@ -27,9 +27,9 @@ export function reservationSummary({ data }) {
 
     if (hasOverlap) {
         const warning = document.createElement("div");
-        warning.className = "summary-warning";
+        warning.className = "modal-context-warning";
         warning.innerHTML = `
-            <span class="bold"><i class="fa-solid fa-triangle-exclamation summary-icon"></i> Attention</span><br>
+            <span class="bold"><i class="fa-solid fa-triangle-exclamation modal-context-icon"></i> Attention</span>
             <span class="italic">Certaines réservations sélectionnées se chevauchent dans le temps.
             Vérifiez que cela correspond bien à votre intention.</span>
         `;
@@ -39,32 +39,32 @@ export function reservationSummary({ data }) {
     /* ================= LIST ================= */
 
     const list = document.createElement("div");
-    list.className = "summary-list";
+    list.className = "modal-context-inline-block";
 
     data.reservations.forEach(r => {
         const row = document.createElement("div");
-        row.className = `summary-item summary-item--${r.type}`;
+        row.className = `modal-context-item modal-context-item--${r.type}`;
 
         row.innerHTML = `
-        <span class="summary-badge summary-badge--${r.type}">
+        <span class="modal-context-badge modal-context-badge--${r.type}">
             ${r.type === "full" ? "D" : "P"}
         </span>
 
-        <span class="summary-catway">
+        <span class="bold">
             Catway ${r.catway}
         </span>
 
-        <span class="summary-date-start">
+        <span class="modal-context-date">
             ${r.startDate || "—"}
         </span>
 
-        <span class="summary-arrow"><i class="fa-solid fa-arrows-left-right"></i></span>
+        <span class="modal-context-date-separator"><i class="fa-solid fa-arrows-left-right"></i></span>
 
-        <span class="summary-date-end">
+        <span class="modal-context-date">
             ${r.endDate || "—"}
         </span>
 
-        <span class="summary-duration">
+        <span class="modal-context-subtotal">
             ${typeof r.duration === "number"
                 ? `${r.duration} nuit${r.duration > 1 ? "s" :""}`
                 : "—"}
@@ -82,7 +82,7 @@ export function reservationSummary({ data }) {
     }, 0);
 
     const total = document.createElement("div");
-    total.className = "summary-total";
+    total.className = "modal-context-total";
     total.innerHTML = `
     <span class="bold">Total :</span> ${totalNights} nuit${totalNights > 1 ? "s" : ""}
     `;

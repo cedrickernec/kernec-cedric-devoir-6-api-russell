@@ -19,6 +19,8 @@ import {
     renderEditCatwayPage
 } from "../../views/helpers/catwaysViewHelper.js";
 
+import { handleApiError } from "../../utils/apiErrorHandler.js";
+
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 
@@ -149,26 +151,13 @@ export const postEditCatway = async (req, res, next) => {
 export const deleteCatwayAction = async (req, res, next) => {
     try {
         const catwayNumber = Number(req.params.catwayNumber);
+        const password = req.body?.password || null;
 
-        const apiResponse = await deleteCatway(catwayNumber, req, res);
+        const apiResponse = await deleteCatway(catwayNumber, req, res, password);
 
         if (handleAuthExpired(apiResponse, req, res)) return;
 
-        if (apiResponse.success === false) {
-
-        // SI REQUÊTE AJAX
-        if (req.headers.accept?.includes("application/json")) {
-            return res.status(500).json({
-                success: false,
-                message: apiResponse.message
-            });
-        }
-
-        // SINON MODE HTML
-        return res.status(500).render("errors/error", {
-            message: apiResponse.message
-        });
-        }
+        if (!handleApiError(apiResponse, req, res)) return;
 
         // MODE AJAX
         if (req.headers.accept?.includes("application/json")) {

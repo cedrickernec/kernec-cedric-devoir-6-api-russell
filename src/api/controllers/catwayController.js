@@ -173,14 +173,32 @@ export const deleteCatway = async (req, res, next) => {
         // 1) Validation ID
         const catwayNumber = validateCatwayNumber(req.params.id);
 
-        // 2) Service
-        const deleted = await deleteCatwayService(catwayNumber);
+        // 2) Récupération du password éventuel et de l'utilisateur courant
+        const { password } = req.body || {};
+        const userId = req.user.id;
 
-        // 3) Réponse
+        // 3) Service
+        const deleted = await deleteCatwayService(
+            catwayNumber,
+            {
+                userId,
+                password
+            }
+        );
+
+        // 4) Réponse
+        const responseData = {
+            catway: formatCatway(deleted.catway)
+        };
+
+        if (deleted.reservationsDeleted) {
+            responseData.reservationsDeleted = deleted.reservationsDeleted;
+        }
+
         res.status(200).json({
             success: true,
             message: "Catway supprimé avec succès.",
-            data: formatCatway(deleted)
+            data: responseData
         });
 
     } catch (error) {

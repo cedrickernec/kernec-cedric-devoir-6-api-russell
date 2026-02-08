@@ -264,10 +264,21 @@ export const deleteReservation = async (req, res, next) => {
             "Identifiant réservation"
         );
 
-        // 2) Service
-        const deleted = await deleteReservationService(catwayNumber, idReservation);
+        // 2) Récupération du password éventuel et de l'utilisateur courant
+        const { password } = req.body || {};
+        const userId = req.user.id;
 
-        // 3) Réponse
+        // 3) Service
+        const deleted = await deleteReservationService(
+            catwayNumber,
+            idReservation,
+            {
+                userId,
+                password
+            }
+        );
+
+        // 4) Réponse
         res.status(200).json({
             success: true,
             message: "Réservation supprimée avec succès.",

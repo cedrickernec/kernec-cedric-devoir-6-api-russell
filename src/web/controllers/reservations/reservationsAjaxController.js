@@ -29,14 +29,20 @@ export const deleteReservations = async (req, res) => {
     for (const compositeId of ids) {
       const [catwayNumber, reservationId] = compositeId.split("|");
 
-      const apiResponse = await deleteReservation(catwayNumber, reservationId, req, res);
+      const apiResponse = await deleteReservation(
+        catwayNumber,
+        reservationId,
+        req,
+        res,
+        req.body.password);
 
       if (handleAuthExpired(apiResponse, req, res)) return;
 
       if (apiResponse.success === false) {
-        return res.status(500).json({
+        return res.status(409).json({
           success: false,
-          message: apiResponse.message
+          message: apiResponse.message,
+          context: apiResponse.context || null
         });
       }
     }
@@ -48,6 +54,9 @@ export const deleteReservations = async (req, res) => {
 
   } catch (error) {
     console.error("Suppression échouée :", error);
-    res.status(500).json({ success: false });
+    res.status(500).json({
+      success: false,
+      message: COMMON_MESSAGES.DELETE_ERROR
+    });
   }
 };

@@ -30,17 +30,18 @@ import {
     hasReservationStarted
 } from "./reservationRules.js";
 
-import {
-    validateReservationPeriod,
-    validateReservationUpdate
-} from "../validators/reservationValidators.js";
+import { validateReservationUpdate } from "../validators/reservationValidators.js";
+import { verifyUserPassword } from "../utils/security/passwordVerifier.js";
 
 import { parseDate } from "../utils/dates/parseDate.js";
-import { normalizeDayRange } from "../utils/dates/normalizeDayRange.js";
-
-import { ApiError } from "../utils/errors/apiError.js";
+import {
+    parseReservationPeriod,
+    parseReservationUpdatePeriod
+} from "../utils/availability/parseReservationPeriod.js";
 import { getAvailableCatways } from "../utils/availability/getAvailableCatway.js";
-import { parseReservationPeriod, parseReservationUpdatePeriod } from "../utils/availability/parseReservationPeriod.js";
+
+import { getReservationStatus } from "../utils/reservations/reservationStatus.js";
+import { ApiError } from "../utils/errors/apiError.js";
 
 // ===============================================
 // GET ALL RESERVATION
@@ -272,19 +273,20 @@ export async function updateReservationService(catwayNumber, idReservation, data
 // DELETE RESERVATION
 // ===============================================
 
-export async function deleteReservationService(catwayNumber, idReservation) {
+export async function deleteReservationService(catwayNumber, idReservation, options = {}) {
 
+    const { userId, password } = options;
     const catway = await findCatwayByNumber(catwayNumber);
-
+    
     if (!catway) {
         throw ApiError.notFound(
             "Catway introuvable",
             { catwayNumber }
         );
     }
-
+    
     const reservation = await findReservationById(catwayNumber, idReservation);
-
+    
     if (!reservation) {
         throw ApiError.notFound(
             "Réservation introuvable.",
@@ -292,11 +294,39 @@ export async function deleteReservationService(catwayNumber, idReservation) {
         );
     }
 
+    const status = getReservationStatus(reservation);
+
     if (!canDeleteReservation(reservation)) {
-        throw ApiError.forbidden(
-            "Impossible de supprimer une réservation en cours ou terminée."
-        );
+        
+        if (!password) {
+            throw ApiError.businessConflict(
+                `Réservation en cours ou terminée. La suppression nécessite une confirmation par mot de passe.`,
+                {
+                    reason: "password_required",
+                    status,
+                    clientName: reservation.clientName,
+                    boatName: reservation.boatName,
+                    startDate: reservation.startDate,
+                    endDate: reservation.endDate
+                }
+            );
+        }
+    
+        const isValid = await verifyUserPassword(userId, password);
+        if (!isValid) {
+            throw ApiError.businessConflict(
+                "Mot de passe incorrect.",
+                {
+                    reason: "invalid_password"
+                }
+            )
+        }
     }
 
-    return deleteReservation(catwayNumber, idReservation);
+    const deleted = await deleteReservation(catwayNumber, idReservation)
+
+    return {
+        reservation: deleted,
+        catway
+    };
 }

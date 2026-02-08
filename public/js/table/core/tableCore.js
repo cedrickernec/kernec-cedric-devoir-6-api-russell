@@ -5,11 +5,12 @@
  * - Sélection multiple persistante (indépendante des filtres)
  * - "Select all" agit uniquement sur les lignes visibles
  * - Suppression en masse sur l'ensemble de la sélection mémorisée
+ * - Gère le cas password_required
  * - Compteur dynamique dans le bouton "Supprimer"
  * ===================================================================
  */
 
-import { confirmDelete } from "../../ui/modal/confirmDelete.js";
+import { runDeleteFlow } from "../../delete/deleteFlow.js";
 
 export function initBulkTable({
   tableSelector,
@@ -152,31 +153,18 @@ export function initBulkTable({
   // BULK DELETE
   // ==================================================
   deleteBtn.addEventListener("click", async () => {
+    console.log("CLICK BULK DELETE détecté")
     if (selectedIds.size === 0) return;
 
     const ids = Array.from(selectedIds);
 
-    openConfirmModal({
-      title: "Confirmation",
-      content: confirmDelete({
-        type: deleteType,
-        count: ids.length
-      }),
+    runDeleteFlow({
+      deleteUrl,
+      deleteType,
+      count: ids.length,
+      buildBody: (password) => ({ ids, password }),
 
-      onConfirm: async () => {
-        const res = await fetch(deleteUrl, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify({ ids })
-        });
-
-        if (!res.ok) {
-          showToast("error", messages.error);
-          return;
-        }
+      onSuccess: () => {
 
         ids.forEach(id => {
           const cb = table.querySelector(
@@ -205,12 +193,6 @@ export function initBulkTable({
         }
 
         showToast("success", messages.success(ids.length));
-      },
-
-      onCancel: () => {
-        if (messages.cancelled) {
-          showToast("info", messages.cancelled);
-        }
       }
     });
   });

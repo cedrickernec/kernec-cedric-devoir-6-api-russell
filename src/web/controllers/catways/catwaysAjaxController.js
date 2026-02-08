@@ -59,14 +59,20 @@ export const deleteCatways = async (req, res) => {
     }
 
     for (const catwayNumber of ids) {
-      const apiResponse = await deleteCatway(catwayNumber, req, res);
+      const apiResponse = await deleteCatway(
+        catwayNumber,
+        req,
+        res,
+        req.body.password
+      );
 
       if (handleAuthExpired(apiResponse, req, res)) return;
 
       if (apiResponse.success === false) {
-        return res.status(500).json({
+        return res.status(409).json({
           success: false,
-          message: apiResponse.message
+          message: apiResponse.message,
+          context: apiResponse.context || null
         });
       }
     }

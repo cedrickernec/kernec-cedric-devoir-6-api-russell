@@ -14,7 +14,9 @@ import { apiFetch } from "./apiClient.js";
 
 export async function fetchCatways(req, res) {
 
-    return apiFetch("/api/catways", {}, req, res);
+    return apiFetch("/api/catways", {
+        method: "GET"
+    }, req, res);
 }
 
 // ==================================================
@@ -23,7 +25,9 @@ export async function fetchCatways(req, res) {
 
 export async function fetchCatwayByNumber(number, req, res) {
 
-    return apiFetch(`/api/catways/${number}`, {}, req, res);
+    return apiFetch(`/api/catways/${number}`, {
+        method: "GET"
+    }, req, res);
 }
 
 // ==================================================
@@ -58,11 +62,18 @@ export async function updateCatway(number, data, req, res) {
 // DELETE CATWAY
 // ==================================================
 
-export async function deleteCatway(number, req, res) {
+export async function deleteCatway(number, req, res, password = null) {
+
+    const options = { method: "DELETE" };
+
+    if (password) {
+        options.body = JSON.stringify({ password });
+    }
 
     return apiFetch(
-        `/api/catways/${number}`, {
-            method: "DELETE",
-        }, req, res
+        `/api/catways/${number}`,
+        options,
+        req,
+        res
     );
 }
