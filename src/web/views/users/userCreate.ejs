@@ -99,13 +99,14 @@
 
   <div class="form-actions">
     <a href="/users" class="btn btn-cancel">Annuler</a>
-    <button type="submit" class="btn btn-confirm">Créer l'utilisateur</button>
+    <button type="submit" class="btn btn-confirm" autofocus disabled>Créer l'utilisateur</button>
   </div>
 </form>
 
 <!--====== SCRIPTS =======-->
 
-<script src="/js/form/availableEmail.js" defer></script>
+<script src="/js/form/preventSubmitIfLocked.js" defer></script>
+<script type="module" src="/js/form/availableEmail.js"></script>
 <script src="/js/form/passwordValidation.js" defer></script>
 <script src="/js/ui/form/passwordEye.js" defer></script>
 <script src="/js/ui/form/formErrorCleanup.js" defer></script>

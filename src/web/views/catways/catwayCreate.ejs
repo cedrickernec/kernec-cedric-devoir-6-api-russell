@@ -92,13 +92,14 @@
 
   <div class="form-actions">
     <a href="/catways" class="btn btn-cancel">Annuler</a>
-    <button type="submit" class="btn btn-confirm">Créer le catway</button>
+    <button type="submit" class="btn btn-confirm" autofocus disabled>Créer le catway</button>
   </div>
 </form>
 
 <!--====== SCRIPTS ======-->
 
+<script src="/js/form/preventSubmitIfLocked.js" defer></script>
 <script src="/js/form/checkboxTextToggle.js" defer></script>
-<script src="/js/form/availableCatway.js" defer></script>
+<script type="module" src="/js/form/availableCatway.js"></script>
 <script src="/js/ui/form/formErrorCleanup.js" defer></script>
 

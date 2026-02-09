@@ -10,6 +10,7 @@
  */
 
 import bcrypt from "bcrypt";
+import { findUserByEmail } from "../repositories/userRepo.js";
 
 import {
     getAllUsers,
@@ -60,6 +61,16 @@ export async function getUserByIdService(id) {
 
 export async function createUserService(data) {
 
+    const existing = await findUserByEmail(data.email);
+
+    if (existing) {
+        throw ApiError.fieldConflict(
+            "Impossible de créer l'utilisateur.",
+            "email",
+            "Un utilisateur avec cet email existe déjà."
+        );
+    }
+
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     return createUser({
@@ -81,6 +92,16 @@ export async function updateUserService(id, cleanData) {
         throw ApiError.notFound(
             "Utilisateur introuvable.",
             { userId: id }
+        );
+    }
+
+    const existing = await findUserByEmail(cleanData.email);
+
+    if (existing && existing._id.toString() !== id) {
+        throw ApiError.fieldConflict(
+            "Impossible de mettre à jour l'utilisateur.",
+            "email",
+            "Un utilisateur avec cet email existe déjà."
         );
     }
 

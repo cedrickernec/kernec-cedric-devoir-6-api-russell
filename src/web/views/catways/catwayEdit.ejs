@@ -11,6 +11,10 @@
   action="/catways/<%= catway.number %>/edit"
   class="form"
   data-catway-id="<%= catway.number %>"
+  data-initial='<%- JSON.stringify({
+    catwayState: catway.state,
+    isOutOfService: catway.isOutOfService ? "on" : ""
+  }) %>'
 >
   <!-- ===== NUMBER ===== -->
   <div class="form-group">
@@ -62,6 +66,7 @@
         id="goodStateCheckbox"
         data-toggle-checkbox="catwayState"
         data-toggle-value="bon état"
+        <%= catway.state.trim() === "bon état" ? "checked" : "" %>
       >
       Catway en bon état
     </label>
@@ -77,7 +82,10 @@
     ><%= catway.state %></textarea>
   </div>
 
-  <div class="form-group" id="outOfServiceGroup">
+  <div
+    class="form-group <%= catway.state.trim() === 'bon état' ? 'hidden' : '' %>"
+    id="outOfServiceGroup"
+    >
     <label for="OutOfServiceCheckbox">
       <input
         type="checkbox"
@@ -92,11 +100,12 @@
   <!-- ===== ACTIONS ===== -->
   <div class="form-actions">
     <a href="/catways" class="btn btn-cancel"> Annuler </a>
-    <button type="submit" class="btn btn-confirm">Enregistrer</button>
+    <button type="submit" class="btn btn-confirm" autofocus disabled>Enregistrer</button>
   </div>
 </form>
 
 <!-- ===== SCRIPTS ===== -->
-<script src="/js/form/availableCatway.js" defer></script>
 <script src="/js/form/checkboxTextToggle.js" defer></script>
+<script src="/js/form/preventSubmitIfLocked.js" defer></script>
+<script type="module" src="/js/form/availableCatway.js"></script>
 <script src="/js/ui/form/formErrorCleanup.js" defer></script>

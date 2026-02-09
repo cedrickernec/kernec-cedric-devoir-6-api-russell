@@ -19,14 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!goodStateCheckbox || !stateTextarea) return;
 
-  let previousValue = "";
-
-  if (stateTextarea.value.trim() === "bon état") {
-    goodStateCheckbox.checked = true;
-  } else {
-    goodStateCheckbox.checked = false;
-    previousValue = stateTextarea.value;
-  }
+  let previousValue = stateTextarea.value;
+  let initialized = false;
 
   const applyState = () => {
     if (goodStateCheckbox.checked) {
@@ -44,6 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (outOfServiceCheckbox) {
         outOfServiceCheckbox.checked = false;
         outOfServiceCheckbox.disabled = true;
+      }
+
+      // Masqué seulement après initialisation
+      if (initialized) {
         outOfServiceCheckbox.closest(".form-group")?.classList.add("hidden");
       }
 
@@ -56,9 +54,21 @@ document.addEventListener("DOMContentLoaded", () => {
       // Réactive hors service
       if (outOfServiceCheckbox) {
         outOfServiceCheckbox.disabled = false;
+      }
+
+      if (initialized) {
         outOfServiceCheckbox.closest(".form-group")?.classList.remove("hidden");
       }
     }
+
+    // Informer preventSubmitIfLocked qu'un changement a eu lieu
+    const event = new Event("change", { bubbles: true });
+    stateTextarea.dispatchEvent(event);
+    if (outOfServiceCheckbox) {
+      outOfServiceCheckbox.dispatchEvent(event);
+    }
+    
+    initialized = true;
   };
 
   goodStateCheckbox.addEventListener("change", applyState);

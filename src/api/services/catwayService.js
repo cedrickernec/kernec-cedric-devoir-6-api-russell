@@ -64,6 +64,7 @@ export async function createCatwayService(data) {
 
     if (existing) {
         throw ApiError.fieldConflict(
+            "Impossible de créer le catway.",
             "catwayNumber",
             "Un catway avec ce numéro existe déjà.",
             { catway: {

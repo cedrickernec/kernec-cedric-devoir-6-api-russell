@@ -89,10 +89,10 @@ export class ApiError extends Error {
      * @param {object|null} conflictWith
      * @returns {ApiError}
      */
-    static fieldConflict(field, message, conflictWith = null) {
-        return new ApiError(400, message, {
+    static fieldConflict(message, field, fieldMessage, conflictWith = null) {
+        return new ApiError(409, message, {
             fields: {
-                [field]: message
+                [field]: fieldMessage
             },
             conflictWith
         });

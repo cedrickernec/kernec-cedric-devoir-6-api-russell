@@ -19,7 +19,6 @@ import {
     deleteUserService
 } from "../services/userService.js";
 
-import { findUserByEmail } from "../repositories/userRepo.js";
 import { validateUserCreate, validateUserUpdate } from "../validators/userValidators.js";
 import { validateObjectId } from "../validators/params/idValidator.js";
 
@@ -101,12 +100,6 @@ export const createUser = async (req, res, next) => {
         // 2) Validation
         const errors = validateUserCreate(cleanData);
 
-        const existing = await findUserByEmail(email);
-
-        if (existing) {
-            errors.email = "Un utilisateur avec cet email existe déjà.";
-        }
-
         if (Object.keys(errors).length > 0) {
             throw ApiError.validation(
                 errors
@@ -152,14 +145,6 @@ export const updateUser = async (req, res, next) => {
 
         // 3) Validation
         const errors = validateUserUpdate(cleanData);
-
-        if (cleanData.email) {
-            const existing = await findUserByEmail(cleanData.email);
-
-            if (existing && existing._id.toString() !== id) {
-                errors.email = "Un utilisateur avec cet email existe déjà.";
-            }
-        }
 
         if (Object.keys(errors).length > 0) {
             throw ApiError.validation(

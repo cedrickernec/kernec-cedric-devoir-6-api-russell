@@ -53,16 +53,18 @@ export const postCreateUser = async (req, res, next) => {
 
     if (apiData.success === false) {
 
-      // Erreurs de champs
-      if (Object.keys(apiData.errors).length > 0) {
+      const apiErrors = apiData.errors || {};
+
+      // Si erreurs de champs
+      if (Object.keys(apiErrors).length > 0) {
         return renderCreateUserPage(res, {
           errors: formatApiErrors(apiData),
           formData
         });
       }
 
-      // Erreur métier
-      if (apiData.context || apiData.message) {
+      // Sinon erreur globale
+      if (apiData.message) {
         return renderCreateUserPage(res, {
           globalError: apiData.message,
           formData

@@ -11,6 +11,12 @@
     method="POST"
     action="/catways/<%= reservation.catway.number %>/reservations/<%= reservation.id %>/edit"
     class="form form--side"
+    data-initial='<%- JSON.stringify({
+      clientName: reservation.clientName,
+      boatName: reservation.boatName,
+      startDate: reservation.startDateISO,
+      endDate: reservation.endDateISO
+    }) %>'
   >
     <!-- ===== INFORMATIONS FIXES ===== -->
     <div class="detail-list">
@@ -109,7 +115,7 @@
     <!-- ===== ACTIONS ===== -->
     <div class="form-actions">
       <a href="/reservations" class="btn btn-cancel"> Annuler </a>
-      <button type="submit" class="btn btn-confirm">Enregistrer</button>
+      <button type="submit" class="btn btn-confirm" autofocus disabled>Enregistrer</button>
     </div>
   </form>
 
@@ -179,4 +185,5 @@
 </div>
 
 <!--====== SCRIPTS ======-->
+<script src="/js/form/preventSubmitIfLocked.js" defer></script>
 <script src="/js/ui/form/formErrorCleanup.js" defer></script>

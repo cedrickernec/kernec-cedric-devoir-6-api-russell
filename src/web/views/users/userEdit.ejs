@@ -11,6 +11,7 @@
   action="/users/<%= user.id %>/edit"
   class="form"
   data-entity-id="<%= user.id %>"
+  data-initial='<%- JSON.stringify({ username: user.username, email: user.email }) %>'
 >
   <!--====== USERNAME =======-->
 
@@ -61,7 +62,7 @@
 
   <div class="form-actions">
     <a href="/users" class="btn btn-cancel">Annuler</a>
-    <button type="submit" class="btn btn-confirm">Enregistrer</button>
+    <button type="submit" class="btn btn-confirm" autofocus disabled>Enregistrer</button>
   </div>
 </form>
 
@@ -73,6 +74,7 @@
   class="form"
   data-password-rules="<%- JSON.stringify(passwordRules || []) %>"
   data-entity-id="<%= user.id %>"
+  data-initial='<%- JSON.stringify({ password: "" }) %>'
 >
   <div class="form-group">
     <label for="password">
@@ -111,13 +113,14 @@
 
   <div class="form-actions">
     <a href="/users" class="btn btn-cancel">Annuler</a>
-    <button type="submit" class="btn btn-confirm">Enregistrer</button>
+    <button type="submit" class="btn btn-confirm" autofocus disabled>Enregistrer</button>
   </div>
 </form>
 
 <!--====== SCRIPTS =======-->
 
-<script src="/js/form/availableEmail.js" defer></script>
+<script src="/js/form/preventSubmitIfLocked.js" defer></script>
+<script type="module" src="/js/form/availableEmail.js"></script>
 <script src="/js/form/passwordValidation.js" defer></script>
 <script src="/js/ui/form/passwordEye.js" defer></script>
 <script src="/js/ui/form/formErrorCleanup.js" defer></script>

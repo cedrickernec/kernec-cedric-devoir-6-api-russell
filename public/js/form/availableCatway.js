@@ -5,96 +5,49 @@
  * - Valide le format du numéro de catway
  * - Vérifie la disponibilité du numéro de catway
  * - Supporte le mode édition via excludeId
- * - Affiche un feedback sans bloquer la soumission
+ * - Gère l'état visuel du champ
+ * - Bloque automatiquement le submit si une erreur est détectée
+ * ===================================================================
+ * => Fonctionne avec le script générique preventSubmitIfLocked <=
  * ===================================================================
  */
 
-document.addEventListener("DOMContentLoaded", () => {
+import { createAvailabilityChecker } from "./availabilityChecker.js";
 
-  const input = document.getElementById("catwayNumber");
-  const feedback = document.getElementById("catwayNumber-feedback");
-  const form = input?.closest("form");
+createAvailabilityChecker({
+  inputId: "catwayNumber",
+  feedbackId: "catwayNumber-feedback",
 
-  if (!input || !feedback) return;
+  getUrl: (value, input) => {
+    const form = input.closest("form");
+    const currentCatwayId = form?.dataset.catwayId;
 
-  const currentCatwayId = form?.dataset.catwayId;
-  let timeout;
+    const normalized = value.replace(",", ".");
+    const number = Number(normalized);
 
-  const showError = (msg) => {
-    input.dataset.invalid = "true";
-    input.dataset.locked = "true";
-    input.setAttribute("aria-invalid", "true");
-    feedback.textContent = msg;
-    feedback.classList.remove("hidden");
-  };
+    const params = new URLSearchParams({ number });
 
-  const clearError = () => {
-    delete input.dataset.invalid;
-    delete input.dataset.locked;
-    input.removeAttribute("aria-invalid");
-    feedback.textContent = "";
-    feedback.classList.add("hidden");
-  }
+    if (currentCatwayId) {
+      params.append("excludeId", currentCatwayId);
+    }
 
-  input.addEventListener("input", () => {
+    return `/ajax/catways/check-number?${params.toString()}`;
+  },
 
-    clearTimeout(timeout);
-
-    delete input.dataset.locked;
-
-    const value = input.value.trim();
-
-    // Reset visuel
-    clearError();
-
-    // Champ vide → pas de requête
-    if (!value) {
-      clearError();
-      return
-    };
-    
-    // Validation du format
+  validateFormat: (value) => {
     const normalized = value.replace(",", ".");
     const number = Number(normalized);
 
     if (!Number.isInteger(number)) {
-      showError("Le numéro du catway doit être un nombre entier.");
-      return;
-    };
-
-    if (number <1) {
-      showError("Le numéro du catway doit être supérieur ou égal à 1.");
-      return;
+      return "Le numéro du catway doit être un nombre entier.";
     }
 
-    // ========================================================
-    // BACKEND AVAILABILITY CHECK
-    // ========================================================
+    if (number < 1) {
+      return "Le numéro du catway doit être supérieur ou égal à 1.";
+    }
 
-    // Débounce pour éviter les requêtes à chaque frappe
-    timeout = setTimeout(async () => {
-      try {
-        const params = new URLSearchParams({ number });
+    return null;
+  },
 
-        if (currentCatwayId) {
-          params.append("excludeId", currentCatwayId);
-        }
-        const res = await fetch(
-          `/ajax/catways/check-number?${params.toString()}`,
-          { credentials: "same-origin" }
-        );
-
-        if (!res.ok) return;
-
-        const { available } = await res.json();
-
-        if (!available) {
-          showError("Ce numéro de catway est déjà utilisé.");
-        }
-
-      } catch {
-        // Le backend valide au submit
-      }
-    }, 400);
-  });
+  conflictMessage: "Ce numéro de catway est déjà utilisé."
 });
