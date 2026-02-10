@@ -49,6 +49,10 @@
     box-shadow: var(--box-shadow-sm);
 }
 
+.btn--underline span {
+    text-decoration: underline;
+}
+
 
 /* ======================================================
    BUTTON TYPES
