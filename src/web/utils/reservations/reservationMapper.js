@@ -77,6 +77,11 @@ export function mapReservationToDetail(apiReservation) {
   reservation.createdAt
   ? new Date(reservation.createdAt)
   : null;
+
+  const updatedAt =
+  reservation.updatedAt
+  ? new Date(reservation.updatedAt)
+  : null;
   
   const nights = computeNightsBetweenDates(startDate, endDate);
 
@@ -107,6 +112,10 @@ export function mapReservationToDetail(apiReservation) {
     
     createdAtFormatted: createdAt
     ? formatDateFR(createdAt)
+    : "-",
+
+    updatedAtFormatted: updatedAt
+    ? formatDateFR(updatedAt)
     : "-"
   };
 }
@@ -154,6 +163,10 @@ export function mapReservationEdit(apiReservation) {
 
     createdAtFormatted: formatDateFR(reservation.createdAt)
       ? new Date(reservation.createdAt)
+      : "-",
+
+    updatedAtFormatted: formatDateFR(reservation.updatedAt)
+      ? new Date(reservation.updatedAt)
       : "-",
 
     isStartDateLocked
