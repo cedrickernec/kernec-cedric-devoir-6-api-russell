@@ -14,8 +14,13 @@
     <dd class="muted"><%= entity.createdAtFormatted %></dd>
   </div>
 
-  <div class="detail-row">
+  <% if (entity.updatedAtFormatted &&
+  entity.createdAtFormatted &&
+  entity.updatedAtFormatted !==
+  entity.createdAtFormatted) { %>
+  <div class="side-panel-row">
     <dt>Modifié le</dt>
     <dd class="muted"><%= entity.updatedAtFormatted %></dd>
   </div>
+  <% } %>
 </dl>

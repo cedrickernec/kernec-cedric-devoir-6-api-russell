@@ -61,10 +61,17 @@
       <dd class="muted"><%= reservation.createdAtFormatted %></dd>
     </div>
 
+    <% if (reservation.updatedAtFormatted &&
+    reservation.createdAtFormatted &&
+    reservation.updatedAtFormatted !==
+    reservation.createdAtFormatted) { %>
     <div class="detail-row">
       <dt>Modifiée le</dt>
-      <dd class="muted"><%= reservation.updatedAtFormatted %></dd>
+      <dd class="muted">
+        <%= reservation.updatedAtFormatted %>
+      </dd>
     </div>
+    <% } %>
   </dl>
 
   <div class="detail-action" aria-label="Actions réservation">
