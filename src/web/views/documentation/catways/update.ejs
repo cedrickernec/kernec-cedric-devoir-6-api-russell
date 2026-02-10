@@ -24,7 +24,7 @@
     <pre><code>{
     "success": true,
     "message": "Catway mis à jour.",
-    "catway": {
+    "data": {
         "id": "...",
         "number": 25,
         "type": "long",
@@ -49,7 +49,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Numéro de catway invalide."
+    "message": "Numéro de catway invalide."
 }</code></pre>
 
     <!-- CHAMP NON AUTORISÉ -->
@@ -57,19 +57,19 @@
 
     <pre><code>{
     "success": false,
-    "error": "Champ(s) non autorisé(s) : nom_du_champ."
+    "message": "Champ(s) non autorisé(s) : nom_du_champ."
 }</code></pre>
 
 <!-- CHAMP(S) INVALIDE(S) -->
 <p class="error-type">Contrôle de format des champs</p>
 
 <pre><code>{
-"success": false,
-"error": "Données invalides.",
-"details": {
-    "isOutOfService": "Le champ isOutOfService doit être un booléen.",
-    "catwayState": "L'état du catway doit être une chaîne de caractère non vide."
-}
+    "success": false,
+    "message": "Donnée(s) invalide(s).",
+    "errors": {
+        "isOutOfService": "Le champ isOutOfService doit être un booléen.",
+        "catwayState": "L'état du catway doit être une chaîne de caractère non vide."
+    }
 }</code></pre>
 
     <!-- AUCUNE DONNÉE VALIDE À METTRE À JOUR -->
@@ -77,15 +77,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Aucune donnée valide à mettre à jour."
-}</code></pre>
-
-    <!-- NUMERO ET TYPE NON ÉDITABLE -->
-    <p class="error-type">Numéro et type de catway non éditable</p>
-
-    <pre><code>{
-    "success": false,
-    "error": "Le numéro et le type de catway ne peuvent être modifiés."
+    "message": "Aucune donnée valide à mettre à jour."
 }</code></pre>
 
     <p class="example-title">
@@ -97,7 +89,10 @@
 
     <pre><code>{
     "success": false,
-    "error": "Utilisateur introuvable."
+    "message": "Utilisateur introuvable."
+    "context": {
+        "catwayNumber": 32
+    }
 }</code></pre>
   </details>
 </div>

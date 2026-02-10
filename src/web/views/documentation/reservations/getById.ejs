@@ -19,18 +19,23 @@
 
     <pre><code>{
     "success": true,
-    "reservation": {
+    "data": {
         "catway": {
-            "number": 1
+            "catwayNumber": 1,
+            "catwayType": "short"
         },
         "client": {
-            "name": "Thomas Martin",
-            "boat": "Carolina"
+            "clientName": "Thomas Martin",
+            "boatName": "Carolina"
         },
         "reservation": {
             "id": "...",
-            "start": "2024-05-21T06:00:00.000Z",
-            "end": "2024-10-27T06:00:00.000Z",
+            "status": {
+                "key": "FINISHED",
+                "label": "Terminée"
+            },
+            "startDate": "2024-05-21T06:00:00.000Z",
+            "endDate": "2024-10-27T06:00:00.000Z",
             "createdAt": "2026-01-08T12:56:04.016Z",
             "updatedAt": "2026-01-09T18:24:25.845Z"
         }
@@ -50,7 +55,7 @@
     
     <pre><code>{
     "success": false,
-    "error": "Numéro de catway invalide."
+    "message": "Numéro de catway invalide."
 }</code></pre>
 
     <!-- ID RESERVATION INVALIDE -->
@@ -58,7 +63,7 @@
     
     <pre><code>{
     "success": false,
-    "error": "Identifiant reservation invalide."
+    "message": "Identifiant reservation invalide."
 }</code></pre>
 
     <p class="example-title">
@@ -70,8 +75,8 @@
 
     <pre><code>{
     "success": false,
-    "error": "Catway introuvable.",
-    "details": {
+    "message": "Catway introuvable.",
+    "context": {
         "catwayNumber": 32
     }
 }</code></pre>
@@ -81,8 +86,8 @@
 
     <pre><code>{
     "success": false,
-    "error": "Réservation introuvable.",
-    "details": {
+    "message": "Réservation introuvable.",
+    "context": {
         "catwayNumber": 5,
         "idReservation": "..."
     }

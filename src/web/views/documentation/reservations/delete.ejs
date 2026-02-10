@@ -50,7 +50,7 @@
     
     <pre><code>{
     "success": false,
-    "error": "Numéro de catway invalide."
+    "message": "Numéro de catway invalide."
 }</code></pre>
 
     <!-- ID RÉSERVATION INVALIDE -->
@@ -58,19 +58,7 @@
     
     <pre><code>{
     "success": false,
-    "error": "Identifiant réservation invalide."
-}</code></pre>
-
-    <p class="example-title">
-      Erreur <span class="badge badge--error">403 Forbidden</span> :
-    </p>
-
-    <!-- SUPPRESSION IMPOSSIBLE -->
-    <p class="error-type">Réservation non supprimable</p>
-    
-    <pre><code>{
-    "success": false,
-    "error": "Impossible de supprimer une réservation en cours ou terminée."
+    "message": "Identifiant réservation invalide."
 }</code></pre>
 
     <p class="example-title">
@@ -82,8 +70,8 @@
 
     <pre><code>{
     "success": false,
-    "error": "Catway introuvable.",
-    "details": {
+    "message": "Catway introuvable.",
+    "context": {
         "catwayNumber": 32
     }
 }</code></pre>
@@ -93,10 +81,44 @@
 
     <pre><code>{
     "success": false,
-    "error": "Réservation introuvable.",
-    "details": {
+    "message": "Réservation introuvable.",
+    "context": {
         "catwayNumber": 5,
         "idReservation": "..."
+    }
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">409 Conflict</span> :
+    </p>
+
+    <!-- PASSWORD REQUIS -->
+    <p class="error-type">Mot de passe requis</p>
+    
+    <pre><code>{
+    "success": false,
+    "message": "La réservation est 'En cours'. La suppression nécessite une confirmation par mot de passe.",
+    "context": {
+        "reason": "password_required",
+        "status": {
+            "key": "IN_PROGRESS",
+            "label": "En cours"
+        },
+        "clientName": "John Doe",
+        "boatName": "L'Intrépide",
+        "startDate": "2026-02-05T06:00:00.000Z",
+        "endDate": "2026-02-14T06:00:00.000Z"
+    }
+}</code></pre>
+  
+  <!-- PASSWORD INVALIDE -->
+  <p class="error-type">Mot de passe invalide</p>
+
+    <pre><code>{
+    "success": false,
+    "message": "Mot de passe incorrect.",
+    "context": {
+        "reason": "invalid_password"
     }
 }</code></pre>
   </details>

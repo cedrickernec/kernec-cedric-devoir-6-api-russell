@@ -18,7 +18,7 @@
 
     <pre><code>{
     "success": true,
-    "catway": {
+    "data": {
         "id": "...",
         "Number": 1,
         "Type": "short",
@@ -43,7 +43,7 @@
     
     <pre><code>{
     "success": false,
-    "error": "Numéro de catway invalide."
+    "message": "Numéro de catway invalide."
 }</code></pre>
 
     <p class="example-title">
@@ -55,7 +55,10 @@
     
     <pre><code>{
     "success": false,
-    "error": "Catway introuvable."
+    "message": "Catway introuvable.",
+    "context": {
+        "catwayNumber": 32
+    }
 }</code></pre>
   </details>
 </div>

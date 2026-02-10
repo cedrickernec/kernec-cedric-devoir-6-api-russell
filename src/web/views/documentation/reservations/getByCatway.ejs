@@ -18,20 +18,24 @@
 
     <pre><code>{
     "success": true,
-    "count": 3,
-    "reservations": [
+    "count": 1,
+    "data": [
         {
-            "_id": "...",
-            "catwayNumber": 5,
-            "clientName": "Marc Le Goff",
-            "boatName": "Bavaria Cruiser",
-            "startDate": "2026-01-12T00:00:00.000Z",
-            "endDate": "2026-01-14T00:00:00.000Z",
-            "createdAt": "2026-01-08T12:56:04.016Z",
-            "updatedAt": "2026-01-09T18:24:25.845Z"
-        },
-      ...
-  ]
+            "id": "698a5a2d8ac671f7bbdd693c",
+            "catwayNumber": 1,
+            "clientName": "Thomas Martin",
+            "boatName": "Carolina",
+            "status": {
+                "key": "FINISHED",
+                "label": "Terminée"
+            },
+            "startDate": "2024-05-21T06:00:00.000Z",
+            "endDate": "2024-10-27T06:00:00.000Z",
+            "createdAt": "2026-02-09T22:05:33.685Z",
+            "updatedAt": "2026-02-09T22:05:33.685Z"
+        }
+        ...
+    ]
 }</code></pre>
   </details>
 
@@ -47,7 +51,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Numéro de catway invalide."
+    "message": "Numéro de catway invalide."
 }</code></pre>  
 
     <p class="example-title">
@@ -59,8 +63,8 @@
 
     <pre><code>{
     "success": false,
-    "error": "Catway introuvable.",
-    "details": {
+    "message": "Catway introuvable.",
+    "context": {
         "catwayNumber": 32
     }
 }</code></pre>

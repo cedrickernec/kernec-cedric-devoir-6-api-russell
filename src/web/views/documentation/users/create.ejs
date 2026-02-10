@@ -25,7 +25,7 @@
     <pre><code>{
     "success": true,
     "message": "Utilisateur créé avec succès.",
-    "user": {
+    "data": {
         "id": "...",
         "username": "aLefair",
         "email": "aurelie@lefair.com",
@@ -48,7 +48,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Champ(s) non autorisé(s) : nom_du_champ."
+    "message": "Champ(s) non autorisé(s) : nom_du_champ."
 }</code></pre>
 
     <!-- CHAMPS REQUIS -->
@@ -56,12 +56,12 @@
     
     <pre><code>{
     "success": false,
-    "error": "Données invalides.",
-    "details": {
+    "message": "Donnée(s) invalide(s).",
+    "errors": {
         "username": "Le nom d'utilisateur est requis.",
         "email": "L'email est requis.",
         "password": "Le mot de passe est requis."
-      }
+    }
 }</code></pre>
 
     <!-- DONNÉES INVALIDES -->
@@ -69,8 +69,8 @@
     
     <pre><code>{
     "success": false,
-    "error": "Données invalides.",
-    "details": {
+    "message": "Donnée(s) invalide(s).",
+    "errors": {
         "username": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères (lettres, chiffres, - ou _).",
         "email": "Format d'email invalide (ex : nom@domaine.com).",
         "password": {
@@ -88,11 +88,14 @@
     </p>
 
     <!-- CONFLIT EMAIL -->
-    <p class="error-type">Conflit d'email déjà utilisé</p>
+    <p class="error-type">Contrôle d'unicité</p>
 
     <pre><code>{
     "success": false,
-    "error": "Un utilisateur avec cet email existe déjà."
+    "message": "Impossible de créer l'utilisateur."
+    "errors": {
+        "email": "Un utilisateur avec cet email existe déjà."
+    }  
 }</code></pre>
   </details>
 </div>

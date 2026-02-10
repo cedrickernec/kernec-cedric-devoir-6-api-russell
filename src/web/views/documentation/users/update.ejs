@@ -25,13 +25,13 @@
     <pre><code>{
     "success": true,
     "message": "Utilisateur mis à jour.",
-    "user": {
+    "data": {
         "id": "...",
         "username": "nouvelUsername",
         "email": "nouvel@email.com",
         "createdAt": "2026-01-15T19:51:21.057Z",
         "updatedAt": "2026-01-16T14:15:36.570Z"
-
+    }
 }</code></pre>
   </details>
 
@@ -48,7 +48,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Identifiant utilisateur invalide."
+    "message": "Identifiant utilisateur invalide."
 }</code></pre>
 
     <!-- CHAMP NON AUTORISÉ -->
@@ -56,7 +56,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Champ(s) non autorisé(s) : nom_du_champ."
+    "message": "Champ(s) non autorisé(s) : nom_du_champ."
 }</code></pre>
 
     <!-- AUCUNE DONNÉE VALIDE À METTRE À JOUR -->
@@ -64,7 +64,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Aucune donnée valide à mettre à jour."
+    "message": "Aucune donnée valide à mettre à jour."
 }</code></pre>
 
     <!-- NOM D'UTILISATEUR OU FORMAT D'EMAIL INVALIDE -->
@@ -72,8 +72,8 @@
 
     <pre><code>{
     "success": false,
-    "error": "Données invalides.",
-    "details": {
+    "message": "Donnée(s) invalide(s).",
+    "errors": {
         "username": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères (lettres, chiffres, - ou _).",
         "email": "Format d'email invalide (ex : nom@domaine.com)."
     }
@@ -88,7 +88,10 @@
 
     <pre><code>{
     "success": false,
-    "error": "Utilisateur introuvable."
+    "message": "Utilisateur introuvable.",
+    "context": {
+        "userId": "..."
+    }
 }</code></pre>
 
     <p class="example-title">
@@ -96,11 +99,14 @@
     </p>
     
     <!-- CONFLIT EMAIL -->
-    <p class="error-type">Conflit d'email déjà utilisé</p>
+    <p class="error-type">Contrôle d'unicité</p>
 
     <pre><code>{
     "success": false,
-    "error": "Un utilisateur avec cet email existe déjà."
+    "message": "Impossible de mettre à jour l'utilisateur.",
+    "errors": {
+        "email": "Un utilisateur avec cet email existe déjà."
+    }
 }</code></pre>
   </details>
 </div>

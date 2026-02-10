@@ -49,7 +49,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Champ(s) non autorisé(s) : nom_du_champ."
+    "message": "Champ(s) non autorisé(s) : nom_du_champ."
 }</code></pre>
 
     <!-- CHAMPS REQUIS -->
@@ -57,8 +57,8 @@
     
     <pre><code>{
     "success": false,
-    "error": "Données invalides.",
-    "details": {
+    "message": "Donnée(s) invalide(s).",
+    "errors": {
         "catwayNumber": "Champ obligatoire manquant : Numéro de catway",
         "catwayType": "Champ obligatoire manquant : Type de catway",
         "catwayState": "Champ obligatoire manquant : État du catway"
@@ -70,25 +70,35 @@
     
     <pre><code>{
     "success": false,
-    "error": "Données invalides.",
-    "details": {
+    "message": "Donnée(s) invalide(s).",
+    "errors": {
+        "catwayNumber": "Le numéro de catway doit être un nombre valide.",
+        "catwayNumber": "Le numéro de catway doit être un nombre entier.",
+        "catwayNumber": "Le numéro de catway doit être supérieur ou égal à 1.",
         "catwayType": "Type de catway invalide. Valeurs autorisées : short ou long"
     }
 }</code></pre>
 
+    <p class="example-title">
+      Erreur <span class="badge badge--error">409 Conflict</span> :
+    </p>
+
     <!-- CATWAY EXISTANT -->
-    <p class="error-type">Contrôle d'unicité du numéro de catway</p>
+    <p class="error-type">Contrôle d'unicité</p>
 
     <pre><code>{
     "success": false,
-    "error": "Un catway avec ce numéro existe déjà.",
-    "details": {
-        "existingCatway": {
-            "isOutOfService": false,
-            "_id": "...",
-            "catwayNumber": 24,
+    "message": "Impossible de créer le catway.",
+    "errors": {
+        "catwayNumber": "Un catway avec ce numéro existe déjà."
+    },
+    "conflictWith": {
+        "catway": {
+            "id": "...",
+            "catwayNumber": 2,
             "catwayType": "short",
-            "catwayState": "bon état"
+            "catwayState": "bon état",
+            "isOutOfService": false
         }
     }
 }</code></pre>

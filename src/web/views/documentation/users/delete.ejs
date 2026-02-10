@@ -19,7 +19,7 @@
     <pre><code>{
     "success": true,
     "message": "Utilisateur supprimé avec succès.",
-    "user": {
+    "data": {
         "id": "...",
         "username": "jDoe",
         "email": "john@doe.com",
@@ -42,7 +42,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Identifiant utilisateur invalide."
+    "message": "Identifiant utilisateur invalide."
 }</code></pre>
 
     <p class="example-title">
@@ -54,7 +54,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Vous ne pouvez pas supprimer votre propre compte."
+    "message": "Vous ne pouvez pas supprimer votre propre compte."
 }</code></pre>
 
     <p class="example-title">
@@ -66,7 +66,10 @@
 
     <pre><code>{
     "success": false,
-    "error": "Utilisateur introuvable."
+    "message": "Utilisateur introuvable.",
+    "context": {
+        "userId": "..."
+    }
 }</code></pre>
   </details>
 </div>
