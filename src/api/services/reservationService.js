@@ -30,7 +30,6 @@ import {
     hasReservationStarted
 } from "./reservationRules.js";
 
-import { validateReservationUpdate } from "../validators/reservationValidators.js";
 import { verifyUserPassword } from "../utils/security/passwordVerifier.js";
 
 import { parseDate } from "../utils/dates/parseDate.js";
@@ -207,14 +206,6 @@ export async function updateReservationService(catwayNumber, idReservation, data
     if (!canUpdateReservation(reservation)) {
         throw ApiError.forbidden(
             "Cette réservation est terminée et ne peut plus être modifiée."
-        );
-    }
-
-    const formatErrors = validateReservationUpdate(data);
-
-    if (Object.keys(formatErrors).length > 0) {
-        throw ApiError.validation(
-            formatErrors
         );
     }
 

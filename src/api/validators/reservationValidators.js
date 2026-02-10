@@ -8,7 +8,6 @@
  * ===================================================================
  */
 
-import { parseDate } from "../utils/dates/parseDate.js";
 import { ApiError } from "../utils/errors/apiError.js";
 
 // Champs obligatoires
@@ -41,29 +40,6 @@ export function validateAvailabilityInput(body) {
 
     if (!endDate)
         errors.endDate = "Champ obligatoire manquant : Date de sortie.";
-
-    return errors;
-}
-
-// Validation update
-export function validateReservationUpdate(cleanData) {
-    const errors = {};
-
-    if (cleanData.startDate) {
-        try {
-            parseDate(cleanData.startDate);
-        } catch {
-            errors.startDate = "Format de date de début invalide.";
-        }
-    }
-
-    if (cleanData.endDate) {
-        try {
-            parseDate(cleanData.endDate);
-        } catch {
-            errors.endDate = "Format de date de fin invalide.";
-        }
-    }
 
     return errors;
 }

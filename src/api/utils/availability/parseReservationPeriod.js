@@ -3,7 +3,7 @@ import { normalizeDayRange } from "../dates/normalizeDayRange.js";
 import { validateReservationPeriod } from "../../validators/reservationValidators.js";
 
 // ===============================================
-// PARSE RESERVATION PERDIOD
+// PARSE RESERVATION PERIOD
 // ===============================================
 
 export function parseReservationPeriod(startDate, endDate) {

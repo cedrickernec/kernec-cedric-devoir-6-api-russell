@@ -17,9 +17,9 @@ export const parseDate = (dateStr) => {
 
     // 1) Type
     if (typeof dateStr !== "string") {
-        throw ApiError.validation(
-            "Format de date invalide. Format attendu : YYYY-MM-DD."
-        );
+        throw ApiError.validation({
+            Dates: "Format de date invalide. Format attendu : YYYY-MM-DD."
+        });
     }
 
     const raw = dateStr.trim();
@@ -29,9 +29,9 @@ export const parseDate = (dateStr) => {
     const match = raw.match(regex);
 
     if (!match) {
-        throw ApiError.validation(
-            "Format de date invalide. Format attendu : YYYY-MM-DD."
-        );
+        throw ApiError.validation({
+            Dates: "Format de date invalide. Format attendu : YYYY-MM-DD."
+        });
     }
 
     // 3) Extraction
@@ -57,17 +57,16 @@ export const parseDate = (dateStr) => {
 
     // 5) Date invalide
     if (errors.length > 0) {
-        let message = "Date invalide : ";
 
         if (errors.length === 1) {
-            message += `le ${errors[0]} est incorrect.`;
+            throw ApiError.validation({
+                Dates: `Le ${errors[0]} est incorrect.`
+            });
         } else {
-            message += "le mois et le jour sont incorrects.";
+            throw ApiError.validation({
+                Dates: "Le mois et le jour sont incorrects."
+            });
         }
-
-        throw ApiError.validation(
-            message
-        );
     }
 
     // 6) Date valide
