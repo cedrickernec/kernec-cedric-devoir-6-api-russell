@@ -19,12 +19,7 @@ import {
     deleteUserService
 } from "../services/userService.js";
 
-import {
-    validateUserUpdate,
-    validatePassword,
-    validateUserCreate
-} from "../validators/userValidators.js";
-
+import { validateUserCreate, validateUserUpdate } from "../validators/userValidators.js";
 import { validateObjectId } from "../validators/params/idValidator.js";
 
 import {
@@ -51,7 +46,7 @@ export const getAllUsers = async (req, res, next) => {
             message: users.length === 0
               ? "Aucun utilisateur trouvé."
               : undefined,
-            users: formatUsersList(users)
+            data: formatUsersList(users)
         });
 
     } catch (error) {
@@ -77,7 +72,7 @@ export const getUserById = async (req, res, next) => {
         // 3) Réponse
         res.status(200).json({
             success: true,
-            user: formatUser(user)
+            data: formatUser(user)
         });
 
     } catch (error) {
@@ -104,8 +99,11 @@ export const createUser = async (req, res, next) => {
 
         // 2) Validation
         const errors = validateUserCreate(cleanData);
+
         if (Object.keys(errors).length > 0) {
-            throw new ApiError(400, "Données invalides.", errors);
+            throw ApiError.validation(
+                errors
+            );
         }
 
         // 3) Service
@@ -115,7 +113,7 @@ export const createUser = async (req, res, next) => {
         res.status(201).json({
             success: true,
             message: "Utilisateur créé avec succès.",
-            user: formatUser(created)
+            data: formatUser(created)
         });
 
     } catch (error) {
@@ -140,23 +138,28 @@ export const updateUser = async (req, res, next) => {
         const cleanData = pickAllowedFields(req.body, allowedFields);
 
         if (Object.keys(cleanData).length === 0) {
-            throw new ApiError(400, "Aucune donnée valide à mettre à jour.")
+            throw ApiError.badRequest(
+                "Aucune donnée valide à mettre à jour."
+            );
         }
 
-        // 3) Validations
+        // 3) Validation
         const errors = validateUserUpdate(cleanData);
+
         if (Object.keys(errors).length > 0) {
-            throw new ApiError(400, "Données invalides.", errors);
+            throw ApiError.validation(
+                errors
+            );
         }
 
         // 4) Service
-        const updated = await updateUserService(id, cleanData, req.body)
+        const updated = await updateUserService(id, cleanData)
 
         // 5) Réponse
         res.status(200).json({
             success: true,
             message: "Utilisateur mis à jour.",
-            user: formatUser(updated)
+            data: formatUser(updated)
         });
 
     } catch (error) {
@@ -180,19 +183,15 @@ export const updatePassword = async (req, res, next) => {
         const cleanData = pickAllowedFields(req.body, ["newPassword"]);
 
         if (!cleanData.newPassword) {
-            throw new ApiError(400, "Le nouveau mot de passe est requis.");
+            throw ApiError.badRequest(
+                "Le nouveau mot de passe est requis."
+            );
         }
 
-        // 3) Validation
-        const validation = validatePassword(cleanData.newPassword);
-        if (!validation.valid) {
-            throw new ApiError(400, "Mot de passe invalide.", validation.errors);
-        }
-
-        // 4) Recupération
+        // 3) Service
         await updatePasswordService(id, cleanData.newPassword);
-
-        // 5) Réponse
+        
+        // 4) Réponse
         res.status(200).json({
             success: true,
             message: "Nouveau mot de passe enregistré."
@@ -222,7 +221,7 @@ export const deleteUser = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Utilisateur supprimé avec succès.",
-            user: formatUser(deleted)
+            data: formatUser(deleted)
         });
 
     } catch (error) {

@@ -6,6 +6,7 @@
     width: 520px;
     background: white;
     padding: 1.5rem;
+    margin-bottom: 1.5rem;
     border-radius: 10px;
     box-shadow: var(--box-shadow-sm);
     display: flex;
@@ -85,12 +86,16 @@ input[type="checkbox"] {
    FORM STATES
    ===================================================== */
 
-.form-group.has-error input {
+.form-group input[data-invalid="true"],
+.form-group select[data-invalid="true"],
+.form-group textarea[data-invalid="true"] {
     border-color: var(--danger-2);
     background-color: var(--danger-accent);
 }
 
-.form-group.has-error label {
+.form-group:has(input[data-invalid="true"]) > label,
+.form-group:has(select[data-invalid="true"]) > label,
+.form-group:has(textarea[data-invalid="true"]) > label {
     color: var(--danger-2);
 }
 
@@ -106,13 +111,21 @@ input[type="checkbox"] {
     margin-top: 4px;
 }
 
-.form-error,
-.form-feedback.error {
+.form-error {
     color: var(--danger-2);
 }
 
-.form-feedback:empty {
+.form-error.hidden {
     display: none;
+}
+
+.form-global-error {
+    margin: 0 0 1.5rem;
+    padding: 0.5rem 1rem;
+    border-left: 4px solid var(--danger-1);
+    background-color: var(--danger-accent);
+    color: var(--danger-2);
+    border-radius: 4px;
 }
 
 /* =====================================================

@@ -7,6 +7,7 @@ export const USER_MESSAGES = {
   // ===== CRUD =====
   CREATE_SUCCESS: "Utilisateur créé avec succès.",
   UPDATE_SUCCESS: "Utilisateur modifié avec succès.",
+  PASSWORD_UPDATE_SUCCESS: "Mot de passe utilisateur modifié avec succès.",
   
   DELETE_CONFIRM: "Supprimer cet utilisateur ?",
   DELETE_SUCCESS: "Utilisateur supprimé.",

@@ -10,6 +10,8 @@
  * ===================================================================
  */
 
+import { normalizeString } from "../../utils/normalizeString.js";
+
 export function initReservationsLiveFilter() {
     const rows = Array.from(document.querySelectorAll(".js-reservation-row"));
 
@@ -31,7 +33,8 @@ export function initReservationsLiveFilter() {
 
     function applyFilters() {
         const catway = catwaySelect.value;
-        const search = searchInput.value.trim().toLowerCase();
+        const search = normalizeString(searchInput.value.trim());
+
         const start = startInput.value;
         const end = endInput.value;
 
@@ -39,8 +42,8 @@ export function initReservationsLiveFilter() {
 
         rows.forEach(row => {
             const rowCatway = row.dataset.catway;
-            const client = row.dataset.client || "";
-            const boat = row.dataset.boat || "";
+            const client = normalizeString(row.dataset.client);
+            const boat = normalizeString(row.dataset.boat);
             const rowStart = row.dataset.start;
             const rowEnd = row.dataset.end;
 

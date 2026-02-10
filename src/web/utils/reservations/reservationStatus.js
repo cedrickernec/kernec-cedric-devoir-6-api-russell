@@ -1,9 +1,9 @@
 import { normalizeDateRange } from "../normalizeDateRange.js";
 
-export function computeReservationStatus(reservation) {
+export function computeReservationStatus({startDate, endDate}) {
     const now = new Date();
-    const start = normalizeDateRange(reservation.startDate, "start");
-    const end = normalizeDateRange(reservation.endDate, "end")
+    const start = normalizeDateRange(startDate, "start");
+    const end = normalizeDateRange(endDate, "end")
 
     if (now < start) {
         return {

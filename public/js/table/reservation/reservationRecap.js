@@ -7,7 +7,7 @@
  * ===================================================================
  */
 
-import { computeDurationDays } from "../../utils/computeDurationDays.js";
+import { computeNightsBetweenDates } from "../../utils/computeReservationNights.js";
 
 function formatDateFR(date) {
   return date instanceof Date && !isNaN(date)
@@ -26,7 +26,7 @@ export function extractReservationData(idsSet, formDates = {}) {
     // RÉSERVATION COMPLÈTE
     // ==============================
     if (parts.length === 1) {
-      const days = computeDurationDays(formStart, formEnd);
+      const days = computeNightsBetweenDates(formStart, formEnd);
       const catway = Number(parts[0]);
 
       return {
@@ -44,7 +44,7 @@ export function extractReservationData(idsSet, formDates = {}) {
     const [catway, from, to] = parts;
     const start = new Date(from);
     const end = new Date(to);
-    const days = computeDurationDays(start, end);
+    const days = computeNightsBetweenDates(start, end);
 
     return {
       type: "partial",

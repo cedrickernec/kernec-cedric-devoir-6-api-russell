@@ -1,42 +1,63 @@
 /**
- * --------------------------------------------------------------------
- * Authentification
- * --------------------------------------------------------------------
- * - Gestion de la connexion utilisateur
- * - Gestion de la déconnexion
+ * ===================================================================
+ * AUTH VIEW CONTROLLER
+ * ===================================================================
+ * - Gestion de la connexion/deconnexion utilisateur
+ *      - Délègue l'authentification à l'API
+ *      - Stock le JWT en session
+ * ===================================================================
  */
 
-import User from "../../api/models/User.js";
-import bcrypt from "bcrypt";
-
 // ==================================================
-// CONNEXION
+// LOGIN
 // ==================================================
 
 export const postLoginView = async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    try {
+        // Appel API
+        const apiResponse = await fetch("http://localhost:3000/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
 
-    // Identifiants invalides
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+        const apiData = await apiResponse.json();
+
+        // Erreur d'authentification
+        if (!apiResponse.ok || !apiData.data || !apiData.accessToken) {
+            req.session.authError = "Identifiants incorrects.";
+            req.session.disableAnimations = true;
+            
+            return res.redirect("/");
+        }
+
+        console.log("API LOGIN RESPONSE:", apiData);
+
+        // Session utilisateur
+        req.session.user = {
+            id: apiData.data.id,
+            username: apiData.data.username,
+            email: apiData.data.email,
+            token: apiData.accessToken,
+            refreshToken: apiData.refreshToken
+        };
+
+        res.redirect("/dashboard");
+
+    } catch (error) {
+        console.error("Erreur login:", error);
         req.session.authError = "Identifiants incorrects.";
         req.session.disableAnimations = true;
-        return res.redirect("/");
-    };
-
-    // Session utilisateur
-    req.session.user = {
-        id: user._id,
-        username: user.username,
-        email: user.email
-    };
-
-    res.redirect("/dashboard");
+        res.redirect("/");
+    }
 }
 
 // ==================================================
-// DÉCONNEXION
+// LOGOUT
 // ==================================================
 
 export const getLogoutView = (req, res) => {

@@ -45,9 +45,9 @@ export function initCatwaysLiveFilter() {
         let visibleCount = 0;
 
         rows.forEach(row => {
-            const rowNumber = row.dataset.number;
-            const rowType   = row.dataset.type;
-            const rowState  = (row.dataset.state || "").trim();
+            const rowNumber = row.dataset.catwayNumber;
+            const rowType   = row.dataset.catwayType;
+            const rowState  = (row.dataset.catwayState || "").trim();
 
             let visible = true;
 

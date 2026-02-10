@@ -1,9 +1,15 @@
 <h1>Création d'un catway</h1>
 
+<% if (globalError) { %>
+  <div class="form-global-error" role="alert">
+    <%= globalError %>
+  </div>
+<% } %>
+
 <form method="POST" action="/catways/create" class="form">
   <!--====== NUMBER ======-->
 
-  <div class="form-group <%= errors.catwayNumber ? 'has-error' : '' %>">
+  <div class="form-group">
     <label for="catwayNumber">Numéro du catway</label>
     <input
       type="number"
@@ -11,17 +17,21 @@
       name="catwayNumber"
       min="1"
       step="1"
-      value="<%= formData.catwayNumber || suggestedNumber %>"
+      value="<%= formData.catwayNumber || startNumber %>"
       aria-invalid="<%= errors.catwayNumber ? 'true' : 'false' %>"
+      data-invalid="<%= errors.catwayNumber ? 'true' : '' %>"
       required
     />
 
-    <p
-      id="catwayNumber-feedback"
-      class="form-feedback <%= errors.catwayNumber ? '' : 'hidden' %>"
-    >
+    <p id="catwayNumber-error" class="form-error <%= errors.catwayNumber ? '' : 'hidden' %>">
       <%= errors.catwayNumber %>
     </p>
+
+    <p
+      id="catwayNumber-feedback"
+      class="form-error hidden"
+      data-source="ajax"
+    ></p>
   </div>
 
   <!--====== TYPE ======-->
@@ -30,8 +40,18 @@
     <label for="catwayType">Type</label>
     <select id="catwayType" name="catwayType" required>
       <option value="">- Choisir -</option>
-      <option value="short">Short</option>
-      <option value="long">Long</option>
+      <option
+        value="short"
+        <%= formData?.catwayType === "short" ? "selected" : '' %>
+        >
+        Short
+      </option>
+      <option
+        value="long"
+        <%= formData?.catwayType === "long" ? "selected" : '' %>
+        >
+        Long
+      </option>
     </select>
   </div>
 
@@ -44,7 +64,7 @@
         id="goodStateCheckbox"
         data-toggle-checkbox="catwayState"
         data-toggle-value="bon état"
-        checked
+        <%= formData?.catwayState === "bon état" ? "checked" : '' %>
       />
       Catway en bon état
     </label>
@@ -60,7 +80,7 @@
       aria-readonly="true"
       required
     >
-bon état
+<%= formData?.catwayState || "bon état" %>
     </textarea>
 
     <% if (errors?.catwayState) { %>
@@ -68,24 +88,18 @@ bon état
     <% } %>
   </div>
 
-  <div class="form-group" id="outOfServiceGroup">
-    <label for="OutOfServiceCheckbox">
-      <input type="checkbox" id="OutOfServiceCheckbox" name="isOutOfService" />
-      Catway hors service
-    </label>
-  </div>
-
   <!--====== BUTTONS ACTIONS =======-->
 
   <div class="form-actions">
     <a href="/catways" class="btn btn-cancel">Annuler</a>
-    <button type="submit" class="btn btn-confirm">Créer le catway</button>
+    <button type="submit" class="btn btn-confirm" autofocus disabled>Créer le catway</button>
   </div>
 </form>
 
 <!--====== SCRIPTS ======-->
 
+<script src="/js/form/preventSubmitIfLocked.js" defer></script>
 <script src="/js/form/checkboxTextToggle.js" defer></script>
-<script src="/js/form/availableCatway.js" defer></script>
+<script type="module" src="/js/form/availableCatway.js"></script>
 <script src="/js/ui/form/formErrorCleanup.js" defer></script>
 

@@ -6,9 +6,9 @@
  * ===================================================================
  */
 
-import Reservation from "../../../api/models/Reservation.js";
-import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservationMessage.js";
+import { deleteReservation } from "../../services/api/reservationApi.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
 
 // ==================================================
 // BULK DELETE - TABLE
@@ -20,10 +20,32 @@ export const deleteReservations = async (req, res) => {
 
     // Sécurité payload
     if (!Array.isArray(ids) || ids.length === 0) {
-      return res.status(400).json({ success: false, message: COMMON_MESSAGES.INVALID_REQUEST });
+      return res.status(400).json({
+        success: false,
+        message: COMMON_MESSAGES.INVALID_REQUEST
+      });
     }
 
-    await Reservation.deleteMany({ _id: { $in: ids } });
+    for (const compositeId of ids) {
+      const [catwayNumber, reservationId] = compositeId.split("|");
+
+      const apiResponse = await deleteReservation(
+        catwayNumber,
+        reservationId,
+        req,
+        res,
+        req.body.password);
+
+      if (handleAuthExpired(apiResponse, req, res)) return;
+
+      if (apiResponse.success === false) {
+        return res.status(409).json({
+          success: false,
+          message: apiResponse.message,
+          context: apiResponse.context || null
+        });
+      }
+    }
 
     res.json({
       success: true,
@@ -32,30 +54,9 @@ export const deleteReservations = async (req, res) => {
 
   } catch (error) {
     console.error("Suppression échouée :", error);
-    res.status(500).json({ success: false });
-  }
-};
-
-// ==================================================
-// DELETE - SIDE PANEL
-// ==================================================
-
-export const deleteReservationById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleteReservation = await Reservation.findByIdAndDelete(id);
-
-    if (!deleteReservation) {
-      return res.status(404).json({
-        success: false,
-        message: RESERVATION_MESSAGES.NOT_FOUND
-      });
-    }
-
-    res.status(204).end();
-
-  } catch (error) {
-    console.error("Suppression utilisateur :", error);
-    res.status(500).json({ success: false });
+    res.status(500).json({
+      success: false,
+      message: COMMON_MESSAGES.DELETE_ERROR
+    });
   }
 };

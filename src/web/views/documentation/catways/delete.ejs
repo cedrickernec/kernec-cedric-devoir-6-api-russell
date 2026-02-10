@@ -19,14 +19,21 @@
     <pre><code>{
     "success": true,
     "message": "Catway supprimé avec succès.",
-    "catway": {
-        "id": "...",
-        "number": 25,
-        "type": "long",
-        "state": "catway instable. À consolider avant de remettre en service.",
-        "isOutOfService": true,
-        "createdAt": "2026-01-21T13:03:12.095Z",
-        "updatedAt": "2026-01-21T13:15:56.410Z"
+    "data": {
+        "catway": {
+            "_id": "...",
+            "catwayNumber": 25,
+            "catwayType": "long",
+            "catwayState": "catway instable. À consolider avant de remettre en service.",
+            "isOutOfService": true,
+            "createdAt": "2026-01-17T15:36:11.851Z",
+            "updatedAt": "2026-01-17T18:46:57.501Z"
+        },
+        "reservationsDeleted": {
+            "upComing": 0,
+            "inProgress": 0,
+            "finished": 1
+        }
     }
 }</code></pre>
   </details>
@@ -44,19 +51,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Numéro de catway invalide."
-}</code></pre>
-
-    <p class="example-title">
-      Erreur <span class="badge badge--error">403 Forbidden</span> :
-    </p>
-
-    <!-- SUPPRESSION IMPOSSIBLE -->
-    <p class="error-type">Suppression impossible</p>
-
-    <pre><code>{
-    "success": false,
-    "error": "Impossible de supprimer ce catway : des réservations y sont associées."
+    "message": "Numéro de catway invalide."
 }</code></pre>
 
     <p class="example-title">
@@ -68,7 +63,43 @@
 
     <pre><code>{
     "success": false,
-    "error": "Catway introuvable."
+    "message": "Catway introuvable.",
+    "context": {
+        "catwayNumber": 32
+    }
+}</code></pre>
+
+    <p class="example-title">
+      Erreur <span class="badge badge--error">409 Conflict</span> :
+    </p>
+
+    <!-- PASSWORD REQUIS -->
+    <p class="error-type">Mot de passe requis</p>
+    
+    <pre><code>{
+    "success": false,
+    "message": "Ce catway contient des réservations. La suppression nécessite une confirmation par mot de passe.",
+    "context": {
+      "reason": "password_required",
+      "catwayNumber": 25,
+      "reservationsLinked": true,
+      "reservationsStats": {
+          "upComing": 2,
+          "inProgress": 1,
+          "finished": 1
+        }
+    }
+}</code></pre>
+  
+  <!-- PASSWORD INVALIDE -->
+  <p class="error-type">Mot de passe invalide</p>
+
+    <pre><code>{
+    "success": false,
+    "message": "Mot de passe incorrect.",
+    "context": {
+        "reason": "invalid_password"
+    }
 }</code></pre>
   </details>
 </div>

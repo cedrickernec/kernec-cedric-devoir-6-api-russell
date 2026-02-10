@@ -1,95 +1,56 @@
-/**
- * --------------------------------------------------------------------
- * Mapper de vue - Catway
- * --------------------------------------------------------------------
- */
-
+import { buildCatwayStatus } from "./catwayStatus.js";
 import { formatDateFR } from "../dateFormatter.js";
-
-/* ==================================================
-  MAPPER CATWAY DETAIL
-================================================== */
-
-export function mapCatwayToDetail(catway) {
-  const createdAt = catway.createdAt
-    ? new Date(catway.createdAt)
-    : null;
-
-  let status;
-
-  if (catway.isOutOfService) {
-    status = {
-      label: catway.catwayState,
-      className: "status--danger",
-      aria: "Catway hors service, non réservable",
-    };
-  } 
-  else if (catway.catwayState === "bon état") {
-    status = {
-      label: catway.catwayState,
-      className: "status--ok",
-      aria: "Catway en bon état",
-    };
-  } 
-  else {
-    status = {
-      label: catway.catwayState,
-      className: "status--warning",
-      aria: "Catway réservable nécessitant une attention",
-    };
-  }
-
-  return {
-    id: catway._id,
-
-    catwayNumber: catway.catwayNumber,
-    catwayType: catway.catwayType,
-
-    isOutOfService: catway.isOutOfService,
-
-    state: status,
-
-    createdAtFormatted: formatDateFR(createdAt)
-  };
-}
 
 /* ==================================================
   MAPPER CATWAY LIST (TABLE)
 ================================================== */
 
 export function mapCatwayToList(catway) {
-  let status;
 
-  if (catway.isOutOfService) {
-    status = {
-      label: catway.catwayState,
-      className: "status--danger",
-      aria: "Catway hors service, non réservable",
-    };
-  } 
-  else if (catway.catwayState === "bon état") {
-    status = {
-      label: catway.catwayState,
-      className: "status--ok",
-      aria: "Catway en bon état",
-    };
-  } 
-  else {
-    status = {
-      label: catway.catwayState,
-      className: "status--warning",
-      aria: "Catway réservable nécessitant une attention",
-    };
-  }
+    const status = buildCatwayStatus({
+        catwayState: catway.catwayState,
+        isOutOfService: catway.isOutOfService
+    });
 
   return {
-    id: catway._id,
-
-    catwayNumber: catway.catwayNumber,
-    catwayType: catway.catwayType,
-
-    isOutOfService: catway.isOutOfService,
-
-    status
+    id: catway.id,
+    number: catway.catwayNumber,
+    type: catway.catwayType,
+    status,
+    stateKey: status.className
   };
+}
+
+/* ==================================================
+  MAPPER CATWAY DETAIL
+================================================== */
+
+export function mapCatwayToDetail(catway) {
+
+  const status = buildCatwayStatus({
+      catwayState: catway.catwayState,
+      isOutOfService: catway.isOutOfService
+  });
+
+  return {
+    id: catway.id,
+    number: catway.catwayNumber,
+    type: catway.catwayType,
+    status,
+    createdAtFormatted: formatDateFR(catway.createdAt)
+  };
+}
+
+/* ==================================================
+  MAPPER CATWAY FORM
+================================================== */
+
+export function mapCatwayToForm(catway) {
+    return {
+      id: catway.id,
+      number: catway.catwayNumber,
+      type: catway.catwayType,
+      state: catway.catwayState,
+      isOutOfService: catway.isOutOfService
+    };
 }

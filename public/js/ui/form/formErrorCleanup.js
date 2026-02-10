@@ -14,58 +14,67 @@ document.addEventListener("DOMContentLoaded", () => {
     ".form-group input, .form-group textarea, .form-group select"
   );
 
-  const onFieldEdit = (field) => {
+  // =====================================================
+  // BACKEND ERROR REMOVAL
+  // =====================================================
 
-    /* =====================================================
-       CAS SPÉCIFIQUE : DATES (startDate / endDate)
-       ===================================================== */
+  const clearBackendErrors = (field) => {
 
-    if (field.name === "startDate" || field.name === "endDate") {
-
-      // Supprime l'erreur visuelle du champ modifié
-      const formGroup = field.closest(".form-group");
-      if (formGroup) {
-        formGroup.classList.remove("has-error");
-      }
-
-      const datesWrapper = field.closest(".form-group--dates");
-      if (!datesWrapper) return;
-
-      // Vérifie s'il reste au moins un champ date encore en erreur
-      const remainingErrors =
-        datesWrapper.querySelectorAll(".form-group.has-error");
-
-      // Supprime le message global uniquement si plus aucune erreur
-      if (remainingErrors.length === 0) {
-        datesWrapper
-          .querySelectorAll('.form-error[data-error-scope="dates"]')
-          .forEach(msg => msg.remove());
-      }
-
-      return;
-    }
-
-    /* =====================================================
-       CAS GÉNÉRAL : TOUS LES AUTRES CHAMPS
-       ===================================================== */
-
-    // Le mot de passe a sa propre logique
-    if (field.id === "password") return;
-
+    // Ne jamais supprimer une erreur AJAX vérouillée
+    if (field.dataset.locked === "true") return;
+    
     const formGroup = field.closest(".form-group");
     if (!formGroup) return;
 
-    // Suppression de l'état d'erreur
-    formGroup.classList.remove("has-error");
+    // Nettoyage de l'état visuel
+    delete field.dataset.invalid;
+    field.removeAttribute("aria-invalid");
 
-    // Suppression des messages d'erreur backend
+    // Suppression des messages backend
     formGroup.querySelectorAll(".form-error").forEach((msg) => {
 
-      // Ne pas toucher aux règles dynamiques du password
+      // Ne pas toucher aux erreurs AJAX
+      if (msg.dataset.source === "ajax") return;
+
+      // Ne pas toucher aux règles password
       if (msg.closest(".password-rules")) return;
 
-      msg.remove();
-    });
+      msg.classList.add("hidden");
+      msg.textContent = "";
+    })
+  }
+
+  // =====================================================
+  // MAIN HANDLER
+  // =====================================================
+  const onFieldEdit = (field) => {
+
+    // Nettoyage standard du champ modifié
+
+    clearBackendErrors(field);
+
+    // Cas spécifique des dates: startDate / endDate → nettoyage commun
+    
+    if (field.name === "startDate" || field.name === "endDate") {
+
+      const datesWrapper =
+      field.closest(".form-group--dates") ||
+      field.closest(".form-group--row") ||
+      document;
+
+      const start = datesWrapper.querySelector('input[name="startDate"]');
+      const end = datesWrapper.querySelector('input[name="endDate"]');
+
+      if (start) clearBackendErrors(start);
+      if (end) clearBackendErrors(end);
+    }
+
+    // Suppression erreur métier globale dès qu'on modifie un champ
+    const globalErrorBox = document.getElementById("globalErrorBox");
+
+    if (globalErrorBox && globalErrorBox.dataset.errorType === "business") {
+      globalErrorBox.remove();
+    }
   };
 
   // Brancher la logique sur input ET change

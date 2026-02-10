@@ -8,7 +8,7 @@
  * ===================================================================
  */
 
-import { parseDate } from "../utils/dates/parseDate.js";
+import { ApiError } from "../utils/errors/apiError.js";
 
 // Champs obligatoires
 export function validateReservationCreate(body) {
@@ -30,25 +30,16 @@ export function validateReservationCreate(body) {
     return errors;
 }
 
-// Validation update
-export function validateReservationUpdate(cleanData) {
+// Champs obligatoires
+export function validateAvailabilityInput(body) {
     const errors = {};
+    const { startDate, endDate } = body;
+    
+    if (!startDate)
+        errors.startDate = "Champ obligatoire manquant : Date d'entrée.";
 
-    if (cleanData.startDate) {
-        try {
-            parseDate(cleanData.startDate);
-        } catch {
-            errors.startDate = "Format de date de début invalide.";
-        }
-    }
-
-    if (cleanData.endDate) {
-        try {
-            parseDate(cleanData.endDate);
-        } catch {
-            errors.endDate = "Format de date de fin invalide.";
-        }
-    }
+    if (!endDate)
+        errors.endDate = "Champ obligatoire manquant : Date de sortie.";
 
     return errors;
 }
@@ -56,12 +47,14 @@ export function validateReservationUpdate(cleanData) {
 // Validation cohérence période
 export function validateReservationPeriod(start, end) {
     if (!start || !end) {
-        throw new Error("Dates de réservation invalides.");
+        throw ApiError.badRequest(
+            "Dates de réservation ou formats invalides."
+        );
     }
 
     if (start >= end) {
-        throw new Error(
-            "La date de début doit être antérieure à la date de fin."
-        );
+        throw ApiError.validation({
+            Dates: "La date de fin doit être strictement postérieure à la date de début (minimum 1 nuit)."
+        });
     }
 }

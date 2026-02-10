@@ -27,16 +27,20 @@
     <pre><code>{
     "success": true,
     "message": "Réservation mise à jour",
-    "details": {
+    "dara": {
         "catway": {
             "number": 5
         },
         "client": {
-            "name": "Test_update",
-            "boat": "Test_update"
+            "name": "John Doe",
+            "boat": "Appolon"
         },
         "reservation": {
             "id": "...",
+            "status": {
+                "key": "UPCOMING",
+                "label": "À venir"
+            },
             "start": "2026-02-01T05:00:00.000Z",
             "end": "2026-03-01T05:00:00.000Z",
             "createdAt": "2026-01-21T15:22:23.556Z",
@@ -58,7 +62,7 @@
     
     <pre><code>{
     "success": false,
-    "error": "Numéro de catway invalide."
+    "message": "Numéro de catway invalide."
 }</code></pre>
 
     <!-- ID RÉSERVATION INVALIDE -->
@@ -66,7 +70,7 @@
     
     <pre><code>{
     "success": false,
-    "error": "Identifiant réservation invalide."
+    "message": "Identifiant réservation invalide."
 }</code></pre>
 
     <!-- CHAMP NON AUTORISÉ -->
@@ -74,7 +78,7 @@
 
     <pre><code>{
     "success": false,
-    "error": "Champ(s) non autorisé(s) : nom_du_champ."
+    "message": "Champ(s) non autorisé(s) : nom_du_champ."
 }</code></pre>  
 
     <!-- FORMATS DATES -->
@@ -82,7 +86,10 @@
     
     <pre><code>{
     "success": false,
-    "error": "Format de date invalide. Format attendu : YYYY-MM-DD."
+    "message": "Donnée(s) invalide(s).",
+    "errors": {
+        "Dates": "Format de date invalide. Format attendu : YYYY-MM-DD."
+    }
 }</code></pre>
 
     <!-- DATES CALENDAIRES -->
@@ -90,7 +97,10 @@
     
     <pre><code>{
     "success": false,
-    "error": "Date invalide : le mois et le jour sont incorrects."
+    "message": "Donnée(s) invalide(s).",
+    "errors": {
+        "Dates": "Le mois et le jour sont incorrects."
+    }
 }</code></pre>
 
     <!-- AUCUNE DONNÉE VALIDE -->
@@ -98,7 +108,7 @@
     
     <pre><code>{
     "success": false,
-    "error": "Aucune donnée valide à mettre à jour."
+    "message": "Aucune donnée valide à mettre à jour."
 }</code></pre>
 
     <!-- DATE ENTRÉE < DATE SORTIE -->
@@ -106,30 +116,31 @@
     
     <pre><code>{
     "success": false,
-    "error": "La date d'entrée doit être antérieure à la date de sortie."
-}</code></pre>
-
-    <!-- DATE ENTRÉE NON ÉDITABLE (RÉSERVATION EN COURS) -->
-    <p class="error-type">Date d'entrée non éditable</p>
-    
-    <pre><code>{
-    "success": false,
-    "error": "Données invalides.",
-    "details": {
-        "startDate": "La date de début ne peut plus être modifiée (date de début antérieure à la date du jour)"
+    "message": "Donnée(s) invalide(s).",
+    "errors": {
+        "Dates": "La date de fin doit être strictement postérieure à la date de début (minimum 1 nuit)."
     }
 }</code></pre>
 
+
     <p class="example-title">
-      Erreur <span class="badge badge--error">403 Forbidden</span> :
+        Erreur <span class="badge badge--error">403 Forbidden</span> :
     </p>
+
+    <!-- DATE ENTRÉE NON ÉDITABLE (RÉSERVATION EN COURS) -->
+    <p class="error-type">Date d'entrée non éditable</p>
+
+    <pre><code>{
+    "success": false,
+    "message": "La date de début ne peut plus être modifiée une fois la réservation commencée."
+}</code></pre>
 
     <!-- ÉDITION IMPOSSIBLE -->
     <p class="error-type">Réservation non éditable</p>
     
     <pre><code>{
     "success": false,
-    "error": "Cette réservation est terminée et ne peut plus être modfifiée."
+    "message": "Cette réservation est terminée et ne peut plus être modifiée."
 }</code></pre>
 
     <p class="example-title">
@@ -141,8 +152,8 @@
 
     <pre><code>{
     "success": false,
-    "error": "Catway introuvable.",
-    "details": {
+    "message": "Catway introuvable.",
+    "context": {
         "catwayNumber": 32
     }
 }</code></pre>
@@ -152,8 +163,8 @@
 
     <pre><code>{
     "success": false,
-    "error": "Réservation introuvable.",
-    "details": {
+    "message": "Réservation introuvable.",
+    "context": {
         "catwayNumber": 5,
         "idReservation": "..."
     }
@@ -168,16 +179,16 @@
 
     <pre><code>{
     "success": false,
-    "error": "Ce catway est déjà réservé sur ce créneau.",
-    "details": {
-        "conflictWith": {
+    "message": "Ce catway est déjà réservé sur ce créneau.",
+    "conflictWith": {
+        "reservation": {
             "id": "...",
-            "clientName": "Marc Le Goff",
-            "boatName": "Bavaria Cruiser",
-            "startDate": "2026-01-12T06:00:00.000Z",
-            "endDate": "2026-01-14T06:00:00.000Z",
-            "createdAt": "2026-01-08T12:56:04.016Z",
-            "updatedAt": "2026-01-09T18:24:25.845Z"
+            "clientName": "Test",
+            "boatName": "Test",
+            "startDate": "2026-06-03T06:00:00.000Z",
+            "endDate": "2026-06-07T06:00:00.000Z",
+            "createdAt": "2026-02-10T00:14:39.314Z",
+            "updatedAt": "2026-02-10T00:14:39.314Z"
         }
     }
 }</code></pre>

@@ -39,9 +39,11 @@ export function openSidePanel({
   title,
   content,
   entityId,
-  actions = null,
-  editBaseUrl = null,
   editTitle = null,
+  editBaseUrl = null,
+  nestedEditUrl = null,
+  nestedEditParams = null,
+  actions = null,
 }) {
   panelTitle.textContent = title;
   panelContent.innerHTML = content;
@@ -83,15 +85,30 @@ export function openSidePanel({
 
   const editBtn = panel.querySelector("[data-panel-action='edit']");
   if (editBtn) {
-    if (editBaseUrl) {
-      editBtn.dataset.editBase = editBaseUrl;
-      editBtn.style.display = "inline-flex";
-    } else {
-      editBtn.style.display = "none";
+    // Gestion du titre
+    if (editTitle) {
+      editBtn.title = editTitle
     }
 
-    if (editTitle) {
-      editBtn.title = editTitle;
+    // Cas 1 : Édition imbriquée
+    if (nestedEditUrl && nestedEditParams) {
+      editBtn.dataset.nestedEditUrl = nestedEditUrl;
+      editBtn.dataset.nestedEditParams = nestedEditParams;
+      editBtn.style.display = "inline-flex";
+
+      delete editBtn.dataset.editBase;
+
+    // Cas 2 : Édition simple  
+    } else if (editBaseUrl) {
+      editBtn.dataset.editBase = editBaseUrl;
+      editBtn.style.display = "inline-flex";
+
+      delete editBtn.dataset.nestedEditUrl;
+      delete editBtn.dataset.nestedEditParams;
+
+    // Cas 3 : Aucune édition possible
+    } else {
+      editBtn.style.display = "none";
     }
   }
 

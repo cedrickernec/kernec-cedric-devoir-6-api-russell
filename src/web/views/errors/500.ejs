@@ -9,16 +9,14 @@
     </p>
 
     <div class="error-actions">
-      <% if (showBack) { %>
       <button type="button" onclick="history.back()" class="btn btn--primary">
         <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
         Page précédente
-      </a>
-      <% } %>
+      </button>
 
-      <% if (showLogout) { %>
-      <a href="/auth/logout" class="btn btn-danger"> Se déconnecter </a>
-      <% } %>
+      <a href="/auth/logout" class="btn btn-danger">
+        Se déconnecter
+      </a>
     </div>
   </div>
 </section>

@@ -13,13 +13,16 @@ import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
 initEntityPanel({
   panelTitle: "Détail du catway",
   panelUrl: "/catways",
-  editBaseUrl: "/catways",
+
   editTitle: "Éditer le catway",
+  editBaseUrl: "/catways",
+
   deleteConfig: {
-    baseUrl: "/catways/ajax",
+    deleteUrlTemplate: "/catways/:catwayNumber",
     confirmMessage: CATWAY_MESSAGES.DELETE_CONFIRM,
     type: "catway"
   },
+
   messages: {
     NOT_FOUND: CATWAY_MESSAGES.NOT_FOUND,
     SERVER_ERROR_SHORT: COMMON_MESSAGES.SERVER_ERROR_SHORT,

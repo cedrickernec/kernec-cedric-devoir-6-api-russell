@@ -26,11 +26,36 @@ export function mapUserDetail(user) {
     : null;
 
   return {
-    id: user._id.toString(),
+    id: user.id,
 
     username: user.username ?? "-",
     email: user.email ?? "-",
 
     createdAtFormatted: formatDateFR(createdAt)
+  };
+}
+
+/* ==================================================
+  MAPPER USER LIST (TABLE)
+================================================== */
+
+export function mapUserToList(user) {
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    createdAt: user.createdAt
+  }
+}
+
+/* ==================================================
+  MAPPER USER FORM
+================================================== */
+
+export function mapUserToForm(user) {
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email
   };
 }

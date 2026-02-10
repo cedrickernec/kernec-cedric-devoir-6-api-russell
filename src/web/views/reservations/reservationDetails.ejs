@@ -29,7 +29,7 @@
       <dt>Catway</dt>
       <dd>
         <a
-          href="/catways/number/<%= reservation.catway.number %>?from=reservation&id=<%= reservation.id %>"
+          href="/catways/<%= reservation.catway.number %>?from=reservation&id=<%= reservation.id %>"
           class="link"
           aria-label="Voir le catway <%= reservation.catway.number %>"
           title="Afficher le catway"
@@ -73,7 +73,7 @@
     </a>
 
     <a
-      href="/reservations/<%= reservation.id %>/edit"
+      href="/catways/<%= reservation.catway.number %>/reservations/<%= reservation.id %>/edit"
       class="btn btn--primary"
       aria-label="Éditer la réservation"
       title="Éditer la réservation"
@@ -83,3 +83,13 @@
     </a>
   </div>
 </section>
+
+<!-- ====== SCRIPTS ====== -->
+
+<% if (flash) { %>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    showToast("<%= flash.type %>", "<%= flash.message %>");
+  });
+</script>
+<% } %>

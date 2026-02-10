@@ -8,6 +8,7 @@
 */
 
 import { getCurrentEntityId } from "../ui/panel/sidePanel.js";
+import { resolveNestedUrl } from "../ui/panel/entityPanel.js";
 
 const panel = document.getElementById("side-panel");
 
@@ -19,10 +20,19 @@ panel?.addEventListener("click", (e) => {
   if (!entityId) return;
 
   const baseUrl = editBtn.dataset.editBase;
-  if (!baseUrl) {
-    console.warn("Aucune base URL définie pour l'édition");
-    return;
+  const nestedEditUrl = editBtn.dataset.nestedEditUrl;
+  const nestedEditParams = editBtn.dataset.nestedEditParams;
+
+  let finalUrl;
+
+  if (nestedEditUrl && nestedEditParams) {
+    finalUrl = resolveNestedUrl(nestedEditUrl, {
+      id: entityId,
+      ...JSON.parse(nestedEditParams)
+    });
+  } else {
+    finalUrl = `${baseUrl}/${entityId}/edit`
   }
 
-  window.location.href = `${baseUrl}/${entityId}/edit`;
+  window.location.href = finalUrl;
 });

@@ -9,7 +9,6 @@
 
 import Catway from "../models/Catway.js";
 import Reservation from "../models/Reservation.js";
-import { ApiError } from "../utils/errors/apiError.js";
 
 // ===============================================
 // GET ALL CATWAYS
@@ -26,7 +25,7 @@ export async function getAllCatways() {
 
 export async function findCatwayByNumber(catwayNumber) {
 
-    return Catway.findOne({ catwayNumber });
+    return Catway.findOne({ catwayNumber }).select("-__v");
 }
 
 // ===============================================
@@ -66,4 +65,13 @@ export async function deleteCatwayByNumber(catwayNumber) {
 
 export async function catwayHasReservations(catwayNumber) {
     return Reservation.findOne({ catwayNumber });
+}
+
+// ===============================================
+// DELETE ALL RESERVATION BY CATWAY
+// ===============================================
+
+export async function deleteAllReservationsByCatway(catwayNumber) {
+
+    return Reservation.deleteMany({ catwayNumber });
 }

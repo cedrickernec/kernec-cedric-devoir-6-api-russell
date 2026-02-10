@@ -18,11 +18,7 @@ import {
     updateCatwayService
 } from "../services/catwayService.js";
 
-import {
-    validateCatwayCreate,
-    validateCatwayUpdate
-} from "../validators/catwayValidators.js";
-
+import { validateCatwayCreate } from "../validators/catwayValidators.js";
 import { validateCatwayNumber } from "../validators/params/idValidator.js";
 
 import {
@@ -49,7 +45,7 @@ export const getAllCatways = async (req, res, next) => {
             message: catways.length === 0
               ? "Aucun catway trouvé."
               : undefined,
-            catways: formatCatwaysList(catways)
+            data: formatCatwaysList(catways)
         });
 
     } catch (error) {
@@ -72,7 +68,7 @@ export const getCatwayByNumber = async (req, res, next) => {
         // 3) Réponse
         res.status(200).json({
             success: true,
-            catway: formatCatway(catway)
+            data: formatCatway(catway)
         });
 
     } catch (error) {
@@ -95,20 +91,26 @@ export const createCatway = async (req, res, next) => {
 
         const cleanData = pickAllowedFields(req.body, allowedFields);
 
+        if (cleanData.catwayState) {
+            cleanData.catwayState = cleanData.catwayState.trim();
+        }
+        
         // 2) Validation
         const errors = validateCatwayCreate(cleanData);
         if (Object.keys(errors).length > 0) {
-            throw new ApiError(400, "Données invalides.", errors);
+            throw ApiError.validation(
+                errors
+            );
         }
 
         // 3) Service
         const created = await createCatwayService(cleanData);
 
-        // 3) Réponse
+        // 4) Réponse
         res.status(201).json({
             success: true,
             message: "Catway créé avec succès.",
-            catway: formatCatway(created)
+            data: formatCatway(created)
         });
 
     } catch (error) {
@@ -133,28 +135,28 @@ export const updateCatway = async (req, res, next) => {
 
         const cleanData = pickAllowedFields(req.body, allowedFields);
 
+        if (cleanData.catwayState) {
+            cleanData.catwayState = cleanData.catwayState.trim();
+        }
+
         if (Object.keys(cleanData).length === 0) {
-            throw new ApiError(400, "Aucune donnée valide à mettre à jour.")
+            throw ApiError.badRequest(
+                "Aucune donnée valide à mettre à jour."
+            );
         }
 
-        // 3) Validation
-        const errors = validateCatwayUpdate(cleanData);
-        if (Object.keys(errors).length > 0) {
-            throw new ApiError(400, "Données invalides.", errors);
-        }
-
-        // 4) Service
+        // 3) Service
         const updated = await updateCatwayService(
             catwayNumber,
             req.body,
             cleanData
         );
 
-        // 5) Réponse
+        // 4) Réponse
         res .status(200).json({
             success: true,
             message: "Catway mis à jour.",
-            catway: formatCatway(updated)
+            data: formatCatway(updated)
         });
 
     } catch (error) {
@@ -171,14 +173,32 @@ export const deleteCatway = async (req, res, next) => {
         // 1) Validation ID
         const catwayNumber = validateCatwayNumber(req.params.id);
 
-        // 2) Service
-        const deleted = await deleteCatwayService(catwayNumber);
+        // 2) Récupération du password éventuel et de l'utilisateur courant
+        const { password } = req.body || {};
+        const userId = req.user.id;
 
-        // 3) Réponse
+        // 3) Service
+        const deleted = await deleteCatwayService(
+            catwayNumber,
+            {
+                userId,
+                password
+            }
+        );
+
+        // 4) Réponse
+        const responseData = {
+            catway: formatCatway(deleted.catway)
+        };
+
+        if (deleted.reservationsDeleted) {
+            responseData.reservationsDeleted = deleted.reservationsDeleted;
+        }
+
         res.status(200).json({
             success: true,
             message: "Catway supprimé avec succès.",
-            catway: formatCatway(deleted)
+            data: responseData
         });
 
     } catch (error) {

@@ -15,7 +15,10 @@ import User from "../models/User.js";
 
 export async function getAllUsers() {
 
-    return User.find().sort({ username: 1 }).select("-password");
+    return User.find()
+    .collation({ locale: "fr", strength: 2 })
+    .sort({ username: 1 })
+    .select("-password");
 }
 
 // ===============================================

@@ -37,6 +37,17 @@ export async function findReservationById(catwayNumber, idReservation) {
 }
 
 // ===============================================
+// GET RESERVATION OVERLAPPING PERIOD
+// ===============================================
+
+export async function getReservationsOverlappingPeriod({ start, end }) {
+    return Reservation.find({
+        startDate: { $lte: end },
+        endDate: { $gte: start }
+    });
+}
+
+// ===============================================
 // CREATE RESERVATION
 // ===============================================
 

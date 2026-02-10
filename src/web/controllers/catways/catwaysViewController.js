@@ -6,9 +6,25 @@
  * - Panel latéral
  */
 
-import Catway from "../../../api/models/Catway.js";
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+
+import {
+  fetchCatways,
+  fetchCatwayByNumber
+} from "../../services/api/catwayApi.js";
+
+import {
+  mapCatwayToDetail,
+  mapCatwayToForm,
+  mapCatwayToList
+} from "../../utils/catways/catwayMapper.js";
+
+import {
+  renderCreateCatwayPage,
+  renderEditCatwayPage
+} from "../../views/helpers/catwaysViewHelper.js";
+
 import { findNextCatwayNumber } from "../../utils/catways/findNextCatwayNumber.js";
-import { mapCatwayToDetail, mapCatwayToList } from "../../utils/catways/catwayMapper.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 
@@ -18,49 +34,25 @@ import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.j
 
 export const getCatwaysPage = async (req, res, next) => {
     try {
-        const catways = await Catway.find().sort({ catwayNumber: 1 });
-        const catwaysView = catways.map(mapCatwayToList);
+      const apiData = await fetchCatways(req, res);
 
-        res.render("catways/catwaysList", {
-            title: "Liste des catways",
-            activePage: "catways",
-            catways: catwaysView
-        });
+      if (handleAuthExpired(apiData, req, res)) return;
+
+      if (!apiData?.success) {
+        return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
+      }
+
+      const catwaysView = apiData.data.map(mapCatwayToList);
+
+      res.render("catways/catwaysList", {
+          title: "Liste des catways",
+          activePage: "catways",
+          catways: catwaysView
+      });
 
     } catch (error) {
         next(error);
     }
-};
-
-/* ==================================================
-  CATWAY DETAILS - FULL PAGE (BY ID)
-================================================== */
-
-export const getCatwayById = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { from, id: reservationId } = req.query;
-    const catway = await Catway.findById(id);
-
-    if (!catway) {
-      const error = new Error(CATWAY_MESSAGES.NOT_FOUND)
-      error.status = 404;
-      return next(error);
-    }
-
-    const catwayViewModel = mapCatwayToDetail(catway);
-
-    res.render("catways/catwayDetails", {
-      title: "Détail catway",
-      activePage: "catways",
-      catway: catwayViewModel,
-      from,
-      reservationId
-    });
-
-  } catch (error) {
-    next(error);
-  }
 };
 
 /* ==================================================
@@ -70,22 +62,37 @@ export const getCatwayById = async (req, res, next) => {
 export const getCatwayByNumber = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
-    const { from, id: reservationId } = req.query;
-    const catway = await Catway.findOne({ catwayNumber });
 
-    if (!catway) {
-      const error = new Error("Catway introuvable");
+    if (Number.isNaN(catwayNumber)) {
+      const error = new Error(CATWAY_MESSAGES.INVALID_NUMBER);
+      error.status = 400;
+      return next(error);
+    }
+
+    const { from, id: reservationId } = req.query;
+
+    const apiData = await fetchCatwayByNumber(catwayNumber, req, res);
+
+    if (handleAuthExpired(apiData, req, res)) return;
+
+    if (!apiData?.success) {
+      return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
+    }
+
+    if (!apiData.data) {
+      const error = new Error(CATWAY_MESSAGES.NOT_FOUND);
       error.status = 404;
       return next(error);
     }
 
-    const catwayViewModel = mapCatwayToDetail(catway);
+    const catwayApi = apiData.data;
+    const catwayViewModel = mapCatwayToDetail(catwayApi);
 
     res.render("catways/catwayDetails", {
       title: "Détail catway",
       activePage: "catways",
       catway: catwayViewModel,
-      catwayId: catway._id,
+      catwayNumber,
       from,
       reservationId
     });
@@ -99,19 +106,37 @@ export const getCatwayByNumber = async (req, res, next) => {
   CATWAY PANEL
 ================================================== */
 
-export const getCatwayPanel = async (req, res) => {
+export const getCatwayPanel = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const catway = await Catway.findById(id);
+    const catwayNumber = Number(req.params.catwayNumber);
 
-    if (!catway) {
+    if (Number.isNaN(catwayNumber)) {
+      const error = new Error(CATWAY_MESSAGES.INVALID_NUMBER);
+      error.status = 400;
+      return next(error);
+    }
+
+    const apiData = await fetchCatwayByNumber(catwayNumber, req, res);
+
+    if (handleAuthExpired(apiData, req, res)) return;
+
+    if (!apiData?.success) {
+      return res.status(500).render("partials/panels/panelError", {
+        layout: false,
+        message: apiData?.message ||
+        COMMON_MESSAGES.SERVER_ERROR_LONG
+      });
+    }
+
+    if (!apiData.data) {
       return res.status(404).render("partials/panels/panelError", {
         layout: false,
         message: CATWAY_MESSAGES.NOT_FOUND
       });
     }
-
-    const catwayViewModel = mapCatwayToDetail(catway);
+    
+    const catwayApi = apiData.data;
+    const catwayViewModel = mapCatwayToDetail(catwayApi);
 
     res.render("partials/panels/catwayPanel", {
       layout: false,
@@ -119,12 +144,7 @@ export const getCatwayPanel = async (req, res) => {
     });
     
   } catch (error) {
-    console.error("Erreur chargement panel catway :", error);
-
-    res.status(500).render("partials/panels/panelError", {
-      layout: false,
-      message: COMMON_MESSAGES.LOAD_ERROR
-    })
+    next(error);
   }
 };
 
@@ -136,37 +156,9 @@ export const getCreateCatwayPage = async (req, res, next) => {
   try {
     const suggestedNumber = await findNextCatwayNumber();
 
-    res.render("catways/catwayCreate", {
-        title: "Créer un catway",
-        activePage: "catways",
-        suggestedNumber,
-        errors: {},
-        formData: {}
-    });
-
-  } catch (error) {
-    next(error);
-  }
-};
-
-/* ==================================================
-  EDIT CATWAY PAGE (BY ID)
-================================================== */
-
-export const getEditCatwayById = async (req, res, next) => {
-  try {
-    const catway = await Catway.findById(req.params.id);
-
-    if (!catway) {
-      return next();
-    }
-
-    res.render("catways/catwayEdit", {
-      title: "Éditer un catway",
-      activePage: "catways",
-      catway,
-      errors: {},
-    });
+    renderCreateCatwayPage(res, {
+      startNumber: suggestedNumber
+    })
 
   } catch (error) {
     next(error);
@@ -182,20 +174,30 @@ export const getEditCatwayByNumber = async (req, res, next) => {
     const catwayNumber = Number(req.params.catwayNumber);
 
     if (Number.isNaN(catwayNumber)) {
-      return next();
+      const error = new Error(CATWAY_MESSAGES.INVALID_NUMBER);
+      error.status = 400;
+      return next(error);
     }
 
-    const catway = await Catway.findOne({ catwayNumber });
+    const apiData = await fetchCatwayByNumber(catwayNumber, req, res);
 
-    if (!catway) {
-      return next();
+    if (handleAuthExpired(apiData, req, res)) return;
+
+    if (!apiData?.success) {
+      return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
     }
 
-    res.render("catways/catwayEdit", {
-      title: "Éditer un catway",
-      activePage: "catways",
-      catway,
-      errors: {},
+    if (!apiData.data) {
+      const error = new Error(CATWAY_MESSAGES.NOT_FOUND);
+      error.status = 404;
+      return next(error);
+    }
+
+    const catwayApi = apiData.data;
+    const catwayViewModel = mapCatwayToForm(catwayApi);
+
+    renderEditCatwayPage(res, {
+      catway: catwayViewModel
     });
 
   } catch (error) {

@@ -7,14 +7,18 @@ export const authMiddleware = (req, res, next) => {
         const authHeader = req.headers.authorization;
 
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            throw new ApiError(401, "Accès refusé: aucun token fourni.");
+            throw ApiError.unauthorized(
+                "Accès refusé: aucun token fourni."
+            );
         }
 
         // 2) Extraction du token
         const token = authHeader.split(" ")[1];
 
         if (!token) {
-            throw new ApiError(401, "Accès refusé: aucun token fourni.");
+            throw ApiError.unauthorized(
+                "Accès refusé: aucun token fourni."
+            );
         }
 
         // 3) Vérification et décodage du token
@@ -31,14 +35,18 @@ export const authMiddleware = (req, res, next) => {
         //Token expiré
         if (error.name ===  "TokenExpiredError") {
             return next(
-                new ApiError(401, "Token expiré. Veuillez vous reconnecter.")
+                ApiError.unauthorized(
+                    "Token expiré. Veuillez vous reconnecter."
+                )
             );
         }
 
         // Token invalide
         if (error.name === "JsonWebTokenError") {
             return next(
-                new ApiError(401, "Accès refusé: token invalide.")
+                ApiError.unauthorized(
+                    "Accès refusé: token invalide."
+                )
             );
         }
 

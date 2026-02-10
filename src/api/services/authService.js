@@ -26,7 +26,9 @@ export async function loginService(email, password) {
     const user = await findUserByEmailWithPassword(email);
 
     if (!user) {
-        throw new ApiError(401, "Email ou mot de passe incorrect.");
+        throw ApiError.unauthorized(
+            "Email ou mot de passe incorrect."
+        );
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -35,17 +37,22 @@ export async function loginService(email, password) {
     );
 
     if (!isPasswordValid) {
-        throw new ApiError(401, "Email ou mot de passe incorrect.");
+        throw ApiError.unauthorized(
+            "Email ou mot de passe incorrect."
+        );
     }
 
-    const token = jwt.sign(
-        {
-            id: user._id,
-            email: user.email
-        },
+    const accessToken = jwt.sign(
+        { id: user._id, email: user.email },
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: process.env.ACCESS_TOKEN_DURATION || "30m" }
     );
 
-    return { token, user };
+    const refreshToken = jwt.sign(
+        { id: user._id, email: user.email },
+        process.env.JWT_REFRESH_SECRET,
+        { expiresIn: process.env.REFRESH_TOKEN_DURATION || "7d" }
+    )
+
+    return { accessToken, refreshToken, user };
 }

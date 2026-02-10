@@ -8,7 +8,6 @@
 
 import { escapeManager } from "../accessibility/escapeManager.js";
 
-console.log("docMenu loaded");
 document.addEventListener("DOMContentLoaded", () => {
     const titles = document.querySelectorAll(".menu-title");
 

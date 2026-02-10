@@ -15,15 +15,15 @@ export function normalizeDateRange(date, mode = "start") {
   const d = new Date(date);
 
   if (Number.isNaN(d.getTime())) {
-    throw new Error("Date non valide transmise à normalizeDateRange");
+    throw new Error("Date invalide");
   }
 
   if (mode === "start") {
-    d.setHours(0, 0, 0, 0);
+    d.setHours(6, 0, 0, 0);
   }
 
   if (mode === "end") {
-    d.setHours(23, 59, 59, 999);
+    d.setHours(5, 59, 59, 999);
   }
 
   return d;

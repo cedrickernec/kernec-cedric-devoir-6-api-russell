@@ -20,7 +20,7 @@ export function initCatwaysTable() {
         checkboxName: "selectedCatways",
         deleteBtnId: "delete-selected",
         selectAllId: "select-all",
-        deleteUrl: "/catways/ajax/",
+        deleteUrl: "/ajax/catways",
         deleteType: "catway",
 
         messages: {

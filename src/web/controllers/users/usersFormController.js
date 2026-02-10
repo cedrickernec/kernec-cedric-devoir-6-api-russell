@@ -7,112 +7,87 @@
  * - Redirections + flash messages
  */
 
-import User from "../../../api/models/User.js";
-import bcrypt from "bcrypt";
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+
 import {
-  validateUserCreate,
-  validateUsername,
-  validateEmail,
-  validatePassword
-} from "../../../api/validators/userValidators.js";
-import { PASSWORD_RULES } from "../../utils/users/userValidator.js";
+  createUser,
+  deleteUser,
+  fetchUserById,
+  updatePassword,
+  updateUser
+} from "../../services/api/userApi.js";
+
+import {
+  renderCreateUserPage,
+  renderEditUserPage
+} from "../../views/helpers/usersViewHelper.js";
+
+import { formatApiErrors } from "../../utils/formatApiErrors.js";
+import { handleApiError } from "../../utils/apiErrorHandler.js";
+
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
-
-// ==================================================
-// VIEW HELPER - CREATE PAGE RENDER
-// ==================================================
-
-const renderCreateUserPage = (res, {
-  errors = {},
-  formData = {}
-}) => {
-  res.render("users/userCreate", {
-    title: "Création d'un utilisateur",
-    activePage : "users",
-    errors,
-    formData,
-    passwordRules: PASSWORD_RULES
-  });
-};
-
-// ==================================================
-// VIEW HELPER - EDIT PAGE RENDER
-// ==================================================
-
-const renderEditUserPage = (res, {
-  user,
-  errors = {}
-}) => {
-  res.render("users/userEdit", {
-      title: "Modification de l'utilisateur",
-      activePage: "users",
-      user,
-      errors,
-      passwordRules: PASSWORD_RULES
-  });
-};
 
 // ==================================================
 // CREATE USER
 // ==================================================
 
-export const postCreateUser = async (req, res) => {
-  const { username, email, password } = req.body;
-
+export const postCreateUser = async (req, res, next) => {
   try {
-    // Validation standard
-    const errors = validateUserCreate({ username, email, password });
+    const { username, email, password } = req.body;
+    
+    const payload = {
+      username,
+      email,
+      password
+    }
 
-    // Vérification email unique
-    if (email) {
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        errors.email = USER_MESSAGES.EMAIL_CONFLICT;
+    const apiData = await createUser(payload, req, res);
+
+    const formData = {
+      username,
+      email
+    }
+
+    if (handleAuthExpired(apiData, req, res)) return;
+
+    if (apiData.success === false) {
+
+      const apiErrors = apiData.errors || {};
+
+      // Si erreurs de champs
+      if (Object.keys(apiErrors).length > 0) {
+        return renderCreateUserPage(res, {
+          errors: formatApiErrors(apiData),
+          formData
+        });
       }
-    }
 
-    // Normalisation du format d'erreur password
-    if (errors.password && typeof errors.password === "object") {
-      errors.password = {
-        message: USER_MESSAGES.INVALID_PASSWORD,
-        failed: Object.values(errors.password)
-      };
-    }
+      // Sinon erreur globale
+      if (apiData.message) {
+        return renderCreateUserPage(res, {
+          globalError: apiData.message,
+          formData
+        });
+      }
 
-    // Erreurs → retour formulaire
-    if (Object.keys(errors).length > 0) {
+      // Fallback sécurité
       return renderCreateUserPage(res, {
-        errors,
-        formData: { username, email }
+        globalError: COMMON_MESSAGES.SERVER_ERROR_LONG,
+        formData
       });
     }
 
-    // Hash et création
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const createdUser = await User.create({
-      username,
-      email,
-      password: hashedPassword
-    })
-
-    // Flash + redirect
     req.session.flash = {
       type : "success",
       message : USER_MESSAGES.CREATE_SUCCESS,
-      highlightId: createdUser._id.toString()
+      highlightId: apiData.data.id
     };
 
     res.redirect("/users");
 
   } catch (error) {
-    console.error("Erreur création utilisateur :", error);
-
-    return renderCreateUserPage(res, {
-      errors: { global: COMMON_MESSAGES.SERVER_ERROR_LONG},
-      formData: { username, email }
-    });
+    next(error);
   }
 };
 
@@ -122,80 +97,167 @@ export const postCreateUser = async (req, res) => {
 
 export const postEditUser = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
-    const errors = {};
+    const { username, email } = req.body;
+    const userId = req.params.id;
+
+    const payload = {
+      username,
+      email
+    }
+
+    const apiData = await updateUser(userId, payload, req, res);
+    const errors = apiData.errors || {};
     
-    const user = await User.findById(req.params.id);
-    if (!user) return next();
+    const user = {
+      id: userId,
+      username,
+      email
+    };
 
-    // Validation nom d'utilisateur
-    const usernameError = validateUsername(username);
-    if (usernameError) {
-      errors.username = usernameError;
-    }
+    if (handleAuthExpired(apiData, req, res)) return;
 
-    // Validation email
-    const emailError = validateEmail(email);
-    if (emailError) {
-      errors.email = emailError;
-    } else {
-      const existingUser = await User.findOne({
-        email,
-        _id: { $ne: req.params.id }
-      });
-      if (existingUser) {
-        errors.email = USER_MESSAGES.EMAIL_CONFLICT
-      };
-    }
+    if (apiData.success === false) {
 
-    // Validation mot de passe (optionnel)
-    if (password && password.trim()) {
-      const passwordValidation = validatePassword(password);
-
-      // Règles non respectées
-      if (!passwordValidation.valid) {
-        errors.password = {
-          message: USER_MESSAGES.INVALID_PASSWORD,
-          failed: passwordValidation.errors
-        };
-      } else {
-        // Bloque un password identique à l'ancien
-        const isSamePassword = await bcrypt.compare(password, user.password);
-        if (isSamePassword) {
-          errors.password = {
-            message: USER_MESSAGES.PASSWORD_CONFLICT
-          }
-        }
+      // Erreurs de champs
+      if (Object.keys(errors).length > 0) {
+        return renderEditUserPage(res, {
+          user,
+          errors: formatApiErrors(apiData)
+        });
       }
-    }
 
-    // Erreur → Retour formulaire
-    if (Object.keys(errors).length > 0) {
+      // Erreur métier
+      if (apiData.context || apiData.message) {
+        return renderEditUserPage(res, {
+          user,
+          globalError: apiData.message
+        });
+      }
 
+      // Fallback sécurité
       return renderEditUserPage(res, {
         user,
-        errors
+        globalError: COMMON_MESSAGES.SERVER_ERROR_LONG
       });
     }
 
-    // Update
-    const update = { username, email };
-
-    if (password && password.trim()) {
-      update.password = await bcrypt.hash(password, 10);
-    }
-
-    await User.findByIdAndUpdate(req.params.id, update);
-
-    // Flash + redirect
     req.session.flash = {
       type: "success",
       message: USER_MESSAGES.UPDATE_SUCCESS
     };
 
-    res.redirect("/users");
+    res.redirect(`/users/${userId}`);
 
   } catch (error) {
     next(error);
   }
+};
+
+/* ==================================================
+  EDIT USER PASSWORD
+================================================== */
+
+export const postEditUserPassword = async (req, res, next) => {
+  try {
+    const { password } = req.body;
+    const userId = req.params.id;
+
+    const apiUser = await fetchUserById(userId, req, res);
+
+    if (handleAuthExpired(apiUser, req, res)) return;
+
+    if (!apiUser.success || !apiUser.data) {
+      return renderEditUserPage(res, {
+        user: { id: userId },
+        globalError: COMMON_MESSAGES.SERVER_ERROR_LONG
+      });
+    }
+
+    const user = apiUser.data;
+
+    const payload = {
+      newPassword: password
+    };
+
+    const apiData = await updatePassword(userId, payload, req, res);
+    const errors = apiData.errors || {};
+
+    if (handleAuthExpired(apiData, req, res)) return;
+
+    if (apiData.success === false) {
+
+      // Erreur de règles password
+      if (Object.keys(errors).length > 0) {
+        return renderEditUserPage(res, {
+          user,
+          errors: {
+            password: {
+              message: apiData.message,
+              errors
+            }
+          }
+        });
+      }
+
+      // Erreur métier
+      if (apiData.message) {
+        return renderEditUserPage(res, {
+          user,
+          errors: formatApiErrors(apiData)
+        });
+      }
+
+      // Fallback sécurité
+      return renderEditUserPage(res, {
+        user,
+        globalError: COMMON_MESSAGES.SERVER_ERROR_LONG
+      });
+    }
+
+    console.log("erreur backend", errors);
+
+    req.session.flash = {
+      type: "success",
+      message: USER_MESSAGES.PASSWORD_UPDATE_SUCCESS
+    };
+
+    res.redirect(`/users/${userId}`);
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ==================================================
+// DELETE USER
+// ==================================================
+
+export const deleteUserAction = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const apiResponse = await deleteUser(id, req, res);
+
+        if (handleAuthExpired(apiResponse, req, res)) return;
+
+        if (!handleApiError(apiResponse, req, res)) return;
+
+        // MODE AJAX
+        if (req.headers.accept?.includes("application/json")) {
+            return res.status(200).json({
+                success: true
+            });
+        }
+
+        // MODE CLASSIQUE
+        req.session.flash = {
+            type: "success",
+            message: USER_MESSAGES.DELETE_SUCCESS,
+        };
+
+        return res.redirect("/users");
+
+    } catch (error) {
+        next(error);
+    }
 };

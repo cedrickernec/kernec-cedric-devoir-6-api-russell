@@ -9,11 +9,11 @@ import { computeReservationStatus } from "./reservationStatus.js";
 
 export function mapReservationToDashboard(reservation) {
   return {
-    id: reservation._id.toString(),
+    id: reservation.id,
 
-    clientName: reservation.clientName ?? "-",
-    boatName: reservation.boatName ?? "-",
-    catwayNumber: reservation.catwayNumber ?? "-",
+    clientName: reservation.clientName,
+    boatName: reservation.boatName,
+    catwayNumber: reservation.catwayNumber,
 
     startDateFormatted: formatDateFR(reservation.startDate),
     endDateFormatted: formatDateFR(reservation.endDate),

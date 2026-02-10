@@ -16,9 +16,31 @@ import {
   getCurrentEntityId
 } from "./sidePanel.js";
 
+// ==================================================
+// URL RESOLVER
+// ==================================================
+
+export function resolveNestedUrl(template, params = {}) {
+  let url = template;
+
+  Object.entries(params).forEach(([key, value]) => {
+    url = url.replace(`:${key}`, value);
+  });
+
+  return url
+}
+
+// ==================================================
+// INIT
+// ==================================================
+
 export function initEntityPanel({
   panelTitle,
   panelUrl,
+  nestedPanelUrl,
+  nestedParams,
+  nestedEditUrl,
+  nestedEditParams,
   deleteConfig,
   editBaseUrl,
   editTitle,
@@ -51,6 +73,7 @@ export function initEntityPanel({
       if (e.target.closest("a, button, input, .actions")) return;
 
       const entityId = row.dataset.entityId;
+      const catwayNumber = row.dataset.catwayNumber;
 
       // Toggle panel si déjà ouvert sur la même entité
       if (isSidePanelOpen() && getCurrentEntityId() === entityId) {
@@ -64,7 +87,18 @@ export function initEntityPanel({
       // ==================================================
 
       try {
-        const res = await fetch(`${panelUrl}/${entityId}/panel`);
+        let url;
+        
+        if (nestedPanelUrl && nestedParams) {
+          url = resolveNestedUrl(nestedPanelUrl, {
+            id: entityId,
+            ...nestedParams(row)
+          });
+        } else {
+          url = `${panelUrl}/${entityId}/panel`;
+        }
+        
+        const res = await fetch(url);
 
         // ---------- Gestion erreurs ----------
         if (!res.ok) {
@@ -95,16 +129,34 @@ export function initEntityPanel({
         clearActiveRows();
         row.classList.add("is-active");
 
+        let deleteUrl = null;
+
+        if (deleteConfig?.deleteUrlTemplate) {
+          deleteUrl = resolveNestedUrl(deleteConfig.deleteUrlTemplate, {
+            id: entityId,
+            catwayNumber
+          });
+        }
+
         openSidePanel({
           title: panelTitle,
           content: html,
           entityId,
-          editBaseUrl,
+
           editTitle,
+          editBaseUrl,
+          nestedEditUrl: nestedEditUrl || null,
+          nestedEditParams: nestedEditParams
+            ? JSON.stringify({
+              id: entityId,
+              ...nestedEditParams(row)
+            })
+            : null,
+            
           actions: deleteConfig
             ? {
                 delete: {
-                  url: `${deleteConfig.baseUrl}/${entityId}`,
+                  url: deleteUrl,
                   rowSelector: `.js-panel-row[data-entity-id="${entityId}"]`,
                   confirmMessage: deleteConfig.confirmMessage,
                   type: deleteConfig.type

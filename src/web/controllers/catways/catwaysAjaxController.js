@@ -7,8 +7,9 @@
  */
 
 import Catway from "../../../api/models/Catway.js";
-import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
+import { deleteCatway } from "../../services/api/catwayApi.js";
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
 
 // ==================================================
 // CHECK - CATWAY NUMBER AVAILABILITY
@@ -51,10 +52,30 @@ export const deleteCatways = async (req, res) => {
 
     // Sécurité payload
     if (!Array.isArray(ids) || ids.length === 0) {
-      return res.status(400).json({ success: false, message: COMMON_MESSAGES.INVALID_REQUEST });
+      return res.status(400).json({
+        success: false,
+        message: COMMON_MESSAGES.INVALID_REQUEST
+      });
     }
 
-    await Catway.deleteMany({ _id: { $in: ids } });
+    for (const catwayNumber of ids) {
+      const apiResponse = await deleteCatway(
+        catwayNumber,
+        req,
+        res,
+        req.body.password
+      );
+
+      if (handleAuthExpired(apiResponse, req, res)) return;
+
+      if (apiResponse.success === false) {
+        return res.status(409).json({
+          success: false,
+          message: apiResponse.message,
+          context: apiResponse.context || null
+        });
+      }
+    }
 
     res.json({
       success: true,
@@ -63,30 +84,6 @@ export const deleteCatways = async (req, res) => {
 
   } catch (error) {
     console.error("Suppression échouée :", error);
-    res.status(500).json({ success: false });
-  }
-};
-
-// ==================================================
-// DELETE - SIDE PANEL
-// ==================================================
-
-export const deleteCatwayById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleteCatway = await Catway.findByIdAndDelete(id);
-
-    if (!deleteCatway) {
-      return res.status(404).json({
-        success: false,
-        message: CATWAY_MESSAGES.NOT_FOUND
-      });
-    }
-
-    res.status(204).end();
-
-  } catch (error) {
-    console.error("Suppression utilisateur :", error);
     res.status(500).json({ success: false });
   }
 };

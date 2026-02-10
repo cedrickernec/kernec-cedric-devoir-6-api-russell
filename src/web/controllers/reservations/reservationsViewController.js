@@ -7,11 +7,24 @@
  * ===================================================================
  */
 
-import Reservation from "../../../api/models/Reservation.js";
-import { mapReservationEdit } from "../../utils/reservations/reservationMapper.js";
+import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+
+import {
+  fetchReservations,
+  fetchReservationById
+} from "../../services/api/reservationApi.js";
+
+import {
+  mapReservationToList,
+  mapReservationToDetail,
+  mapReservationEdit
+} from "../../utils/reservations/reservationMapper.js";
+
+import { renderEditReservationPage } from "../../views/helpers/reservationsViewHelper.js";
+
 import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservationMessage.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
-import { mapReservationToList, mapReservationToDetail } from "../../utils/reservations/reservationMapper.js";
+import { loadOtherReservations } from "../../utils/reservations/loadOtherReservations.js";
 
 // ==================================================
 // RESERVATIONS LIST
@@ -28,16 +41,27 @@ export const getReservationsPage = async (req, res, next) => {
 
       const filters = { catway, search, startDate, endDate };
 
-      let reservations = await Reservation.find();
+      let apiData = await fetchReservations(req, res);
 
+      if (handleAuthExpired(apiData, req, res)) return;
+
+      if (!apiData.success) {
+        return next(new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
+      }
+
+      const reservationsView = apiData.data.map(mapReservationToList);
+
+      // Filtrage
       if (catway) {
-        reservations = reservations.filter(r => Number(r.catwayNumber) === Number(catway));
+        reservationsView = reservationsView.filter(r =>
+          Number(r.catwayNumber) === Number(catway)
+        );
       }
 
       if (search) {
         const q = search.toLowerCase();
 
-        reservations = reservations.filter(r => 
+        reservationsView = reservationsView.filter(r => 
           r.clientName.toLocaleLowerCase().includes(q) ||
           r.boatName.toLocaleLowerCase().includes(q)
         );
@@ -47,18 +71,12 @@ export const getReservationsPage = async (req, res, next) => {
         const start = startDate ? new Date(startDate) : null;
         const end = endDate ? new Date(endDate) : null;
 
-        reservations = reservations.filter(r => {
-          const rStart = new Date(r.startDate);
-          const rEnd = new Date(r.endDate);
-
-          if (start && rEnd < start) return false;
-          if (end && rStart > end) return false;
-
+        reservationsView = reservationsView.filter(r => {
+          if (start && r.endDate < start) return false;
+          if (end && r.startDate > end) return false;
           return true
         });
       }
-
-      const reservationsView = reservations.map(mapReservationToList);
 
       const STATUS_ORDER = {
         upcoming: 1,
@@ -86,7 +104,7 @@ export const getReservationsPage = async (req, res, next) => {
         }
 
         // Trie par catway
-        return a.catway.number - b.catway.number;
+        return a.catwayNumber - b.catwayNumber;
       });
 
       res.render("reservations/reservationsList", {
@@ -107,17 +125,28 @@ export const getReservationsPage = async (req, res, next) => {
 
 export const getReservationById = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id, catwayNumber } = req.params;
 
-    const reservation = await Reservation.findById(id);
+    if (!catwayNumber) {
+      return next(new Error("Numéro de catway manquant."));
+    }
 
-    if (!reservation) {
+    const apiData = await fetchReservationById(catwayNumber, id, req, res);
+
+    if (handleAuthExpired(apiData, req, res)) return;
+
+    if (!apiData?.success) {
+      return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
+    }
+
+    if (!apiData.data) {
       const error = new Error(RESERVATION_MESSAGES.NOT_FOUND);
       error.status = 404;
       return next(error);
     }
 
-    const reservationViewModel = mapReservationToDetail(reservation);
+    const reservationApi = apiData.data;
+    const reservationViewModel = mapReservationToDetail(reservationApi);
 
     res.render("reservations/reservationDetails", {
       title: "Détail réservation",
@@ -134,19 +163,35 @@ export const getReservationById = async (req, res, next) => {
 // RESERVATION PANEL
 // ==================================================
 
-export const getReservationPanel = async (req, res) => {
+export const getReservationPanel = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const reservation = await Reservation.findById(id);
+    const { id, catwayNumber } = req.params;
 
-    if (!reservation) {
+    if (!catwayNumber) {
+      return next(new Error("Numéro de catway manquant."));
+    }
+
+    const apiData = await fetchReservationById(catwayNumber, id, req, res);
+
+    if (handleAuthExpired(apiData, req, res)) return;
+
+    if (!apiData?.success) {
+      return res.status(500).render("partials/panels/panelError", {
+        layout: false,
+        message: apiData?.message ||
+        COMMON_MESSAGES.SERVER_ERROR_LONG
+      });
+    }
+
+    if (!apiData.data) {
       return res.status(404).render("partials/panels/panelError", {
         layout: false,
         message: RESERVATION_MESSAGES.NOT_FOUND
       });
     }
 
-    const reservationViewModel = mapReservationToDetail(reservation);
+    const reservationApi = apiData.data;
+    const reservationViewModel = mapReservationToDetail(reservationApi);
 
     res.render("partials/panels/reservationPanel", {
       layout: false,
@@ -154,12 +199,7 @@ export const getReservationPanel = async (req, res) => {
     });
     
   } catch (error) {
-    console.error("Erreur chargement panel reservation :", error);
-
-    res.status(500).render("partials/panels/panelError", {
-      layout: false,
-      message: COMMON_MESSAGES.LOAD_ERROR
-    })
+    next(error)
   }
 };
 
@@ -195,23 +235,34 @@ export const getCreateReservationPage = async (req, res, next) => {
 
 export const getEditReservationPage = async (req, res, next) => {
   try {
-    const reservation = await Reservation.findById(req.params.id);
-    if (!reservation) return next();
+    const { id, catwayNumber } = req.params;
 
-    const otherReservations = await Reservation.find({
-      catwayNumber: reservation.catwayNumber,
-      _id: { $ne: reservation._id }
-    }).sort({ startDate: 1 });
+    if (!catwayNumber) {
+      return next(new Error("Numéro de catway manquant."));
+    }
 
-    res.render("reservations/reservationEdit", {
-      title: "Éditer une réservation",
-      activePage: "reservations",
+    const apiData = await fetchReservationById(catwayNumber, id, req, res);
+    
+    if (handleAuthExpired(apiData, req, res)) return;
+    
+    if (!apiData?.success) {
+      return next (new Error(apiData?.message || COMMON_MESSAGES.SERVER_ERROR_LONG));
+    }
+    
+    if (!apiData.data) {
+      const error = new Error(RESERVATION_MESSAGES.NOT_FOUND);
+      error.status = 404;
+      return next(error);
+    }
+    
+    const otherReservations = await loadOtherReservations(catwayNumber, id, req, res);
 
-      reservation: mapReservationEdit(reservation),
-      otherReservations: otherReservations.map(mapReservationToList),
+    const reservationApi = apiData.data;
+    const reservation = mapReservationEdit(reservationApi);
 
-      errors: {},
-      formData: {}
+    renderEditReservationPage(res, {
+      reservation,
+      otherReservations
     });
 
   } catch (error) {

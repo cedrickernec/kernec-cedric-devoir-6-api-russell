@@ -3,23 +3,26 @@
 <h1>Création d'une réservation</h1>
 
 <form method="POST" action="/reservations/create" class="form">
-  <input type="hidden" name="step" value="client">
-
+  
   <div class="form-group <%= errors.clientName ? 'has-error' : '' %>">
     <div>
       <label for="clientName">Client</label>
       <p id="client-hint" class="form-hint muted">Prénom & Nom</p>
     </div>
+
+    <!-- Champ affiché (lecture seul) -->
     <input
-      id="clientName"
-      type="text"
-      name="clientName"
-      value="<%= formData.clientName || '' %>"
-      placeholder="John Doe"
-      autocomplete="off"
-      aria-describedby="client-hint"
-      required
+    id="clientName"
+    type="text"
+    name="clientName"
+    value="<%= formData.clientName || '' %>"
+    placeholder="John Doe"
+    autocomplete="off"
+    aria-describedby="client-hint"
+    required
     >
+    <!-- Champ envoyé au serveur -->
+    <input type="hidden" name="step" value="client">
   </div>
 
   <div class="form-group <%= errors.boatName ? 'has-error' : '' %>">
@@ -40,15 +43,13 @@
 
   <div class="form-actions">
     <button
-      type="submit"
-      formmethod="POST"
-      formaction="/reservations/create/cancel"
-      formnovalidate
+      type="button"
+      onclick="window.location='/reservations/create/cancel'"
       class="btn btn-cancel">
       Annuler
     </button>
 
-    <button type="submit" class="btn btn-confirm">
+    <button type="submit" class="btn btn-confirm" autofocus disabled>
       Continuer
     </button>
   </div>
@@ -118,7 +119,13 @@
 
     <div class="form-actions form-actions--split">
       <a href="/reservations/create?step=client" class="btn btn-cancel">Retour</a>
-      <button type="submit" class="btn btn-confirm" aria-label="Lancer la recherche">
+      <button
+        type="submit"
+        class="btn btn-confirm"
+        aria-label="Lancer la recherche"
+        autofocus
+        disabled
+        >
         <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
       </button>
     </div>
@@ -142,7 +149,7 @@
           <p class="no-data italic">Aucune recherche effectuée.</p>
 
         <% } else if (availableCatways.length === 0) { %>
-          <p class="no-data italic">Aucun catway disponible pour ces dates.</p>
+          <p class="no-data italic">Aucun catway disponible pour la période demandée.</p>
 
         <% } else { %>
 
@@ -314,6 +321,7 @@
 <% } %>
 
 <!--====== SCRIPTS ======-->
+<script src="/js/form/preventSubmitIfLocked.js" defer></script>
 <script type="module" src="/js/table/partialsToggle.js"></script>
 <script type="module" src="/js/pages/reservation/reservationSelection.js"></script>
 <script src="/js/ui/form/dateRangeSync.js" defer></script>

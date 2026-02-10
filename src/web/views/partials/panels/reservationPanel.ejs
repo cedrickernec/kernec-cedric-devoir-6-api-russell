@@ -5,6 +5,7 @@
       <span
         class="status <%= entity.status.className %>"
         role="status"
+        aria-label="<%= entity.status.aria %>"
         ><%= entity.status.label %></span
       >
     </dd>
@@ -24,11 +25,11 @@
     <dt>Catway</dt>
     <dd>
       <a
-        href="/catways/number/<%= entity.catway.number %>?from=reservation&id=<%= entity.id %>"
+        href="/catways/<%= entity.catway.number %>?from=reservation&id=<%= entity.id %>"
         class="link"
         aria-label="Ouvrir la fiche du catway <%= entity.catway.number %>"
       >
-        #<%= entity.catway.number %>
+        #<%= entity.catway.number %> (<%= entity.catway.type %>)
         <i
           class="fa-solid fa-arrow-up-right-from-square"
           aria-hidden="true"
@@ -53,7 +54,7 @@
   </div>
 
   <div class="side-panel-row">
-    <dt>Créé le</dt>
+    <dt>Créée le</dt>
     <dd class="muted"><%= entity.createdAtFormatted %></dd>
   </div>
 </dl>

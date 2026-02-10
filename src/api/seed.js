@@ -12,8 +12,8 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const catwaysData = JSON.parse(fs.readFileSync(path.join(__dirname, "../data/catways.json"), "utf-8"));
-const reservationsData = JSON.parse(fs.readFileSync(path.join(__dirname, "../data/reservations.json"), "utf-8"));
+const catwaysData = JSON.parse(fs.readFileSync(path.join(__dirname, "../api/data/catways.json"), "utf-8"));
+const reservationsData = JSON.parse(fs.readFileSync(path.join(__dirname, "../api/data/reservations.json"), "utf-8"));
 
 const seedDatabase = async () => {
     try {

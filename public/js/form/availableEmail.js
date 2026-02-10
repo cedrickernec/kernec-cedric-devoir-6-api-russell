@@ -4,67 +4,63 @@
  * ===================================================================
  * - Vérifie le format email
  * - Vérifie l'unicité de l'email
- * - Support le mode édition via excludeId
- * - Affiche un feedback sans bloquer la soumission
+ * - Supporte le mode édition via excludeId
+ * - Gère l'état visuel du champ
+ * - Bloque automatiquement le submit si une erreur est détectée
+ * ===================================================================
+ * => Fonctionne avec le script générique preventSubmitIfLocked <=
  * ===================================================================
  */
 
-document.addEventListener("DOMContentLoaded", () => {
+import { createAvailabilityChecker } from "./availabilityChecker.js";
 
-  const input = document.getElementById("email");
-  const feedback = document.getElementById("email-feedback");
-  const form = input?.closest("form");
+createAvailabilityChecker({
+  inputId: "email",
+  feedbackId: "email-feedback",
 
-  if (!input || !feedback) return;
+  getUrl: (email, input) => {
+    const form = input.closest("form");
+    const userId = form?.dataset.entityId;
 
-  // Présent en mode édition uniquement
-  const currentUserId = form?.dataset.entityId;
-  let timeout;
+    let url = `/ajax/users/check-email?email=${encodeURIComponent(email)}`;
 
-  input.addEventListener("input", () => {
-    clearTimeout(timeout);
+    if (userId) {
+      url += `&excludeId=${userId}`;
+    }
 
-    const email = input.value.trim();
+    return url;
+  },
 
-    // Reset
+  validateFormat: (value, input) => {
+    return null;
+  },
+
+  conflictMessage: "Cet email est déjà utilisé."
+});
+
+// Gestion spécifique du format au blur
+const emailInput = document.getElementById("email");
+const feedback = document.getElementById("email-feedback");
+
+emailInput?.addEventListener("blur", () => {
+  if (emailInput.value.trim() && !emailInput.checkValidity()) {
+
+    // Erreur bloquante
+    emailInput.dataset.invalid = "true";
+    emailInput.dataset.locked = "true";
+    emailInput.setAttribute("aria-invalid", "true");
+
+    feedback.textContent = "Format d'email invalide (ex : nom@domaine.com).";
+    feedback.classList.remove("hidden");
+    feedback.setAttribute("role", "alert");
+
+  } else {
+    // Si format correct, on libère le champ
+    delete emailInput.dataset.invalid;
+    delete emailInput.dataset.locked;
+    emailInput.removeAttribute("aria-invalid");
+
     feedback.textContent = "";
     feedback.classList.add("hidden");
-    feedback.classList.remove("error");
-
-    // Champ vide ou format invalide → pas de requête
-    if (!email || !input.checkValidity()) return;
-
-    // ========================================================
-    // BACKEND AVAILABILITY CHECK
-    // ========================================================
-
-    // Débounce pour éviter les requêtes à chaque frappe
-    timeout = setTimeout(async () => {
-      try {
-        const params = new URLSearchParams({
-          email: email
-        });
-
-        if (currentUserId) {
-          params.append("excludeId", currentUserId);
-        }
-
-        const res = await fetch(
-          `/users/ajax/check-email?${params.toString()}`,
-          { credentials: "same-origin" }
-        );
-
-        const data = await res.json();
-
-        if (!data.available) {
-          feedback.textContent = "Cet email est déjà utilisé.";
-          feedback.classList.remove("hidden");
-          feedback.classList.add("error");
-        }
-        
-      } catch (err) {
-        // Le backend valide au submit
-      }
-    }, 400);
-  });
+  }
 });

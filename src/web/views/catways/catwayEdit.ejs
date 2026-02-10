@@ -1,10 +1,20 @@
 <h1>Modification du catway</h1>
 
+<% if (globalError) { %>
+  <div class="form-global-error" role="alert">
+    <%= globalError %>
+  </div>
+<% } %>
+
 <form
   method="POST"
-  action="/catways/<%= catway._id %>/edit"
+  action="/catways/<%= catway.number %>/edit"
   class="form"
-  data-catway-id="<%= catway._id %>"
+  data-catway-id="<%= catway.number %>"
+  data-initial='<%- JSON.stringify({
+    catwayState: catway.state,
+    isOutOfService: catway.isOutOfService ? "on" : ""
+  }) %>'
 >
   <!-- ===== NUMBER ===== -->
   <div class="form-group">
@@ -14,7 +24,7 @@
     <input
       type="number"
       id="catwayNumber"
-      value="<%= catway.catwayNumber %>"
+      value="<%= catway.number %>"
       aria-disabled="true"
       disabled
     >
@@ -23,7 +33,7 @@
     <input
       type="hidden"
       name="catwayNumber"
-      value="<%= catway.catwayNumber %>"
+      value="<%= catway.number %>"
     >
   </div>
 
@@ -35,7 +45,7 @@
     <input
       type="text"
       id="catwayType"
-      value="<%= catway.catwayType === 'short' ? 'short' : 'long' %>"
+      value="<%= catway.type === 'short' ? 'short' : 'long' %>"
       aria-disabled="true"
       disabled
     >
@@ -44,7 +54,7 @@
     <input
       type="hidden"
       name="catwayType"
-      value="<%= catway.catwayType === 'short' ? 'short' : 'long' %>"
+      value="<%= catway.type === 'short' ? 'short' : 'long' %>"
     >
   </div>
 
@@ -56,6 +66,7 @@
         id="goodStateCheckbox"
         data-toggle-checkbox="catwayState"
         data-toggle-value="bon état"
+        <%= catway.state.trim() === "bon état" ? "checked" : "" %>
       >
       Catway en bon état
     </label>
@@ -68,10 +79,13 @@
       name="catwayState"
       rows="3"
       required
-    ><%= catway.catwayState %></textarea>
+    ><%= catway.state %></textarea>
   </div>
 
-  <div class="form-group" id="outOfServiceGroup">
+  <div
+    class="form-group <%= catway.state.trim() === 'bon état' ? 'hidden' : '' %>"
+    id="outOfServiceGroup"
+    >
     <label for="OutOfServiceCheckbox">
       <input
         type="checkbox"
@@ -86,11 +100,12 @@
   <!-- ===== ACTIONS ===== -->
   <div class="form-actions">
     <a href="/catways" class="btn btn-cancel"> Annuler </a>
-    <button type="submit" class="btn btn-confirm">Enregistrer</button>
+    <button type="submit" class="btn btn-confirm" autofocus disabled>Enregistrer</button>
   </div>
 </form>
 
 <!-- ===== SCRIPTS ===== -->
-<script src="/js/form/availableCatway.js" defer></script>
 <script src="/js/form/checkboxTextToggle.js" defer></script>
+<script src="/js/form/preventSubmitIfLocked.js" defer></script>
+<script type="module" src="/js/form/availableCatway.js"></script>
 <script src="/js/ui/form/formErrorCleanup.js" defer></script>
