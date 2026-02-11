@@ -1,121 +1,145 @@
 [{
         "catwayNumber": 1,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 2,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 3,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 4,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 5,
         "catwayType": "long",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 6,
         "catwayType": "short",
-        "catwayState": "En cours de réparation. Ne peut être réservée actuellement"
+        "catwayState": "En cours de réparation. Ne peut être réservée actuellement",
+        "isOutOfService": true
     },
     {
         "catwayNumber": 7,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 8,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 9,
         "catwayType": "long",
-        "catwayState": "Plusieurs grandes tâches de peinture bleue sur le ponton"
+        "catwayState": "Plusieurs grandes tâches de peinture bleue sur le ponton",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 10,
         "catwayType": "long",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 11,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 12,
         "catwayType": "short",
-        "catwayState": "grosse tâche d'huile et trou en fin de ponton"
+        "catwayState": "grosse tâche d'huile et trou en fin de ponton",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 13,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 14,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 15,
         "catwayType": "long",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 16,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 17,
         "catwayType": "short",
-        "catwayState": "2 planches bougent lorsqu'on marche dessus"
+        "catwayState": "2 planches bougent lorsqu'on marche dessus",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 18,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 19,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 20,
         "catwayType": "long",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 21,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 22,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 23,
         "catwayType": "short",
-        "catwayState": "La bite d'amarrage est légèrement désolidarisée"
+        "catwayState": "La bite d'amarrage est légèrement désolidarisée",
+        "isOutOfService": false
     },
     {
         "catwayNumber": 24,
         "catwayType": "short",
-        "catwayState": "bon état"
+        "catwayState": "bon état",
+        "isOutOfService": false
     }
 ]
