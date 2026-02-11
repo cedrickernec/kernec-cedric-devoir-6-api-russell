@@ -4,6 +4,10 @@
   <div id="globalErrorBox" data-error-type="business" class="form-global-error" role="alert">
     <%= globalError %>
   </div>
+<% } else if (reservation.isFinished) { %>
+  <div class="form-global-message" role="alert">
+    Cette réservation est terminée et ne peut plus être modifiée.
+  </div>
 <% } %>
 
 <div class="split-view">
@@ -30,14 +34,20 @@
 
     <!-- ===== CLIENT ===== -->
     <div class="form-group">
-      <label for="clientName">Client</label>
+      <label for="clientName">
+        Client <% if (reservation.isFinished) { %>
+        <i class="fa-solid fa-lock" aria-hidden="true"></i>
+        <% } %>
+      </label>
       <input
         type="text"
         id="clientName"
         name="clientName"
+        class="<%= reservation.isStartDateLocked || reservation.isFinished ? 'locked-field' : '' %>"
         value="<%= reservation.clientName %>"
         aria-invalid="<%= errors.clientName ? 'true' : 'false' %>"
         data-invalid="<%= errors.clientName ? 'true' : '' %>"
+        <%= reservation.isFinished ? 'disabled aria-disabled="true"' : '' %>
         required
       />
       <% if (errors?.clientName) { %>
@@ -47,14 +57,20 @@
 
     <!-- ===== BATEAU ===== -->
     <div class="form-group">
-      <label for="boatName">Nom du bateau</label>
+      <label for="boatName">
+        Nom du bateau <% if (reservation.isFinished) { %>
+        <i class="fa-solid fa-lock" aria-hidden="true"></i>
+        <% } %>
+      </label>
       <input
         type="text"
         id="boatName"
         name="boatName"
+        class="<%= reservation.isStartDateLocked || reservation.isFinished ? 'locked-field' : '' %>"
         value="<%= reservation.boatName %>"
         aria-invalid="<%= errors.boatName ? 'true' : 'false' %>"
         data-invalid="<%= errors.boatName ? 'true' : '' %>"
+        <%= reservation.isFinished ? 'disabled aria-disabled="true"' : '' %>
         required
       />
       <% if (errors?.boatName) { %>
@@ -76,24 +92,30 @@
             type="date"
             id="startDate"
             name="startDate"
-            class="<%= reservation.isStartDateLocked ? 'locked-field' : '' %>"
+            class="<%= reservation.isStartDateLocked || reservation.isFinished ? 'locked-field' : '' %>"
             value="<%= reservation.startDateISO %>"
             aria-invalid="<%= errors?.startDate ? 'true' : 'false' %>"
             data-invalid="<%= errors?.startDate ? 'true' : '' %>"
-            <%= reservation.isStartDateLocked ? 'disabled aria-disabled="true"' : '' %>
+            <%= reservation.isStartDateLocked || reservation.isFinished ? 'disabled aria-disabled="true"' : '' %>
           />
         </div>
 
         <!-- DATE DE FIN -->
         <div class="form-group">
-          <label for="endDate">Date de fin</label>
+          <label for="endDate">
+            Date de fin <% if (reservation.isFinished) { %>
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+            <% } %>
+          </label>
           <input
             type="date"
             id="endDate"
             name="endDate"
+            class="<%= reservation.isStartDateLocked || reservation.isFinished ? 'locked-field' : '' %>"
             value="<%= reservation.endDateISO %>"
             aria-invalid="<%= errors?.endDate ? 'true' : 'false' %>"
             data-invalid="<%= errors?.endDate ? 'true' : '' %>"
+            <%= reservation.isFinished ? 'disabled aria-disabled="true"' : '' %>
             required
           />
         </div>
@@ -104,7 +126,7 @@
       <p class="form-error" data-error-scope="dates">
         <%= errors.dateError %>
       </p>
-      <% } else if (reservation.isStartDateLocked) { %>
+      <% } else if (reservation.isStartDateLocked !== reservation.isFinished) { %>
       <p class="form-hint muted">
         La date de début ne peut être modifiée car la réservation a commencé
       </p>
@@ -114,8 +136,22 @@
 
     <!-- ===== ACTIONS ===== -->
     <div class="form-actions">
-      <a href="/reservations" class="btn btn-cancel"> Annuler </a>
-      <button type="submit" class="btn btn-confirm" autofocus disabled>Enregistrer</button>
+      <a
+        href="/reservations"
+        class="btn btn-cancel"
+        <%= reservation.isFinished ? 'disabled aria-disabled="true"' : '' %>
+      >
+        Annuler
+      </a>
+      <button
+        type="submit"
+        class="btn btn-confirm"
+        autofocus
+        <%= reservation.isFinished ? 'disabled aria-disabled="true"' : '' %>
+        disabled
+      >
+        Enregistrer
+      </button>
     </div>
   </form>
 

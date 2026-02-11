@@ -260,6 +260,8 @@ export const getEditReservationPage = async (req, res, next) => {
     const reservationApi = apiData.data;
     const reservation = mapReservationEdit(reservationApi);
 
+    reservation.isFinished = reservationApi.reservation.status.key === "FINISHED";
+
     renderEditReservationPage(res, {
       reservation,
       otherReservations
