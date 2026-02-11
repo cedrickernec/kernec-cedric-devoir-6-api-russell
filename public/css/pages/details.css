@@ -3,11 +3,12 @@
    ====================================================== */
 
 .detail-card {
-    max-width: 752px;
-    padding: var(--detail-page-p-m);
+    width: 520px;
     background: white;
+    padding: var(--detail-page-p-m);
     border-radius: 8px;
     box-shadow: var(--box-shadow-sm);
+    align-self: flex-start;
 }
 
 /* ======================================================
@@ -45,4 +46,15 @@
 .detail-action {
     display: flex;
     justify-content: space-between;
+    gap: 16px;
+}
+
+/* ======================================================
+   VARIANTS
+   ====================================================== */
+
+.detail-card--side {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 356px;
 }
