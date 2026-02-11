@@ -5,8 +5,8 @@
 */
 
 import { computeNightsBetweenDates } from "../computeReservationNights.js";
-import { computeReservationStatus } from "./reservationStatus.js";
 import { formatDateFR } from "../dateFormatter.js";
+import { mapApiStatusToToViewStatus } from "./mapApiStatusToViewStatus.js";
 
 // ==================================================
 // MAPPER RESERVATION LIST (TABLE)
@@ -24,10 +24,11 @@ export function mapReservationToList(reservation) {
   ? new Date(reservation.endDate)
   : null;
 
-  const status = computeReservationStatus({
+  const status = mapApiStatusToToViewStatus(
+    reservation.status,
     startDate,
     endDate
-  });
+  );
 
   return {
     id: reservation.id,
@@ -85,10 +86,11 @@ export function mapReservationToDetail(apiReservation) {
   
   const nights = computeNightsBetweenDates(startDate, endDate);
 
-  const status = computeReservationStatus({
+  const status = mapApiStatusToToViewStatus(
+    reservation.status,
     startDate,
     endDate
-  });
+  );
 
   return {
     id: reservation.id,

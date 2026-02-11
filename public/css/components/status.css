@@ -45,12 +45,12 @@
     color: var(--danger-2);
 }
 
-.status--active {
+.status--in-progress {
     background: var(--accent-primary);
     color: white;
 }
 
-.status--past {
+.status--finished {
     background: var(--color-tertiary);
     color: var(--color-quinary);
 }
