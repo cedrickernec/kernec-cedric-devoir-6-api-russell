@@ -8,6 +8,7 @@
  *      - Définit l'ordre des clés
  * ============================================================
  */
+import { computeCatwayStateKey } from "../catways/catwayState.js";
 
 export function formatCatway(catway) {
     if (!catway) return null;
@@ -20,6 +21,10 @@ export function formatCatway(catway) {
         catwayType: object.catwayType,
         catwayState: object.catwayState,
         isOutOfService: object.isOutOfService,
+        stateKey: computeCatwayStateKey({
+            catwayState: catway.catwayState,
+            isOutOfService: catway.isOutOfService
+        }),
         createdAt : object.createdAt,
         updatedAt : object.updatedAt
     };

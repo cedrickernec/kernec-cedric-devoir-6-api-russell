@@ -38,9 +38,9 @@ export function initCatwaysLiveFilter() {
         const type = typeSelect.value;
 
         const allowedStates = [];
-        if (stateOk.checked) allowedStates.push("ok");
-        if (stateHs.checked) allowedStates.push("hs");
-        if (stateWarn.checked) allowedStates.push("warning");
+        if (stateOk.checked) allowedStates.push("OK");
+        if (stateHs.checked) allowedStates.push("HS");
+        if (stateWarn.checked) allowedStates.push("WARNING");
 
         let visibleCount = 0;
 

@@ -17,7 +17,7 @@ export function mapCatwayToList(catway) {
     number: catway.catwayNumber,
     type: catway.catwayType,
     status,
-    stateKey: status.className
+    stateKey: catway.stateKey
   };
 }
 
