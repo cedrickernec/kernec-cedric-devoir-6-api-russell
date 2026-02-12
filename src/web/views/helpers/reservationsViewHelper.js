@@ -8,7 +8,8 @@ export const renderCreateReservationPage = (res, {
     globalError = null,
     formData = {},
     hasSearched = false,
-    availableCatways = []
+    availableCatways = [],
+    preselectedCatway = null
 }) => {
     res.render("reservations/reservationCreate", {
         title: "Création d'une réservation",
@@ -18,7 +19,8 @@ export const renderCreateReservationPage = (res, {
         globalError,
         formData,
         hasSearched,
-        availableCatways
+        availableCatways,
+        preselectedCatway
     });
 };
 

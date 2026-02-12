@@ -21,3 +21,7 @@
 .split-view__right .form--btn-only {
     flex-shrink: 0;
 }
+
+.split-view > .table-section {
+    flex: 1;
+}

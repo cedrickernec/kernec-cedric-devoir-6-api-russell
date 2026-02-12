@@ -1,7 +1,7 @@
 <h1 id="page-title">Détails catway</h1>
 
 <div class="table-actions">
-  <a href="/reservations/create" class="btn btn--primary btn--shadow">
+  <a href="/reservations/create?preselectedCatway=<%= catway.number %>" class="btn btn--primary btn--shadow">
     <i class="fa-solid fa-calendar-plus" aria-hidden="true"></i>
     Ajouter une réservation
   </a>
@@ -214,6 +214,8 @@
 </div>
 
 <!-- ====== SCRIPTS ====== -->
+
+<script type="module" src="/js/ui/animation/highlightCleanup.js"></script>
 
 <!-- LIVE FILTER -->
 <script type="module">

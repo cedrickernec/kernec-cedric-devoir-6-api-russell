@@ -215,13 +215,20 @@ export const getCreateReservationPage = async (req, res, next) => {
         delete req.session.reservationDraft;
       }
 
+      let preselectedCatway = req.query.preselectedCatway || null;
+
+      if (Array.isArray(preselectedCatway)) {
+        preselectedCatway = preselectedCatway[0];
+      }
+
       res.render("reservations/reservationCreate", {
           title: "Créer une réservation",
           activePage: "reservations",
           step: "client",
           errors: {},
           formData: req.session.reservationDraft || {},
-          availableCatways: []
+          availableCatways: [],
+          preselectedCatway
       });
 
     } catch (error) {

@@ -164,11 +164,11 @@ export function mapReservationEdit(apiReservation) {
       : "",
 
     createdAtFormatted: formatDateFR(reservation.createdAt)
-      ? new Date(reservation.createdAt)
+      ? formatDateFR(new Date(reservation.createdAt))
       : "-",
 
     updatedAtFormatted: formatDateFR(reservation.updatedAt)
-      ? new Date(reservation.updatedAt)
+      ? formatDateFR(new Date(reservation.updatedAt))
       : "-",
 
     isStartDateLocked
@@ -179,7 +179,7 @@ export function mapReservationEdit(apiReservation) {
 // MAPPER AVAILABILITY (TABLE)
 // ==================================================
 
-export function mapAvailabilityToTable({ catway, availability }) {
+export function mapAvailabilityToTable({ catway, availability, flattenPartials = false }) {
 
   const from = availability.from || null;
   const to = availability.to ||  null;
@@ -199,14 +199,39 @@ export function mapAvailabilityToTable({ catway, availability }) {
     toFormatted: formatISODate(slot.to),
   }))
   : [];
-  
-  const slotsCount = slots.length;
+
+  // Mode éclatement des partiels
+  if (flattenPartials && isPartial && slots.length > 0) {
+    return slots.map(slot => ({
+      catway: {
+        number: catway.catwayNumber,
+        type: catway.catwayType
+      },
+
+      fromISO: slot.from,
+      toISO: slot.to,
+
+      fromFormatted: slot.fromFormatted,
+      toFormatted: slot.toFormatted,
+
+      status: "partial",
+
+      isFull: false,
+      isPartial: true,
+
+      slotsCount: 1,
+      slots: []
+    }));
+  }
 
   return {
     catway: {
       number: catway.catwayNumber,
       type: catway.catwayType
     },
+
+    fromISO: isFull ? from : null,
+    toISO: isFull ? to : null,
 
     fromFormatted: isFull && from ? formatISODate(from) : null,
     toFormatted: isFull && to ? formatISODate(to) : null,
@@ -216,7 +241,7 @@ export function mapAvailabilityToTable({ catway, availability }) {
     isFull,
     isPartial,
 
-    slotsCount,
+    slotsCount : slots.length,
     slots
   };
 }

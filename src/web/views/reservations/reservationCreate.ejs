@@ -4,6 +4,9 @@
 
 <form method="POST" action="/reservations/create" class="form">
   
+  <% if (preselectedCatway) { %>
+    <input type="hidden" name="preselectedCatway" value="<%= preselectedCatway %>">
+  <% } %>
   <div class="form-group <%= errors.clientName ? 'has-error' : '' %>">
     <div>
       <label for="clientName">Client</label>
@@ -42,12 +45,11 @@
   </div>
 
   <div class="form-actions">
-    <button
-      type="button"
-      onclick="window.location='/reservations/create/cancel'"
+    <a
+      href="/reservations/create/cancel<%= preselectedCatway ? `?preselectedCatway=${preselectedCatway}` : '' %>"
       class="btn btn-cancel">
       Annuler
-    </button>
+    </a>
 
     <button type="submit" class="btn btn-confirm" autofocus disabled>
       Continuer
@@ -98,27 +100,51 @@
     </div>
 
     <div class="form-group">
+      <% if (preselectedCatway) { %>
+        <label for="catwayNumber">Catway sélectionné</label>
+        <input id="catwayNumber" type="number" value="<%= preselectedCatway %>" disabled>
+        <input type="hidden" name="preselectedCatway" value="<%= preselectedCatway %>">
+      <% } else { %>
       <label for="catwayType">Type de catway</label>
       <select id="catwayType" name="catwayType">
         <option value="all"   <%= formData.catwayType === 'all' ? 'selected' : '' %>>Tous</option>
         <option value="short" <%= formData.catwayType === 'short' ? 'selected' : '' %>>Short</option>
         <option value="long"  <%= formData.catwayType === 'long' ? 'selected' : '' %>>Long</option>
       </select>
+      <% } %>
     </div>
 
     <div class="form-group">
-      <label class="checkbox-inline">
-        <input
-          type="checkbox"
-          name="allowPartial"
-          <%= formData.allowPartial ? 'checked' : '' %>
-        >
-        Partiellement compatibles
-      </label>
+      <% if (preselectedCatway) { %>
+        <label class="checkbox-inline muted">
+          <input
+            type="checkbox"
+            name="allowPartial"
+            checked
+            disabled
+          >
+          Partiellement compatibles
+        </label>
+      <% } else { %>
+        <label class="checkbox-inline">
+          <input
+            type="checkbox"
+            name="allowPartial"
+            <%= formData.allowPartial ? 'checked' : '' %>
+          >
+          Partiellement compatibles
+        </label>
+      <% } %>
     </div>
 
     <div class="form-actions form-actions--split">
-      <a href="/reservations/create?step=client" class="btn btn-cancel">Retour</a>
+      <a
+        href="/reservations/create?step=client<%= preselectedCatway ? `&preselectedCatway=${preselectedCatway}` : '' %>"
+        class="btn btn-cancel"
+      >
+        Retour
+      </a>
+      
       <button
         type="submit"
         class="btn btn-confirm"
@@ -192,7 +218,7 @@
                     <% } %>
                   </td>
 
-                  <% if (c.isFull) { %>
+                  <% if (c.fromFormatted && c.toFormatted) { %>
                     <td class="align-center"><%= c.fromFormatted %></td>
                     <td class="align-center" aria-hidden="true">&ndash;</td>
                     <td class="align-center"><%= c.toFormatted %></td>
@@ -207,33 +233,47 @@
                   <% } %>
 
                   <td class="align-center border-col-left">
-                    <% if (c.isFull) { %>
+                    <% if (preselectedCatway) { %>
+                    <!-- MODE PRESELECTED : aucune ligne "info", tout est réservable -->
                       <button
                         type="button"
                         class="btn btn--primary btn-toggle"
                         aria-label="Réserver le catway <%= c.catway.number %> du <%= c.fromFormatted %> au <%= c.toFormatted %>"
                         aria-pressed="false"
-                        data-selection-id="<%= c.catway.number %>">
+                        data-selection-id="<%= c.status %>|<%= c.catway.number %>|<%= c.fromISO %>|<%= c.toISO %>">
                           <span class="btn-label">Réserver</span>
                           <i class="fa-solid fa-check btn-toggle-icon btn-toggle-icon--confirm" aria-hidden="true"></i>
                           <i class="fa-solid fa-xmark btn-toggle-icon btn-toggle-icon--cancel" aria-hidden="true"></i>
                       </button>
                     <% } else { %>
-                      <button
-                        type="button"
-                        class="btn btn-info btn-show-partials tooltip"
-                        aria-describedby="tooltip-catway-<%= c.catway.number %>"
-                        data-catway="<%= c.catway.number %>"
-                        data-catway-type="<%= c.catway.type %>"
-                        data-slots='<%= JSON.stringify(c.slots) %>'>
-                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-                        <span id="tooltip-catway-<%= c.catway.number %>" class="tooltip__content">
-                          Cliquez pour afficher les créneaux disponibles
-                        </span>
-                      </button>
+                    <!-- MODE STANDARD -->
+                      <% if (c.isFull) { %>
+                        <button
+                          type="button"
+                          class="btn btn--primary btn-toggle"
+                          aria-label="Réserver le catway <%= c.catway.number %> du <%= c.fromFormatted %> au <%= c.toFormatted %>"
+                          aria-pressed="false"
+                          data-selection-id="full|<%= c.catway.number %>|<%= c.fromISO %>|<%= c.toISO %>">
+                            <span class="btn-label">Réserver</span>
+                            <i class="fa-solid fa-check btn-toggle-icon btn-toggle-icon--confirm" aria-hidden="true"></i>
+                            <i class="fa-solid fa-xmark btn-toggle-icon btn-toggle-icon--cancel" aria-hidden="true"></i>
+                        </button>
+                      <% } else { %>
+                        <button
+                          type="button"
+                          class="btn btn-info btn-show-partials tooltip"
+                          aria-describedby="tooltip-catway-<%= c.catway.number %>"
+                          data-catway="<%= c.catway.number %>"
+                          data-catway-type="<%= c.catway.type %>"
+                          data-slots='<%= JSON.stringify(c.slots) %>'>
+                          <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                          <span id="tooltip-catway-<%= c.catway.number %>" class="tooltip__content">
+                            Cliquez pour afficher les créneaux disponibles
+                          </span>
+                        </button>
+                        <% } %>
                       <% } %>
                   </td>
-
                 </tr>
               <% }) %>
             </tbody>
@@ -244,45 +284,47 @@
     </section>
 
     <!-- ================= CRÉNEAUX PARTIELS ================= -->
-    <section
-      id="catway-partials"
-      class="table-section"
-      hidden
-      aria-hidden="true">
+    <% if (!preselectedCatway) { %>
+      <section
+        id="catway-partials"
+        class="table-section"
+        hidden
+        aria-hidden="true">
 
-      <header class="table-header">
-        <h2>Créneaux disponibles - Catway sélectionné</h2>
-        <button type="button" id="back-to-results" class="btn btn--primary">
-          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour
-        </button>
-      </header>
+        <header class="table-header">
+          <h2>Créneaux disponibles - Catway sélectionné</h2>
+          <button type="button" id="back-to-results" class="btn btn--primary">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour
+          </button>
+        </header>
 
-      <div class="table-wrapper">
-        <table class="data-table data-table--fixed">
-          <colgroup>
-            <col class="col-catway">
-            <col class="col-type">
-            <col class="col-status">
-            <col class="col-date">
-            <col class="col-dash">
-            <col class="col-date">
-            <col class="col-auto">
-          </colgroup>
-          <thead>
-            <tr>
-              <th class="align-center">Catway</th>
-              <th class="align-center">Type</th>
-              <th class="align-center border-col-left">Statut</th>
-              <th class="align-center">Du</th>
-              <th class="align-center">&ndash;</th>
-              <th class="align-center">Au</th>
-              <th class="align-center border-col-left"></th>
-            </tr>
-          </thead>
-          <tbody id="partials-table-body"></tbody>
-        </table>
-      </div>
-    </section>
+        <div class="table-wrapper">
+          <table class="data-table data-table--fixed">
+            <colgroup>
+              <col class="col-catway">
+              <col class="col-type">
+              <col class="col-status">
+              <col class="col-date">
+              <col class="col-dash">
+              <col class="col-date">
+              <col class="col-auto">
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="align-center">Catway</th>
+                <th class="align-center">Type</th>
+                <th class="align-center border-col-left">Statut</th>
+                <th class="align-center">Du</th>
+                <th class="align-center">&ndash;</th>
+                <th class="align-center">Au</th>
+                <th class="align-center border-col-left"></th>
+              </tr>
+            </thead>
+            <tbody id="partials-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+    <% } %>
 
   <!-- ================= ACTIONS POST-RECHERCHE ================= -->
   <% if (hasSearched) { %>
@@ -300,15 +342,11 @@
       </div>
 
       <div class="form-group--row">
-        <button
-          type="submit"
-          formmethod="POST"
-          formaction="/reservations/create/cancel"
-          class="btn btn-cancel"
-          formnovalidate
-        >
+        <a
+          href="/reservations/create/cancel<%= preselectedCatway ? `?preselectedCatway=${preselectedCatway}` : '' %>"
+          class="btn btn-cancel">
           Annuler
-        </button>
+        </a>
 
         <button
           type="button"

@@ -50,6 +50,16 @@ export const postCreateReservation = async (req, res, next) => {
             catways
         } = req.body;
 
+        let preselectedCatway = req.body.preselectedCatway || null;
+
+        if (Array.isArray(preselectedCatway)) {
+            preselectedCatway = preselectedCatway[0];
+        }
+
+        if (preselectedCatway) {
+            preselectedCatway = String(preselectedCatway);
+        }
+
         const errors = {};
 
         const selectedType = catwayType && catwayType !== "all"
@@ -70,7 +80,8 @@ export const postCreateReservation = async (req, res, next) => {
                 return renderCreateReservationPage(res, {
                     step: "client",
                     errors,
-                    formData: req.body
+                    formData: req.body,
+                    preselectedCatway
                 });
             }
 
@@ -82,7 +93,8 @@ export const postCreateReservation = async (req, res, next) => {
 
             return renderCreateReservationPage(res, {
                 step: "dates",
-                formData: req.session.reservationDraft
+                formData: req.session.reservationDraft,
+                preselectedCatway
             });
         }
 
@@ -94,6 +106,7 @@ export const postCreateReservation = async (req, res, next) => {
                     date: RESERVATION_MESSAGES.DATES_REQUIRED
                 },
                 formData: req.body,
+                preselectedCatway,
                 hasSearched: false,
                 availableCatways: []
             });
@@ -104,29 +117,23 @@ export const postCreateReservation = async (req, res, next) => {
             const createdReservations = [];
 
             for (const rawSelection of catways) {
-                const parts = rawSelection.split("|");
+                const [type, number, from, to] = rawSelection.split("|");
 
-                let catwayNumber;
+                const catwayNumber = Number(number);
                 let payload;
 
                 // Réservation complète
-                if (parts.length === 1) {
-                    catwayNumber = Number(parts[0]);
-
+                if (type === "full") {
                     payload = {
                         clientName,
                         boatName,
-                        startDate,
-                        endDate
+                        startDate: from,
+                        endDate: to
                     };
                 }
 
                 // Réservation partielle
-                else {
-                    const [number, from, to] = parts;
-
-                    catwayNumber = Number(number);
-
+                if (type === "partial") {
                     payload = {
                         clientName,
                         boatName,
@@ -147,6 +154,7 @@ export const postCreateReservation = async (req, res, next) => {
                             step: "dates",
                             errors: apiData.errors,
                             formData: req.body,
+                            preselectedCatway,
                             hasSearched: true,
                             availableCatways: []
                         });
@@ -158,6 +166,7 @@ export const postCreateReservation = async (req, res, next) => {
                             step: "dates",
                             globalError: apiData.message,
                             formData: req.body,
+                            preselectedCatway,
                             hasSearched: true,
                             availableCatways: []
                         });
@@ -168,6 +177,7 @@ export const postCreateReservation = async (req, res, next) => {
                         step: "dates",
                         globalError: "Erreur lors de la création de la réservation.",
                         formData: req.body,
+                        preselectedCatway,
                         hasSearched: true,
                         availableCatways: []
                     });
@@ -183,6 +193,11 @@ export const postCreateReservation = async (req, res, next) => {
             };
 
             delete req.session.reservationDraft;
+
+            if (preselectedCatway) {
+                return res.redirect(`/catways/${preselectedCatway}`);
+            }
+
             return res.redirect("/reservations");
         }
 
@@ -191,7 +206,11 @@ export const postCreateReservation = async (req, res, next) => {
             startDate,
             endDate,
             catwayType: selectedType ?? "all",
-            allowPartial : allowPartial === "on"
+            allowPartial : preselectedCatway ? true : allowPartial === "on"
+        }
+
+        if (preselectedCatway) {
+            availabilityPayload.catwayNumber = preselectedCatway;
         }
 
         const apiData = await fetchReservationAvailability(availabilityPayload, req, res);
@@ -202,22 +221,25 @@ export const postCreateReservation = async (req, res, next) => {
             return renderCreateReservationPage(res, {
                 step: "dates",
                 formData: req.body,
+                preselectedCatway,
                 hasSearched: false,
                 errors: {},
                 globalError: apiData.message || "Erreur lors de la recherche de disponibilité."
             })
         }
 
-        const mappedCatways = apiData.data.map(item =>
+        const mappedCatways = apiData.data.flatMap(item =>
             mapAvailabilityToTable({
                 catway: item.catway,
-                availability: item.availability
+                availability: item.availability,
+                flattenPartials: Boolean(preselectedCatway)
             })
         );
 
         return renderCreateReservationPage(res, {
             step: "dates",
             formData: req.body,
+            preselectedCatway,
             hasSearched: true,
             availableCatways: mappedCatways
         });
@@ -232,8 +254,18 @@ export const postCreateReservation = async (req, res, next) => {
 // ==================================================
 
 export const cancelCreateReservation = (req, res) => {
+
+    const preselectedCatway =
+        req.body?.preselectedCatway ||
+        req.query?.preselectedCatway ||
+        null;
+
     // Nettoyage complet du brouillon
     delete req.session.reservationDraft;
+
+    if (preselectedCatway) {
+        return res.redirect(`/catways/${preselectedCatway}`);
+    }
 
     res.redirect("/reservations");
 };

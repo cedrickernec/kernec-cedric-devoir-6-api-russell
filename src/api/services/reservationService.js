@@ -104,7 +104,8 @@ export async function getReservationAvailabilityService({
     startDate,
     endDate,
     catwayType,
-    allowPartial
+    allowPartial,
+    catwayNumber
 }) {
 
     const { start, end } = parseReservationPeriod(startDate, endDate);
@@ -118,7 +119,8 @@ export async function getReservationAvailabilityService({
         startDate: start,
         endDate: end,
         allowPartial: Boolean(allowPartial),
-        selectedType: catwayType !== "all" ? catwayType : null
+        selectedType: catwayType !== "all" ? catwayType : null,
+        selectedCatwayNumber: catwayNumber ? Number(catwayNumber) : null
     });
 }
 
