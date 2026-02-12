@@ -77,7 +77,7 @@
             Date(reservations[i].endDate); %> <% if (now < start) { %>
             <span class="status status--upcoming" aria-label="Réservation à venir">À venir</span>
             <% } else if (now >= start && now <= end) { %>
-            <span class="status status--active" aria-label="Réservation en cours">En cours</span>
+            <span class="status status--in-progress" aria-label="Réservation en cours">En cours</span>
             <% } %>
           </td>
         </tr>

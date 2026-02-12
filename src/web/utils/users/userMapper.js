@@ -16,7 +16,8 @@ export function mapUserDetail(user) {
       id: null,
       username: "-",
       email: "-",
-      createdAtFormatted: "Non disponible"
+      createdAtFormatted: "Non disponible",
+      updatedAtFormatted: "Non disponible"
     };
   }
 
@@ -25,13 +26,19 @@ export function mapUserDetail(user) {
     ? new Date(user.createdAt)
     : null;
 
+  const updatedAt =
+  user.updatedAt
+    ? new Date(user.updatedAt)
+    : null;
+
   return {
     id: user.id,
 
     username: user.username ?? "-",
     email: user.email ?? "-",
 
-    createdAtFormatted: formatDateFR(createdAt)
+    createdAtFormatted: formatDateFR(createdAt),
+    updatedAtFormatted: formatDateFR(updatedAt)
   };
 }
 
@@ -44,7 +51,8 @@ export function mapUserToList(user) {
     id: user.id,
     username: user.username,
     email: user.email,
-    createdAt: user.createdAt
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt
   }
 }
 

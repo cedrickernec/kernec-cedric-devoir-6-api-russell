@@ -27,6 +27,8 @@ import {
 import { findNextCatwayNumber } from "../../utils/catways/findNextCatwayNumber.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
+import { fetchReservationsByCatway } from "../../services/api/reservationApi.js";
+import { loadOtherReservations } from "../../utils/reservations/loadOtherReservations.js";
 
 /* ==================================================
   CATWAYS LIST
@@ -88,11 +90,14 @@ export const getCatwayByNumber = async (req, res, next) => {
     const catwayApi = apiData.data;
     const catwayViewModel = mapCatwayToDetail(catwayApi);
 
+    const otherReservations = await loadOtherReservations(catwayNumber, null, req, res);
+
     res.render("catways/catwayDetails", {
       title: "Détail catway",
       activePage: "catways",
       catway: catwayViewModel,
       catwayNumber,
+      otherReservations,
       from,
       reservationId
     });

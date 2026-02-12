@@ -49,7 +49,7 @@ function hideSection(section) {
 function createPartialRow(catwayNumber, catwayType, slot) {
   const row = document.createElement("tr");
 
-  const selectionId = `${catwayNumber}|${slot.from}|${slot.to}`;
+  const selectionId = `partial|${catwayNumber}|${slot.from}|${slot.to}`;
   const isSelected = hasSelection(selectionId);
 
   const fromLabel = formatDateFR(new Date(slot.from));
@@ -130,4 +130,6 @@ document.addEventListener("click", event => {
 });
 
 // Retour à la liste principale
-backToResultsBtn.addEventListener("click", showResultsView);
+if (backToResultsBtn) {
+  backToResultsBtn.addEventListener("click", showResultsView);
+}

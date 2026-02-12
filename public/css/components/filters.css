@@ -155,6 +155,24 @@
     color: var(--warning-1);
 }
 
+/* UPCOMING */
+.filter-checkbox:has(#filter-status-upcoming:checked) {
+    background: var(--color-primary);
+    color: white;
+}
+
+/* IN PROGRESS */
+.filter-checkbox:has(#filter-status-in-progress:checked) {
+    background: var(--accent-primary);
+    color: white;
+}
+
+/* FINISHED */
+.filter-checkbox:has(#filter-status-finished:checked) {
+    background: var(--color-tertiary);
+    color: var(--color-quinary);
+}
+
 /* ======================================================
    FILTER CHECKBOX — HOVER + CHECKED
    ====================================================== */

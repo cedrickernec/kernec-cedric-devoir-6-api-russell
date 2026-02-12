@@ -17,16 +17,16 @@ export function computeReservationStatus({startDate, endDate}) {
     if (now >= start && now <= end) {
         return {
             label: "En cours",
-            className: "status--active",
+            className: "status--in-progress",
             aria: "Réservation en cours",
-            semantic: "active"
+            semantic: "in-progress"
         };
     }
 
     return {
         label: "Terminée",
-        className: "status--past",
-        aria: "Réservation passée",
-        semantic: "past"
+        className: "status--finished",
+        aria: "Réservation terminée",
+        semantic: "finished"
     };
 }

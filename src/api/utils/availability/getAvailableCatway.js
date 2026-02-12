@@ -21,7 +21,8 @@ export function getAvailableCatways({
     startDate,
     endDate,
     allowPartial = false,
-    selectedType = null
+    selectedType = null,
+    selectedCatwayNumber = null
 }) {
     return catways
 
@@ -40,6 +41,12 @@ export function getAvailableCatways({
     })
 
     .filter(({ catway, compatibility }) => {
+
+        // Filtre par catwayNumber
+        if (selectedCatwayNumber !== null && Number(catway.catwayNumber) !== Number(selectedCatwayNumber)) {
+            return false
+        }
+
         // Exclusion des catways non réservables par état
         const state = catway.catwayState.toLowerCase()
         const isBlocked = BLOKED_STATES.some(keyword => state.includes(keyword));

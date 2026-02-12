@@ -18,6 +18,18 @@
         <%= user.createdAtFormatted %>
       </dd>
     </div>
+
+    <% if (user.updatedAtFormatted &&
+    user.createdAtFormatted &&
+    user.updatedAtFormatted !==
+    user.createdAtFormatted) { %>
+    <div class="detail-row">
+      <dt>Modifié le</dt>
+      <dd class="muted">
+        <%= user.updatedAtFormatted %>
+      </dd>
+    </div>
+    <% } %>
   </dl>
 
   <nav class="detail-action" aria-label="Actions utilisateur">

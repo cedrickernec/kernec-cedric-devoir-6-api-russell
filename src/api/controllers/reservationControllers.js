@@ -126,10 +126,11 @@ export const getReservationAvailability = async (req, res, next) => {
             "startDate",
             "endDate",
             "catwayType",
-            "allowPartial"
+            "allowPartial",
+            "catwayNumber"
         ];
 
-        const cleanData = pickAllowedFields(req.body, allowedFields)
+        const cleanData = pickAllowedFields(req.body, allowedFields);
 
         // 3) Validation
         const errors = validateAvailabilityInput(cleanData);

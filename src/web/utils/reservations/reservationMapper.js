@@ -5,8 +5,8 @@
 */
 
 import { computeNightsBetweenDates } from "../computeReservationNights.js";
-import { computeReservationStatus } from "./reservationStatus.js";
 import { formatDateFR } from "../dateFormatter.js";
+import { mapApiStatusToToViewStatus } from "./mapApiStatusToViewStatus.js";
 
 // ==================================================
 // MAPPER RESERVATION LIST (TABLE)
@@ -24,10 +24,11 @@ export function mapReservationToList(reservation) {
   ? new Date(reservation.endDate)
   : null;
 
-  const status = computeReservationStatus({
+  const status = mapApiStatusToToViewStatus(
+    reservation.status,
     startDate,
     endDate
-  });
+  );
 
   return {
     id: reservation.id,
@@ -77,13 +78,19 @@ export function mapReservationToDetail(apiReservation) {
   reservation.createdAt
   ? new Date(reservation.createdAt)
   : null;
+
+  const updatedAt =
+  reservation.updatedAt
+  ? new Date(reservation.updatedAt)
+  : null;
   
   const nights = computeNightsBetweenDates(startDate, endDate);
 
-  const status = computeReservationStatus({
+  const status = mapApiStatusToToViewStatus(
+    reservation.status,
     startDate,
     endDate
-  });
+  );
 
   return {
     id: reservation.id,
@@ -107,6 +114,10 @@ export function mapReservationToDetail(apiReservation) {
     
     createdAtFormatted: createdAt
     ? formatDateFR(createdAt)
+    : "-",
+
+    updatedAtFormatted: updatedAt
+    ? formatDateFR(updatedAt)
     : "-"
   };
 }
@@ -153,7 +164,11 @@ export function mapReservationEdit(apiReservation) {
       : "",
 
     createdAtFormatted: formatDateFR(reservation.createdAt)
-      ? new Date(reservation.createdAt)
+      ? formatDateFR(new Date(reservation.createdAt))
+      : "-",
+
+    updatedAtFormatted: formatDateFR(reservation.updatedAt)
+      ? formatDateFR(new Date(reservation.updatedAt))
       : "-",
 
     isStartDateLocked
@@ -164,7 +179,7 @@ export function mapReservationEdit(apiReservation) {
 // MAPPER AVAILABILITY (TABLE)
 // ==================================================
 
-export function mapAvailabilityToTable({ catway, availability }) {
+export function mapAvailabilityToTable({ catway, availability, flattenPartials = false }) {
 
   const from = availability.from || null;
   const to = availability.to ||  null;
@@ -184,14 +199,39 @@ export function mapAvailabilityToTable({ catway, availability }) {
     toFormatted: formatISODate(slot.to),
   }))
   : [];
-  
-  const slotsCount = slots.length;
+
+  // Mode éclatement des partiels
+  if (flattenPartials && isPartial && slots.length > 0) {
+    return slots.map(slot => ({
+      catway: {
+        number: catway.catwayNumber,
+        type: catway.catwayType
+      },
+
+      fromISO: slot.from,
+      toISO: slot.to,
+
+      fromFormatted: slot.fromFormatted,
+      toFormatted: slot.toFormatted,
+
+      status: "partial",
+
+      isFull: false,
+      isPartial: true,
+
+      slotsCount: 1,
+      slots: []
+    }));
+  }
 
   return {
     catway: {
       number: catway.catwayNumber,
       type: catway.catwayType
     },
+
+    fromISO: isFull ? from : null,
+    toISO: isFull ? to : null,
 
     fromFormatted: isFull && from ? formatISODate(from) : null,
     toFormatted: isFull && to ? formatISODate(to) : null,
@@ -201,7 +241,7 @@ export function mapAvailabilityToTable({ catway, availability }) {
     isFull,
     isPartial,
 
-    slotsCount,
+    slotsCount : slots.length,
     slots
   };
 }

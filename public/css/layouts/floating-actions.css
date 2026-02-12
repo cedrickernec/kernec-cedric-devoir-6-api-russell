@@ -17,6 +17,7 @@
     box-shadow: var(--box-shadow-sm);
 
     transition: margin-right 0.4s ease;
+    z-index: var(--z-floating-top);
 }
 
 .floating-actions a.btn.btn--primary {

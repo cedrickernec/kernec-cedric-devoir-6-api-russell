@@ -37,7 +37,8 @@ export function mapCatwayToDetail(catway) {
     number: catway.catwayNumber,
     type: catway.catwayType,
     status,
-    createdAtFormatted: formatDateFR(catway.createdAt)
+    createdAtFormatted: formatDateFR(catway.createdAt),
+    updatedAtFormatted: formatDateFR(catway.updatedAt)
   };
 }
 

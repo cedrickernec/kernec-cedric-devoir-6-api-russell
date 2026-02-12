@@ -57,4 +57,14 @@
     <dt>Créée le</dt>
     <dd class="muted"><%= entity.createdAtFormatted %></dd>
   </div>
+
+  <% if (entity.updatedAtFormatted &&
+  entity.createdAtFormatted &&
+  entity.updatedAtFormatted !==
+  entity.createdAtFormatted) { %>
+  <div class="side-panel-row">
+    <dt>Modifiée le</dt>
+    <dd class="muted"><%= entity.updatedAtFormatted %></dd>
+  </div>
+  <% } %>
 </dl>

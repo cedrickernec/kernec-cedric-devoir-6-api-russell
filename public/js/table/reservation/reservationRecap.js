@@ -15,40 +15,20 @@ function formatDateFR(date) {
     : "-";
 }
 
-export function extractReservationData(idsSet, formDates = {}) {
-  const formStart = formDates.startDate ? new Date(formDates.startDate) : null;
-  const formEnd   = formDates.endDate   ? new Date(formDates.endDate)   : null;
+export function extractReservationData(idsSet) {
 
   return Array.from(idsSet).map(raw => {
-    const parts = raw.split("|");
 
-    // ==============================
-    // RÉSERVATION COMPLÈTE
-    // ==============================
-    if (parts.length === 1) {
-      const days = computeNightsBetweenDates(formStart, formEnd);
-      const catway = Number(parts[0]);
+    const [type, catway, from, to] = raw.split("|");
 
-      return {
-        type: "full",
-        catway,
-        startDate: formatDateFR(formStart),
-        endDate: formatDateFR(formEnd),
-        duration: days,
-      };
-    }
-
-    // ==============================
-    // RÉSERVATION PARTIELLE
-    // ==============================
-    const [catway, from, to] = parts;
     const start = new Date(from);
-    const end = new Date(to);
+    const end   = new Date(to);
+
     const days = computeNightsBetweenDates(start, end);
 
     return {
-      type: "partial",
-      catway,
+      type,
+      catway: Number(catway),
       startDate: formatDateFR(start),
       endDate: formatDateFR(end),
       duration: days,
