@@ -9,6 +9,7 @@
 
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import ms from "ms";
 
 // Détection de l'environnement
 const isProduction = process.env.NODE_ENV === "production";
@@ -35,7 +36,7 @@ if (!process.env.MONGO_URI) {
 // SESSION TIMING
 // ==================================================
 
-const SESSION_DURATION = Number(process.env.SESSION_DURATION) || 1000 * 60 * 30;
+const SESSION_DURATION = ms(process.env.SESSION_DURATION || "30m");
 
 // ==================================================
 // SESSION MIDDLEWARE

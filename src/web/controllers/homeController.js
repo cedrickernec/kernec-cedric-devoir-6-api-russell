@@ -10,6 +10,13 @@
 
 export const getHome = (req, res, next) => {
     try {
+        if (req.session.user) {
+            const redirectTo = req.query.redirect || "/dashboard";
+            return res.redirect(redirectTo);
+        }
+
+        const redirect = req.query.redirect || "";
+        
         const error = req.session.authError || null;
         const disableAnimations = req.session.disableAnimations || false;
 
@@ -21,7 +28,8 @@ export const getHome = (req, res, next) => {
             title: "Connexion - API Russell",
             layout: "layouts/authLayout",
             error,
-            disableAnimations
+            disableAnimations,
+            redirect
         });
         
     } catch (error) {

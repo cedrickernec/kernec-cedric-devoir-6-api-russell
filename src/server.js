@@ -29,6 +29,7 @@ import morgan from "morgan";
 import sidebarClock from "./web/middlewares/sidebarClock.js";
 import { sessionMiddleware } from "./web/configs/sessionConfig.js";
 import { exposeSessionData } from "./web/middlewares/sessionExpose.js";
+import { rememberLastPath } from "./web/middlewares/rememberLastPath.js";
 import { normalizeRequest } from "./web/middlewares/normalizeRequest.js";
 import { exposeFlash } from "./web/middlewares/flashExpose.js";
 
@@ -91,6 +92,7 @@ app.use(sidebarClock);
 
 app.use(sessionMiddleware);
 app.use(exposeSessionData);
+app.use(rememberLastPath);
 app.use(exposeFlash);
 
 // ============================================
