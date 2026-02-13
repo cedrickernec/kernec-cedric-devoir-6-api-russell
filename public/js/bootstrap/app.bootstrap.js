@@ -12,6 +12,8 @@ import "../ui/accessibility/escapeManager.js";
 import "../ui/accessibility/focusTrap.js";
 
 // SESSION
+import "../auth/loginSync.js";
+import "../auth/logoutSync.js";
 import "../session/sessionController.js";
 
 // UI GLOBAL

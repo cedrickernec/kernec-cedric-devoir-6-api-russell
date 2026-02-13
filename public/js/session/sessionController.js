@@ -6,6 +6,7 @@
  * - Permet l'actualisation de la session
  * - Redirige à l'expiration
  * - Mode aperçu DEV pris en charge
+ * - Sync multi-onglets via BroadcastChannel
  * ===================================================================
  */
 
@@ -19,11 +20,16 @@
     const sessionDuration = Number(document.body.dataset.sessionMaxAge);
     const forceWarning = document.body.dataset.forceWarning === "true";
 
+    if (!Number.isFinite(sessionDuration) || sessionDuration <= 0) {
+        console.warn("🚨 sessionController désactivé : sessionMaxAge invalide →", sessionDuration);
+        return;
+    }
+
     // ========================================================
     // SESSION TIMING
     // ========================================================
 
-    const warningDelay = sessionDuration - 120_000; // 2 minutes avant expiration
+    const warningDelay = Math.max(0, sessionDuration - 120_000); // 2 minutes avant expiration
 
     // ========================================================
     // STATE
@@ -37,11 +43,46 @@
     // ========================================================
     // DOM REFERENCES
     // ========================================================
-    
+
     const warningBox = document.getElementById("session-warning");
     const stayBtn = document.getElementById("stay-connected");
     const remainingTimeEl = document.getElementById("remaining-time");
     const countdownBox = document.getElementById("session-countdown");
+
+    // ========================================================
+    // MULTI TAB SYNC
+    // ========================================================
+
+    const sessionChannel = new BroadcastChannel("russell-session");
+
+    function notifyAllTabs(type, payload = {}) {
+        sessionChannel.postMessage({ type, payload });
+    }
+
+    sessionChannel.onmessage = (event) => {
+        const { type } = event.data || {};
+
+        switch (type) {
+            case "RESET_TIMERS":
+                clearTimeout(warningTimer);
+                clearTimeout(expireTimer);
+                startTimers();
+                updateRemainingTimeElement();
+                break;
+
+            case "SHOW_WARNING":
+                warningBox.classList.remove("hidden");
+                break;
+
+            case "HIDE_WARNING":
+                warningBox.classList.add("hidden");
+                break;
+
+            case "FORCE_LOGOUT":
+                window.location.href = "/auth/logout";
+                break;
+        }
+    };
 
     // ========================================================
     // SESSION REMAINING TIME
@@ -55,7 +96,7 @@
         const minutes = Math.floor(seconds / 60);
         const sec = seconds % 60;
         const paddedSec = sec < 10 ? `0${sec}` : sec;
-        
+
         return `${minutes}:${paddedSec}`;
     }
 
@@ -116,10 +157,12 @@
         // Timer d'avertissement
         warningTimer = setTimeout(() => {
             warningBox.classList.remove("hidden");
+            notifyAllTabs("SHOW_WARNING");
         }, warningDelay);
 
-        // Time d'expiration
+        // Timer d'expiration
         expireTimer = setTimeout(() => {
+            notifyAllTabs("FORCE_LOGOUT");
             window.location.href = redirectOnExpire;
         }, sessionDuration);
     }
@@ -127,6 +170,7 @@
     function resetTimers() {
         clearTimeout(warningTimer);
         clearTimeout(expireTimer);
+
         startTimers();
         updateRemainingTimeElement();
     }
@@ -143,15 +187,26 @@
         lastReset = now;
 
         // Si modale visible → on ne fait rien
-        if(!warningBox.classList.contains("hidden")) {
-            return
-        };
+        if (!warningBox.classList.contains("hidden")) {
+            return;
+        }
 
+        // Onglet actif : reset local + broadcast aux autres
         resetTimers();
+        notifyAllTabs("RESET_TIMERS");
     }
-    
-    ["mousemove", "mousedown", "keydown", "scroll", "touchstart", "input", "change"]
-    .forEach(event => window.addEventListener(event, registerActivity, { passive: true }));
+
+    [
+        "mousemove",
+        "mousedown",
+        "keydown",
+        "scroll",
+        "touchstart",
+        "input",
+        "change"
+    ].forEach(event =>
+        window.addEventListener(event, registerActivity, { passive: true })
+    );
 
     // ========================================================
     // ACTIONS : STAY CONNECTED
@@ -168,15 +223,19 @@
                     "Content-Type": "application/json"
                 }
             });
-            
+
             if (!response.ok) {
                 console.warn("💥 Echec du refresh de session 'keep-alive'");
                 return;
             }
-            
+
             warningBox.classList.add("hidden");
+
+            // Onglet actif : reset local + broadcast
             resetTimers();
-            
+            notifyAllTabs("RESET_TIMERS");
+            notifyAllTabs("HIDE_WARNING");
+
         } catch (error) {
             console.error("❗ Erreur lors du refresh de session 'keep-alive' :", error);
         }
@@ -188,4 +247,5 @@
 
     startTimers();
     setInterval(updateRemainingTimeElement, 1000);
+
 })();
