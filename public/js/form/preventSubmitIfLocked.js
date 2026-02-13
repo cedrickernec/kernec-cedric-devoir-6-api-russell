@@ -43,11 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const initialValue = String(initialData[key] ?? "").trim();
                 const currentValue = String(el.value ?? "").trim();
 
-                console.log("Comparing field:", key);
-                console.log("initial:", initialValue);
-                console.log("current:", currentValue);
-                console.log("different:", currentValue !== initialValue);
-
                 return currentValue !== initialValue;
             });
         };
@@ -84,16 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const refreshState = () => {
 
             const state = computeState();
-
-            console.log("----- REFRESH STATE -----");
-            console.log("form action:", form.getAttribute("action"));
-            console.log("lockedFields:", form.querySelectorAll("[data-locked='true']").length);
-            console.log("invalidFields:", form.querySelectorAll("input:invalid").length);
-            console.log("emptyRequired:", Array.from(
-                form.querySelectorAll("input[required]")
-            ).filter(el => !el.value.trim()).length);
-            console.log("noChanges:", initialData ? !hasChanges() : "N/A");
-            console.log("isBlocked:", state.isBlocked);
 
             submitButtons.forEach(btn => {
                 btn.disabled = state.isBlocked;

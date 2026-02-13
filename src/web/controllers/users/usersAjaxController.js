@@ -49,18 +49,10 @@ export const checkEmailAvailability = async (req, res) => {
 // ==================================================
 
 export const deleteUsers = async (req, res) => {
-  console.log(">>> DELETE BULK USERS HIT", {
-    url: req.originalUrl,
-    method: req.method,
-    ids: req.body?.ids,
-    accept: req.headers.accept,
-    contentType: req.headers["content-type"]
-  });
 
   try {
     const { ids } = req.body;
 
-    console.log("IDS envoyées:", ids);
     // Sécurité payload
     if (!Array.isArray(ids) || ids.length === 0) {
       return res.status(400).json({

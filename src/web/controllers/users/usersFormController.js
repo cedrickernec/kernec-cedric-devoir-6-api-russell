@@ -214,8 +214,6 @@ export const postEditUserPassword = async (req, res, next) => {
       });
     }
 
-    console.log("erreur backend", errors);
-
     req.session.flash = {
       type: "success",
       message: USER_MESSAGES.PASSWORD_UPDATE_SUCCESS

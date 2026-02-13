@@ -21,8 +21,6 @@ panel?.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-panel-action='delete']");
   if (!btn) return;
 
-  console.log("CLICK DELETE PANEL detecté");
-
   const deleteUrl = btn.dataset.deleteUrl;
   const rowSelector = btn.dataset.rowSelector;
   const entityType = btn.dataset.entityType;

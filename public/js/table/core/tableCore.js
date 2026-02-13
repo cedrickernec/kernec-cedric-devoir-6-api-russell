@@ -153,7 +153,6 @@ export function initBulkTable({
   // BULK DELETE
   // ==================================================
   deleteBtn.addEventListener("click", async () => {
-    console.log("CLICK BULK DELETE détecté")
     if (selectedIds.size === 0) return;
 
     const ids = Array.from(selectedIds);
