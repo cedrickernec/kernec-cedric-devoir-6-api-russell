@@ -11,7 +11,7 @@ export const renderCreateReservationPage = (res, {
     availableCatways = [],
     preselectedCatway = null
 }) => {
-    res.render("reservations/reservationCreate", {
+    res.render("reservations/create", {
         title: "Création d'une réservation",
         activePage : "reservations",
         step,
@@ -35,7 +35,7 @@ export const renderEditReservationPage = (res, {
     globalError = null,
     formData = {}
 }) => {
-    res.render("reservations/reservationEdit", {
+    res.render("reservations/edit", {
         title: "Édition d'une réservation",
         activePage : "reservations",
         reservation,

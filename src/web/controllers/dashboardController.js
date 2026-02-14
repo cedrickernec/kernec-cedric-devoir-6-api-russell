@@ -8,7 +8,7 @@
  */
 import { formatDateLongFR } from "../utils/dateFormatter.js";
 import { mapReservationToDashboard } from "../utils/reservations/reservationDashboardMapper.js";
-import { fetchReservations } from "../services/api/reservationApi.js";
+import { fetchReservations } from "../gateways/api/reservationApi.js";
 import { handleAuthExpired } from "../middlewares/authExpiredHandler.js";
 import { COMMON_MESSAGES } from "../../../public/js/messages/commonMessages.js";
 

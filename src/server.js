@@ -44,8 +44,8 @@ import { registerApiRoutes } from "./api/routes/index.js";
 // ERROR HANDLING
 // ============================================
 
-import { webNotFoundHandler, webErrorHandler } from "./web/middlewares/webErrorHandlers.js";
-import { apiNotFoundHandler, apiErrorHandler } from "./api/middlewares/apiErrorHandlers.js";
+import { webNotFoundHandler, webErrorHandler } from "./web/middlewares/webErrorHandler.js";
+import { apiNotFoundHandler, apiErrorHandler } from "./api/middlewares/apiErrorHandler.js";
 
 // ============================================
 // APP INIT.

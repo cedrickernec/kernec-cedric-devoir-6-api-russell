@@ -9,7 +9,7 @@ export const renderCreateCatwayPage = (res, {
     startNumber = null,
     endNumber = null
 }) => {
-    res.render("catways/catwayCreate", {
+    res.render("catways/create", {
         title: "Création d'un catway",
         activePage : "catways",
         errors,
@@ -29,7 +29,7 @@ export const renderEditCatwayPage = (res, {
     errors = {},
     globalError = null
 }) => {
-    res.render("catways/catwayEdit", {
+    res.render("catways/edit", {
         title: "Édition d'un catway",
         activePage : "catways",
         catway,

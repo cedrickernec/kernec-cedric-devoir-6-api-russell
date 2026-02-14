@@ -1,4 +1,4 @@
-import { fetchReservationsByCatway } from "../../services/api/reservationApi.js";
+import { fetchReservationsByCatway } from "../../gateways/api/reservationApi.js";
 import { mapReservationToList } from "./reservationMapper.js";
 
 export async function loadOtherReservations(catwayNumber, currentId, req, res) {

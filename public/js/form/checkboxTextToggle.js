@@ -51,6 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
       stateTextarea.readOnly = false;
       stateTextarea.value = previousValue || "";
 
+      // Vidé si on était en "bon état"
+      if (stateTextarea.value.trim() === "bon état") {
+        stateTextarea.value = "";
+      }
+
       // Réactive hors service
       if (outOfServiceCheckbox) {
         outOfServiceCheckbox.disabled = false;

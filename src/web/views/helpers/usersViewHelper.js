@@ -9,7 +9,7 @@ export const renderCreateUserPage = (res, {
   globalError = null,
   formData = {}
 }) => {
-  res.render("users/userCreate", {
+  res.render("users/create", {
     title: "Création d'un utilisateur",
     activePage : "users",
     errors,
@@ -28,7 +28,7 @@ export const renderEditUserPage = (res, {
   errors = {},
   globalError = null
 }) => {
-  res.render("users/userEdit", {
+  res.render("users/edit", {
       title: "Modification de l'utilisateur",
       activePage: "users",
       user,
