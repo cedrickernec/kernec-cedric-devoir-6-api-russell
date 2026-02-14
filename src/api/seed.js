@@ -17,20 +17,20 @@ const reservationsData = JSON.parse(fs.readFileSync(path.join(__dirname, "../api
 
 const seedDatabase = async () => {
     try {
-        console.log("🌐 Connexion à MongoDB...");
+        console.info("🌐 Connexion à MongoDB...");
         await connectDB();
 
-        console.log("🧹 Nettoyage des collections...");
+        console.info("🧹 Nettoyage des collections...");
         await Catway.deleteMany();
         await Reservation.deleteMany();
 
-        console.log("📥 Insertion des Catways...");
+        console.info("📥 Insertion des Catways...");
         await Catway.insertMany(catwaysData);
 
-        console.log("📥 Insertion des Reservations...");
+        console.info("📥 Insertion des Reservations...");
         await Reservation.insertMany(reservationsData);
 
-        console.log("✅ Base de donnée remplie avec succès !");
+        console.info("✅ Base de donnée remplie avec succès !");
         process.exit();
     } catch (error) {
         console.error("❌ Erreur lors du seed :", error.message);

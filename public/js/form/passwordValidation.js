@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "1 lettre minuscule requise": pwd => /[a-z]/.test(pwd),
         "1 chiffre requis": pwd => /\d/.test(pwd),
         "1 caractère spécial requis": pwd =>
-            /[!@#$%^&*()\-_=+\[\]{};:,.?]/.test(pwd)
+            /[!@#$%^&*()\-_=+[\]{};:,.?]/.test(pwd)
     };
 
     passwordInput.addEventListener("input", () => {

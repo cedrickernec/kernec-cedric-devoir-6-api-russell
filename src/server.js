@@ -106,10 +106,10 @@ registerApiRoutes(app);
 // ERROR HANDLERS
 // ============================================
 
-/* app.use("/api", apiNotFoundHandler); // 404 - route inexistante
+app.use("/api", apiNotFoundHandler); // 404 - route inexistante
 app.use("/api", apiErrorHandler); // 500 - Erreur serveur
 app.use(webNotFoundHandler); // 404 - route inexistante
-app.use(webErrorHandler); // 500 - Erreur serveur */
+app.use(webErrorHandler); // 500 - Erreur serveur
 
 // ============================================
 // SERVER START
@@ -117,5 +117,5 @@ app.use(webErrorHandler); // 500 - Erreur serveur */
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
+    console.info(`🚀 Serveur lancé sur http://localhost:${PORT}`);
 });

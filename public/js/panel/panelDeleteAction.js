@@ -11,6 +11,7 @@
  * ===================================================================
  */
 
+/* global showToast */
 import { closeSidePanel } from "../ui/panel/sidePanel.js";
 import { COMMON_MESSAGES } from "../messages/commonMessages.js";
 import { runDeleteFlow } from "../delete/deleteFlow.js";

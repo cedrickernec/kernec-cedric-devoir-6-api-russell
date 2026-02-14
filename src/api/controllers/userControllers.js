@@ -95,8 +95,6 @@ export const createUser = async (req, res, next) => {
 
         const cleanData = pickAllowedFields(req.body, allowedFields);
 
-        const { username, email, password } = cleanData;
-
         // 2) Validation
         const errors = validateUserCreate(cleanData);
 

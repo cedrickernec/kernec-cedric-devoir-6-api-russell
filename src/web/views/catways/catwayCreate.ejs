@@ -79,9 +79,7 @@
       readonly
       aria-readonly="true"
       required
-    >
-<%= formData?.catwayState || "bon état" %>
-    </textarea>
+    ><%= formData?.catwayState || "bon état" %></textarea>
 
     <% if (errors?.catwayState) { %>
     <p class="form-error"><%= errors.catwayState %></p>

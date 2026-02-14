@@ -10,6 +10,7 @@
  * ===================================================================
  */
 
+/* global showToast */
 import { runDeleteFlow } from "../../delete/deleteFlow.js";
 
 export function initBulkTable({

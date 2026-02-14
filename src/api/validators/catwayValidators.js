@@ -12,7 +12,7 @@ export function validateCatwayCreate(body) {
     const errors = {};
 
     // N° catway
-    if(!body.catwayNumber === undefined || body.catwayNumber === "") {
+    if(body.catwayNumber === null || body.catwayNumber === "") {
         errors.catwayNumber = "Champ obligatoire manquant : Numéro de catway.";
     } else {
         const number = Number(body.catwayNumber);

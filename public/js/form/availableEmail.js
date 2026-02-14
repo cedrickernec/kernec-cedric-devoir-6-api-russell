@@ -31,9 +31,7 @@ createAvailabilityChecker({
     return url;
   },
 
-  validateFormat: (value, input) => {
-    return null;
-  },
+  validateFormat: () => null,
 
   conflictMessage: "Cet email est déjà utilisé."
 });
@@ -43,11 +41,13 @@ const emailInput = document.getElementById("email");
 const feedback = document.getElementById("email-feedback");
 
 emailInput?.addEventListener("blur", () => {
+
+  if (emailInput.dataset.locked === "true") return;
+
   if (emailInput.value.trim() && !emailInput.checkValidity()) {
 
     // Erreur bloquante
     emailInput.dataset.invalid = "true";
-    emailInput.dataset.locked = "true";
     emailInput.setAttribute("aria-invalid", "true");
 
     feedback.textContent = "Format d'email invalide (ex : nom@domaine.com).";
@@ -57,7 +57,6 @@ emailInput?.addEventListener("blur", () => {
   } else {
     // Si format correct, on libère le champ
     delete emailInput.dataset.invalid;
-    delete emailInput.dataset.locked;
     emailInput.removeAttribute("aria-invalid");
 
     feedback.textContent = "";

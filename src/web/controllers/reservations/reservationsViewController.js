@@ -32,16 +32,7 @@ import { loadOtherReservations } from "../../utils/reservations/loadOtherReserva
 
 export const getReservationsPage = async (req, res, next) => {
     try {
-      const {
-        catway,
-        search,
-        startDate,
-        endDate
-      } = req.query;
-
-      const filters = { catway, search, startDate, endDate };
-
-      let apiData = await fetchReservations(req, res);
+      const apiData = await fetchReservations(req, res);
 
       if (handleAuthExpired(apiData, req, res)) return;
 
@@ -51,33 +42,6 @@ export const getReservationsPage = async (req, res, next) => {
 
       const reservationsView = apiData.data.map(mapReservationToList);
 
-      // Filtrage
-      if (catway) {
-        reservationsView = reservationsView.filter(r =>
-          Number(r.catwayNumber) === Number(catway)
-        );
-      }
-
-      if (search) {
-        const q = search.toLowerCase();
-
-        reservationsView = reservationsView.filter(r => 
-          r.clientName.toLocaleLowerCase().includes(q) ||
-          r.boatName.toLocaleLowerCase().includes(q)
-        );
-      }
-
-      if (startDate || endDate) {
-        const start = startDate ? new Date(startDate) : null;
-        const end = endDate ? new Date(endDate) : null;
-
-        reservationsView = reservationsView.filter(r => {
-          if (start && r.endDate < start) return false;
-          if (end && r.startDate > end) return false;
-          return true
-        });
-      }
-
       const STATUS_ORDER = {
         upcoming: 1,
         active: 2,
@@ -85,6 +49,7 @@ export const getReservationsPage = async (req, res, next) => {
       };
       
       reservationsView.sort((a, b) => {
+
         // Trie par statut
         const statusDiff =
         STATUS_ORDER[a.status.semantic] -
@@ -110,8 +75,7 @@ export const getReservationsPage = async (req, res, next) => {
       res.render("reservations/reservationsList", {
           title: "Liste des réservations",
           activePage: "reservations",
-          reservations: reservationsView,
-          filters
+          reservations: reservationsView
       });
 
   } catch (error) {

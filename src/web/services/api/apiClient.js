@@ -77,7 +77,9 @@ export async function apiFetch(url, options = {}, req, res) {
 
     try {
         data = await response.json();
-    } catch {}
+    } catch {
+        /* */
+    }
 
     // ==================================================
     // ERREUR API

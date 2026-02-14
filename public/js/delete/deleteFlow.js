@@ -1,3 +1,4 @@
+/* global showToast */
 import { confirmDelete } from "../ui/modal/confirmDelete.js";
 import { COMMON_MESSAGES } from "../messages/commonMessages.js";
 

@@ -86,7 +86,7 @@ export const refreshToken = async (req, res, next) => {
             accessToken: newAccessToken
         });
 
-    } catch (error) {
+    } catch {
         next(ApiError.unauthorized("Session expirée."));
     }
 };

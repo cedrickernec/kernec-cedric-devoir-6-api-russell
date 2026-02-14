@@ -22,7 +22,7 @@ export const webNotFoundHandler = (req, res) => {
 // GLOBAL ERROR
 // ==================================================
 
-export const webErrorHandler = (err, req, res, next) => {
+export const webErrorHandler = (err, req, res, _next) => {
     const status = err.status || 500;
 
     const ui =

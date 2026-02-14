@@ -14,7 +14,6 @@ export function createAvailabilityChecker({
     feedbackId,
     getUrl,
     validateFormat,
-    formatErrorMessage,
     conflictMessage
 }) {
   document.addEventListener("DOMContentLoaded", () => {
@@ -35,6 +34,8 @@ export function createAvailabilityChecker({
         feedback.textContent = msg;
         feedback.classList.remove("hidden");
         feedback.setAttribute("role", "alert");
+
+        feedback.dataset.source = "ajax";
     };
 
     const clearError = () => {
@@ -44,6 +45,8 @@ export function createAvailabilityChecker({
 
         feedback.textContent = "";
         feedback.classList.add("hidden");
+
+        delete feedback.dataset.source;
 
         lastChecked = "";
     };

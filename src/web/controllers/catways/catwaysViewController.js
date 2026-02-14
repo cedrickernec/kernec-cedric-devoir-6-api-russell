@@ -27,7 +27,6 @@ import {
 import { findNextCatwayNumber } from "../../utils/catways/findNextCatwayNumber.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
-import { fetchReservationsByCatway } from "../../services/api/reservationApi.js";
 import { loadOtherReservations } from "../../utils/reservations/loadOtherReservations.js";
 
 /* ==================================================

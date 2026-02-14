@@ -29,7 +29,6 @@ const panelActions = panel?.querySelector(".side-panel-actions");
 // ==================================================
 
 let currentEntityId = null;
-let currentActions = null;
 
 // ==================================================
 // PANEL OPEN
@@ -56,7 +55,6 @@ export function openSidePanel({
   panelToggle?.setAttribute("aria-expanded", "true");
 
   currentEntityId = entityId;
-  currentActions = actions;
 
   // ==================================================
   // ACTIONS VISIBILITY
@@ -139,7 +137,6 @@ export function closeSidePanel() {
 
   panelContent.innerHTML = "";
   currentEntityId = null;
-  currentActions = null;
 
   document
   .querySelectorAll(".js-panel-row.is-active")

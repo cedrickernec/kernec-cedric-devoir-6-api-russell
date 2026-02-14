@@ -19,7 +19,7 @@ export const apiNotFoundHandler = (req, res) => {
 // GLOBAL ERROR
 // ==================================================
 
-export const apiErrorHandler = (err, req, res, next) => {
+export const apiErrorHandler = (err, req, res, _next) => {
     const status = err.status || 500;
     const response =  { success: false };
 
