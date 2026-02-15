@@ -9,7 +9,7 @@
  * ===================================================================
  */
 
-import { tryRefreshToken } from "../../utils/refreshToken.js";
+import { tryRefreshToken } from "../../utils/api/refreshToken.js";
 
 export async function apiFetch(url, options = {}, req, res) {
 

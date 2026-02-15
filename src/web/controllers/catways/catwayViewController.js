@@ -1,12 +1,14 @@
 /**
- * --------------------------------------------------------------------
- * Controlleur de vue - Catways
- * --------------------------------------------------------------------
- * - Pages EJS
- * - Panel latéral
+ * ===================================================================
+ * VIEW CONTROLLER - CATWAYS
+ * ===================================================================
+ * - Rendu page EJS
+ * - Chargement des données via API gateway
+ * - Gestion pannel latéral
+ * ===================================================================
  */
 
-import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
 import {
   fetchCatways,
@@ -17,21 +19,21 @@ import {
   mapCatwayToDetail,
   mapCatwayToForm,
   mapCatwayToList
-} from "../../utils/catways/catwayMapper.js";
+} from "../../utils/mappers/catwayMapper.js";
 
 import {
   renderCreateCatwayPage,
   renderEditCatwayPage
 } from "../../views/helpers/catwaysViewHelper.js";
 
-import { findNextCatwayNumber } from "../../utils/catways/findNextCatwayNumber.js";
+import { findNextCatwayNumber } from "../../utils/business/catways/findNextCatwayNumber.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
-import { loadOtherReservations } from "../../utils/reservations/loadOtherReservations.js";
+import { loadOtherReservations } from "../../utils/mappers/loadOtherReservations.js";
 
-/* ==================================================
-  CATWAYS LIST
-================================================== */
+// ==================================================
+// CATWAYS LIST
+// ==================================================
 
 export const getCatwaysPage = async (req, res, next) => {
     try {
@@ -56,9 +58,9 @@ export const getCatwaysPage = async (req, res, next) => {
     }
 };
 
-/* ==================================================
-  CATWAY DETAILS - FULL PAGE (BY NUMBER)
-================================================== */
+// ==================================================
+// CATWAY DETAILS - FULL PAGE (BY NUMBER)
+// ==================================================
 
 export const getCatwayByNumber = async (req, res, next) => {
   try {
@@ -106,9 +108,9 @@ export const getCatwayByNumber = async (req, res, next) => {
   }
 };
 
-/* ==================================================
-  CATWAY PANEL
-================================================== */
+// ==================================================
+// CATWAY PANEL
+// ==================================================
 
 export const getCatwayPanel = async (req, res, next) => {
   try {
@@ -152,9 +154,9 @@ export const getCatwayPanel = async (req, res, next) => {
   }
 };
 
-/* ==================================================
-  CREATE CATWAY PAGE
-================================================== */
+// ==================================================
+// CREATE CATWAY PAGE
+// ==================================================
 
 export const getCreateCatwayPage = async (req, res, next) => {
   try {
@@ -169,9 +171,9 @@ export const getCreateCatwayPage = async (req, res, next) => {
   }
 };
 
-/* ==================================================
-  EDIT CATWAY PAGE (BY NUMBER)
-================================================== */
+// ==================================================
+// EDIT CATWAY PAGE (BY NUMBER)
+// ==================================================
 
 export const getEditCatwayByNumber = async (req, res, next) => {
   try {

@@ -2,12 +2,13 @@
  * ===================================================================
  * VIEW CONTROLLER - RESERVATIONS
  * ===================================================================
- * - Pages EJS
- * - Panel latéral
+ * - Rendu page EJS
+ * - Chargement des données via API gateway
+ * - Gestion pannel latéral
  * ===================================================================
  */
 
-import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
 import {
   fetchReservations,
@@ -18,13 +19,13 @@ import {
   mapReservationToList,
   mapReservationToDetail,
   mapReservationEdit
-} from "../../utils/reservations/reservationMapper.js";
+} from "../../utils/mappers/reservationMapper.js";
 
 import { renderEditReservationPage } from "../../views/helpers/reservationsViewHelper.js";
 
 import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservationMessage.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
-import { loadOtherReservations } from "../../utils/reservations/loadOtherReservations.js";
+import { loadOtherReservations } from "../../utils/mappers/loadOtherReservations.js";
 
 // ==================================================
 // RESERVATIONS LIST

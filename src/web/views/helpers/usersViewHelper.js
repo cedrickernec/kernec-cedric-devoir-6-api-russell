@@ -1,4 +1,4 @@
-import { PASSWORD_RULES } from "../../utils/users/userValidator.js";
+import { PASSWORD_RULES } from "../../utils/business/users/userValidator.js";
 
 // ==================================================
 // VIEW HELPER - CREATE PAGE RENDER

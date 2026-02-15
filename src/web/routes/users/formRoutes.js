@@ -12,8 +12,8 @@ import {
     postEditUserPassword
 } from "../../controllers/users/userFormController.js";
 
-import { validateMongoIdParam } from "../../middlewares/paramsValidators.js";
-import { authGuard } from "../../middlewares/authGuard.js";
+import { validateMongoIdParam } from "../../middlewares/request/paramsValidators.js";
+import { authGuard } from "../../middlewares/auth/authGuard.js";
 
 const router = express.Router();
 

@@ -18,8 +18,8 @@ import { deleteCatwayAction } from "../../controllers/catways/catwayFormControll
 
 import nestedViewRoutes from "../reservations/nested/viewRoutes.js";
 
-import { validateNumberParam } from "../../middlewares/paramsValidators.js";
-import { authGuard } from "../../middlewares/authGuard.js";
+import { validateNumberParam } from "../../middlewares/request/paramsValidators.js";
+import { authGuard } from "../../middlewares/auth/authGuard.js";
 
 const router = express.Router();
 // Routes Catways

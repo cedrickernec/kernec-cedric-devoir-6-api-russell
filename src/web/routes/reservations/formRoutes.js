@@ -13,7 +13,7 @@ import {
     cancelCreateReservation
 } from "../../controllers/reservations/reservationFormController.js";
 
-import { authGuard } from "../../middlewares/authGuard.js";
+import { authGuard } from "../../middlewares/auth/authGuard.js";
 
 const router = express.Router();
 

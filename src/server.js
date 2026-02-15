@@ -1,3 +1,15 @@
+/**
+ * ===================================================================
+ * APPLICATION ENTRY POINT
+ * ===================================================================
+ * - Initialise l'application Express
+ * - Configure la base de données
+ * - Enregistre les middlewares globaux
+ * - Monte les routes WEB et API
+ * - Centralise la gestion des erreurs
+ * ===================================================================
+ */
+
 // ============================================
 // BOOTSTRAP & ENV.
 // ============================================
@@ -26,12 +38,12 @@ import morgan from "morgan";
 // APPLICATION MIDDLEWARE
 // ============================================
 
-import sidebarClock from "./web/middlewares/sidebarClock.js";
+import sidebarClock from "./web/middlewares/ui/sidebarClock.js";
 import { sessionMiddleware } from "./web/configs/sessionConfig.js";
-import { exposeSessionData } from "./web/middlewares/sessionExpose.js";
-import { rememberLastPath } from "./web/middlewares/rememberLastPath.js";
-import { normalizeRequest } from "./web/middlewares/normalizeRequest.js";
-import { exposeFlash } from "./web/middlewares/flashExpose.js";
+import { exposeSessionData } from "./web/middlewares/session/sessionExpose.js";
+import { rememberLastPath } from "./web/middlewares/session/rememberLastPath.js";
+import { normalizeRequest } from "./web/middlewares/request/normalizeRequest.js";
+import { exposeFlash } from "./web/middlewares/ui/flashExpose.js";
 
 // ============================================
 // ROUTES
@@ -44,7 +56,7 @@ import { registerApiRoutes } from "./api/routes/index.js";
 // ERROR HANDLING
 // ============================================
 
-import { webNotFoundHandler, webErrorHandler } from "./web/middlewares/webErrorHandler.js";
+import { webNotFoundHandler, webErrorHandler } from "./web/middlewares/errors/webErrorHandler.js";
 import { apiNotFoundHandler, apiErrorHandler } from "./api/middlewares/apiErrorHandler.js";
 
 // ============================================

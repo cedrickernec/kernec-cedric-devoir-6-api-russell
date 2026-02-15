@@ -2,11 +2,16 @@
  * ===================================================================
  * SESSION CONTROLLER
  * ===================================================================
- * - Prolonge la session express si utilisateur actif
+ * - Maintient la session active côté serveur
+ * - Tente un refresh JWT si nécessaire
  * ===================================================================
  */
 
-import { tryRefreshToken } from "../utils/refreshToken.js";
+import { tryRefreshToken } from "../utils/api/refreshToken.js";
+
+// ==================================================
+// SESSION KEEP ALIVE
+// ==================================================
 
 export async function keepAlive(req, res) {
 

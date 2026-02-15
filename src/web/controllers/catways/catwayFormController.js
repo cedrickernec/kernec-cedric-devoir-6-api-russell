@@ -1,12 +1,14 @@
 /**
- * --------------------------------------------------------------------
- * Controlleur de formulaire - Catways
- * --------------------------------------------------------------------
- * - Gestion des erreurs de formulaire
+ * ===================================================================
+ * FORM CONTROLLER - CATWAYS
+ * ===================================================================
+ * - Gestion soumission formulaires
+ * - Mapping erreurs API → vue EJS
  * - Redirections + flash messages
+ * ===================================================================
  */
 
-import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
 import {
     updateCatway,
@@ -19,7 +21,7 @@ import {
     renderEditCatwayPage
 } from "../../views/helpers/catwaysViewHelper.js";
 
-import { handleApiError } from "../../utils/apiErrorHandler.js";
+import { handleApiError } from "../../utils/api/apiErrorHandler.js";
 
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
@@ -67,6 +69,7 @@ export const postCreateCatway = async (req, res, next) => {
             });
         }
 
+        // Flash success
         req.session.flash = {
             type: "success",
             message: CATWAY_MESSAGES.CREATE_SUCCESS,
@@ -132,6 +135,7 @@ export const postEditCatway = async (req, res, next) => {
             });
         }
 
+        // Flash success
         req.session.flash = {
             type: "success",
             message: CATWAY_MESSAGES.UPDATE_SUCCESS

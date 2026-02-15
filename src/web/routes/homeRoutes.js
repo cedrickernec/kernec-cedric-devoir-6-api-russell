@@ -5,12 +5,12 @@
  */
 
 import express from "express";
-import { getHome } from "../controllers/homeController.js";
-import { publicPage } from "../middlewares/publicPage.js";
+import { getHomeView } from "../controllers/homeViewController.js";
+import { publicPage } from "../middlewares/ui/publicPage.js";
 
 const router = express.Router();
 
-router.get("/", publicPage, getHome);
-router.get("/login", publicPage, getHome);
+router.get("/", publicPage, getHomeView);
+router.get("/login", publicPage, getHomeView);
 
 export default router;

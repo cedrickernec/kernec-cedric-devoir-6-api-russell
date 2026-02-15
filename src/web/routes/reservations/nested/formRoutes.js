@@ -11,8 +11,8 @@ import express from "express";
 
 import { postEditReservation } from "../../../controllers/reservations/reservationFormController.js";
 
-import { validateMongoIdParam } from "../../../middlewares/paramsValidators.js";
-import { authGuard } from "../../../middlewares/authGuard.js";
+import { validateMongoIdParam } from "../../../middlewares/request/paramsValidators.js";
+import { authGuard } from "../../../middlewares/auth/authGuard.js";
 
 const router = express.Router({ mergeParams: true });
 

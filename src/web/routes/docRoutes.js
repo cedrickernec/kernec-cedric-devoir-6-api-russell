@@ -5,8 +5,8 @@
  */
 
 import { Router } from "express";
-import { getDocumentation } from "../controllers/docController.js";
-import { publicPage } from "../middlewares/publicPage.js";
+import { getDocumentation } from "../controllers/docViewController.js";
+import { publicPage } from "../middlewares/ui/publicPage.js";
 
 const router = Router();
 

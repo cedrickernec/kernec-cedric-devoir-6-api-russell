@@ -1,14 +1,15 @@
 /**
  * ===================================================================
- * RESERVATIONS AJAX CONTROLLER
+ * AJAX CONTROLLER - RESERVATIONS
  * ===================================================================
- * - Suppression AJAX (table & panel)
+ * - Validation asynchrone formulaire
+ * - Suppression multiple via AJAX
  * ===================================================================
  */
 
 import { deleteReservation } from "../../gateways/api/reservationApi.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
-import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
 // ==================================================
 // BULK DELETE - TABLE

@@ -1,13 +1,14 @@
 /**
- * --------------------------------------------------------------------
- * Controlleur de formulaire - Users
- * --------------------------------------------------------------------
- * - Gestion des erreurs de formulaire
- * - Hash bcrypt + update conditionnel du password
+ * ===================================================================
+ * FORM CONTROLLER - USERS
+ * ===================================================================
+ * - Gestion soumission formulaires
+ * - Mapping erreurs API → vue EJS
  * - Redirections + flash messages
+ * ===================================================================
  */
 
-import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
 import {
   createUser,
@@ -22,8 +23,8 @@ import {
   renderEditUserPage
 } from "../../views/helpers/usersViewHelper.js";
 
-import { formatApiErrors } from "../../utils/formatApiErrors.js";
-import { handleApiError } from "../../utils/apiErrorHandler.js";
+import { formatApiErrors } from "../../utils/formatters/formatApiErrors.js";
+import { handleApiError } from "../../utils/api/apiErrorHandler.js";
 
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
@@ -78,6 +79,7 @@ export const postCreateUser = async (req, res, next) => {
       });
     }
 
+    // Flash success
     req.session.flash = {
       type : "success",
       message : USER_MESSAGES.CREATE_SUCCESS,
@@ -91,9 +93,9 @@ export const postCreateUser = async (req, res, next) => {
   }
 };
 
-/* ==================================================
-  EDIT USER 
-================================================== */
+// ==================================================
+// EDIT USER 
+// ==================================================
 
 export const postEditUser = async (req, res, next) => {
   try {
@@ -141,6 +143,7 @@ export const postEditUser = async (req, res, next) => {
       });
     }
 
+    // Flash success
     req.session.flash = {
       type: "success",
       message: USER_MESSAGES.UPDATE_SUCCESS
@@ -153,9 +156,9 @@ export const postEditUser = async (req, res, next) => {
   }
 };
 
-/* ==================================================
-  EDIT USER PASSWORD
-================================================== */
+// ==================================================
+// EDIT USER PASSWORD
+// ==================================================
 
 export const postEditUserPassword = async (req, res, next) => {
   try {
@@ -214,6 +217,7 @@ export const postEditUserPassword = async (req, res, next) => {
       });
     }
 
+    // Flash success
     req.session.flash = {
       type: "success",
       message: USER_MESSAGES.PASSWORD_UPDATE_SUCCESS

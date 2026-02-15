@@ -12,8 +12,8 @@ import {
 } from "../../controllers/catways/catwayFormController.js";
 import nestedFormRoutes from "../reservations/nested/formRoutes.js";
 
-import { validateNumberParam } from "../../middlewares/paramsValidators.js";
-import { authGuard } from "../../middlewares/authGuard.js";
+import { validateNumberParam } from "../../middlewares/request/paramsValidators.js";
+import { authGuard } from "../../middlewares/auth/authGuard.js";
 
 const router = express.Router();
 

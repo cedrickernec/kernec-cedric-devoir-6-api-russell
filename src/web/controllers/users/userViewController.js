@@ -1,12 +1,14 @@
 /**
- * --------------------------------------------------------------------
- * Controlleur de vue - Users
- * --------------------------------------------------------------------
- * - Pages EJS
- * - Panel latéral
+ * ===================================================================
+ * VIEW CONTROLLER - USERS
+ * ===================================================================
+ * - Rendu page EJS
+ * - Chargement des données via API gateway
+ * - Gestion pannel latéral
+ * ===================================================================
  */
 
-import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
 import {
   fetchUserById,
@@ -17,7 +19,7 @@ import {
   mapUserDetail,
   mapUserToForm,
   mapUserToList
-} from "../../utils/users/userMapper.js";
+} from "../../utils/mappers/userMapper.js";
 
 import {
   renderCreateUserPage,
@@ -54,9 +56,9 @@ export const getUsersPage = async (req, res, next) => {
   }
 };
 
-/* ==================================================
-  USER DETAILS - FULL PAGE
-================================================== */
+// ==================================================
+// USER DETAILS - FULL PAGE
+// ==================================================
 
 export const getUserById = async (req, res, next) => {
   try {
@@ -90,9 +92,9 @@ export const getUserById = async (req, res, next) => {
   }
 };
 
-/* ==================================================
-  USER PANEL
-================================================== */
+// ==================================================
+// USER PANEL
+// ==================================================
 
 export const getUserPanel = async (req, res, next) => {
   try {
@@ -130,9 +132,9 @@ export const getUserPanel = async (req, res, next) => {
   }
 };
 
-/* ==================================================
-  CREATE USER PAGE
-================================================== */
+// ==================================================
+// CREATE USER PAGE
+// ==================================================
 
 export const getCreateUserPage = (req, res, next) => {
   try {
@@ -142,9 +144,9 @@ export const getCreateUserPage = (req, res, next) => {
   }
 };
 
-/* ==================================================
-  EDIT USER PAGE
-================================================== */
+// ==================================================
+// EDIT USER PAGE
+// ==================================================
 
 export const getEditUserPage = async (req, res, next) => {
   try {

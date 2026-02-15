@@ -1,16 +1,17 @@
 /**
- * --------------------------------------------------------------------
- * Controlleur AJAX - Users
- * --------------------------------------------------------------------
- * - Validation asynchrone (email uniquement)
- * - Suppression AJAX (table & panel)
+ * ===================================================================
+ * AJAX CONTROLLER - USERS
+ * ===================================================================
+ * - Validation asynchrone formulaire
+ * - Suppression multiple via AJAX
+ * ===================================================================
  */
 
 import User from "../../../api/models/User.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import mongoose from "mongoose";
 import { deleteUser } from "../../gateways/api/userApi.js";
-import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
 // ==================================================
 // CHECK - EMAIL AVAILABILITY

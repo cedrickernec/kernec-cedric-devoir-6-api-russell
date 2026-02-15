@@ -1,15 +1,16 @@
 /**
- * --------------------------------------------------------------------
- * Controlleur AJAX - Catways
- * --------------------------------------------------------------------
- * - Validation asynchrone (formulaires)
- * - Suppression AJAX (table & panel)
+ * ===================================================================
+ * AJAX CONTROLLER - CATWAYS
+ * ===================================================================
+ * - Validation asynchrone formulaire
+ * - Suppression multiple via AJAX
+ * ===================================================================
  */
 
 import Catway from "../../../api/models/Catway.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { deleteCatway } from "../../gateways/api/catwayApi.js";
-import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
 // ==================================================
 // CHECK - CATWAY NUMBER AVAILABILITY

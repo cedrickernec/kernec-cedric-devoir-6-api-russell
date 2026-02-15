@@ -2,12 +2,13 @@
  * ===================================================================
  * FORM CONTROLLER - RESERVATIONS
  * ===================================================================
- * - Gestion des erreurs de formulaire
+ * - Gestion soumission formulaires
+ * - Mapping erreurs API → vue EJS
  * - Redirections + flash messages
  * ===================================================================
  */
 
-import { handleAuthExpired } from "../../middlewares/authExpiredHandler.js";
+import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
 import {
     createReservation,
@@ -25,10 +26,10 @@ import {
 import {
     mapAvailabilityToTable,
     mapReservationEdit
-} from "../../utils/reservations/reservationMapper.js";
+} from "../../utils/mappers/reservationMapper.js";
 
-import { handleApiError } from "../../utils/apiErrorHandler.js";
-import { loadOtherReservations } from "../../utils/reservations/loadOtherReservations.js";
+import { handleApiError } from "../../utils/api/apiErrorHandler.js";
+import { loadOtherReservations } from "../../utils/mappers/loadOtherReservations.js";
 
 import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservationMessage.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
@@ -186,6 +187,7 @@ export const postCreateReservation = async (req, res, next) => {
                 createdReservations.push(apiData.data.reservation);
             }
 
+            // Flash success
             req.session.flash = {
                 type: "success",
                 message: `${createdReservations.length} réservation(s) créée(s) avec succès`,

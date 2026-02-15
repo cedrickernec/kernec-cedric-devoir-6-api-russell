@@ -10,7 +10,7 @@ import {
     deleteReservations
 } from "../../controllers/reservations/reservationAjaxController.js";
 
-import { authGuard } from "../../middlewares/authGuard.js";
+import { authGuard } from "../../middlewares/auth/authGuard.js";
 
 const router = express.Router();
 
