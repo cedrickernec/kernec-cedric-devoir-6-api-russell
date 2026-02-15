@@ -1,3 +1,12 @@
+/**
+ * ===================================================================
+ * CATWAY MODEL
+ * ===================================================================
+ * - Représente un emplacement d'amarrage (catway)
+ * - Définit les caractéristiques et l'état de disponibilité
+ * ===================================================================
+ */
+
 import mongoose from "mongoose";
 
 const CatwaySchema = new mongoose.Schema({
@@ -25,6 +34,11 @@ const CatwaySchema = new mongoose.Schema({
 }
 );
 
+// ===============================================
+// INSTANCE METHODS
+// ===============================================
+
+// Indique si le catway est indisponible
 CatwaySchema.methods.isUnavailable = function () {
     return this.isOutOfService === true;
 };

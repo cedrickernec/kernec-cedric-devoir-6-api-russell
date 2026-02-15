@@ -1,3 +1,13 @@
+/**
+ * ===================================================================
+ * PASSWORD VERIFICATION SERVICE
+ * ===================================================================
+ * - Vérifie un mot de passe utilisateur via bcrypt
+ * ===================================================================
+ * Utiliser pour les actions sensibles nécessitant confirmation
+ * ===================================================================
+ */
+
 import bcrypt from "bcrypt";
 import User from "../../models/User.js";
 

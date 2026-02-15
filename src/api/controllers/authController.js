@@ -2,10 +2,10 @@
  * ===================================================================
  * AUTH CONTROLLERS
  * ===================================================================
- * - Fait le lien entre l'API et la logique métier :
- *      - Gère les requêtes HTTP
- *      - Appelle les services
- *      - Construit les réponses HTTP
+ * - Reçoit les requêtes HTTP
+ * - Filtre et valide les entrées utilisateur
+ * - Appelle les services métier d'authentification
+ * - Formate les réponses API
  * ===================================================================
  */
 
@@ -70,11 +70,13 @@ export const refreshToken = async (req, res, next) => {
             throw ApiError.unauthorized("Refresh token manquant.");
         }
 
+        // Vérification du refresh toekn
         const decoded = jwt.verify(
             refreshToken,
             process.env.JWT_REFRESH_SECRET
         );
 
+        // Génération nouveau access token
         const newAccessToken = jwt.sign(
             { id: decoded.id },
             process.env.JWT_SECRET,

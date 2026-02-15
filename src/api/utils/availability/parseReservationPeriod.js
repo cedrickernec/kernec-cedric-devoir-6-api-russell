@@ -1,9 +1,18 @@
+/**
+ * ===================================================================
+ * RESERVATION PERIOD PARSER
+ * ===================================================================
+ * - Parse et valide une période de réservation
+ * - Normalise les dates au format jour (début / fin)
+ * ===================================================================
+ */
+
 import { parseDate } from "../dates/parseDate.js";
 import { normalizeDayRange } from "../dates/normalizeDayRange.js";
 import { validateReservationPeriod } from "../../validators/reservationValidators.js";
 
 // ===============================================
-// PARSE RESERVATION PERIOD
+// CREATE PERDIODE PARSING
 // ===============================================
 
 export function parseReservationPeriod(startDate, endDate) {
@@ -17,7 +26,7 @@ export function parseReservationPeriod(startDate, endDate) {
 }
 
 // ===============================================
-// PARSE RESERVATION UPDATE PERDIOD
+// UPDATE PERIOD PARSING
 // ===============================================
 
 export function parseReservationUpdatePeriod(
@@ -27,6 +36,8 @@ export function parseReservationUpdatePeriod(
     newEndDate
 ) {
 
+    // Utilise la nouvelle date si fournie,
+    // sinon conserve l'existante
     const rawStart = newStartDate
     ? parseDate(newStartDate)
     : existingStart;

@@ -2,11 +2,10 @@
  * ===================================================================
  * RESERVATION CONTROLLERS
  * ===================================================================
- * - Fait le lien entre l'API et la logique métier :
- *      - Gère les requêtes HTTP
- *      - Valide les entrées via les validators
- *      - Appelle les services
- *      - Construit les réponses HTTP
+ * - Reçoit les requêtes HTTP
+ * - Filtre et valide les entrées utilisateur
+ * - Appelle les services métier
+ * - Formate les réponses API
  * ===================================================================
  */
 

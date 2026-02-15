@@ -1,3 +1,18 @@
+/**
+ * ===================================================================
+ * AUTH - JWT AUTHENTIFICATION MIDDLEWARE
+ * ===================================================================
+ * - Vérifie la présence d'un token JWT
+ * - Valide et décode le token
+ * - Inject l'utilisateur authentifié dans req.user
+ * ===================================================================
+ * - Bloque l'accès aux routes protégées si le token est :
+ *      → absent
+ *      → invalide
+ *      → expiré
+ * ===================================================================
+ */
+
 import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/errors/apiError.js";
 

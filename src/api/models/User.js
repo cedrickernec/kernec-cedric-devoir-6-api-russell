@@ -1,3 +1,12 @@
+/**
+ * ===================================================================
+ * USER MODEL
+ * ===================================================================
+ * - Représente un utilisateur de l'application
+ * - Stocke les informations d'authentification
+ * ===================================================================
+ */
+
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({

@@ -1,3 +1,12 @@
+/**
+ * ===================================================================
+ * RESERVATION MODEL
+ * ===================================================================
+ * - Représente une réservation de catway
+ * - Contient les informations client, bateau et période
+ * ===================================================================
+ */
+
 import mongoose from "mongoose";
 
 const ReservationSchema = new mongoose.Schema({
