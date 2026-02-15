@@ -2,37 +2,45 @@
  * ===================================================================
  * SESSION LIFECYCLE CONTROLLER
  * ===================================================================
- * - Affiche un avertissement d'expiration
- * - Permet l'actualisation de la session
- * - Redirige à l'expiration
- * - Mode aperçu DEV pris en charge
- * - Sync multi-onglets via BroadcastChannel
+ * - Gère le cycle de vie complet de la session utilisateur
+ * - Affiche un avertissement avant expiration
+ * - Permet le refresh manuel ("Stay connected")
+ * - Déconnecte automatiquement à l'expiration
+ * - Synchronisation multi-onglets via BroadcastChannel
+ * - Supporte un mode preview DEV
+ * ===================================================================
+ * Source des données :
+ * - sessionMaxAge injecté côté serveur via EJS
+ * - UI pilotée uniquement côté client
  * ===================================================================
  */
 
 (() => {
 
     // ========================================================
-    // CONFIGURATION
+    // CONFIGURATION (INJECTÉE SERVEUR)
     // ========================================================
 
-    // Durée de session injectée par EJS
+    // Durée totale de session (ms)
     const sessionDuration = Number(document.body.dataset.sessionMaxAge);
+    // Mode DEV : force l'affichage warning
     const forceWarning = document.body.dataset.forceWarning === "true";
 
+    // Sécurité : désactive le controller si config invalide
     if (!Number.isFinite(sessionDuration) || sessionDuration <= 0) {
         console.warn("🚨 sessionController désactivé : sessionMaxAge invalide →", sessionDuration);
         return;
     }
 
     // ========================================================
-    // SESSION TIMING
+    // SESSION TIMING CONFIG
     // ========================================================
 
-    const warningDelay = Math.max(0, sessionDuration - 120_000); // 2 minutes avant expiration
+    // Affiche l'avertissement 2 minutes avant expiration
+    const warningDelay = Math.max(0, sessionDuration - 120_000);
 
     // ========================================================
-    // STATE
+    // INTERNAL STATE
     // ========================================================
 
     let warningTimer = null;
@@ -50,7 +58,7 @@
     const countdownBox = document.getElementById("session-countdown");
 
     // ========================================================
-    // MULTI TAB SYNC
+    // MULTI TAB SYNCHRONISATION
     // ========================================================
 
     const sessionChannel = new BroadcastChannel("russell-session");
@@ -85,7 +93,7 @@
     };
 
     // ========================================================
-    // SESSION REMAINING TIME
+    // SESSION REMAINING TIME CALCULATION
     // ========================================================
 
     function getRemainingTime() {
@@ -101,7 +109,7 @@
     }
 
     // ========================================================
-    // UPDATE REMAINING TIME TEXT
+    // COUNTDOWN UI UPDATE
     // ========================================================
 
     function updateRemainingTimeElement() {
@@ -112,6 +120,7 @@
 
         remainingTimeEl.textContent = getRemainingTime();
 
+        // Mise en danger visuelle < 30s
         if (seconds < 30) {
             countdownBox.classList.add("session-countdown--danger");
         } else {
@@ -146,7 +155,7 @@
     }
 
     // ========================================================
-    // TIMERS
+    // SESSION TIMERS MANAGEMENT
     // ========================================================
 
     const redirectOnExpire = "/";
@@ -176,7 +185,7 @@
     }
 
     // ========================================================
-    // ACTIVITY LISTENERS
+    // USER ACTIVITY LISTENERS
     // ========================================================
 
     function registerActivity() {
@@ -186,7 +195,7 @@
         if (now - lastReset < 1000) return;
         lastReset = now;
 
-        // Si modale visible → on ne fait rien
+        // Si modale visible → pas de reset automatique
         if (!warningBox.classList.contains("hidden")) {
             return;
         }
@@ -242,7 +251,7 @@
     });
 
     // ========================================================
-    // START TIMERS
+    // INITIAL START
     // ========================================================
 
     startTimers();

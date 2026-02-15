@@ -1,14 +1,20 @@
 /**
  * ===================================================================
- * USERS PANEL
+ * USERS PANEL CONFIGURATION
  * ===================================================================
- * - Configuration du panneau latéral de l'entité users
+ * - Configure le side panel pour l'entité User
+ * - Définit les routes panel / édition / suppression
+ * - Centralise les messages spécifiques métier
  * ===================================================================
  */
 
 import { initEntityPanel } from "./entityPanel.js";
 import { USER_MESSAGES } from "../../messages/userMessages.js";
 import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
+
+// ==================================================
+// PANEL INITIALISATION
+// ==================================================
 
 initEntityPanel({
   panelTitle: "Détail utilisateur",

@@ -1,9 +1,14 @@
 /**
  * ===================================================================
- * ENTITY TABLE
+ * ENTITY TABLE INITIALISER
  * ===================================================================
- * - Permet d'unifier l'initialisation des tables entités
- * - Évite l'exposition directe de tableCore aux pages
+ * - Point d'entrée unifié pour l'initialisation des tables d'entités
+ * - Sert de façade au moteur tableCore
+ * - Évite aux pages d'importer directement la logique interne
+ * ===================================================================
+ * Objectif :
+ * → Découpler les pages UI du moteur de table générique
+ * → Permettre une évolution interne sans casser les imports
  * ===================================================================
  */
 

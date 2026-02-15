@@ -1,15 +1,19 @@
 /**
  * ===================================================================
- * PASSWORD STRENGTH AND RULE VALIDADOR
+ * PASSWORD STRENGTH VALIDADOR - REALTIME FEEDBACK
  * ===================================================================
- * - Validation temps réel du mot de passe
- * - Affichage dynamique des règles
- * - Calcul de la force (barre + label)
- * - Nettoyage des erreurs backend à la saisie
+ * - Valide les règles du mot de passe en temps réel
+ * - Met à jour visuellement chaqie règle
+ * - Calcul de la force de robustesse du mot de passe (barre + label)
+ * - Nettoie implicitement les erreurs backend
  * ===================================================================
  */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    // ========================================================
+    // DOM REFERENCE
+    // ========================================================
 
     const passwordInput = document.getElementById("password");
     const rulesContainer = document.querySelector(".password-rules");
@@ -20,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!passwordInput || !rulesContainer || !rulesItems.length) return;
 
     // ========================================================
-    // VALIDATORS
+    // VALIDATION RULES
     // ========================================================
 
     const validators = {
@@ -31,6 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "1 caractère spécial requis": pwd =>
             /[!@#$%^&*()\-_=+[\]{};:,.?]/.test(pwd)
     };
+
+    // ========================================================
+    // INPUT LISTENER
+    // ========================================================
 
     passwordInput.addEventListener("input", () => {
 
@@ -84,6 +92,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const strengthPercent = Math.round((validRules / totalRules) * 100);
         strengthBar.style.width = `${strengthPercent}%`;
 
+        // ========================================================
+        // VISUAL FEEDBACK
+        // ========================================================
+        
         if (strengthPercent <= 20) {
             strengthBar.style.backgroundColor = "var(--danger-2)";
             strengthLabel.textContent = "Mot de passe très faible";

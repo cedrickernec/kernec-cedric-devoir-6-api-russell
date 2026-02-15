@@ -5,6 +5,8 @@
  * - Empèche une sélection de date antérieur à la date de début saisie
  * - Synchronise la date de fin en fonction de la date de début saisie
  * ===================================================================
+ * Applique automatiquement la logique métier "minimum 1 nuit"
+ * ===================================================================
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -13,12 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!startDateInput || !endDateInput) return;
 
+    // =====================================================
+    // START DATE CHANGE HANDLER
+    // =====================================================
+
     startDateInput.addEventListener("change", () => {
         if (!startDateInput.value) return;
 
         const start = new Date(startDateInput.value);
 
-        // + 1 jour minimum (logique "nuit")
+        // Logique métier "minimum 1 nuit"
         start.setDate(start.getDate() + 1);
 
         const minEndDate = start.toISOString().split("T")[0];
@@ -26,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Empêche une date de fin invalide
         endDateInput.min = minEndDate;
 
-        // Si la date de fin est vide ou invalide → on la synchronise
+        // Synchronisation automatique si nécessaire
         if (!endDateInput.value || endDateInput.value < minEndDate) {
             endDateInput.value = minEndDate;
         }

@@ -1,12 +1,16 @@
 /**
  * ===================================================================
- * PARTIALS TOGGLE
+ * PARTIALS VIEW TOGGLE CONTROLLER
  * ===================================================================
- * - Gère l’affichage du tableau des créneaux partiels
- * - Permet de basculer entre :
- *   - la liste principale des catways
- *   - la vue détaillée des créneaux partiels
- * - Re-synchronise l’état de sélection existant
+ * - Permet de naviguer entre :
+ *      → la liste principale des catways
+ *      → la vue détaillée des créneaux partiels
+ * - Génère dynamiquement les lignes partielles
+ * - Restaure automatiquement l'état de sélection existant
+ * ===================================================================
+ * Interaction avec :
+ *      → selectionStore (état global des sélections)
+ *      → selectionController (toggle boutons)
  * ===================================================================
  */
 
@@ -41,7 +45,7 @@ function hideSection(section) {
 }
 
 // ==================================================
-// RENDERING
+// PARTIAL ROW CREATION
 // ==================================================
 
 // Crée une ligne de tableau pour un créneau partiel
@@ -87,7 +91,10 @@ function createPartialRow(catwayNumber, catwayType, slot) {
   return row;
 }
 
-// Rendu complet du tableau des créneaux partiels
+// ==================================================
+// RENDERING
+// ==================================================
+
 function renderPartials(catwayNumber, catwayType, slots) {
   partialsTableBody.innerHTML = "";
 

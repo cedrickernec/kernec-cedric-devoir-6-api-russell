@@ -2,18 +2,23 @@
  * ===================================================================
  * SIDEBAR CLOCK
  * ===================================================================
- * - Met à jour dynamiquement la date et l'heure affichées
- * - Rafraîchissement toutes les secondes
+ * - Met à jour dynamiquement la date et l'heure affichées dans la sidebar
+ * - Mise à jour immédiate au chargement
+ * - Rafraîchissement automatique toutes les secondes
  * ===================================================================
  */
 
 import { formatDateFR, formatTimeFR } from "../../utils/dateFormatter.js";
 
+// ========================================================
+// DOM REFERENCES
+// ========================================================
+
 const dateEl = document.getElementById("sidebar-date");
 const timeEl = document.getElementById("sidebar-time");
 
 // ========================================================
-// CLOCK INITIALIZATION
+// CLOCK INITIALISATION
 // ========================================================
 
 if (dateEl && timeEl) {

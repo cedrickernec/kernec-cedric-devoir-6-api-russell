@@ -1,12 +1,22 @@
 /**
  * ===================================================================
- * CONFIRM DELETE (MODAL)
+ * DELETE CONFIRMATION CONTENT BUILDER
  * ===================================================================
- * - Génère le contenu HTML de la modale de suppression
- * - Centralise les messages selon le type
- * - Gère le pluralize et les classes status
+ * - Génère dynamiquement le contenu DOM de confirmation
+ * - Centralise les messages métier selon le type d'entité
+ * - Gère :
+ *      → singular/plural
+ *      → contexte métier (reservation, catway, user)
+ *      → demande sécurisée par mot de passe
+ * ===================================================================
+ * Ce fichier ne gère pas la modale,
+ * il construit uniquement le contenu injecté dans confirmModal
  * ===================================================================
  */
+
+// =====================================================
+// MAPPING
+// =====================================================
 
 // Mapping entre le statut API et les classes CSS
 function getStatusClass(statusKey) {
@@ -19,7 +29,10 @@ function getStatusClass(statusKey) {
   return map[statusKey] || "plain";
 }
 
-// Modale de confirmation de suppression
+// =====================================================
+// CONTENT BUILDER
+// =====================================================
+
 export function confirmDelete({
   type,
   count = 1,
@@ -27,6 +40,10 @@ export function confirmDelete({
   message = null,
   context = null
 }) {
+
+  // =====================================================
+  // ENTITY METADATA
+  // =====================================================
 
   const meta = {
     user: {
@@ -56,7 +73,7 @@ export function confirmDelete({
   p.className = "modal-text";
 
   // ==================================================
-  // CLASSIC CONFIRMATION (sans password)
+  // CLASSIC CONFIRMATION (NO PASSWORD)
   // ==================================================
 
   if (!requirePassword) {
@@ -78,7 +95,7 @@ export function confirmDelete({
   }
 
   // ==================================================
-  // PASSWORD REQUEST
+  // RESERVATION DELETE CONTEXT
   // ==================================================
 
   if (type === "reservation") {
@@ -150,7 +167,7 @@ export function confirmDelete({
   }
 
   // ==================================================
-  // SUPPRESSION CATWAY
+  // CATWAY DELETE CONTEXT
   // ==================================================
 
   else if (type === "catway") {
@@ -248,7 +265,7 @@ export function confirmDelete({
   }
 
   // ==================================================
-  // CAS PASSWORD GÉNÉRIQUE
+  // PASSWORD CASE
   // ==================================================
 
   else {
@@ -264,7 +281,7 @@ export function confirmDelete({
   }
 
   // ==================================================
-  // PASSWORD FIELD
+  // PASSWORD FIELD INJECTION
   // ==================================================
 
   const passwordInput = document.createElement("input");

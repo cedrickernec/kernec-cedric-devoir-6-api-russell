@@ -1,12 +1,14 @@
 /**
  * ===================================================================
- * CATWAYS TABLE
+ * CATWAYS TABLE INITIALISER
  * ===================================================================
- * - Initialise la table Catways
- * - Configure la sélection multiple
- * - Configure la suppression en masse
- * - Fournit les messages spécifiques aux catways
- * - Repose sur entityTable et tableCore
+ * - Configure et initialise la table des catways
+ * - Active la sélection multiple
+ * - Active la suppression en masse (bulk delete)
+ * - Injecte les messages métier spécifique aux catways
+ * ===================================================================
+ * Architecture :
+ * → Adaptateur métier au-dessus du moteur générique entityTable
  * ===================================================================
  */
 
@@ -20,6 +22,7 @@ export function initCatwaysTable() {
         checkboxName: "selectedCatways",
         deleteBtnId: "delete-selected",
         selectAllId: "select-all",
+
         deleteUrl: "/ajax/catways",
         deleteType: "catway",
 

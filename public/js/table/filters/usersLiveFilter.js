@@ -1,34 +1,51 @@
 /**
  * ===================================================================
- * USERS LIVE FILTER
+ * USERS LIVE FILTER CONTROLLER
  * ===================================================================
- * - Filtrage en temps réel des utilisateurs :
- *   - Recherche sur username / email
- * - Met à jour le compteur
- * - Gère la ligne "aucun résultat"
- * - Notifie la table des changements de visibilité
+ * - Filtre dynamiquement les lignes de la table Users
+ * - Applique plusieurs critères combinable :
+ *      → Nom d'utilisateur
+ *      → Email
+ * - Met à jour le compteur de résultats visibles
+ * - Gère l'affichage de la ligne "aucun résultat"
+ * - Notifie tableCore des changements de visibilité
+ * ===================================================================
+ * Synchronisé avec tableCore via l'event "table:visibility-change"
  * ===================================================================
  */
 
 import { normalizeString } from "../../utils/normalizeString.js";
 
 export function initUsersLiveFilter() {
+
+    // ========================================================
+    // DOM REFERENCES
+    // ========================================================
+
     const rows = Array.from(document.querySelectorAll(".js-user-row"));
 
     const searchInput = document.querySelector("#filter-search");
     const resetButton = document.querySelector("#filters-reset");
     const countLabel = document.querySelector("#users-count");
 
-    // Sécurité
+    // Sécurité : Si le filtre n'existe pas → abandon
     if (!searchInput) return;
 
     const totalCount = rows.length;
+
+    // ========================================================
+    // COUNTER MANAGEMENT
+    // ========================================================
 
     function updateCounter(visibleCount) {
         if (!countLabel) return;
 
         countLabel.textContent = `(${visibleCount} / ${totalCount})`;
     }
+
+    // ========================================================
+    // FILTER ENGINE
+    // ========================================================
 
     function applyFilters() {
         const search = normalizeString(searchInput.value.trim());
@@ -38,6 +55,7 @@ export function initUsersLiveFilter() {
             const username = normalizeString(row.dataset.user);
             const email = normalizeString(row.dataset.email);
 
+            // ----- FILTER : TEXT SEARCH -----
             const visible =
             !search ||
             username.includes(search) ||
@@ -48,6 +66,7 @@ export function initUsersLiveFilter() {
             if (visible) visibleCount++;
         });
 
+        // Gestion ligne "aucun résultat"
         const noResultRow = document.getElementById("no-results-row");
         if (noResultRow) {
             noResultRow.hidden = visibleCount !== 0;
@@ -55,11 +74,15 @@ export function initUsersLiveFilter() {
 
         updateCounter(visibleCount);
 
-        // Notification pour bulkTable / select-all
+        // Synchronisation avec tableCore (select-all / bulk delete)
         document.dispatchEvent(
             new CustomEvent("table:visibility-change")
         );
     }
+
+    // ========================================================
+    // RESET FILTERS
+    // ========================================================
 
     function resetFilters() {
         searchInput.value = "";
@@ -80,7 +103,10 @@ export function initUsersLiveFilter() {
         );
     }
 
-    // Events
+    // ========================================================
+    // EVENTS
+    // ========================================================
+
     searchInput.addEventListener("input", applyFilters);
 
     if (resetButton) {

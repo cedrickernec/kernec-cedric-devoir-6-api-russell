@@ -1,13 +1,16 @@
 /**
  * ===================================================================
- * PREVENT SUBMIT IF LOCKED
+ * FORM GUARD - PREVENT SUBMIT IF INVALID OR LOCKED
  * ===================================================================
- * - Script générique de protection des formulaires
  * - Désactive automatiquement les boutons submit si :
- *      - un champ possède data-locked="true"
- *      - un champ required est vide
- *      - un champ est invalide HTML5
- *      - en mode EDIT : aucune modification détectée
+ *      → un champ possède data-locked="true"   
+ *      → un champ required est vide
+ *      → un champ est invalide HTML5
+ *      → en mode EDIT : aucune modification détectée
+ * ===================================================================
+ * Sécurité :
+ *      - Protection UX  (frontend)
+ *      - Le backend reste la validation finale
  * ===================================================================
  */
 
@@ -33,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        // Vérifie si une modification existe
         const hasChanges = () => {
             if (!initialData) return true;
 
@@ -119,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
         form.addEventListener("change", refreshState);
 
         // ============================================================
-        // INITIAL STATUS
+        // INITIAL STATE
         // ============================================================
 
         refreshState();

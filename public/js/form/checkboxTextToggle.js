@@ -1,15 +1,23 @@
 /**
  * ===================================================================
- * CHECKBOX → SYNCRONISATION TEXT INPUT FIELD
+ * CHECKBOX STATE SYNCHRONISATION - CATWAY STATE MANAGEMENT
  * ===================================================================
- * - Verrouille le textarea quand "bon état" est coché
- * - Injecte "bon état"
- * - Masque / désactive "hors service"
- * - Garantit que ce qui est caché n’est PAS soumis
+ * - Synchronise la checkbox "bon état" avec le textearea d'état
+ * - Force la valeur "bon état" en mode verouillé
+ * - Masque / désactive la checkbox "hors service"
+ * - Garantit que les champs masqués ne soient jamais soumis
+ * ===================================================================
+ * Fonctionne pour :
+ *    - Création (état par défaut)
+ *    - Édition (réinjection des données existantes)
  * ===================================================================
  */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  // ========================================================
+  // DOM REFERENCE
+  // ========================================================
 
   const goodStateCheckbox = document.getElementById("goodStateCheckbox");
   const stateTextarea = document.getElementById("catwayState");
@@ -19,8 +27,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!goodStateCheckbox || !stateTextarea) return;
 
+  // ========================================================
+  // INTERNAL STATE
+  // ========================================================
+
   let previousValue = stateTextarea.value;
   let initialized = false;
+
+  // ========================================================
+  // STATE SYNCHRONISATION
+  // ========================================================
 
   const applyState = () => {
     if (goodStateCheckbox.checked) {
@@ -30,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         previousValue = stateTextarea.value;
       }
 
-      // Force "bon état"
+      // Vérouille le textarea → Force "bon état"
       stateTextarea.value = "bon état";
       stateTextarea.readOnly = true;
 
@@ -47,11 +63,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     } else {
 
-      // Restaure saisie
+      // Restaure saisie personnalisée
       stateTextarea.readOnly = false;
       stateTextarea.value = previousValue || "";
 
-      // Vidé si on était en "bon état"
+      // Nettoie si ancien état automatique
       if (stateTextarea.value.trim() === "bon état") {
         stateTextarea.value = "";
       }
@@ -66,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Informer preventSubmitIfLocked qu'un changement a eu lieu
+    // Informe preventSubmitIfLocked qu'un changement a eu lieu
     const event = new Event("change", { bubbles: true });
     stateTextarea.dispatchEvent(event);
     if (outOfServiceCheckbox) {
@@ -75,6 +91,10 @@ document.addEventListener("DOMContentLoaded", () => {
     
     initialized = true;
   };
+
+  // ========================================================
+  // EVENTS
+  // ========================================================
 
   goodStateCheckbox.addEventListener("change", applyState);
 

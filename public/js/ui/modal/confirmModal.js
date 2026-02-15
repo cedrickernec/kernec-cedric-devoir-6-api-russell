@@ -1,10 +1,14 @@
 /**
  * ===================================================================
- * CONFIRM MODAL
+ * GLOBAL CONFIRM MODAL CONTROLLER
  * ===================================================================
- * - Affiche une modale de confirmation
+ * - Contrôle l'affichage de la modale de confirmation globale
  * - Expose window.openConfirmModal(options)
- * - Gère confirmation, annulation, fermeture clavier / backdrop
+ * - Gère :
+ *      → injection dynamique du contenu
+ *      → callbacks async de confirmation
+ *      → fermeture (Escape / backdrop / boutons)
+ *      → accessibilité (focus trap + interaction mode)
  * ===================================================================
  */
 import { escapeManager } from "../accessibility/escapeManager.js";
@@ -12,6 +16,11 @@ import { createFocusTrap } from "../accessibility/focusTrap.js";
 import { isKeyboardInteraction } from "../accessibility/interactionMode.js";
 
 (function () {
+
+  // ==================================================
+  // MODAL INITIALISATION
+  // ==================================================
+
   const modal = document.getElementById("confirm-modal");
   if (!modal) return;
 
@@ -33,7 +42,7 @@ import { isKeyboardInteraction } from "../accessibility/interactionMode.js";
   let onCancelCallback = null;
 
   // ==================================================
-  // MODAL CONTROL
+  // OPEN MODAL
   // ==================================================
 
   function open({ title = "Confirmation", content, onConfirm, onCancel }) {
@@ -70,6 +79,10 @@ import { isKeyboardInteraction } from "../accessibility/interactionMode.js";
     });
   }
 
+  // ==================================================
+  // CLOSE MODAL
+  // ==================================================
+
   function close() {
     if (confirmBtn) {
       confirmBtn.textContent = confirmLabelDefaut;
@@ -95,6 +108,10 @@ import { isKeyboardInteraction } from "../accessibility/interactionMode.js";
     open(options || {});
   };
 
+  // ==================================================
+  // CONFIRM ACTION HANDLER
+  // ==================================================
+  
   confirmBtn?.addEventListener("click", async () => {
 
       if (!onConfirmCallback) {

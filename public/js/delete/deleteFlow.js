@@ -1,6 +1,29 @@
+/**
+ * ===================================================================
+ * GENERIC DELETE FLOW
+ * ===================================================================
+ * Centralise tout le workflow de suppression :
+ *      → ouverture de la modale de confirmation
+ *      → gestion password_required
+ *      → appel API DELETE
+ *      → gestion des erreurs métier
+ *      → feedback utilisateur (toast)
+ * ===================================================================
+ * Utilisé par :
+ *      - suppression simple (entité unique)
+ *      - suppression multiple (bulk table)
+ *      - suppression sensible (avec confirmation par mot de passe)
+ * ===================================================================
+ */
+
 /* global showToast */
+
 import { confirmDelete } from "../ui/modal/confirmDelete.js";
 import { COMMON_MESSAGES } from "../messages/commonMessages.js";
+
+// ========================================================
+// MAIN DELETE FLOW
+// ========================================================
 
 export function runDeleteFlow({
     deleteUrl,
@@ -10,6 +33,10 @@ export function runDeleteFlow({
     onSuccess,
     onCancel
 }) {
+
+    // ========================================================
+    // MODAL ORCHESTRATION (RECURSIVE FLOW)
+    // ========================================================
 
     const openDeleteModal = ({
         requirePassword = false,
@@ -28,6 +55,10 @@ export function runDeleteFlow({
         window.openConfirmModal({
             title: "Confirmation",
             content: content.node,
+
+            // ========================================================
+            // CONFIRM ACTION
+            // ========================================================
 
             onConfirm: async () => {
 
@@ -48,10 +79,15 @@ export function runDeleteFlow({
 
                 const data = await res.json();
 
+                // ========================================================
+                // BACKEND RESPONSE HANDLING
+                // ========================================================
+
                 if (!data.success) {
 
                 const detail = data.context || {};
 
+                // Le backend exige un mot de passe
                 if (detail.reason === "password_required") {
                     openDeleteModal({
                         requirePassword: true,
@@ -61,21 +97,31 @@ export function runDeleteFlow({
                     return false;
                 }
 
+                // Mot de passe incorrect
                 if (detail.reason === "invalid_password") {
                     showToast("error", data.message);
                     throw { code: "PASSWORD_INVALID" };
                 }
 
+                // Erreur générique
                 showToast("error", data.message || COMMON_MESSAGES.DELETE_ERROR);
                 return false;
                 }
 
+                // ========================================================
+                // SUCCESS CALLBACK
+                // ========================================================
+                
                 if (onSuccess) {
                     onSuccess(data);
                 }
 
                 return true;
             },
+
+            // ========================================================
+            // CANCEL ACTION
+            // ========================================================
 
             onCancel: () => {
                 if (onCancel) {
@@ -84,6 +130,10 @@ export function runDeleteFlow({
             }
         });
     };
+
+    // ========================================================
+    // FLOW INITIALIZATION
+    // ========================================================
 
     openDeleteModal();
 }

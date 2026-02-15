@@ -2,13 +2,17 @@
  * ===================================================================
  * TOAST NOTIFICATION SYSTEM
  * ===================================================================
- * - Affiche des notifications temporaires
- * - Supporte les actions personnalisées
- * - Pause au survol
+ * - Affiche des notifications temporaires (success / error / info)
+ * - Supporte les actions personnalisées optionnelles
+ * - Met en pause le timer au survol
  * ===================================================================
  */
 
 (function () {
+
+  // ==================================================
+  // DOM REFERENCES
+  // ==================================================
 
   const container = document.getElementById("toast-container");
   if (!container) return;
@@ -19,6 +23,9 @@
 
   const DEFAULT_DURATION = 5000;
 
+  // ==================================================
+  // PUBLIC API
+  // ==================================================
   /**
    * Afficher une notification toast
    * @param {"success"|"error"|"info"} type
@@ -29,6 +36,7 @@
    * @param {string} options.action.label
    * @param {Function} options.action.onClick
    */
+
   window.showToast = function (type, message, options = {}) {
     const duration = options.duration ?? DEFAULT_DURATION;
 
@@ -47,7 +55,7 @@
     actionsEl.className = "toast-actions";
 
     // ==================================================
-    // CUSTOM ACTION
+    // CUSTOM ACTION (OPTIONNAL)
     // ==================================================
 
     if (options.action?.label && typeof options.action.onClick === "function") {
@@ -108,7 +116,7 @@
     });
 
     // ==================================================
-    // TOAST REMOVAL
+    // REMOVAL
     // ==================================================
 
     function removeToast() {
