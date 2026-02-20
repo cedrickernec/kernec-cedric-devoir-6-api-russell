@@ -1,0 +1,89 @@
+/**
+ * ===================================================================
+ * PRIMITIVES - DESIGN SYSTEM FOUNDATIONS
+ * ===================================================================
+ * Variables techniques globales indépendantes du thème.
+ *
+ * Ce fichier définit :
+ *      - les mesures universelles
+ * ===================================================================
+ * Objectif :
+ *      → Assurer la cohérence visuelle globale.
+ * ===================================================================
+ * Utilisé par : 
+ *      - variable.css (contrat UI)
+ *      - composants directement si nécessaire.
+ * ===================================================================
+*/
+
+:root {
+
+    /* =============== BORDERS =============== */
+
+    --border-light:  1px solid color-mix(in srgb, var(--theme-black) 12%, transparent);
+    --border-strong: 1px solid color-mix(in srgb, var(--theme-black) 22%, transparent);
+
+    /* =============== SHADOWS =============== */
+
+    --shadow-sm: 2px 2px 3px rgba(from var(--theme-black) r g calc(b + 100) / 0.1);
+    --shadow-md: 4px 4px 6px rgba(from var(--theme-black) r g calc(b + 100) / 0.15);
+    --shadow-lg: 8px 8px 12px rgba(from var(--theme-black) r g calc(b + 100) / 0.2);
+
+    /* =============== RADIUS =============== */
+
+    --radius-sm:    4px;
+    --radius-md:    6px;
+    --radius-lg:    10px;
+    --radius-pill:  9999px;
+
+    /* =============== SPACING =============== */
+
+    --space-xxs:    0.15rem;
+    --space-xs:     0.25rem;
+    --space-sm:     0.50rem;
+    --space-md:     0.75rem;
+    --space-lg:     1.25rem;
+    --space-xl:     1.50rem;
+    --space-xxl:    1.75rem;
+
+    /* =============== TYPO SCALE =============== */
+
+    --font-size-hint:   0.65rem;
+    --font-size-100:    0.75rem;
+    --font-size-200:    0.85rem;
+    --font-size-300:    1.00rem;
+    --font-size-400:    1.25rem;
+    --font-size-500:    1.75rem;
+    --font-size-600:    2.25rem;
+    --font-size-700:    2.75rem;
+    --font-size-800:    3.25rem;
+    --font-size-900:    4.50rem;
+
+    /* =============== UNDERLINE =============== */
+
+    --underline-thickness: 1px;
+    --underline-offset: 2px;
+
+    /* =============== TYPO WEIGHT =============== */
+
+    --font-weight-700: 700;
+
+    /* =============== ICONS =============== */
+
+    --icon-size-xs: 1.00rem;
+    --icon-size-sm: 1.50rem;
+    --icon-size-md: 2.00rem;
+    --icon-size-lg: 2.50rem;
+
+    /* =============== Z-INDEX SCALE =============== */
+
+    --z-background:   0;
+    --z-content:      10;
+    --z-sticky:       100;
+    --z-floating:     1000;
+    --z-floating-top: 1100;
+    --z-overlay:      2000;
+    --z-toast:        2100;
+    --z-ui-layer:     9999;
+
+}

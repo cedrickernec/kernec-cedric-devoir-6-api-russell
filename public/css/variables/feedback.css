@@ -1,0 +1,86 @@
+/**
+ * ===================================================================
+ * FEEDBACK SYSTEM — USER COMMUNICATION
+ * ===================================================================
+ * Définit les tokens liés aux retours utilisateur.
+ *
+ * Contient :
+ *      - Toast notifications
+ *      - Messages globaux
+ *      - Errors formulaire
+ *      - Overlays
+ * ===================================================================
+ * Rôle :
+ *      → Uniformiser la communication visuelle avec l’utilisateur.
+ *      → Garantir une cohérence UX des états système.
+ * ===================================================================
+ */
+
+:root {
+
+   /* =============== OVERLAY =============== */
+
+   /* Background overlay */
+   --overlay-backdrop-bg-dark:               rgba(from var(--theme-black) r g b / 0.35);
+   --overlay-backdrop-bg-light:              rgba(from var(--theme-white) r g b / 0.85);
+
+   /* Background overlay for gradient */
+   --overlay-dark-strong:                    rgba(from var(--theme-black) r g b / 0.9);
+   --overlay-dark-medium:                    rgba(from var(--theme-black) r g b / 0.5);
+   --overlay-dark-light:                     rgba(from var(--theme-black) r g b / 0.2);
+
+   --overlay-light-strong:                   rgba(from var(--theme-white) r g b / 0.9);
+   --overlay-light-medium:                   rgba(from var(--theme-white) r g b / 0.5);
+   --overlay-light-light:                    rgba(from var(--theme-white) r g b / 0.2);
+
+   /* =============== TOAST =============== */
+
+   /* Container */
+   --toast-container-offset-bottom:          24px;
+   --toast-container-gap:                    var(--flow-tight);
+
+   /* Base */
+   --toast-bg:                               var(--surface-primary);
+   --toast-shadow:                           var(--shadow-md);
+
+   --toast-radius:                           var(--radius-md);
+   --toast-gap:                              var(--flow-tight);
+
+   --toast-min-width:                        280px;
+   --toast-max-width:                        520px;
+
+   --toast-padding-block:                    12px;
+   --toast-padding-inline:                   16px;
+
+   --toast-accent-width:                     var(--border-accent-width);
+
+   /* Variants (accents) */
+   --toast-success-accent:                   var(--color-success);
+   --toast-error-accent:                     var(--color-danger);
+   --toast-info-accent:                      var(--color-text-muted);
+
+   /* Content */
+   --toast-message-font-size:                var(--text-small-size);
+   --toast-actions-gap:                      var(--space-sm);
+
+   /* =============== FORM STATE =============== */
+
+   --form-message-text-size-xs:              var(--text-very-small-size);
+   --form-message-text-size-md:              var(--text-body-size);
+
+   /* Errors */
+   --form-error-text:                        var(--color-danger-hard);
+   --form-error-bg:                          var(--color-danger-accent);
+   --form-error-border:                      var(--color-danger-hard);
+
+   /* Global errors */
+   --form-global-error-text:                 var(--color-danger-hard);
+   --form-global-error-bg:                   var(--color-danger-accent);
+   --form-global-error-border:               var(--border-accent-width) solid var(--color-danger);
+
+   /* Global messages */
+   --form-global-message-text:               var(--color-text-muted);
+   --form-global-message-bg:                 var(--surface-primary);
+   --form-global-message-border:             var(--border-accent-width) solid var(--color-neutral-500);
+
+}

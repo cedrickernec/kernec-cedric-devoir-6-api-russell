@@ -14,6 +14,7 @@ export const renderCreateReservationPage = (res, {
     res.render("reservations/create", {
         title: "Création d'une réservation",
         activePage : "reservations",
+        bodyClass: "scroll-components create-page",
         step,
         errors,
         globalError,
@@ -38,6 +39,7 @@ export const renderEditReservationPage = (res, {
     res.render("reservations/edit", {
         title: "Édition d'une réservation",
         activePage : "reservations",
+        bodyClass: "scroll-components edit-page",
         reservation,
         otherReservations,
         errors,

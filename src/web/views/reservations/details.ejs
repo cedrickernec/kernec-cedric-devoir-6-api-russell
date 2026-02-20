@@ -1,6 +1,6 @@
 <h1 id="page-title">Détails de la réservation</h1>
 
-<section class="detail-card" aria-labelledby="page-title">
+<section class="card card--details" aria-labelledby="page-title">
   <dl class="detail-list">
     <div class="detail-row">
       <dt>Statut</dt>
@@ -30,7 +30,7 @@
       <dd>
         <a
           href="/catways/<%= reservation.catway.number %>?from=reservation&id=<%= reservation.id %>"
-          class="link"
+          class="link link--primary"
           aria-label="Voir le catway <%= reservation.catway.number %>"
           title="Afficher le catway"
         >

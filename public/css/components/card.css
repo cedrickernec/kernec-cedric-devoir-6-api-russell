@@ -1,0 +1,22 @@
+/* ======================================================
+   CARD
+   ====================================================== */
+
+.card {
+    background: var(--surface-primary);
+    border-radius: var(--radius-md);
+    border: var(--border-light);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ======================================================
+   VARIANTS
+   ====================================================== */
+
+.card--elevated {
+    box-shadow: var(--shadow-md);
+}
+
+.card--rounded-lg {
+    border-radius: var(--radius-lg);
+}

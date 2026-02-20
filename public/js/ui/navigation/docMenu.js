@@ -31,7 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
         title.setAttribute("aria-expanded", "false");
 
         submenu.classList.remove("open");
-        submenu.hidden = true;
+
+        submenu.addEventListener("transitionend", () => {
+            if (!submenu.classList.contains("open")) {
+                submenu.hidden = true;
+            }
+        }, { once: true });
     }
 
     function openGroup(title) {
@@ -42,7 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
         title.setAttribute("aria-expanded", "true");
 
         submenu.hidden = false;
-        submenu.classList.add("open");
+
+        requestAnimationFrame(() => {
+            submenu.classList.add("open");
+        })
     }
 
     function closeAllExcept(currentTitle) {

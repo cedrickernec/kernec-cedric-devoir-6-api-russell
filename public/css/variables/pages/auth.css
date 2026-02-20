@@ -1,0 +1,57 @@
+/**
+ * ===================================================================
+ * AUTH PAGE CONFIG — PAGE SPECIFIC VARIABLES
+ * ===================================================================
+ * Variables dédiées exclusivement à la page d’authentification.
+ *
+ * Contient :
+ *      - Layout interne auth
+ *      - Typographie spécifique
+ *      - Espacements propres à la page
+ *      - Éléments flottants (documentation link)
+ * ===================================================================
+ * Rôle :
+ *      → Adapter le design system à un contexte particulier
+ *        sans impacter les autres pages.
+ * ===================================================================
+ * IMPORTANT :
+ *      Ces variables ne doivent PAS être réutilisées ailleurs.
+ * ===================================================================
+ */
+
+.auth-page {
+
+   --auth-hero-image:                        url(/images/pexels-robert-stokoe-105922-714666.jpg);
+
+   /* Stack */
+   --auth-stack-gap:                         var(--flow-loose);
+   --auth-text-stack-gap:                    var(--flow-normal);
+
+   /* Typography */
+   --auth-title-size:                        var(--text-heading-2);
+   --auth-title-weight:                      var(--text-bold);
+   --auth-description-size:                  var(--text-small-size);
+   --auth-description-spacing:               var(--flow-normal);
+
+   /* Submit button */
+   --auth-submit-font-size:                  var(--text-body-size);
+   --auth-submit-padding-block:              12px;
+
+   /* Documentation floating button */
+   --auth-doc-size:                          40px;
+   --auth-doc-offset-top:                    -8px;
+   --auth-doc-offset-left:                   -80px;
+   --auth-doc-btn-text:                      var(--color-text-negatif);
+   --auth-doc-btn-bg:                        var(--color-neutral-900);
+   --auth-doc-btn-text-hover:                var(--color-text-negatif);
+   --auth-doc-btn-bg-hover:                  var(--color-primary);
+
+   /* Motion Auth only */
+   --auth-card-enter-translate-x:            40px;
+   --auth-card-enter-scale:                  var(--motion-enter-scale-sm);
+   --auth-reveal-translate-y:                var(--motion-enter-translate-lg);
+
+   --auth-enter-duration:                    var(--motion-duration-slower);
+   --auth-enter-ease:                        var(--motion-ease-out);
+   
+}

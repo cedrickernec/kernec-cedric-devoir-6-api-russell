@@ -12,6 +12,7 @@ export const renderCreateUserPage = (res, {
   res.render("users/create", {
     title: "Création d'un utilisateur",
     activePage : "users",
+    bodyClass: "scroll-main create-page",
     errors,
     globalError,
     formData,
@@ -31,6 +32,7 @@ export const renderEditUserPage = (res, {
   res.render("users/edit", {
       title: "Modification de l'utilisateur",
       activePage: "users",
+      bodyClass: "scroll-main edit-page",
       user,
       errors,
       globalError,

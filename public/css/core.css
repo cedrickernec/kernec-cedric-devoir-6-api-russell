@@ -1,0 +1,16 @@
+/* ==================================================
+   CORE ENTRYPOINT
+   ===================================================== */
+
+/* Design system */
+@import url(./variables/variables.css);
+
+/* Base rules */
+@import url(./base/reset.css);
+@import url(./base/typography.css);
+@import url(./base/accessibility.css);
+
+/* Utilities */
+@import url(./utils/text-utils.css);
+@import url(./utils/empty-state.css);
+

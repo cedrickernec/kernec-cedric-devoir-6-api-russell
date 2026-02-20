@@ -21,7 +21,10 @@ import {
   mapReservationEdit
 } from "../../utils/mappers/reservationMapper.js";
 
-import { renderEditReservationPage } from "../../views/helpers/reservationsViewHelper.js";
+import {
+  renderCreateReservationPage,
+  renderEditReservationPage
+} from "../../views/helpers/reservationsViewHelper.js";
 
 import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservationMessage.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
@@ -76,7 +79,8 @@ export const getReservationsPage = async (req, res, next) => {
       res.render("reservations/list", {
           title: "Liste des réservations",
           activePage: "reservations",
-          reservations: reservationsView
+          reservations: reservationsView,
+          bodyClass: "scroll-components reservations-page",
       });
 
   } catch (error) {
@@ -116,7 +120,8 @@ export const getReservationById = async (req, res, next) => {
     res.render("reservations/details", {
       title: "Détail réservation",
       activePage: "reservations",
-      reservation: reservationViewModel
+      reservation: reservationViewModel,
+      bodyClass: "scroll-main details-page"
     });
 
   } catch (error) {
@@ -186,15 +191,7 @@ export const getCreateReservationPage = async (req, res, next) => {
         preselectedCatway = preselectedCatway[0];
       }
 
-      res.render("reservations/create", {
-          title: "Créer une réservation",
-          activePage: "reservations",
-          step: "client",
-          errors: {},
-          formData: req.session.reservationDraft || {},
-          availableCatways: [],
-          preselectedCatway
-      });
+      renderCreateReservationPage(res, {});
 
     } catch (error) {
         next(error);

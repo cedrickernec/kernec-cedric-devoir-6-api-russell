@@ -1,12 +1,9 @@
 /* ======================================================
    DASHBOARD - USER INFOS
    ====================================================== */
-.user-box {
-    background: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: var(--box-shadow-sm);
-    margin-bottom: 30px;
+   
+.card--user {
+    padding: var(--space-lg) var(--space-xl);
     width: 100%;
 
     display: flex;
@@ -14,11 +11,7 @@
     align-items: center;
 }
 
-.user-box p {
-    margin: 0.3rem 0;
-}
-
-.user-box p i {
+.card--user-icon {
     font-size: var(--size-icon);
-    padding-right: 10px;
+    padding-right: var(--space-md);
 }

@@ -17,7 +17,7 @@ import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
 // ==================================================
 
 initEntityPanel({
-  panelTitle: "Détail utilisateur",
+  panelTitle: "Détails",
   panelUrl: "/users",
 
   editTitle: "Éditer l'utilisateur",

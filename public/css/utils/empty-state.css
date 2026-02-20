@@ -4,16 +4,16 @@
 
 .no-data {
     text-align: center;
-    padding: 20px;
-    font-size: 0.875rem;
+    padding: var(--space-lg);
+    font-size: var(--text-small-size);
     font-style: italic;
-    color: var(--color-tertiary);
+    color: var(--color-text-muted);
 }
 
 .no-data--error {
-    color: var(--danger-1);
+    color: var(--color-danger);
 }
 
 .no-data--error i {
-    margin-right: 6px;
+    margin-right: var(--space-sm);
 }

@@ -36,7 +36,7 @@ export function reservationSummary({ data }) {
 
     if (hasOverlap) {
         const warning = document.createElement("div");
-        warning.className = "modal-context-warning";
+        warning.className = "modal-context-info";
         warning.innerHTML = `
             <span class="bold"><i class="fa-solid fa-triangle-exclamation modal-context-icon"></i> Attention</span>
             <span class="italic">Certaines réservations sélectionnées se chevauchent dans le temps.

@@ -48,7 +48,8 @@ export const getUsersPage = async (req, res, next) => {
     res.render("users/list", {
       title: "Utilisateurs",
       activePage: "users",
-      users: userView
+      users: userView,
+      bodyClass: "scroll-components users-page",
     });
 
   } catch (error) {
@@ -84,7 +85,8 @@ export const getUserById = async (req, res, next) => {
     res.render("users/details", {
       title: "Détail utilisateur",
       activePage: "users",
-      user: userViewModel
+      user: userViewModel,
+      bodyClass: "scroll-main details-page",
     });
 
   } catch (error) {

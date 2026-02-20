@@ -1,0 +1,54 @@
+/**
+ * ===================================================================
+ * DOC PAGE CONFIG — PAGE SPECIFIC VARIABLES
+ * ===================================================================
+ * Variables dédiées exclusivement à la page de documentation.
+ *
+ * Contient :
+ *      - Layout interne doc
+ *      - Typographie spécifique
+ *      - Espacements propres à la page
+ *      - Couleurs d’accentuation (ex: erreurs)
+ * ===================================================================
+ * Rôle :
+ *      → Adapter le design system à un contexte particulier
+ *        sans impacter les autres pages.
+ * ===================================================================
+ * IMPORTANT :
+ *      Ces variables ne doivent PAS être réutilisées ailleurs.
+ * ===================================================================
+ */
+
+.doc-page {
+
+   /* Global */
+   --doc-global-spacing:                     var(--space-md);
+
+   /* Doc menu */
+   --doc-menu-padding-left:                  var(--doc-global-spacing);
+   --doc-menu-max-height:                    400px;
+
+   /* Content Page */
+   --doc-content-title-padding-left:         var(--doc-global-spacing);
+
+   /* Navigation achor */
+   --doc-anchor-offset:                      80px;
+   
+   /* Doc card */
+   --doc-card-padding-block:                 var(--space-lg);
+   --doc-card-padding-inline:                var(--space-lg);
+
+   /* Detail Summary */
+   --doc-summary-gap:                        var(--space-sm);
+   --doc-example-title-gap:                  var(--space-sm);
+   --doc-example-title-spacing:              var(--doc-global-spacing);
+   
+   /* Reading rhythm */
+   --doc-bloc-spacing:                       var(--doc-global-spacing);
+
+   /* Error blocks */
+   --doc-error-spacing:                      var(--doc-global-spacing);
+   --doc-error-padding-left:                 var(--doc-global-spacing);
+   --doc-error-gap:                          var(--space-md);
+   
+}

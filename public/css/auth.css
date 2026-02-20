@@ -1,0 +1,22 @@
+@import url(./core.css);
+
+/* ==================================================
+   COMPONENTS ENTRYPOINT (USED BY AUTH.CSS)
+   ================================================== */
+
+@import url(./components/button.css);
+@import url(./components/card.css);
+@import url(./components/form.css);
+@import url(./components/scrollbar.css);
+
+/* ==================================================
+   LAYOUTS
+   ===================================================== */
+
+@import url(./layouts/auth-layout.css);
+
+/* ==================================================
+   PAGES
+   ===================================================== */
+
+@import url(./pages/auth.css);

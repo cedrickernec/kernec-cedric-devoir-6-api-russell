@@ -18,7 +18,7 @@ import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
 // ==================================================
 
 initEntityPanel({
-  panelTitle: "Détail de la réservation",
+  panelTitle: "Détails",
   nestedPanelUrl: "/catways/:catwayNumber/reservations/:id/panel",
   nestedParams: (row) => ({
     catwayNumber: row.dataset.catwayNumber

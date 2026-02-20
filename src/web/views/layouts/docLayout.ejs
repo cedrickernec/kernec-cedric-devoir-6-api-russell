@@ -4,22 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
-    <link rel="stylesheet" href="/css/layouts/doc-layout.css" />
-    <link rel="stylesheet" href="/css/pages/documentation.css" />
+
+    <!--====== Styles ======-->
+    <link rel="stylesheet" href="/css/doc.css" />
   </head>
 
-  <body>
+  <body class="<%= bodyClass || '' %>">
     <div class="layout">
       <!-- ======================== SIDEBAR =========================== -->
        
       <aside class="sidebar" aria-label="Navigation de la documentation">
         <h1 class="sidebar-title">Documentation<br />de l'API Russell</h1>
 
-        <nav class="sidebar-nav" aria-label="Sommaire de la documentation">
+        <nav class="sidebar-menu" aria-label="Sommaire de la documentation">
           <div class="menu-group">
             <button
               class="menu-title"
-              role="button"
               aria-expanded="false"
               aria-controls="menu-auth"
             >
@@ -34,7 +34,6 @@
           <div class="menu-group">
             <button
               class="menu-title"
-              role="button"
               aria-expanded="false"
               aria-controls="menu-users"
             >
@@ -53,7 +52,6 @@
           <div class="menu-group">
             <button
               class="menu-title"
-              role="button"
               aria-expanded="false"
               aria-controls="menu-catways"
             >
@@ -71,7 +69,6 @@
           <div class="menu-group">
             <button
               class="menu-title"
-              role="button"
               aria-expanded="false"
               aria-controls="menu-reservation"
             >
@@ -101,7 +98,6 @@
           <div class="menu-group">
             <button
               class="menu-title"
-              role="button"
               aria-expanded="false"
               aria-controls="menu-errors"
             >

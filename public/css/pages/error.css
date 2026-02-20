@@ -1,87 +1,57 @@
 /* ==================================================
    ERROR CARD - CONTAINER
-================================================== */
+   ================================================== */
 
-.error-card {
-    background: white;
-    border-radius: 12px;
-    padding: 48px 56px;
-    max-width: 520px;
+.card--error {
+    display: flex;
+    flex-direction: column;
+    gap: var(--flow-normal);
+
+    padding: calc(var(--space-xl) * 2) calc(var(--space-xxl) * 2);
+    max-width: var(--size-content-sm);
     width: 100%;
 
     text-align: center;
 
-    box-shadow: var(--box-shadow-lg);
-    animation: errorFadeIn 0.35s ease;
-}
+    border-top: var(--border-accent-width-xl) solid var(--color-danger);
 
-/* ==================================================
-   ERROR CARD - VARIANTS
-================================================== */
-
-.error-card--danger {
-    border-top: 6px solid var(--danger-1);
-}
-
-.error-card--danger .error-code {
-    color: var(--danger-1);
-}
-
-.error-card--warning {
-    border-top: 6px solid var(--accent-secondary);
-}
-
-.error-card--warning .error-code {
-    color: var(--accent-secondary);
+    animation: var(--animation-error-enter);
 }
 
 /* ==================================================
    ERROR CARD - CONTENT
-================================================== */
+   ================================================== */
 
 .error-code {
     display: block;
-    font-size: 4.5rem;
-    font-weight: bold;
-    color: var(--accent-primary);
-    margin-bottom: 12px;
+
+    line-height: var(--text-line-height-default);
+
+    font-size: var(--text-max-size);
+    font-weight: var(--text-bold);
+    color: var(--color-danger);
+    
 }
 
 .error-title {
-    font-size: 1.5rem;
-    margin-bottom: 12px;
+    font-size: var(--text-heading-2);
     text-align: center;
+    margin-bottom: 0;
 }
 
 .error-message {
-    font-size: 0.95rem;
-    color: var(--color-secondary);
-    line-height: 1.5;
-    margin-bottom: 28px;
+    font-size: var(--text-body-size);
+    color: var(--color-danger);
 }
 
 /* ==================================================
    ERROR CARD - ACTIONS
-================================================== */
+   ================================================== */
 
 .error-actions {
     display: flex;
     justify-content: center;
-    gap: 16px;
+    align-items: center;
     flex-wrap: wrap;
-}
-
-/* ==================================================
-   ANIMATION
-================================================== */
-
-@keyframes errorFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(12px) scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
+    gap: var(--space-lg);
+}   

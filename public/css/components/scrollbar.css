@@ -1,23 +1,28 @@
+/* ======================================================
+   SCROLLBAR
+   ====================================================== */
+
 ::-webkit-scrollbar {
-    width: 14px;
+    width: var(--scrollbar-size);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
+    background: var(--scrollbar-thumb-bg);
+    border-radius: var(--scrollbar-thumb-radius);
+    transition: var(--transition-fast);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-primary);
+    background: var(--scrollbar-thumb-hover);
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--scrollbar-track-bg);
 }
 
 ::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb:hover {
-    border: 4px solid transparent;
+    border: var(--scrollbar-thumb-border) solid transparent;
     background-clip: content-box;
 }
 

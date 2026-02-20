@@ -50,7 +50,8 @@ export const getCatwaysPage = async (req, res, next) => {
       res.render("catways/list", {
           title: "Liste des catways",
           activePage: "catways",
-          catways: catwaysView
+          catways: catwaysView,
+          bodyClass: "scroll-components catways-page"
       });
 
     } catch (error) {
@@ -97,6 +98,7 @@ export const getCatwayByNumber = async (req, res, next) => {
       title: "Détail catway",
       activePage: "catways",
       catway: catwayViewModel,
+      bodyClass: "scroll-main details-page",
       catwayNumber,
       otherReservations,
       from,

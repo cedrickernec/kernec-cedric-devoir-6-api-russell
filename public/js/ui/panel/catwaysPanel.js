@@ -17,7 +17,7 @@ import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
 // ==================================================
 
 initEntityPanel({
-  panelTitle: "Détail du catway",
+  panelTitle: "Détails",
   panelUrl: "/catways",
 
   editTitle: "Éditer le catway",

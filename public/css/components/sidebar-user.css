@@ -1,0 +1,30 @@
+/* ======================================================
+   SIDEBAR USER
+   ====================================================== */
+
+.sidebar-user {
+    display: flex;
+    flex-direction: column;
+    gap: var(--flow-tight);
+
+    font-size: var(--text-body-size);
+    padding: 0 var(--space-md);
+}
+
+.sidebar-username {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+
+    font-weight: var(--text-bold);
+    color: var(--color-primary);
+}
+
+.sidebar-email {
+    display: flex;
+    align-items: center;
+
+    font-size: var(--text-small-size);
+    color: var(--color-text-muted);
+    font-style: italic;
+}

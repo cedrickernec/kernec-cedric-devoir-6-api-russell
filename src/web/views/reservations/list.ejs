@@ -40,7 +40,7 @@
   <button
     type="button"
     id="filters-reset"
-    class="btn btn--primary btn-icon"
+    class="btn btn--primary btn-icon btn--icon-table"
     aria-label="Réinitialiser les filtres"
   >
     <i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i>
@@ -139,7 +139,7 @@
         <td class="align-center actions border-col-left">
           <a
             href="/catways/<%= reservations[i].catwayNumber %>/reservations/<%= reservations[i].id %>"
-            class="btn btn--primary btn-icon"
+            class="btn btn--primary btn-icon btn--icon-table"
             aria-label="Voir le détail de la réservation de <%= reservations[i].clientName %>, bateau <%= reservations[i].boatName %>, du <%= reservations[i].startDateFormatted %> au <%= reservations[i].endDateFormatted %>"
           >
             <i
@@ -152,7 +152,7 @@
         <td class="align-center actions">
           <a
             href="/catways/<%= reservations[i].catwayNumber %>/reservations/<%= reservations[i].id %>/edit"
-            class="btn btn--primary btn-icon"
+            class="btn btn--primary btn-icon btn--icon-table"
             aria-label="Éditer la réservation de <%= reservations[i].clientName %>, bateau <%= reservations[i].boatName %>, du <%= reservations[i].startDateFormatted %> au <%= reservations[i].endDateFormatted %>"
           >
             <i class="fa-solid fa-pen" aria-hidden="true"></i>

@@ -22,8 +22,8 @@
 function getStatusClass(statusKey) {
   const map = {
     "UPCOMING": "upcoming",
-    "IN_PROGRESS": "active",
-    "FINISHED": "past"
+    "IN_PROGRESS": "in-progress",
+    "FINISHED": "finished"
   };
 
   return map[statusKey] || "plain";
@@ -115,7 +115,7 @@ export function confirmDelete({
             </span>.
           </p>
 
-          <div class="modal-context-warning">
+          <div class="modal-context-info">
             <p class="bold">
               <i class="fa-solid fa-triangle-exclamation modal-context-icon"></i>
               Attention
@@ -147,7 +147,7 @@ export function confirmDelete({
             La sélection comporte des réservations en cours ou terminées.
           </p>
 
-          <div class="modal-context-warning">
+          <div class="modal-context-info">
             <p class="bold">
               <i class="fa-solid fa-triangle-exclamation modal-context-icon"></i>
               Attention
@@ -179,7 +179,7 @@ export function confirmDelete({
       wrapper.innerHTML = `
         <div class="modal-context">
 
-          <div class="modal-context-warning">
+          <div class="modal-context-info">
             <p class="bold">
               <i class="fa-solid fa-triangle-exclamation modal-context-icon"></i>
               Attention
@@ -198,16 +198,16 @@ export function confirmDelete({
               <span class="bold">À venir</span>
             </div>
 
-            <div class="modal-context-stat modal-context-stat--active">
-              <span class="modal-context-badge modal-context-badge--active">
+            <div class="modal-context-stat modal-context-stat--in-progress">
+              <span class="modal-context-badge modal-context-badge--in-progress">
                 ${stats.inProgress || 0}
               </span>
 
               <span class="bold">En cours</span>
             </div>
 
-            <div class="modal-context-stat modal-context-stat--past">
-              <span class="modal-context-badge modal-context-badge--past">
+            <div class="modal-context-stat modal-context-stat--finished">
+              <span class="modal-context-badge modal-context-badge--finished">
                 ${stats.finished || 0}
               </span>
 
@@ -216,7 +216,7 @@ export function confirmDelete({
 
           </div>
 
-          <div class="modal-context-warning italic">
+          <div class="modal-context-info italic">
             <p>Cette action est irréversible et entraînera :</p>
             <ul class="modal-context-list">
               <li>la suppression de toutes les réservations associées</li>
@@ -237,7 +237,7 @@ export function confirmDelete({
       wrapper.innerHTML = `
         <div class="modal-context">
 
-          <div class="modal-context-warning">
+          <div class="modal-context-info">
             <p class="bold">
               <i class="fa-solid fa-triangle-exclamation modal-context-icon"></i>
               Attention
@@ -247,7 +247,7 @@ export function confirmDelete({
             </p>
           </div>
 
-          <div class="modal-context-warning italic">
+          <div class="modal-context-info italic">
             <p>Cette action est irréversible et entraînera :</p>
             <ul class="modal-context-list">
               <li>la suppression de toutes les réservations associées</li>

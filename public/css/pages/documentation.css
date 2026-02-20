@@ -5,21 +5,21 @@
 .menu-title {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-weight: bold;
+    gap: var(--space-sm);
+    font-weight: var(--text-bold);
     cursor: pointer;
-    color: #0066cc;
-    margin: 8px 0;
-    font-size: 1.15rem;
+    color: var(--color-primary);
+    margin: var(--space-sm) 0;
+    font-size: var(--text-heading-3);
     background: none;
     border: none;
 }
 
 .menu-title::before {
     content: "▶ ";
-    font-size: 0.7em;
-    line-height: 1;
-    transition: transform 0.2s ease;
+    font-size: var(--text-small-size);
+    line-height: var(--text-line-height-heading);
+    transition: var(--transition-slow);
 }
 
 .menu-title.open::before {
@@ -27,32 +27,29 @@
 }
 
 .menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--flow-tight);
     max-height: 0;
     overflow: hidden;
     list-style: none;
     margin: 0;
-    padding-left: 12px;
-    transition: max-height 0.3s ease;
+    padding-left: var(--doc-menu-padding-left);
+    transition: var(--transition-normal);
 }
 
 .menu-list.open {
-    display: block;
-    max-height: 500px;
-}
-
-.menu-list li {
-    margin: 10px 0;
-    line-height: 1.3;
+    max-height: var(--doc-menu-max-height);
 }
 
 .menu-list a {
     text-decoration: none;
-    color: #333;
-    font-size: 0.875rem;
+    color: var(--color-text);
+    font-size: var(--text-small-size);
 }
 
 .menu-list a:hover {
-    color: #0066cc;
+    color: var(--color-primary);
 }
 
 .menu-group:last-child {
@@ -64,70 +61,55 @@
    ====================================================== */
 
 .content h2 {
-    margin-top: 40px;
-    color: #333;
-    font-size: 1.375rem;
-    border-left: 4px solid #0066cc;
-    padding-left: 10px;
-    border-radius: 5px 0 0 5px;
-}
-
-.content h2:first-child {
-    margin-top: 0;
+    margin-top: var(--flow-tight);
+    border-left: var(--border-accent-primary);
+    padding-left: var(--doc-content-title-padding-left);
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
 }
 
 [id] {
-    scroll-margin-top: 80px;
+    scroll-margin-top: var(--doc-anchor-offset);
 }
 
 /* ======================================================
    DOC - ROUTE BLOCKS
    ====================================================== */
 
-.route-block {
-    background: white;
-    padding: 15px 20px;
-    border-radius: 6px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
+.card--doc {
+    padding: var(--doc-card-padding-block) var(--doc-card-padding-inline);
 }
 
 .method {
-    font-weight: bold;
-    color: #0066cc;
+    font-weight: var(--text-bold);
+    color: var(--color-primary);
 }
 
 .example-title {
-    font-weight: bold;
-    margin-top: 10px;
+    font-weight: var(--text-bold);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--doc-example-title-gap);
 }
 
 /* ======================================================
    DOC - DETAILS (ACCORDIONS)
    ====================================================== */
 
-details {
-    margin-top: 10px;
-}
-
 details summary {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--doc-summary-gap);
     cursor: pointer;
-    font-weight: bold;
-    color: #333;
+    font-weight: var(--text-bold);
     list-style: none;
+    user-select: none;
 }
 
 details summary::before {
     content: "▶ ";
-    font-size: 0.75em;
-    line-height: 1;
-    transition: transform 0.2s ease;
+    font-size: var(--text-very-small-size);
+    line-height: var(--text-line-height-body);
+    transition: var(--transition-slow);
 }
 
 details[open] summary::before {
@@ -139,13 +121,12 @@ details[open] summary::before {
    ====================================================== */
 
 .error-type {
-    font-weight: bold;
-    font-size: 14px;
-    color: #333;
+    font-weight: var(--text-bold);
+    font-size: var(--text-small-size);
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin: 12px 0;
-    border-left: 4px solid #ed6767ff;
-    padding-left: 10px;
+    gap: var(--doc-error-gap);
+    margin: var(--doc-error-spacing) 0;
+    border-left: var(--border-accent-danger);
+    padding-left: var(--doc-error-padding-left);
 }

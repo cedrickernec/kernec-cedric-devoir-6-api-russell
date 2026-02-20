@@ -33,6 +33,7 @@ export const getHomeView = (req, res, next) => {
         res.render("login", {
             title: "Connexion - API Russell",
             layout: "layouts/authLayout",
+            bodyClass: "scroll-main auth-page",
             error,
             disableAnimations,
             redirect

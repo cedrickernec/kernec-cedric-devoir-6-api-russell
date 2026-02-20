@@ -1,11 +1,8 @@
-@import url(../base/variables.css);
-@import url(../base/reset.css);
-@import url(../base/typography.css);
-@import url(../base/accessibility.css);
-@import url(../components/buttons.css);
-@import url(../components/form.css);
+/* ======================
+   AUTH LAYOUT
+   ====================== */
 
-body {
+.auth-page {
     margin: 0;
     background: none;
 }
@@ -27,40 +24,29 @@ body {
 }
 
 /* ======================================================
-   NO-ANIMATIONS
-   (pas d'animation au rechargement lors d'une erreur d'authentification)
-   ====================================================== */
-
-.no-animations *,
-.no-animations *::before,
-.no-animations *::after {
-    animation: none !important;
-    transition: none !important;
-}
-
-.no-animations .reveal {
-    opacity: 1 !important;
-    transform: none !important;
-}
-
-.no-animations .delay-1,
-.no-animations .delay-2,
-.no-animations .delay-3,
-.no-animations .delay-4 {
-    animation-delay: 0s !important;
-}
-
-/* ======================================================
    AUTH CONTAINER
    ====================================================== */
 
 .auth-container {
     position: relative;
-    height: 100vh;
-    display: flex;
-    justify-content: flex-end;
+    min-height: 100dvh;
+
+    display: grid;
+    grid-template-columns: 
+        minmax(var(--auth-hero-min-width), 1fr)
+        minmax(var(--auth-card-min-width), var(--auth-card-width));
+    column-gap: var(--auth-safe-gap);
+        
+    align-items: center;
     padding: var(--auth-padding);
-    overflow: hidden;
+
+    width: 100%;
+    min-width: calc(
+        var(--auth-hero-min-width)
+        + var(--auth-card-min-width)
+        + var(--auth-safe-gap)
+        + (var(--auth-padding) * 2)
+    );
 }
 
 /* Background image */
@@ -69,21 +55,21 @@ body {
     position: absolute;
     inset: 0;
     left: 0;
-    width: 75%;
+    width: var(--auth-hero-width);
 
-    background-image: url(../../images/pexels-robert-stokoe-105922-714666.jpg);
+    background-image: var(--auth-hero-image);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: left center;
 
     mask-image: linear-gradient(
         to right,
-        black 75%,
+        var(--surface-negatif) var(--auth-hero-width),
         transparent 100%
     );
     -webkit-mask-image: linear-gradient(
         to right,
-        black 75%,
+        var(--surface-negatif) var(--auth-hero-width),
         transparent 100%
     );
 }
@@ -97,10 +83,10 @@ body {
 
     background: radial-gradient(
         circle at bottom left,
-        rgba(0, 0, 0, 0.6) 0%,
-        rgba(0, 0, 0, 0.4) 15%,
-        rgba(0, 0, 0, 0.2) 30%,
-        rgba(0, 0, 0, 0) 40%
+        var(--overlay-dark-strong) 0%,
+        var(--overlay-dark-medium) 15%,
+        var(--overlay-dark-light) 30%,
+        transparent 40%
     );
 }
 
@@ -109,9 +95,14 @@ body {
    ====================================================== */
 
 .auth-hero {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
+    grid-column: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    height: 100%;
+    min-width: 0;
 }
 
 .hero-kicker {
@@ -120,13 +111,13 @@ body {
     left: var(--auth-padding);
 
     display: inline-block;
-    padding-left: 12px;
+    padding-left: var(--hero-kicker-padding-left);
 
-    font-size: 0.85rem;
-    font-weight: bold;
+    font-size: var(--text-body-size);
+    font-weight: var(--text-bold);
     letter-spacing: 0.35em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--color-text-negatif);
 }
 
 .hero-kicker::before {
@@ -135,64 +126,65 @@ body {
     top: 50%;
     transform: translateY(-50%);
 
-    right: calc(100% + 12px);
+    right: calc(100% + var(--hero-kicker-padding-left));
     width: calc(100vw - var(--auth-padding));
-    height: 12px;
+    height: var(--hero-kicker-height);
 
-    background: rgba(255, 255, 255, 0.85);
-    border-right: 10px solid var(--accent-primary);
+    background: var(--overlay-backdrop-bg-light);
+    border-right: var(--border-accent-hero-kicker);
 }
 
 .auth-hero-text {
-    position: absolute;
-    bottom: var(--auth-padding);
-    left: var(--auth-padding);
-
-    max-width: 520px;
-    color: rgba(255, 255, 255, 0.95);
+    max-width: var(--auth-hero-text-max-width);
+    color: var(--color-text-inverse-strong);
 }
 
 /* Typography */
 .hero-title {
     display: block;
-    font-size: clamp(2.2rem, 4vw, 3.5rem);
-    font-weight: bold;
-    line-height: 1.1;
-    margin-bottom: 8px;
-    color: white;
+    margin-bottom: var(--space-sm);
+
+    font-size: clamp(var(--text-heading-1), 4vw, var(--text-decorative-size));
+    font-weight: var(--text-bold);
+    line-height: var(--text-line-height-heading);
+    color: var(--color-text-negatif);
 }
 
 .hero-subtitle {
     display: block;
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.85);
-    margin-bottom: 16px;
+    font-size: var(--text-heading-3);
+    margin-bottom: var(--space-lg);
 }
 
 .hero-intro {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.85);
+    font-size: var(--text-body-size);
 }
 
 /* ======================================================
    AUTH CARD
    ====================================================== */
 
-.auth-content {
+.card--auth {
     position: relative;
 
+    grid-column: 2;
+    justify-self: end;
+    align-self: center;
     display: flex;
     align-items: center;
 
-    width: 500px;
-    padding: 40px;
+    width: 100%;
+    max-width: var(--auth-card-width);
+    min-width: var(--auth-card-min-width);
+    padding: var(--auth-card-padding);
 
-    background: white;
-    border-radius: 10px;
-    box-shadow: var(--box-shadow-md);
+    animation:
+        authCardEnter
+        var(--motion-duration-slower)
+        var(--motion-ease-out) forwards;
 
-    animation: authCardEnter 0.6s ease-out forwards;
-    animation-delay: 0.1s;
+    flex-shrink: 0;
+    z-index: var(--z-floating);
 }
 
 /* ======================================================
@@ -202,7 +194,9 @@ body {
 @keyframes authCardEnter {
     from {
         opacity: 0;
-        transform: translateX(40px) scale(0.98);
+        transform:
+            translateX(var(--auth-card-enter-translate-x))
+            scale(var(--auth-card-enter-scale));
     }
     to {
         opacity: 1;
@@ -210,15 +204,19 @@ body {
     }
 }
 
-.delay-1 { animation-delay: 0.2s; }
-.delay-2 { animation-delay: 0.4s; }
-.delay-3 { animation-delay: 0.6s; }
-.delay-4 { animation-delay: 0.8s; }
+.delay-1 { animation-delay: var(--animation-delay-1); }
+.delay-2 { animation-delay: var(--animation-delay-2); }
+.delay-3 { animation-delay: var(--animation-delay-3); }
+.delay-4 { animation-delay: var(--animation-delay-4); }
 
 .reveal {
     opacity: 0;
-    transform: translateY(16px);
-    animation: revealUp 0.7s ease-out forwards;
+    transform: translateY(var(--auth-reveal-translate-y));
+    animation:
+        revealUp
+        var(--auth-enter-duration)
+        var(--auth-enter-ease)
+        forwards;
 }
 
 @keyframes revealUp {

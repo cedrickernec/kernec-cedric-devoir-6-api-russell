@@ -2,12 +2,9 @@
    DETAILS CARD
    ====================================================== */
 
-.detail-card {
-    width: 520px;
-    background: white;
-    padding: var(--detail-page-p-m);
-    border-radius: 8px;
-    box-shadow: var(--box-shadow-sm);
+.card--details {
+    width: min(100%, var(--size-content-sm));
+    padding: var(--space-xl);
     align-self: flex-start;
 }
 
@@ -17,14 +14,14 @@
 
 .detail-list {
     display: grid;
-    gap: 16px;
-    border-bottom: var(--border-strong);
-    padding-bottom: var(--detail-page-p-m);
-    margin-bottom: var(--detail-page-p-m);
+    gap: var(--details-list-stack-gap);
+    border-bottom: var(--details-border-bottom);
+    padding-bottom: var(--details-border-spacing);
+    margin-bottom: var(--details-border-spacing);
 }
 
 .detail-list dt {
-    font-weight: bold;
+    font-weight: var(--text-bold);
 }
 
 .detail-list dd {
@@ -34,9 +31,10 @@
 
 .detail-row {
     display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 16px;
+    grid-template-columns: var(--details-grid-template-columns);
+    gap: var(--space-lg);
     align-items: start;
+    min-width: 0;
 }
 
 /* ======================================================
@@ -46,7 +44,7 @@
 .detail-action {
     display: flex;
     justify-content: space-between;
-    gap: 16px;
+    gap: var(--space-lg);
 }
 
 /* ======================================================
@@ -56,5 +54,6 @@
 .detail-card--side {
     display: flex;
     flex-direction: column;
-    flex: 0 0 356px;
+    flex: 0 0 var(--details-card-side-width);
+    max-width: 100%;
 }

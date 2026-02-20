@@ -1,0 +1,40 @@
+@import url(./core.css);
+
+/* ==================================================
+   COMPONENTS ENTRYPOINT (USED BY APP.CSS)
+   ================================================== */
+
+@import url(./components/sidebar-clock.css);
+@import url(./components/sidebar-user.css);
+@import url(./components/button.css);
+@import url(./components/card.css);
+@import url(./components/form.css);
+@import url(./components/filter.css);
+@import url(./components/table.css);
+@import url(./components/status.css);
+@import url(./components/scrollbar.css);
+@import url(./components/side-panel-toggle.css);
+
+/* Overlay / Portal Layer */
+@import url(./components/modal.css);
+@import url(./components/toast.css);
+@import url(./components/tooltip.css);
+@import url(./components/popup-session-warning.css);
+
+/* ==================================================
+   LAYOUTS
+   ================================================== */
+
+@import url(./layouts/app-layout.css);
+@import url(./layouts/sidebar.css);
+@import url(./layouts/floating-actions.css);
+@import url(./layouts/side-panel.css);
+@import url(./layouts/table-layout.css);
+@import url(./layouts/split-view.css);
+
+/* ==================================================
+   PAGES
+   ================================================== */
+   
+@import url(./pages/dashboard.css);
+@import url(./pages/details.css);

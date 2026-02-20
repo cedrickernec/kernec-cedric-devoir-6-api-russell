@@ -3,11 +3,12 @@
    ====================================================== */
 
 .status {
-    display: inline-block;
-    padding: 0 16px;
-    border-radius: 999px;
-    font-size: 0.85rem;
-    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 var(--status-padding-inline);
+    border-radius: var(--status-radius);
+    font-size: var(--status-font-size);
+    font-weight: var(--text-bold);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -24,42 +25,39 @@
     border-radius: 0;
     font-size: inherit;
     white-space: normal;
+    background: none;
 }
 
 /* ======================================================
    STATUS VARIANTS
    ====================================================== */
 
-.status--upcoming {
-    background: var(--color-primary);
-    color: white;
+.status--ok {
+    background: var(--status-ok-bg);
+    color: var(--status-ok-text);
 }
 
 .status--warning {
-    background: var(--warning-2);
-    color: var(--warning-1);
+    background: var(--status-warning-bg);
+    color: var(--status-warning-text);
 }
 
 .status--danger {
-    background: var(--danger-3);
-    color: var(--danger-2);
+    background: var(--status-danger-bg);
+    color: var(--status-danger-text);
+}
+
+.status--upcoming {
+    background: var(--status-upcoming-bg);
+    color: var(--status-upcoming-text);
 }
 
 .status--in-progress {
-    background: var(--accent-primary);
-    color: white;
+    background: var(--status-progress-bg);
+    color: var(--status-progress-text);
 }
 
 .status--finished {
-    background: var(--color-tertiary);
-    color: var(--color-quinary);
-}
-
-.status--ok {
-    background: var(--accent-secondary-hover);
-    color: var(--accent-secondary);
-}
-
-.status--plain.status {
-    background: none;
+    background: var(--status-finished-bg);
+    color: var(--status-finished-text);
 }

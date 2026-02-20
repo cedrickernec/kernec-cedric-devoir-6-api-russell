@@ -59,6 +59,7 @@ export const getDashboard = async (req, res, next) => {
         res.render("dashboard", {
             title: "Dashboard - API Russell",
             activePage: "dashboard",
+            bodyClass: "scroll-main dashboard-page",
             user: req.session.user,
             today: formattedToday,
             reservations,

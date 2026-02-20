@@ -13,9 +13,10 @@
 
 export const getDocumentation = (req, res, next) => {
     try {
-        res.render("documentation/documentation", {
+        res.render("documentation/index", {
             title: "Documentation de l'API Russell",
-            layout: "layouts/docLayout"
+            layout: "layouts/docLayout",
+            bodyClass: "scroll-main doc-page"
         });
         
     } catch (error) {

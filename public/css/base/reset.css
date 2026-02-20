@@ -1,6 +1,6 @@
 /* ======================================================
    GLOBAL RESET
-   ====================================================== */
+====================================================== */
 
 .hidden,
 [hidden] {
@@ -10,5 +10,20 @@
 * {
     box-sizing: border-box;
     margin: 0;
+    margin-block: 0;
     padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--surface-muted);
+}
+
+svg {
+    fill: currentColor;
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+    margin-top: 0;
 }
