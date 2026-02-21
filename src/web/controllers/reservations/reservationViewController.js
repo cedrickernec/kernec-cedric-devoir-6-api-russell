@@ -179,11 +179,7 @@ export const getReservationPanel = async (req, res, next) => {
 
 export const getCreateReservationPage = async (req, res, next) => {
     try {
-      const { step } = req.query;
-
-      if (!step) {
-        delete req.session.reservationDraft;
-      }
+      const step = req.query.step || "client";
 
       let preselectedCatway = req.query.preselectedCatway || null;
 
@@ -191,7 +187,49 @@ export const getCreateReservationPage = async (req, res, next) => {
         preselectedCatway = preselectedCatway[0];
       }
 
-      renderCreateReservationPage(res, {});
+      // Si utilisateur arrive depuis une page hors du formulaire → nouveau formulaire
+      const isWizardNavigation = req.query.step !== undefined;
+
+      // Nouvelle entrée → reset complet du draft
+      if (!isWizardNavigation) {
+        delete req.session.reservationDraft;
+        req.session.reservationWizardActive = true;
+      }
+
+      // Sécurité : si wizard marqué inactif → nettoyage du brouillon
+      if (!req.session.reservationWizardActive) {
+        delete req.session.reservationDraft;
+      }
+
+      const draft = req.session.reservationDraft || {};
+
+      // Affiche le formulaire client pré-rempli
+      if (step === "client") {
+        return renderCreateReservationPage(res, {
+          step: "client",
+          formData: draft,
+          preselectedCatway
+        });
+      }
+
+      // Sécurité : impossible d'accéder à la step 2 sans passer par step 1
+      if (step === "dates" && (!draft.clientName || !draft.boatName)) {
+        return renderCreateReservationPage(res, {
+          step: "client",
+          formData: {},
+          preselectedCatway,
+          globalError: "Veuillez renseigner le client et le bateau avant de choisir des dates."
+        });
+      }
+
+      // Affichage de step 2
+      return renderCreateReservationPage(res, {
+        step: "dates",
+        formData: draft,
+        preselectedCatway,
+        hasSearched: false,
+        availableCatways: []
+      });
 
     } catch (error) {
         next(error);

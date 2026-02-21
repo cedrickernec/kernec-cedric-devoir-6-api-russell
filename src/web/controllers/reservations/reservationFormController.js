@@ -195,6 +195,7 @@ export const postCreateReservation = async (req, res, next) => {
             };
 
             delete req.session.reservationDraft;
+            delete req.session.reservationWizardActive;
 
             if (preselectedCatway) {
                 return res.redirect(`/catways/${preselectedCatway}`);
@@ -264,6 +265,7 @@ export const cancelCreateReservation = (req, res) => {
 
     // Nettoyage complet du brouillon
     delete req.session.reservationDraft;
+    delete req.session.reservationWizardActive;
 
     if (preselectedCatway) {
         return res.redirect(`/catways/${preselectedCatway}`);
