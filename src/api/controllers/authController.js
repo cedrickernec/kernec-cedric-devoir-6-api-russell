@@ -80,7 +80,7 @@ export const refreshToken = async (req, res, next) => {
         const newAccessToken = jwt.sign(
             { id: decoded.id },
             process.env.JWT_SECRET,
-            { expiresIn: process.env.ACCESS_TOKEN_DURATION || "30m" }
+            { expiresIn: process.env.ACCESS_TOKEN_DURATION || "15m" }
         );
 
         res.status(200).json({
