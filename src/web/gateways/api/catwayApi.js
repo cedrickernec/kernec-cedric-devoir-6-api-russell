@@ -31,6 +31,17 @@ export async function fetchCatwayByNumber(number, req, res) {
 }
 
 // ==================================================
+// FETCH NEXT CATWAY NUMBER
+// ==================================================
+
+export async function fetchNextCatwayNumber(req, res) {
+
+    return apiFetch(`/api/catways/next-number`, {
+        method: "GET"
+    }, req, res);
+}
+
+// ==================================================
 // CREATE CATWAY
 // ==================================================
 

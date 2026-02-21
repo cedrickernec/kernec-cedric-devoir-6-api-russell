@@ -162,7 +162,7 @@ export const getCatwayPanel = async (req, res, next) => {
 
 export const getCreateCatwayPage = async (req, res, next) => {
   try {
-    const suggestedNumber = await findNextCatwayNumber();
+    const suggestedNumber = await findNextCatwayNumber(req, res);
 
     renderCreateCatwayPage(res, {
       startNumber: suggestedNumber

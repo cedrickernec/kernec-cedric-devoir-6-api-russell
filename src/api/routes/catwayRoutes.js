@@ -11,6 +11,7 @@ import { Router } from "express";
 import {
     getAllCatways,
     getCatwayByNumber,
+    getNextCatwayNumber,
     createCatway,
     updateCatway,
     deleteCatway
@@ -21,6 +22,7 @@ import { authMiddleware } from "../middlewares/authMiddleware.js";
 const router = Router();
 // Routes Catways
 router.get("/", authMiddleware, getAllCatways);
+router.get("/next-number", authMiddleware, getNextCatwayNumber);
 router.get("/:id", authMiddleware, getCatwayByNumber);
 router.post("/", authMiddleware, createCatway);
 router.put("/:id", authMiddleware, updateCatway);

@@ -55,6 +55,29 @@ export async function getCatwayByNumberService(catwayNumber) {
 }
 
 // ===============================================
+// GET NEXT CATWAY NUMBER
+// ===============================================
+
+export async function findNextCatwayNumberService() {
+
+    // Récupération des numéros existants
+    const catways = await getAllCatways();
+
+    let expected = 1;
+
+    // Recherche du premier trou dans la séquence
+    for (const catway of catways) {
+        if (catway.catwayNumber !== expected) {
+            return expected;
+        }
+        expected++;
+    }
+
+    // Aucun trou → prochain numéro logique
+    return expected;
+}
+
+// ===============================================
 // CREATE CATWAY
 // ===============================================
 

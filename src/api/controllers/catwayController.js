@@ -10,10 +10,11 @@
  */
 
 import {
-    createCatwayService,
-    deleteCatwayService,
     getAllCatwaysService,
     getCatwayByNumberService,
+    findNextCatwayNumberService,
+    createCatwayService,
+    deleteCatwayService,
     updateCatwayService
 } from "../services/catwayService.js";
 
@@ -74,6 +75,26 @@ export const getCatwayByNumber = async (req, res, next) => {
         next(error);
     }
 };
+
+// ===============================================
+// GET NEXT CATWAY NUMBER
+// ===============================================
+
+export const getNextCatwayNumber = async (req, res, next) => {
+    try {
+        // 1) Récupération du numéro de catway
+        const nextNumber = await findNextCatwayNumberService();
+
+        // 2) Réponse
+        res.status(200).json({
+            success: true,
+            data: nextNumber
+        });
+
+    } catch (error) {
+        next(error)
+    }
+}
 
 // ===============================================
 // CREATE CATWAY
