@@ -1,0 +1,165 @@
+/* ======================================================
+   TABLE BASE
+   ====================================================== */
+
+.data-table {
+    table-layout: fixed;
+    width: max-content;
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--table-bg);
+}
+
+.data-table thead tr {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+}
+
+.data-table th {
+    background: var(--table-header-bg);
+    color: var(--table-header-text);
+    padding: var(--table-header-padding);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.data-table td {
+    min-height: var(--table-row-min-height);
+    height: auto;
+    padding: var(--table-cell-padding-y) var(--table-cell-padding-x);
+    border-bottom: var(--table-cell-border);
+    vertical-align: middle;
+    max-width: 0;
+
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.data-table td > * {
+    min-width: 0;
+}
+
+/* Gestion du texte */
+.data-table .cell-ellipsis {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* gestion du texte + UI (ex: pilules) */
+.data-table .cell-ellipsis--flex {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    min-width: 0;
+}
+
+.data-table .cell-ellipsis--flex > * {
+    min-width: 0;
+}
+
+.data-table.is-clickable tr {
+    cursor: pointer;
+}
+
+.data-table tr:nth-child(even) {
+    background-color: var(--table-row-alt-bg);
+}
+
+/* ======================================================
+   TABLE CHECKBOX (DELETE)
+   ====================================================== */
+
+.data-table input[type="checkbox"] {
+    accent-color: var(--table-checkbox-accent);
+    transform: scale(var(--table-checkbox-scale));
+}
+
+/* ======================================================
+   TABLE STATE & INTERACTIONS
+   ====================================================== */
+
+.data-table tbody tr:hover {
+    background: var(--table-row-hover-bg);
+}
+
+.data-table tr.is-active,
+.data-table tr.is-active:hover {
+    background-color: var(--table-row-active-bg);
+}
+
+.data-table tr.is-active td {
+    font-weight: var(--text-bold);
+}
+
+.data-table tbody tr.is-active td:first-child {
+    border-left: var(--table-row-active-border);
+}
+
+/* ======================================================
+   TABLE COLUMN UTILS
+   ====================================================== */
+
+.data-table .border-col-left {
+    border-left: var(--border-default);
+}
+
+.data-table .border-col-right {
+    border-right: var(--border-default);
+}
+
+/* ===============================
+   TABLE GRID
+   =============================== */
+
+/* Global column */
+.data-table--fixed .col-checkbox { width: var(--table-col-checkbox-width); }
+.data-table--fixed .col-action   { width: var(--table-col-action-width); }
+.data-table--fixed .col-auto     { width: auto; }
+.data-table--fixed .col-date     { width: var(--table-col-date-width); }
+.data-table--fixed .col-dash     { width: var(--table-col-dash-width); }
+
+/* Specific column */
+.data-table--fixed .col-catway   { width: var(--table-col-catway-width); }
+.data-table--fixed .col-type     { width: var(--table-col-type-width); }
+.data-table--fixed .col-username { width: var(--table-col-username-width); }
+.data-table--fixed .col-status   { width: var(--table-col-status-width); }
+.data-table--fixed .col-reserve  { width: var(--table-col-reserve-width); }
+
+/* ======================================================
+   TABLE ROW ANIMATIONS
+   ====================================================== */
+
+.data-table tr {
+    transition: var(--transition-normal)
+}
+
+/* delete */
+.data-table tr.is-removing {
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+/* Highlight */
+tr[data-highlight="true"] > td:first-child {
+    border-left: var(--table-row-highlight-border);
+}
+
+tr[data-highlight="true"] > td {
+    background-color: var(--table-row-highlight-bg);
+}
+
+/* Exit animation */
+tr.row-exit > td {
+    background-color: var(--table-row-exit-bg);
+    animation: var(--animation-row-exit);
+}
+
+tr.row-exit > td:first-child {
+    border-left: var(--table-row-exit-border);
+}

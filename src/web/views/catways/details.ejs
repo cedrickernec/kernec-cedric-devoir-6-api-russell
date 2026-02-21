@@ -1,0 +1,233 @@
+<h1 id="page-title">Détails du catway</h1>
+
+<div class="table-actions">
+  <a href="/reservations/create?preselectedCatway=<%= catway.number %>" class="btn btn--primary btn--shadow">
+    <i class="fa-solid fa-calendar-plus" aria-hidden="true"></i>
+    Ajouter une réservation
+  </a>
+</div>
+
+<!-- ====== FILTERS BAR ====== -->
+
+<div class="filters-bar">
+
+  <input
+    id="filter-search"
+    type="text"
+    placeholder="Client"
+    aria-label="Rechercher un client"
+  />
+
+  <input id="filter-start" type="date" aria-label="Date de début" />
+  <input id="filter-end" type="date" aria-label="Date de fin" />
+
+  <!-- Status -->
+  <fieldset class="filter-group">
+    <span class="filter-group__label">Statut</span>
+    <label class="filter-checkbox">
+      <input type="checkbox" id="filter-status-upcoming" />
+      À venir
+    </label>
+
+    <label class="filter-checkbox">
+      <input type="checkbox" id="filter-status-in-progress" />
+      En cours
+    </label>
+
+    <label class="filter-checkbox">
+      <input type="checkbox" id="filter-status-finished" />
+      Terminée
+    </label>
+  </fieldset>
+
+  <button
+    type="button"
+    id="filters-reset"
+    class="btn btn--primary btn-icon"
+    aria-label="Réinitialiser les filtres"
+  >
+    <i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i>
+  </button>
+</div>
+
+<div class="split-view">
+  <section class="card card--details detail-card--side" aria-labelledby="page-title">
+    <dl class="detail-list">
+      <div class="detail-row">
+        <dt>Numéro</dt>
+        <dd><%= catway.number %></dd>
+      </div>
+  
+      <div class="detail-row">
+        <dt>Type</dt>
+        <dd><%= catway.type %></dd>
+      </div>
+  
+      <div class="detail-row">
+        <dt>État</dt>
+        <dd>
+          <span
+            class="status status--plain <%= catway.status.className %>"
+            aria-label="<%= catway.status.aria %>"
+            role="status"
+            >
+            <%= catway.status.label %>
+          </span>
+        </dd>
+      </div>
+  
+      <div class="detail-row">
+        <dt>Créé le</dt>
+        <dd class="muted">
+          <%= catway.createdAtFormatted %>
+        </dd>
+      </div>
+  
+      <% if (catway.updatedAtFormatted &&
+      catway.createdAtFormatted &&
+      catway.updatedAtFormatted !==
+      catway.createdAtFormatted) { %>
+      <div class="detail-row">
+        <dt>Modifié le</dt>
+        <dd class="muted">
+          <%= catway.updatedAtFormatted %>
+        </dd>
+      </div>
+      <% } %>
+    </dl>
+  
+    <div class="detail-action" aria-label="Actions catway">
+      <a
+        href="/catways"
+        class="btn btn--primary"
+        aria-label="Retour à la liste des catways"
+      >
+        <i class="fa-solid fa-arrow-left"></i>
+        Retour à la liste
+      </a>
+      <% if (from === "reservation" && reservationId) { %>
+      <a
+        href="/catways/<%= catwayNumber %>/reservations/<%= reservationId %>"
+        class="btn btn--primary"
+        aria-label="Retour à la réservation"
+      >
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        Retour à la réservation
+      </a>
+      <% } %>
+      <a
+        href="/catways/<%= catway.number %>/edit"
+        class="btn btn--primary"
+        aria-label="Éditer le catway numéro <%= catway.number %>"
+        title="Éditer le catway"
+      >
+        <i class="fa-solid fa-pen"></i>
+        Éditer
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== RESERVATIONS EXISTANTES (MÊME CATWAY) ===== -->
+  <aside class="table-section no-gap">
+    
+    <h2>Liste des réservations existantes</h2>
+    
+    <div class="table-wrapper">
+      <table class="data-table data-table--fixed">
+        <caption class="sr-only">
+          Liste des réservations existantes du catway
+          <%= catwayNumber %>
+          avec client, statut et période
+        </caption>
+
+        <colgroup>
+          <col class="col-auto" />
+          <col class="col-status" />
+          <col class="col-date" />
+          <col class="col-dash" />
+          <col class="col-date" />
+        </colgroup>
+
+        <thead>
+          <tr>
+            <th scope="col" class="align-center border-col-right">Client</th>
+            <th scope="col" class="align-center border-col-right">Statut</th>
+            <th scope="col" class="align-center separator">Début</th>
+            <th scope="col" class="align-center">&ndash;</th>
+            <th scope="col" class="align-center">Fin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!otherReservations || otherReservations.length === 0) { %>
+          <tr>
+            <td colspan="5" class="no-data">
+              Aucune réservation existante associée.
+            </td>
+          </tr>
+          <% } else { %> <% for (let i = 0; i < otherReservations.length; i++) {
+          %>
+          <tr
+            class="js-reservation-row js-panel-row"
+            data-entity-id="<%= otherReservations[i].id %>"
+            data-catway-number="<%= otherReservations[i].catwayNumber %>"
+            data-client="<%= otherReservations[i].clientName %>"
+            data-boat="<%= otherReservations[i].boatName %>"
+            data-start="<%= otherReservations[i].startDateISO %>"
+            data-end="<%= otherReservations[i].endDateISO %>"
+            data-status="<%= otherReservations[i].status.key %>"
+            data-highlight="<%= (flash?.highlightIds || []).includes(otherReservations[i].id.toString()) ? 'true' : 'false' %>"
+          >
+            <td class="align-center border-col-right">
+              <%= otherReservations[i].clientName %>
+            </td>
+            <td class="align-center border-col-left border-col-right">
+              <span
+                class="status <%= otherReservations[i].status.className %>"
+                aria-label="<%= otherReservations[i].status.aria %>"
+              >
+                <%= otherReservations[i].status.label %>
+              </span>
+            </td>
+            <td class="align-center bold">
+              <%= otherReservations[i].startDateFormatted %>
+            </td>
+            <td class="align-center">&ndash;</td>
+            <td class="align-center bold">
+              <%= otherReservations[i].endDateFormatted %>
+            </td>
+          </tr>
+          <% } %> <% } %>
+
+          <tr
+            id="no-results-row"
+            class="no-data"
+            role="status"
+            aria-live="polite"
+            hidden
+          >
+            <td colspan="5">Aucune réservation correspondante</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </aside>
+</div>
+
+<!-- ====== SCRIPTS ====== -->
+
+<script type="module" src="/js/ui/animation/highlightCleanup.js"></script>
+
+<!-- LIVE FILTER -->
+<script type="module">
+  import { initReservationsLiveFilter } from "/js/table/filters/reservationsLiveFilter.js";
+  initReservationsLiveFilter();
+</script>
+
+<!-- FLASH -->
+<% if (flash) { %>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    showToast("<%= flash.type %>", "<%= flash.message %>");
+  });
+</script>
+<% } %>

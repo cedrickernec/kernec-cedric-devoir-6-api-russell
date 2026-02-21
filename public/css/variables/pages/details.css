@@ -1,0 +1,36 @@
+/**
+ * ===================================================================
+ * DETAILS PAGE CONFIG — PAGE SPECIFIC VARIABLES
+ * ===================================================================
+ * Variables dédiées exclusivement à la page de détails.
+ *
+ * Contient :
+ *      - Layout interne details
+ *      - Espacements propres à la page
+ *      - Grids spécifiques
+ * ===================================================================
+ * Rôle :
+ *      → Adapter le design system à un contexte particulier
+ *        sans impacter les autres pages.
+ * ===================================================================
+ * IMPORTANT :
+ *      Ces variables ne doivent PAS être réutilisées ailleurs.
+ * ===================================================================
+ */
+
+.details-page {
+
+   /* Stack */
+   --details-list-stack-gap:                 var(--flow-normal);
+
+   /* Border */
+   --details-border-bottom:                  var(--border-default);
+   --details-border-spacing:                 var(--space-xl);
+
+   /* Grid template */
+   --details-grid-template-columns:          100px 1fr;
+
+   /* Variants */
+   --details-card-side-width:                356px;
+   
+}

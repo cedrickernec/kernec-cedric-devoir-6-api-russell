@@ -1,11 +1,16 @@
 /**
- * --------------------------------------------------------------------
- * UI Utils — Date & Time Formatter (FR)
- * --------------------------------------------------------------------
- * Formatage des dates/heures pour l’interface utilisateur.
+ * ===================================================================
+ * DATE & TIME FORMATTER (FR)
+ * ===================================================================
+ * - Centralise le formatage des dates/heures UI
+ * - Sécurise les entrées invalides
+ * - Garantit une cohérence d'affichage globale
+ * ===================================================================
  */
 
-// ===== SHORT DATE (JJ/MM/AAAA) =====
+// ==================================================
+// SHORT DATE (JJ/MM/AAAA)
+// ==================================================
 
 export function formatDateFR(date) {
     if (!date) return "-";
@@ -20,7 +25,9 @@ export function formatDateFR(date) {
     });
 }
 
-// ===== HOUR (HH:MM:SS) =====
+// ==================================================
+// TIME (HH:MM:SS)
+// ==================================================
 
 export function formatTimeFR(date) {
     if (!date) return "-";

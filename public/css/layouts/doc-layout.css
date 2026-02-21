@@ -1,27 +1,27 @@
-@import url(../base/reset.css);
-@import url(../base/typography.css);
-@import url(../base/variables.css);
-@import url(../base/accessibility.css);
-@import url(../layouts/sidebar.css);
-@import url(../components/badge.css);
-@import url(../components/code.css);
-
-body {
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
-    background: #f7f7f7;
-    overflow: hidden;
-}
-
-.layout {
-    display: flex;
-    min-height: 100vh;
-}
+/* ======================
+   DOC LAYOUT
+   ====================== */
 
 .content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--flow-normal);
     flex: 1;
-    padding: 30px;
-    height: 100vh;
-    overflow-y: auto;
+    padding: var(--content-page-padding);
+}
+
+.doc-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--flow-normal);
+}
+
+.card--doc {
+    display: flex;
+    flex-direction: column;
+    gap: var(--flow-tight);
+}
+
+details > * + * {
+    margin-top: var(--flow-tight);
 }

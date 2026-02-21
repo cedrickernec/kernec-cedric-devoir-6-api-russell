@@ -1,27 +1,33 @@
 /**
  * ===================================================================
- * PANEL DELETE ACTION
+ * SIDE PANEL - DELETE ACTION HANDLER
  * ===================================================================
  * - Gère la suppression d'une entité depuis le side panel
- * - Affiche une modale de confirmation
- * - Déclenche la requête DELETE
- * - Gère le cas password_required
- * - Anime la suppression de la ligne
- * - Affiche un toast de feedback
+ * - Lance le delete flow générique (confirmation + API)
+ * - Anime la suppression visuelle de la ligne associée
+ * - Affiche un toast feedback selon résultat
+ * ===================================================================
+ * Fonctionnement :
+ * - Le bouton delete est configuré dynamiquement via
+ *   les data-attributes ijectés lors de l'ouverture du panel
  * ===================================================================
  */
+
+/* global showToast */
 
 import { closeSidePanel } from "../ui/panel/sidePanel.js";
 import { COMMON_MESSAGES } from "../messages/commonMessages.js";
 import { runDeleteFlow } from "../delete/deleteFlow.js";
+
+// ==================================================
+// PANEL EVENT LISTENER
+// ==================================================
 
 const panel = document.getElementById("side-panel");
 
 panel?.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-panel-action='delete']");
   if (!btn) return;
-
-  console.log("CLICK DELETE PANEL detecté");
 
   const deleteUrl = btn.dataset.deleteUrl;
   const rowSelector = btn.dataset.rowSelector;
@@ -32,6 +38,10 @@ panel?.addEventListener("click", (e) => {
     return;
   }
 
+  // ==================================================
+  // DELETE FLOW EXECUTION
+  // ==================================================
+
   runDeleteFlow({
     deleteUrl,
     deleteType: entityType,
@@ -39,7 +49,13 @@ panel?.addEventListener("click", (e) => {
 
     buildBody: (password => ({ password })),
 
+    // ==================================================
+    // SUCCESS HANDLER
+    // ==================================================
+
     onSuccess: () => {
+
+      // Animation de suppression de la ligne UI
       const row = document.querySelector(rowSelector);
       if (row) {
         row.classList.add("row-exit");
@@ -48,6 +64,10 @@ panel?.addEventListener("click", (e) => {
 
       closeSidePanel();
     },
+
+    // ==================================================
+    // CANCEL HANDLER
+    // ==================================================
 
     onCancel: () => {
       showToast("info", COMMON_MESSAGES.DELETE_CANCEL)

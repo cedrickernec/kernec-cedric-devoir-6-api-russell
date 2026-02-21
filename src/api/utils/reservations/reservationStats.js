@@ -1,3 +1,11 @@
+/**
+ * ===================================================================
+ * RESERVATION STATISTICS
+ * ===================================================================
+ * - Calcul les statistiques d'état des réservations
+ * ===================================================================
+ */
+
 import { getReservationStatus } from "./reservationStatus.js";
 
 export function computeReservationStats(reservations) {

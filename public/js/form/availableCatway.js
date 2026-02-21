@@ -1,14 +1,15 @@
 /**
  * ===================================================================
- * CATWAY NUMBER AVAILABILITY CHECKER
+ * CATWAY NUMBER AVAILABILITY CHECKER - FORM VALIDATION
  * ===================================================================
- * - Valide le format du numéro de catway
- * - Vérifie la disponibilité du numéro de catway
- * - Supporte le mode édition via excludeId
- * - Gère l'état visuel du champ
- * - Bloque automatiquement le submit si une erreur est détectée
+ * - Vérifie le format du numéro de catway
+ * - Vérifie son unicité côté serveur
+ * - Supporte le mode édition (excludeId)
+ * - Bloque automatiquement le submit si invalide
  * ===================================================================
- * => Fonctionne avec le script générique preventSubmitIfLocked <=
+ * Utilise :
+ *    - createAvailabilityChecker (générique)
+ *    - preventSubmitIfLocked pour la sécurité formulaire
  * ===================================================================
  */
 
@@ -17,6 +18,10 @@ import { createAvailabilityChecker } from "./availabilityChecker.js";
 createAvailabilityChecker({
   inputId: "catwayNumber",
   feedbackId: "catwayNumber-feedback",
+
+  // ========================================================
+  // URL BUILDER
+  // ========================================================
 
   getUrl: (value, input) => {
     const form = input.closest("form");
@@ -27,12 +32,17 @@ createAvailabilityChecker({
 
     const params = new URLSearchParams({ number });
 
+    // Ignore le catway actuel en mode édition
     if (currentCatwayId) {
       params.append("excludeId", currentCatwayId);
     }
 
     return `/ajax/catways/check-number?${params.toString()}`;
   },
+
+  // ========================================================
+  // LOCAL FORMAT VALIDATION
+  // ========================================================
 
   validateFormat: (value) => {
     const normalized = value.replace(",", ".");

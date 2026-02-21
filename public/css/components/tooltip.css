@@ -2,57 +2,81 @@
    TOOLTIP
    ====================================================== */
 
-.tooltip {
-  position: relative;
+.tooltip-floating {
+    position: fixed;
+    min-width: var(--tooltip-min-width);
+    max-width: var(--tooltip-max-width);
+    padding: var(--tooltip-padding-block) var(--tooltip-padding-inline);
+    border-radius: var(--tooltip-radius);
+
+    background: var(--tooltip-bg);
+    color: var(--tooltip-color-text);
+    font-size: var(--tooltip-size-text);
+    font-weight: var(--text-bold);
+
+    pointer-events: none;
+    opacity: 0;
+
+    transform: translateY(4px);
+
+    transition: var(--transition-fast);
 }
 
-/* Contenu tooltip */
-.tooltip__content {
-  position: absolute;
-  left: calc(100% + 8px);
-  top: 50%;
-  transform: translateY(-50%);
-  max-width: 260px;
-  min-width: 240px;
-
-  background: var(--color-primary);
-  color: white;
-  font-weight: bold;
-  font-size: 0.75rem;
-  line-height: 1.4;
-
-  padding: 10px 12px;
-  border-radius: 6px;
-
-  white-space: normal;
-  opacity: 0;
-  pointer-events: none;
-
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  z-index: var(--z-tooltip);
+.tooltip-floating.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-/* Flèche par défaut (tooltip à droite) */
-.tooltip__content::before {
+.tooltip-top {
+  transform-origin: center bottom;
+}
+
+.tooltip-bottom {
+  transform-origin: center top;
+}
+
+.tooltip-left {
+  transform-origin: right center;
+}
+
+.tooltip-right {
+  transform-origin: left center;
+}
+
+/* ARROW */
+.tooltip-floating::after {
   content: "";
   position: absolute;
-  width: 8px;
-  height: 8px;
-  background: var(--color-primary);
-  left: -4px;
+  width: var(--tooltip-arrow-size);
+  height: var(--tooltip-arrow-size);
+  background: inherit;
+  transform: rotate(45deg);
+}
+
+/* RIGHT */
+.tooltip-right::after {
+  left: var(--tooltip-arrow-offset);
   top: 50%;
   transform: translateY(-50%) rotate(45deg);
 }
 
-/* Flèche à droite (tooltip à gauche) */
-.tooltip__content.is-left::before {
-  left: auto;
-  right: -4px;
+/* LEFT */
+.tooltip-left::after {
+  right: var(--tooltip-arrow-offset);
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
 }
 
-/* Flèche en haut (tooltip en bas) */
-.tooltip__content.is-bottom::before {
-  top: -4px;
+/* BOTTOM */
+.tooltip-bottom::after {
+  top: var(--tooltip-arrow-offset);
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+/* TOP */
+.tooltip-top::after {
+  bottom: var(--tooltip-arrow-offset);
   left: 50%;
   transform: translateX(-50%) rotate(45deg);
 }

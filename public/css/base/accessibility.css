@@ -10,6 +10,7 @@
     margin: -1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
     white-space: nowrap;
     border: 0;
 }
@@ -18,8 +19,33 @@
     outline: none;
 }
 
-.using-keyboard :focus {
-    outline: 3px solid var(--color-secondary);
-    outline-offset: 3px;
-    border-radius: 4px;
+.using-keyboard :focus,
+:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--focus-ring-radius);
+}
+
+/* ======================================================
+   NO-ANIMATIONS
+   (pas d'animation au rechargement)
+   ====================================================== */
+
+.no-animations *,
+.no-animations *::before,
+.no-animations *::after {
+    animation: none !important;
+    transition: none !important;
+}
+
+.no-animations .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+.no-animations .delay-1,
+.no-animations .delay-2,
+.no-animations .delay-3,
+.no-animations .delay-4 {
+    animation-delay: 0s !important;
 }

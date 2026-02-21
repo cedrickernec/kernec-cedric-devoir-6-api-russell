@@ -1,3 +1,15 @@
+/**
+ * ===================================================================
+ * RESERVATION STATUS RESOLVER
+ * ===================================================================
+ * - Détermine le statut temporel d'une réservation
+ * ===================================================================
+ * États possibles :
+ *      - UPCOMING      → À venir
+ *      - IN_PROGRESS   → En cours
+ *      - FINISHED      → Terminée
+ * ===================================================================
+ */
 
 import {
     hasReservationStarted,

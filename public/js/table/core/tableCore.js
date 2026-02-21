@@ -1,14 +1,19 @@
 /**
  * ===================================================================
- * TABLE CORE
+ * BULK TABLE CORE ENGINE
  * ===================================================================
+ * - Gestion générique des tables avec seélection multiple
  * - Sélection multiple persistante (indépendante des filtres)
  * - "Select all" agit uniquement sur les lignes visibles
- * - Suppression en masse sur l'ensemble de la sélection mémorisée
- * - Gère le cas password_required
- * - Compteur dynamique dans le bouton "Supprimer"
+ * - Suppression en masse avec confirmation sécurisée
+ * - Synchronisation UI dynamique (compteur, états)
+ * ===================================================================
+ * Principe clé :
+ * → La sélection est conservée en mémoire même si la table change
  * ===================================================================
  */
+
+/* global showToast */
 
 import { runDeleteFlow } from "../../delete/deleteFlow.js";
 
@@ -21,6 +26,10 @@ export function initBulkTable({
   deleteType,
   messages
 }) {
+
+  // ========================================================
+  // DOM REFERENCES
+  // ========================================================
 
   const table = document.querySelector(tableSelector);
   const deleteBtn = document.getElementById(deleteBtnId);
@@ -35,6 +44,7 @@ export function initBulkTable({
   // ==================================================
   // CHECKBOX HELPERS
   // ==================================================
+
   const getAllCheckboxes = () =>
     Array.from(table.querySelectorAll(`input[name='${checkboxName}']`));
 
@@ -45,8 +55,9 @@ export function initBulkTable({
     });
 
   // ==================================================
-  // SYNC CHECKBOXES WITH MEMORY
+  // MEMORY - UI SYNCHRONISATION
   // ==================================================
+
   const syncCheckboxesWithMemory = () => {
     getAllCheckboxes().forEach(cb => {
       cb.checked = selectedIds.has(cb.value);
@@ -54,16 +65,17 @@ export function initBulkTable({
   };
 
   // ==================================================
-  // DELETE BUTTON + SELECT ALL STATE
+  // DELETE BUTTON STATE MANAGEMENT
   // ==================================================
+
   const updateDeleteButton = () => {
     const visibleCheckboxes = getVisibleCheckboxes();
     const visibleChecked = visibleCheckboxes.filter(cb => cb.checked).length;
 
-    // Bouton supprimer (basé sur la mémoire globale)
+    // Activation du bouton suppression
     deleteBtn.disabled = selectedIds.size === 0;
 
-    // Compteur dynamique
+    // Mise à jour compteur dynamique
     if (deleteCountSpan) {
       deleteCountSpan.textContent =
         selectedIds.size > 0 ? ` (${selectedIds.size})` : "";
@@ -110,12 +122,14 @@ export function initBulkTable({
   // ==================================================
   // INITIAL STATE
   // ==================================================
+
   syncCheckboxesWithMemory();
   updateDeleteButton();
 
   // ==================================================
-  // ROW CHECKBOX HANDLING
+  // ROW CHECKBOX EVENTS
   // ==================================================
+
   table.addEventListener("change", (e) => {
     if (!e.target.matches(`input[name='${checkboxName}']`)) return;
 
@@ -131,8 +145,9 @@ export function initBulkTable({
   });
 
   // ==================================================
-  // SELECT ALL (VISIBLE ONLY)
+  // SELECT ALL (VISIBLE ROWS ONLY)
   // ==================================================
+
   if (selectAll) {
     selectAll.addEventListener("change", () => {
       getVisibleCheckboxes().forEach(cb => {
@@ -150,10 +165,10 @@ export function initBulkTable({
   }
 
   // ==================================================
-  // BULK DELETE
+  // BULK DELETE FLOW
   // ==================================================
+
   deleteBtn.addEventListener("click", async () => {
-    console.log("CLICK BULK DELETE détecté")
     if (selectedIds.size === 0) return;
 
     const ids = Array.from(selectedIds);
@@ -166,6 +181,7 @@ export function initBulkTable({
 
       onSuccess: () => {
 
+        // Animation suppression lignes
         ids.forEach(id => {
           const cb = table.querySelector(
             `input[name='${checkboxName}'][value='${id}']`
@@ -198,8 +214,9 @@ export function initBulkTable({
   });
 
   // ==================================================
-  // FILTRE / VISIBILITÉ MODIFIÉE
+  // EXTERNAL VISIBILITY EVENTS (FILTERS / SEARCH)
   // ==================================================
+  
   document.addEventListener("table:visibility-change", () => {
     syncCheckboxesWithMemory();
     updateDeleteButton();

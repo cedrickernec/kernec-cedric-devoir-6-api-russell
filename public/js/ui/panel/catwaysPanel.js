@@ -1,8 +1,10 @@
 /**
  * ===================================================================
- * CATWAYS PANEL
+ * CATWAYS PANEL CONFIGURATION
  * ===================================================================
- * - Configuration du panneau latéral de l'entité utilisateur
+ * - Configure le side panel pour l'entité Catway
+ * - Définit les routes panel / édition / suppression
+ * - Centralise les messages spécifiques métier
  * ===================================================================
  */
 
@@ -10,8 +12,12 @@ import { initEntityPanel } from "./entityPanel.js";
 import { CATWAY_MESSAGES } from "../../messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
 
+// ==================================================
+// PANEL INITIALISATION
+// ==================================================
+
 initEntityPanel({
-  panelTitle: "Détail du catway",
+  panelTitle: "Détails",
   panelUrl: "/catways",
 
   editTitle: "Éditer le catway",

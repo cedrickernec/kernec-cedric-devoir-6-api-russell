@@ -4,7 +4,7 @@
  * ===================================================================
  * - Erreur métier personnalisée pour l'API
  *   - Centralise la gestion des erreurs HTTP + métier
- *   - Intercepté par le middleware apiErrorHandlers
+ *   - Intercepté par le middleware apiErrorHandler
  * ===================================================================
  */
 

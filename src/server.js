@@ -1,3 +1,15 @@
+/**
+ * ===================================================================
+ * APPLICATION ENTRY POINT
+ * ===================================================================
+ * - Initialise l'application Express
+ * - Configure la base de données
+ * - Enregistre les middlewares globaux
+ * - Monte les routes WEB et API
+ * - Centralise la gestion des erreurs
+ * ===================================================================
+ */
+
 // ============================================
 // BOOTSTRAP & ENV.
 // ============================================
@@ -26,12 +38,12 @@ import morgan from "morgan";
 // APPLICATION MIDDLEWARE
 // ============================================
 
-import sidebarClock from "./web/middlewares/sidebarClock.js";
+import sidebarClock from "./web/middlewares/ui/sidebarClock.js";
 import { sessionMiddleware } from "./web/configs/sessionConfig.js";
-import { exposeSessionData } from "./web/middlewares/sessionExpose.js";
-import { rememberLastPath } from "./web/middlewares/rememberLastPath.js";
-import { normalizeRequest } from "./web/middlewares/normalizeRequest.js";
-import { exposeFlash } from "./web/middlewares/flashExpose.js";
+import { exposeSessionData } from "./web/middlewares/session/sessionExpose.js";
+import { rememberLastPath } from "./web/middlewares/session/rememberLastPath.js";
+import { normalizeRequest } from "./web/middlewares/request/normalizeRequest.js";
+import { exposeFlash } from "./web/middlewares/ui/flashExpose.js";
 
 // ============================================
 // ROUTES
@@ -44,8 +56,8 @@ import { registerApiRoutes } from "./api/routes/index.js";
 // ERROR HANDLING
 // ============================================
 
-import { webNotFoundHandler, webErrorHandler } from "./web/middlewares/webErrorHandlers.js";
-import { apiNotFoundHandler, apiErrorHandler } from "./api/middlewares/apiErrorHandlers.js";
+import { webNotFoundHandler, webErrorHandler } from "./web/middlewares/errors/webErrorHandler.js";
+import { apiNotFoundHandler, apiErrorHandler } from "./api/middlewares/apiErrorHandler.js";
 
 // ============================================
 // APP INIT.
@@ -106,10 +118,10 @@ registerApiRoutes(app);
 // ERROR HANDLERS
 // ============================================
 
-/* app.use("/api", apiNotFoundHandler); // 404 - route inexistante
+app.use("/api", apiNotFoundHandler); // 404 - route inexistante
 app.use("/api", apiErrorHandler); // 500 - Erreur serveur
 app.use(webNotFoundHandler); // 404 - route inexistante
-app.use(webErrorHandler); // 500 - Erreur serveur */
+app.use(webErrorHandler); // 500 - Erreur serveur
 
 // ============================================
 // SERVER START
@@ -117,5 +129,5 @@ app.use(webErrorHandler); // 500 - Erreur serveur */
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
+    console.info(`🚀 Serveur lancé sur http://localhost:${PORT}`);
 });

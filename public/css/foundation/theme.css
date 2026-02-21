@@ -1,0 +1,127 @@
+/**
+ * ===================================================================
+ * THEME - COLOR PALETTE
+ * ===================================================================
+ * Contient uniquement la platte de couleurs brute.
+ *
+ * Ce fichier définit :
+ *      - les couleurs du thème
+ *      - les variantes
+ * ===================================================================
+ * Objectif :
+ *      → Permettre un changement de thème complet sans modifier les
+ *        composant.
+ * ===================================================================
+ * Utilisé par variable.css (contrat UI)
+ * ===================================================================
+*/
+
+:root {
+
+    /* ======================================================
+       COLOR SOURCES (EDIT ONLY THESE)
+       ====================================================== */
+
+    --theme-primary:        oklch(0.52 0.17 255);
+    --theme-secondary:      oklch(0.65 0.14 163);
+    --theme-success:        oklch(0.52 0.17 255);
+    --theme-warning:        oklch(0.55 0.11 90);
+    --theme-danger:         oklch(0.64 0.25 14);
+    
+    --theme-black:          oklch(0.28 0.01 242);
+    --theme-white:          oklch(0.99 0.00 240);
+
+    /* ======================================================
+       BLOCKED COLOR SOURCES (DON'T EDIT THESE)
+       ====================================================== */
+    
+    --theme-disabled:       oklch(0.85 0 0);
+    --theme-muted:          oklch(0.98 0.00 240);
+
+    /* ======================================================
+       PRIMARY VARIANTS (AUTO)
+       ====================================================== */
+
+    --theme-primary-hover:
+        oklch(from var(--theme-primary) calc(l - 0.06) c h);
+
+    --theme-primary-hard:
+        oklch(from var(--theme-primary) calc(l - 0.12) c h);
+
+    --theme-primary-soft:
+        oklch(from var(--theme-primary) calc(l + 0.40) calc(c * 0.25) h);
+
+    --theme-primary-accent:
+        oklch(from var(--theme-primary) calc(l + 0.45) calc(c * 0.15) h);
+
+    /* ======================================================
+       SECONDARY VARIANTS
+       ====================================================== */
+
+    --theme-secondary-soft:
+        oklch(from var(--theme-secondary) calc(l + 0.40) calc(c * 0.30) h);
+
+    /* ======================================================
+        SUCCESS VARIANTS
+        ====================================================== */
+
+    --theme-success-soft:
+        oklch(from var(--theme-success) calc(l + 0.40) calc(c * 0.30) h);
+
+    /* ======================================================
+       WARNING VARIANTS
+       ====================================================== */
+
+    --theme-warning-soft:
+        oklch(from var(--theme-warning) calc(l + 0.40) calc(c * 0.30) h);
+
+    /* ======================================================
+       DANGER VARIANTS
+       ====================================================== */
+
+    --theme-danger-hover:
+        oklch(from var(--theme-danger) calc(l - 0.07) c h);
+
+    --theme-danger-hard:
+        oklch(from var(--theme-danger) calc(l - 0.14) c h);
+
+    --theme-danger-soft:
+        oklch(from var(--theme-danger) calc(l + 0.40) calc(c * 0.25) h);
+
+    --theme-danger-accent:
+        oklch(from var(--theme-danger) calc(l + 0.45) calc(c * 0.15) h);
+
+
+    /* ======================================================
+       GREY SCALE (AUTO depuis black)
+       ====================================================== */
+
+    --theme-grey-900:
+        oklch(from var(--theme-black) 0.32 0.02 h);
+
+    --theme-grey-700:
+        oklch(from var(--theme-black) 0.45 0.02 h);
+
+    --theme-grey-500:
+        oklch(from var(--theme-black) 0.65 0.02 h);
+
+    --theme-grey-200:
+        oklch(from var(--theme-black) 0.90 0.01 h);
+
+    --theme-grey-100:
+        oklch(from var(--theme-black) 0.94 0.01 h);
+
+    --theme-grey-50:
+        oklch(from var(--theme-black) 0.97 0.005 h);
+
+
+    /* ======================================================
+       BACKGROUNDS
+       ====================================================== */
+
+    --theme-bg-primary:     var(--theme-white);
+    --theme-bg-muted:       var(--theme-muted);
+    --theme-bg-disabled:    var(--theme-disabled);
+    --theme-bg-negatif:     var(--theme-black);
+
+}

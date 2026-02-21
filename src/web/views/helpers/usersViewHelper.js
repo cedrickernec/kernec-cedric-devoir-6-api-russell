@@ -1,4 +1,4 @@
-import { PASSWORD_RULES } from "../../utils/users/userValidator.js";
+import { PASSWORD_RULES } from "../../utils/business/users/userValidator.js";
 
 // ==================================================
 // VIEW HELPER - CREATE PAGE RENDER
@@ -9,9 +9,10 @@ export const renderCreateUserPage = (res, {
   globalError = null,
   formData = {}
 }) => {
-  res.render("users/userCreate", {
+  res.render("users/create", {
     title: "Création d'un utilisateur",
     activePage : "users",
+    bodyClass: "scroll-main create-page",
     errors,
     globalError,
     formData,
@@ -28,9 +29,10 @@ export const renderEditUserPage = (res, {
   errors = {},
   globalError = null
 }) => {
-  res.render("users/userEdit", {
+  res.render("users/edit", {
       title: "Modification de l'utilisateur",
       activePage: "users",
+      bodyClass: "scroll-main edit-page",
       user,
       errors,
       globalError,

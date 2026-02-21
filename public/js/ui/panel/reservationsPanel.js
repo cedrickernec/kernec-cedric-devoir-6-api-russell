@@ -1,8 +1,11 @@
 /**
  * ===================================================================
- * RESERVATIONS PANEL
+ * RESERVATIONS PANEL CONFIGURATION
  * ===================================================================
- * - Configuration du panneau latéral de l'entité reservations
+ * - Configure le side panel pour l'entité Reservation
+ * - Définit les routes panel / édition / suppression
+ * - Centralise les messages spécifiques métier
+ * - Supporte les routes imbriquées Catway → Reservation
  * ===================================================================
  */
 
@@ -10,8 +13,12 @@ import { initEntityPanel } from "./entityPanel.js";
 import { RESERVATION_MESSAGES } from "../../messages/reservationMessage.js";
 import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
 
+// ==================================================
+// PANEL INITIALISATION
+// ==================================================
+
 initEntityPanel({
-  panelTitle: "Détail de la réservation",
+  panelTitle: "Détails",
   nestedPanelUrl: "/catways/:catwayNumber/reservations/:id/panel",
   nestedParams: (row) => ({
     catwayNumber: row.dataset.catwayNumber

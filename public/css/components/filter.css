@@ -1,0 +1,191 @@
+/* ======================================================
+   FILTER BAR — CONTAINER
+   ====================================================== */
+
+.filters-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: var(--filter-gap);
+    min-width: var(--control-min-width);
+
+    padding: var(--filter-padding);
+
+    background: var(--filters-bg);
+    border: var(--border-light);
+    border-radius: var(--radius-md);
+    box-shadow: var(--filters-shadow);
+}
+
+.filters-bar > * {
+    height: var(--control-height-sm);
+}
+
+/* ======================================================
+   FILTER GROUP — WRAPPER
+   ====================================================== */
+
+.filter-group {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--filter-group-gap);
+    padding: 0 var(--space-md);
+
+    border-radius: var(--radius-md);
+    border: var(--border-default);
+
+    transition: var(--transition-slow);
+}
+
+/* Label */
+.filter-group__label {
+    display: flex;
+    align-items: center;
+
+    height: 100%;
+    padding-right: var(--space-md);
+    margin-left: var(--space-xs);
+
+    font-size: var(--text-label-size);
+    font-weight: var(--text-bold);
+    white-space: nowrap;
+
+    color: var(--color-text-muted);
+    border-right: var(--border-default);
+}
+
+/* Active group */
+.filter-group:has(input:checked) {
+    border-color: var(--filter-group-active-border);
+    background: var(--filter-group-active-bg);
+}
+
+/* ======================================================
+   INPUTS & SELECTS
+   ====================================================== */
+
+.filters-bar input,
+.filters-bar select {
+    padding: 0 var(--space-md);
+
+    border-radius: var(--radius-md);
+    border: var(--border-default);
+
+    transition: var(--transition-slow)
+}
+
+/* Accessibility Focus */
+.filters-bar input:focus,
+.filters-bar select:focus {
+    outline: none;
+    border-color: var(--filter-input-focus-border);
+    background: var(--filter-input-focus-bg);
+}
+
+/* ======================================================
+   FILTER CHECKBOX — BASE (IDLE)
+   ====================================================== */
+
+.filter-checkbox {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+
+    padding: 0 var(--space-sm);
+
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+
+    font-size: var(--text-small-size);
+    color: var(--filter-checkbox-text);
+
+    cursor: pointer;
+
+    transition: var(--transition-fast)
+}
+
+.filter-checkbox input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ======================================================
+   FILTER CHECKBOX — HOVER (NON CHECKED)
+   ====================================================== */
+
+.filter-checkbox:hover {
+    box-shadow: var(--filter-checkbox-hover-shadow);
+    transform: scale(var(--filter-checkbox-hover-scale));
+}
+
+/* ======================================================
+   FILTER CHECKBOX — CHECKED
+   ====================================================== */
+
+/* OK */
+.filter-checkbox:has(#filter-state-ok:checked) {
+    color: var(--status-ok-text);
+    background: var(--status-ok-bg);
+    border-color: var(--status-ok-border);
+}
+
+/* HS */
+.filter-checkbox:has(#filter-state-hs:checked) {
+    color: var(--status-danger-text);
+    background: var(--status-danger-bg);
+    border-color: var(--status-danger-border);
+}
+
+/* WARNING */
+.filter-checkbox:has(#filter-state-warning:checked) {
+    color: var(--status-warning-text);
+    background: var(--status-warning-bg);
+    border-color: var(--status-warning-border);
+}
+
+/* UPCOMING */
+.filter-checkbox:has(#filter-status-upcoming:checked) {
+    color: var(--status-upcoming-text);
+    background: var(--status-upcoming-bg);
+}
+
+/* IN PROGRESS */
+.filter-checkbox:has(#filter-status-in-progress:checked) {
+    color: var(--status-progress-text);
+    background: var(--status-progress-bg);
+}
+
+/* FINISHED */
+.filter-checkbox:has(#filter-status-finished:checked) {
+    color: var(--status-finished-text);
+    background: var(--status-finished-bg);
+}
+
+/* ======================================================
+   FILTER CHECKBOX — HOVER + CHECKED
+   ====================================================== */
+
+.filter-checkbox:has(input:checked):hover {
+    filter: brightness(var(--filter-checkbox-hover-brightness));
+    transform: scale(var(--filter-checkbox-hover-scale));
+}
+
+/* ======================================================
+   LARGE TEXT FILTER
+   ====================================================== */
+
+#filter-search {
+    min-width: var(--filter-search-min-width);
+    flex: 1;
+}
+
+/* ======================================================
+   META (COUNT)
+   ====================================================== */
+
+#reservations-count {
+    margin-left: var(--space-xxs);
+}

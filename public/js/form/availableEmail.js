@@ -1,18 +1,24 @@
 /**
  * ===================================================================
- * EMAIL AVAILABILITY CHECKER
+ * EMAIL AVAILABILITY CHECKER - FORM VALIDATION
  * ===================================================================
- * - Vérifie le format email
- * - Vérifie l'unicité de l'email
- * - Supporte le mode édition via excludeId
- * - Gère l'état visuel du champ
- * - Bloque automatiquement le submit si une erreur est détectée
+ * - Vérifie le format de l'email
+ * - Vérifie l'unicité de l'email côté serveur
+ * - Supporte le mode édition (excludeId)
+ * - Combine validation HTML native + validation AJAX
+ * - Bloque automatiquement le submit si invalide
  * ===================================================================
- * => Fonctionne avec le script générique preventSubmitIfLocked <=
+ * Utilise :
+ *    - createAvailabilityChecker (générique)
+ *    - preventSubmitIfLocked pour la sécurité formulaire
  * ===================================================================
  */
 
 import { createAvailabilityChecker } from "./availabilityChecker.js";
+
+// ========================================================
+// AJAX AVAILABILITY CHECK
+// ========================================================
 
 createAvailabilityChecker({
   inputId: "email",
@@ -24,6 +30,7 @@ createAvailabilityChecker({
 
     let url = `/ajax/users/check-email?email=${encodeURIComponent(email)}`;
 
+    // Ignore l'utilisateur actuel en mode édition
     if (userId) {
       url += `&excludeId=${userId}`;
     }
@@ -31,23 +38,27 @@ createAvailabilityChecker({
     return url;
   },
 
-  validateFormat: (value, input) => {
-    return null;
-  },
+  validateFormat: () => null,
 
   conflictMessage: "Cet email est déjà utilisé."
 });
 
-// Gestion spécifique du format au blur
+// ========================================================
+// HTML FORMAT VALIDATION (BLUR)
+// ========================================================
+
 const emailInput = document.getElementById("email");
 const feedback = document.getElementById("email-feedback");
 
 emailInput?.addEventListener("blur", () => {
+
+  // Ne pas écraser une erreur AJAX verouillée
+  if (emailInput.dataset.locked === "true") return;
+
   if (emailInput.value.trim() && !emailInput.checkValidity()) {
 
     // Erreur bloquante
     emailInput.dataset.invalid = "true";
-    emailInput.dataset.locked = "true";
     emailInput.setAttribute("aria-invalid", "true");
 
     feedback.textContent = "Format d'email invalide (ex : nom@domaine.com).";
@@ -57,7 +68,6 @@ emailInput?.addEventListener("blur", () => {
   } else {
     // Si format correct, on libère le champ
     delete emailInput.dataset.invalid;
-    delete emailInput.dataset.locked;
     emailInput.removeAttribute("aria-invalid");
 
     feedback.textContent = "";

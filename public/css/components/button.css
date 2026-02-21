@@ -1,0 +1,227 @@
+/* ======================================================
+   BUTTON
+   ====================================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--btn-gap);
+    
+    height: var(--btn-height);
+    padding-inline: var(--btn-padding-x);
+    padding-block: 0;
+
+    border-radius: var(--btn-radius);
+    border: none;
+    background: none;
+    
+    font-size: var(--btn-font-size);
+    font-weight: var(--btn-font-weight);
+    white-space: nowrap;
+    letter-spacing: var(--btn-letter-spacing);
+    text-decoration: none;
+    cursor: pointer;
+
+    transition: var(--transition-fast);
+}
+
+/* État disabled global (SAFE) */
+.btn:disabled {
+    background-color: var(--btn-disabled-bg);
+    cursor: default;
+    pointer-events: none;
+}
+
+/* ======================================================
+   BUTTON MODIFIERS
+   ====================================================== */
+
+/* Bouton principal */
+.btn--primary {
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+}
+
+.btn--primary:hover {
+    background: var(--btn-primary-bg-hover);
+    color: var(--btn-primary-text-hover);
+}
+
+/* Bouton valorisé avec ombre et contour */
+.btn--shadow {
+    border: var(--border-light);
+    box-shadow: var(--btn-shadow);
+}
+
+/* Bouton pour la barre flottante d'actions */
+.btn--floating {
+    font-size: var(--btn-icon-size-xs);
+}
+
+/* Bouton d'icône pour les actions des tableaux */
+.btn--icon-table {
+    background-color: var(--btn-icon-bg);
+    border: var(--border-light);
+}
+
+/* ======================================================
+   BUTTON TYPES
+   ====================================================== */
+
+/* Bouton de navigation */
+.btn-nav {
+    width: 100%;
+    justify-content: flex-start;
+    font-size: var(--btn-nav-text-size);
+    height: var(--btn-nav-height);
+}
+
+.btn-nav:hover {
+    background: var(--btn-nav-bg-hover);
+    color: var(--btn-nav-text-hover);
+}
+
+.btn-nav.is-active {
+    background: var(--btn-nav-active-bg);
+    color: var(--btn-nav-active-text);
+}
+
+/* Bouton de fermeture */
+.btn-close {
+    background: none;
+    border: none;
+    min-height: auto;
+    padding: 0;
+    font-size: var(--btn-close-size);
+    color: var(--btn-close-color);
+    cursor: pointer;
+}
+
+.btn-close:hover {
+    color: var(--btn-close-color-hover);
+}
+
+/* Bouton d'icône seulement */
+.btn-icon {
+    color: var(--btn-primary-text);
+    padding: var(--btn-icon-padding);
+    height: var(--btn-icon-size-md);
+    width: var(--btn-icon-size-md);
+}
+
+/* Bouton de sélection */
+.btn-toggle {
+    display: inline-grid;
+    place-items: center;
+    min-width: var(--btn-toggle-min-width);
+
+    background-color: var(--btn-toggle-bg);
+    border: var(--border-light);
+}
+
+.btn-toggle > * {
+    grid-area: 1 / 1;
+    transition: var(--transition-fast);
+}
+
+/* Bouton de confirmation/validation */
+.btn-confirm {
+    background: var(--btn-confirm-bg);
+    color: var(--btn-confirm-text);
+}
+
+.btn-confirm:hover {
+    background: var(--btn-confirm-bg-hover);
+}
+
+/* Bouton de retour/d'annulation */
+.btn-cancel {
+    background: var(--btn-cancel-bg);
+}
+
+.btn-cancel:hover {
+    background: var(--btn-cancel-bg-hover);
+}
+
+/* Bouton de suppression/déconnexion */
+.btn-danger {
+    background: var(--btn-danger-bg);
+    color: var(--btn-danger-text);
+}
+
+.btn-danger:hover {
+    background: var(--btn-danger-bg-hover);
+}
+
+/* Bouton d'information */
+.btn-info {
+    font-size: var(--btn-info-text-size);
+    opacity: var(--interactive-subtle-opacity);
+    padding: 0;
+}
+
+.btn-info:hover {
+    opacity: var(--interactive-subtle-opacity-hover);
+}
+
+/* ======================================================
+   BUTTON STATES
+   ====================================================== */
+
+/* État par défaut */
+.btn-toggle-icon {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Hover bouton inactif */
+.btn-toggle:hover:not(.is-active) {
+    background-color: var(--btn-toggle-inactif-bg-hover);
+    border-color: var(--btn-toggle-inactif-border-hover);
+}
+
+.btn-toggle:hover:not(.is-active) .btn-label {
+    opacity: 0;
+}
+
+.btn-toggle:hover:not(.is-active) .btn-toggle-icon--confirm {
+    opacity: 1;
+    color: var(--btn-toggle-icon-hover);
+}
+
+/* Hover bouton actif */
+.btn-toggle:hover.is-active {
+    background-color: var(--btn-toggle-actif-bg-hover);
+    border-color: var(--btn-toggle-actif-border-hover);
+}
+
+.btn-toggle:hover.is-active .btn-label {
+    opacity: 0;
+}
+
+.btn-toggle:hover.is-active .btn-toggle-icon--cancel {
+    opacity: 1;
+    color: var(--btn-toggle-icon-hover);
+}
+
+/* Bouton actif */
+.btn-toggle.is-active {
+    background: var(--btn-toggle-actif-bg);
+    color: var(--btn-toggle-actif-text);
+}
+
+/* Lock : neutraliser le hover "cancel/confirm" */
+.btn-toggle.is-locked {
+    pointer-events: none;
+    cursor: default;
+}
+
+.btn-toggle.is-locked .btn-label {
+    opacity: 1;
+}
+
+.btn-toggle.is-locked .btn-toggle-icon--confirm,
+.btn-toggle.is-locked .btn-toggle-icon--cancel {
+    opacity: 0;
+}

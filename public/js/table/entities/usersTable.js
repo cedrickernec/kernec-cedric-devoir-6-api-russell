@@ -1,12 +1,14 @@
 /**
  * ===================================================================
- * USERS TABLE
+ * USERS TABLE INITIALISER
  * ===================================================================
- * - Initialise la table Users
- * - Configure la sélection multiple
- * - Configure la suppression en masse
- * - Fournit les messages spécifiques aux utilisateurs
- * - Repose sur entityTable et tableCore
+ * - Configure et initialise la table des utilisateurs
+ * - Active la sélection multiple
+ * - Active la suppression en masse (bulk delete)
+ * - Injecte les messages métier spécifique aux utilisateurs
+ * ===================================================================
+ * Architecture :
+ * → Adaptateur métier au-dessus du moteur générique entityTable
  * ===================================================================
  */
 
@@ -20,6 +22,7 @@ export function initUsersTable() {
         checkboxName: "selectedUsers",
         deleteBtnId: "delete-selected",
         selectAllId: "select-all",
+        
         deleteUrl: "/ajax/users",
         deleteType: "user",
 

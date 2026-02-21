@@ -1,9 +1,10 @@
 /**
  * ===================================================================
- * CLEANING UP FORM ERROR
+ * FORM ERROR CLEANUP
  * ===================================================================
- * - Supprime les erreurs backend dès la reprise de saisie
- * - Gère les champs liés (dates start / end)
+ * - Supprime les erreurs backend dès la reprise de saisie utilisateur
+ * - Maintient les erreurs AJAX vérouillées
+ * - Gère les champs liés (startDate / endDate)
  * - Ignore les règles dynamiques du mot de passe
  * ===================================================================
  */
@@ -26,11 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const formGroup = field.closest(".form-group");
     if (!formGroup) return;
 
-    // Nettoyage de l'état visuel
+    // Reset état accessibilité
     delete field.dataset.invalid;
     field.removeAttribute("aria-invalid");
 
-    // Suppression des messages backend
+    // Suppression des messages backend uniquement
     formGroup.querySelectorAll(".form-error").forEach((msg) => {
 
       // Ne pas toucher aux erreurs AJAX
@@ -45,16 +46,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =====================================================
-  // MAIN HANDLER
+  // MAIN FIELD HANDLER
   // =====================================================
+  
   const onFieldEdit = (field) => {
 
     // Nettoyage standard du champ modifié
-
     clearBackendErrors(field);
 
-    // Cas spécifique des dates: startDate / endDate → nettoyage commun
-    
+    // Synchronisation spécifique des champs dates
     if (field.name === "startDate" || field.name === "endDate") {
 
       const datesWrapper =
@@ -77,7 +77,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Brancher la logique sur input ET change
+  // =====================================================
+  // EVENTS BINDING
+  // =====================================================
+
   fields.forEach((field) => {
     field.addEventListener("input", () => onFieldEdit(field));
     field.addEventListener("change", () => onFieldEdit(field));

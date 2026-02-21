@@ -9,7 +9,7 @@
 .login-card {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: var(--auth-stack-gap);
 }
 
 /* ======================================================
@@ -19,52 +19,37 @@
 .login-card-text {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: var(--auth-text-stack-gap);
     text-align: center;
 }
 
 .login-title {
-    font-size: 1.75rem;
-    font-weight: 700;
+    font-size: var(--auth-title-size);
+    font-weight: var(--auth-title-weight);
     margin: 0;
 }
 
 .login-description {
-    font-size: 0.85rem;
-    padding-bottom: 35px;
-    border-bottom: var(--border-strong);
+    font-size: var(--auth-description-size);
+    padding-bottom: var(--auth-description-spacing);
+    border-bottom: var(--border-default);
 }
 
 /* ======================================================
    AUTH FORM
    ====================================================== */
 
-.login-form label {
-    display: block;
-    margin-top: 15px;
-    margin-bottom: 5px;
-}
-
-.login-form input {
+.login-submit {
     width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    border: var(--border-strong);
-}
-
-.login-form .btn {
-    width: 100%;
-    padding: 12px;
-    margin-top: 20px;
-    font-size: 1rem;
+    padding: var(--auth-submit-padding-block);
+    font-size: var(--auth-submit-font-size);
 }
 
 /* ======================================================
    AUTH ERRORS
    ====================================================== */
 
-.error-message {
-    color: var(--danger-1);
+.login-card .form-error {
     text-align: center;
 }
 
@@ -74,25 +59,27 @@
 
 .doc-link {
     position: absolute;
-    top: -8px;
-    left: -80px;
+    top: var(--auth-doc-offset-top);
+    left: var(--auth-doc-offset-left);
 
-    width: 40px;
-    height: 40px;
+    width: var(--auth-doc-size);
+    height: var(--auth-doc-size);
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    background: var(--color-primary);
-    color: white;
+    background: var(--auth-doc-btn-bg);
+    color: var(--auth-doc-btn-text);
     text-decoration: none;
 
-    border-radius: 6px 0 0 6px;
-    transition: background 0.2s ease;
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+    transition: var(--transition-normal);
+
+    z-index: var(--z-floating-top)
 }
 
 .doc-link:hover {
-    background: var(--accent-primary);
-    color: white;
+    background: var(--auth-doc-btn-bg-hover);
+    color: var(--auth-doc-btn-text-hover);
 }

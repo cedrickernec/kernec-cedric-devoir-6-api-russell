@@ -1,12 +1,16 @@
 /**
  * ===================================================================
- * RESERVATION PAGE — SELECTION HANDLING
+ * RESERVATION PAGE — SELECTION STATE CONTROLLER
  * ===================================================================
- * - Réagit aux changements de sélection
- * - Met à jour :
- *   - le bouton de validation
- *   - les résumés de créneaux partiels
- * - Initialise la validation finale
+ * - Écoute les changements de sélection utilisateur
+ * - Met à jour dynamiquement l'interface :
+ *      → bouton de validation
+ *      → résumé de créneaux partiels
+ * - Initialise la logique de validation de réservation
+ * ===================================================================
+ * Rôle :
+ * - Ce fichier agit comme contrôleur principal de la page réservation
+ * - Il orchestre les modules sans contenir de logique métier
  * ===================================================================
  */
 
@@ -18,20 +22,26 @@ import {
 import { initReservationValidation } from "./reservationValidationController.js";
 
 // ==================================================
-// INITIALISATION
+// PAGE INITIALIZATION
 // ==================================================
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  // Initialise le contrôleur de validation
   initReservationValidation();
+  // Synchronise les résumés éxistants
   refreshAllPartialSummaries();
 });
 
 // ==================================================
-// SELECTION EVENTS
+// GLOBAL SELECTION EVENTS
 // ==================================================
 
 document.addEventListener("selection:change", event => {
+
   const { id } = event.detail;
+
+  // Format attendu : "catwayNumber|shotId"
   const [catwayNumber] = id.split("|");
 
   updateValidationButton();
@@ -44,9 +54,12 @@ document.addEventListener("selection:change", event => {
 // ==================================================
 
 function updateValidationButton() {
+
+  // Met à jour le bouton de validation
   const button = document.getElementById("validate-selection");
   if (!button) return;
 
+  // Met à jour le compteur dynamique
   const count = getSelections().size;
   button.textContent = `Valider (${count})`;
   button.disabled = count === 0;

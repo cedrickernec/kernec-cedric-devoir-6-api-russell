@@ -1,0 +1,142 @@
+/**
+ * ===================================================================
+ * FOUNDATIONS — GLOBAL UI SEMANTICS
+ * ===================================================================
+ * Définit les bases sémantiques universelles de l’interface.
+ *
+ * Contient :
+ *      - Couleurs UI
+ *      - Textes et typographie
+ *      - Surfaces
+ *      - Bordures
+ *      - Interactions globales
+ *      - Accessibilité
+ * ===================================================================
+ * Rôle :
+ *      → Donner un sens UI aux tokens bruts (theme + token).
+ *      → Utilisable par TOUS les composants.
+ * ===================================================================
+ * Dépend de :
+ *      - theme.css
+ *      - primitives.css
+ * ===================================================================
+ * Ne doit PAS contenir :
+ *      - valeurs spécifiques à une page
+ *      - logique composant
+ * ===================================================================
+ */
+
+:root {
+
+   /* =============== TEXT =============== */
+
+   --color-text:                             var(--theme-black);
+   --color-text-negatif:                     var(--theme-white);
+   --color-text-muted:                       var(--theme-grey-500);
+
+   --text-max-size:                          var(--font-size-900);
+   --text-decorative-size:                   var(--font-size-800);
+   --text-heading-1:                         var(--font-size-600);
+   --text-heading-2:                         var(--font-size-500);
+   --text-heading-3:                         var(--font-size-400);
+   --text-body-size:                         var(--font-size-300);
+   --text-label-size:                        var(--font-size-200);
+   --text-small-size:                        var(--font-size-200);
+   --text-very-small-size:                   var(--font-size-100);
+
+   --text-bold:                              var(--font-weight-700);
+
+   --text-line-height-body:                  1.5;
+   --text-line-height-heading:               1.2;
+   --text-line-height-default:               1.0;
+   --list-indent:                            var(--space-lg);
+
+   /* =============== TYPOGRAPHY =============== */
+
+   --font-family-base:                       Arial, Helvetica, sans-serif;
+   --font-family-mono:                       "Courrier New", Courrier, monospace;
+
+   /* =============== COLORS =============== */
+
+   --color-primary:                          var(--theme-primary);
+   --color-primary-hover:                    var(--theme-primary-hover);
+   --color-primary-hard:                     var(--theme-primary-hard);
+   --color-primary-soft:                     var(--theme-primary-soft);
+   --color-primary-accent:                   var(--theme-primary-accent);
+
+   --color-secondary:                        var(--theme-secondary);
+   --color-secondary-soft:                   var(--theme-secondary-soft);
+   
+   --color-success:                          var(--theme-success);
+   --color-success-soft:                     var(--theme-success-soft);
+   
+   --color-warning:                          var(--theme-warning);
+   --color-warning-soft:                     var(--theme-warning-soft);
+   
+   --color-danger:                           var(--theme-danger);
+   --color-danger-hover:                     var(--theme-danger-hover);
+   --color-danger-hard:                      var(--theme-danger-hard);
+   --color-danger-soft:                      var(--theme-danger-soft);
+   --color-danger-accent:                    var(--theme-danger-accent);
+
+   --color-info:                             var(--theme-info);
+
+   --color-neutral-900:                      var(--theme-grey-900);
+   --color-neutral-700:                      var(--theme-grey-700);
+   --color-neutral-500:                      var(--theme-grey-500);
+   --color-neutral-200:                      var(--theme-grey-200);
+   --color-neutral-100:                      var(--theme-grey-100);
+   --color-neutral-50:                       var(--theme-grey-50);
+   --color-disabled:                         var(--theme-disabled);
+
+   /* =============== TEXT VARIANTS =============== */
+
+   --color-text-inverse-strong:              color-mix(in srgb, var(--theme-white) 95%, transparent);
+   --color-text-inverse-soft:                color-mix(in srgb, var(--theme-white) 85%, transparent);
+
+   /* =============== SURFACES =============== */
+
+   --surface-primary:                        var(--theme-bg-primary);
+   --surface-muted:                          var(--theme-bg-muted);
+   --surface-disabled:                       var(--theme-bg-disabled);
+   --surface-negatif:                        var(--theme-bg-negatif);
+
+   --surface-hover:                          var(--interactive-hover-bg);
+   --surface-active:                         var(--interactive-selected-bg);
+   --surface-delete:                         var(--interactive-deleted-bg);
+
+   /* =============== BORDERS =============== */
+
+   --border-default:                         var(--border-strong);
+
+   --border-accent-width:                    4px;
+   --border-accent-width-xl:                 10px;
+   --border-accent-primary:                  var(--border-accent-width) solid var(--color-primary);
+   --border-accent-secondary:                var(--border-accent-width) solid var(--color-secondary);
+   --border-accent-warning:                  var(--border-accent-width) solid var(--color-warning);
+   --border-accent-danger:                   var(--border-accent-width) solid var(--color-danger);
+   --border-accent-info:                     var(--border-accent-width) solid var(--color-neutral-900);
+   --border-accent-hero-kicker:              var(--border-accent-width-xl) solid var(--color-primary);
+
+   /* =============== INTERACTIONS =============== */
+
+   --interactive-hover-bg:                   color-mix(in srgb, var(--color-primary) 8%, transparent);
+   --interactive-selected-bg:                color-mix(in srgb, var(--color-primary) 15%, transparent);
+   --interactive-deleted-bg:                 color-mix(in srgb, var(--color-danger) 15%, transparent);
+   --interactive-focus-bg:                   var(--color-primary-accent);
+   --interactive-focus-border:               var(--color-primary);
+   --interactive-hover-shadow:               var(--shadow-md);
+
+   --interactive-very-subtle-opacity:        0.6;
+   --interactive-subtle-opacity:             0.7;
+   --interactive-muted-opacity:              0.8;
+   --interactive-subtle-opacity-hover:       1;
+   
+   /* =============== ACCESSIBILITY =============== */
+   
+   --focus-ring-color:                       var(--color-text-muted);
+   --focus-ring-width:                       3px;
+   --focus-ring-offset:                      3px;
+   --focus-ring-radius:                      var(--radius-sm);
+
+}

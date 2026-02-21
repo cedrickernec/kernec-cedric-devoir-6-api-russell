@@ -1,45 +1,66 @@
-@import url(../base/variables.css);
-@import url(../base/reset.css);
-@import url(../base/typography.css);
-@import url(../base/accessibility.css);
-@import url(../utils/text-utils.css);
-@import url(../utils/empty-state.css);
-@import url(../layouts/sidebar.css);
-@import url(../layouts/floating-actions.css);
-@import url(../layouts/side-panel.css);
-@import url(../layouts/table-layout.css);
-@import url(../layouts/split-view.css);
-@import url(../components/tooltip.css);
-@import url(../components/filters.css);
-@import url(../components/tables.css);
-@import url(../components/buttons.css);
-@import url(../components/scrollbar.css);
-@import url(../components/form.css);
-@import url(../components/modal.css);
-@import url(../components/toast.css);
-@import url(../components/popup-session-warning.css);
-@import url(../components/status.css);
-
-body {
-    margin: 0;
-    padding: 0;
-    line-height: 1.5;
-    background: var(--bg-grey);
-    overflow: hidden;
-}
+/* ==================================================
+   APP LAYOUT
+   ================================================== */
 
 .layout {
     display: flex;
-    min-height: 100vh;
+    height: 100dvh;
 }
 
 main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    padding: 30px;
-    overflow-y: auto;
+    gap: var(--flow-normal);
+    min-height: 0;
+    min-width: var(--control-min-width);
+    padding: var(--content-page-padding);
 
-    transition: margin-right 0.4s ease;
+    transition:
+        margin-right
+        var(--motion-duration-slow)
+        var(--motion-ease-standard);
+}
+
+.ui-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: var(--z-ui-layer);
+    isolation: isolate;
+}
+
+/* ==================================================
+   APP LAYOUT — SCROLL BEHAVIOR
+   ================================================== */
+
+/* Page classique */
+body.scroll-main main {
+    overflow: auto;
+}
+
+/* Page applicative */
+body.scroll-components main {
+    overflow: hidden;
+}
+
+/* ==================================================
+   APP LAYOUT — SIDE PANEL INTERACTION
+   ================================================== */
+
+body.side-panel-open main {
+    margin-right: var(--side-panel-width);
+}
+
+body.side-panel-open {
+    overflow-x: hidden;
+}
+
+/* ==================================================
+   APP STATE — SIDE PANEL
+   ================================================== */
+
+body.side-panel-open .side-panel-toggle {
+    opacity: 1;
+    pointer-events: auto;
 }

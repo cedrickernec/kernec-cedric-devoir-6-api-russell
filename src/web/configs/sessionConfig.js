@@ -1,17 +1,22 @@
 /**
- * --------------------------------------------------------------------
- * Configuration de la session Express
- * --------------------------------------------------------------------
- * - Stockage MongoDB
+ * ===================================================================
+ * EXPRESS SESSION CONFIGURATION
+ * ===================================================================
+ * - Configure express-session
+ * - Stockage MongoDB via connect-mongo
  * - Sécurisation des cookies selon l'environnement
  * - Durée de session centralisée
+ * ===================================================================
  */
 
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import ms from "ms";
 
-// Détection de l'environnement
+// ==================================================
+// ENVIRONMENT DETECTION
+// ==================================================
+
 const isProduction = process.env.NODE_ENV === "production";
 
 // ==================================================

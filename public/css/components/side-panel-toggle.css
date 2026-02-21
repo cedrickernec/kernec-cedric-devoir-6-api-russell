@@ -1,0 +1,35 @@
+/* ======================================================
+   SIDEPANEL-TOGGLE
+   ====================================================== */
+
+.side-panel-toggle {
+    position: absolute;
+
+    top: var(--side-panel-toggle-top);
+    transform: translateY(-50%);
+
+    width: var(--side-panel-toggle-width);
+    height: var(--side-panel-toggle-height);
+
+    left: calc(
+        var(--side-panel-toggle-width)
+        * var(--side-panel-toggle-overlap-x)
+        * -1
+    );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--surface-primary);
+    border: none;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+
+    cursor: pointer;
+    z-index: var(--z-floating-top);
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: var(--transition-normal);
+}

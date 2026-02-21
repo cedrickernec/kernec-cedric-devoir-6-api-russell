@@ -1,12 +1,14 @@
 /**
  * ===================================================================
- * RESERVATIONS TABLE
+ * RESERVATIONS TABLE INITIALISER
  * ===================================================================
- * - Initialise la table Reservations
- * - Configure la sélection multiple
- * - Configure la suppression en masse
- * - Fournit les messages spécifiques aux réservations
- * - Repose sur entityTable et tableCore
+ * - Configure et initialise la table des réservations
+ * - Active la sélection multiple
+ * - Active la suppression en masse (bulk delete)
+ * - Injecte les messages métier spécifique aux réservations
+ * ===================================================================
+ * Architecture :
+ * → Adaptateur métier au-dessus du moteur générique entityTable
  * ===================================================================
  */
 
@@ -20,6 +22,7 @@ export function initReservationsTable() {
         checkboxName: "selectedReservations",
         deleteBtnId: "delete-selected",
         selectAllId: "select-all",
+        
         deleteUrl: "/ajax/reservations",
         deleteType: "reservation",
 

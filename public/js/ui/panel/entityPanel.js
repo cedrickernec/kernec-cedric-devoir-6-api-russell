@@ -1,11 +1,12 @@
 /**
  * ===================================================================
- * SIDE PANEL CONTROLLER
+ * ENTITY PANEL CONTROLLER
  * ===================================================================
- * - Gère l'ouverture du side panel au clic sur une ligne
- * - Charge dynamiquement le contenu HTML
- * - Synchronise l'état actif des lignes
+ * - Initialise le comportement des lignes ouvrant un side panel
+ * - Charge dynamiquement le contenu HTML via fetch
  * - Gère les erreurs backend
+ * - Configure dynamiquement actions Edit/Delete
+ * - Supporte les routes imbriquées (nested entities)
  * ===================================================================
  */
 
@@ -31,7 +32,7 @@ export function resolveNestedUrl(template, params = {}) {
 }
 
 // ==================================================
-// INIT
+// INITIALISATION
 // ==================================================
 
 export function initEntityPanel({
@@ -52,6 +53,7 @@ export function initEntityPanel({
   // ==================================================
 
   const rows = document.querySelectorAll(".js-panel-row");
+  if (!rows.length) return;
 
   // ==================================================
   // UI HELPERS
@@ -66,10 +68,12 @@ export function initEntityPanel({
   // ==================================================
 
   rows.forEach(row => {
+
     row.addEventListener("click", async (e) => {
+
       e.stopPropagation();
 
-      // Ignore les clics sur actions internes
+      // Ignore interactions internes
       if (e.target.closest("a, button, input, .actions")) return;
 
       const entityId = row.dataset.entityId;
@@ -82,11 +86,10 @@ export function initEntityPanel({
         return;
       }
 
-      // ==================================================
-      // PANEL CONTENT LOADING
-      // ==================================================
-
       try {
+        // ==================================================
+        // URL BUILDING
+        // ==================================================
         let url;
         
         if (nestedPanelUrl && nestedParams) {
@@ -99,8 +102,11 @@ export function initEntityPanel({
         }
         
         const res = await fetch(url);
+        
+        // ==================================================
+        // ERROR HANDLING
+        // ==================================================
 
-        // ---------- Gestion erreurs ----------
         if (!res.ok) {
           let message = messages.SERVER_ERROR_SHORT;
 
@@ -123,7 +129,9 @@ export function initEntityPanel({
           return;
         }
 
-        // ---------- Contenu OK ----------
+        // ==================================================
+        // SUCCESS CONTENT LOAD
+        // ==================================================
         const html = await res.text();
 
         clearActiveRows();

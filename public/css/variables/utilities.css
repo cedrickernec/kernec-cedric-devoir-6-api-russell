@@ -1,0 +1,30 @@
+/**
+ * ===================================================================
+ * UTILITIES TOKENS — TECHNICAL HELPERS
+ * ===================================================================
+ * Variables techniques transverses utilisées dans toute l’application.
+ *
+ * Contient :
+ *      - Scrollbar
+ *      - Z-index scale
+ *      - Helpers techniques
+ * ===================================================================
+ * Rôle :
+ *      → Centraliser les constantes techniques globales.
+ * ===================================================================
+ * Ne représente PAS une intention UI directe.
+ * ===================================================================
+ */
+
+:root {
+
+   /* =============== SCROLLBAR =============== */
+
+   --scrollbar-size:                         14px;
+   --scrollbar-thumb-border:                 4px;
+   --scrollbar-thumb-bg:                     var(--color-neutral-500);
+   --scrollbar-thumb-radius:                 var(--radius-lg);
+   --scrollbar-thumb-hover:                  var(--color-primary);
+   --scrollbar-track-bg:                     transparent;
+
+}

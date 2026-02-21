@@ -1,0 +1,21 @@
+@import url(./core.css);
+
+/* ==================================================
+   COMPONENTS ENTRYPOINT (USED BY ERROR.CSS)
+   ================================================== */
+
+@import url(./components/button.css);
+@import url(./components/card.css);
+@import url(./components/scrollbar.css);
+
+/* ==================================================
+   LAYOUTS
+   ===================================================== */
+
+@import url(./layouts/error-layout.css);
+
+/* ==================================================
+   PAGES
+   ===================================================== */
+
+@import url(./pages/error.css);

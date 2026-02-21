@@ -2,25 +2,31 @@
    TYPOGRAPHY & TEXTS
    ====================================================== */
 
+/* Body */
 body {
-    font-family: Arial, sans-serif;
-    color: var(--color-black-init);
+    font-family: var(--font-family-base);
+    color: var(--color-text);
+    line-height: var(--text-line-height-body);
 }
 
+/* Headings */
 h1 {
     text-align: left;
     margin-top: 0;
-    margin-bottom: 1.25rem;
-    font-weight: bold;
-    font-size: 1.75rem;
+    font-weight: var(--text-bold);
+    font-size: var(--text-heading-1);
+    line-height: var(--text-line-height-heading);
 }
 
 h2 {
-    margin-bottom: 0.9rem;
+    font-weight: var(--text-bold);
+    font-size: var(--text-heading-2);
+    line-height: var(--text-line-height-heading);
 }
 
+/* Text elements */
 .muted {
-    color: var(--color-secondary);
+    color: var(--color-text-muted);
 }
 
 a {
@@ -30,20 +36,31 @@ a {
 .link {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-weight: 700;
-    color: var(--accent-primary);
+    gap: var(--space-sm);
     text-decoration: none;
 }
 
-.link:hover {
-    color: var(--accent-primary-hover);
+.link--primary {
+    font-weight: var(--text-bold);
+    color: var(--color-primary);
+}
+
+.link--underline {
+    text-decoration: underline;
+    text-decoration-thickness: var(--underline-thickness);
+    text-underline-offset: var(--underline-offset);
+}
+
+.link--primary:hover {
+    color: var(--color-primary-hover);
+    transition: var(--transition-fast);
 }
 
 .link i {
-    font-size: 0.8em;
+    font-size: var(--icon-size-xs);
 }
 
+/* Form elements */
 button,
 input,
 select,
@@ -52,9 +69,9 @@ textarea {
 }
 
 ::placeholder {
-    color: color-mix(in srgb, var(--color-black-init) 60%, transparent);
-}
-
-svg {
-    fill: currentColor;
+    color: color-mix(
+        in srgb,
+        var(--color-text) 60%,
+        transparent
+    );
 }

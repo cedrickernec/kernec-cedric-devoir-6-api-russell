@@ -1,17 +1,27 @@
 /**
  * ===================================================================
- * RESERVATION VALIDATION
+ * RESERVATION VALIDATION CONTROLLER
  * ===================================================================
- * - Gère le clic sur le bouton "Valider"
- * - Construit le récapitulatif
+ * - Gère l'action utilisateur "Valider la réservation"
+ * - Construit le récapitulatif final
  * - Ouvre la modale de confirmation
- * - Injecte les données avant soumission
+ * - Injecte les données dans le formulaire avant submit
+ * ===================================================================
+ * Responsabilité :
+ * - Ce module fait le pont entre :
+ *    → la selection UI
+ *    → le formulaire HTML
+ *    → la confirmation utilisateur
  * ===================================================================
  */
 
 import { getSelections } from "../../table/core/selectionStore.js";
 import { extractReservationData } from "../../table/reservation/reservationRecap.js";
 import { reservationSummary } from "../../ui/modal/reservationSummary.js";
+
+// ==================================================
+// INITIALIZATION
+// ==================================================
 
 export function initReservationValidation() {
   const validateBtn = document.getElementById("validate-selection");
@@ -24,11 +34,18 @@ export function initReservationValidation() {
     const form = validateBtn.closest("form");
     if (!form) return;
 
+    // ==================================================
+    // FORM DATA EXTRACTION
+    // ==================================================
     
     // Données issues du formulaire
     const startDate = form.querySelector("[name='startDate']")?.value;
     const endDate = form.querySelector("[name='endDate']")?.value;
     
+    // ==================================================
+    // SELECTION DATA EXTRACTION
+    // ==================================================
+
     // Données issues de la sélection
     const reservations = extractReservationData(selections, { startDate, endDate });
     
@@ -37,6 +54,10 @@ export function initReservationValidation() {
       boatName: form.querySelector("[name='boatName']")?.value || "",
       reservations
     };
+
+    // ==================================================
+    // CONFIRMATION MODAL
+    // ==================================================
 
     const summaryNode = reservationSummary({ data: summaryData});
 
@@ -51,10 +72,23 @@ export function initReservationValidation() {
   });
 }
 
-// Injection des sélections dans le formulaire avant soumission serveur
+// ==================================================
+// FORM INJECTION HELPERS
+// ==================================================
+/**
+ * Injecte dynamiquement les catways selectionnés
+ * dans le formulaire avant l'envoie serveur.
+ * 
+ * Permet de conserver une formulaire HTML classique
+ * tout en utilisant une sélection dynamique JS.
+ */
+
 function injectSelectionsIntoForm(form, idsSet) {
+
+  // Nettoyage des anciennes injections
   form.querySelectorAll('input[name="catways[]"]').forEach(i => i.remove());
 
+  // Injection des nouvelles données
   idsSet.forEach(id => {
     const input = document.createElement("input");
     input.type = "hidden";

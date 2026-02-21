@@ -1,11 +1,10 @@
 /**
  * ===================================================================
- * INTERACTION MODE TRACKING (KEYBOARD/MOUSE)
+ * INTERACTION MODE DETECTOR
  * ===================================================================
- * - Détecte si la dernière interaction a été effectuée à l'aide 
- *   du clavier ou de la souris
- * - Utilisé pour conditionner la gestion du focus
- * - Consommé par JS (logique) et CSS (focus-visible)
+ * - Détecte si l'utilisateur navigue au clavier ou à la souris
+ * - Permet d'adapter l'affichage du focus
+ * - Synchronise JS et CSS via la classe body → using-kerboard
  * ===================================================================
  */
 
@@ -47,7 +46,8 @@ function handleKeydown(e) {
     }
 }
 
-function handleMousedown() { // Interaction souris → Mode souris
+// Interaction souris → Mode souris
+function handleMousedown() {
     setMouseMode();
 }
 

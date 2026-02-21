@@ -1,0 +1,21 @@
+/* ==================================================
+   UI VARIABLES CONTRACT
+   ===================================================== */
+
+/* Foundations */
+@import url(../foundation/theme.css);
+@import url(../foundation/primitives.css);
+@import url(../foundation/motion.css);
+@import url(../foundation/foundations.css);
+
+/* Semantic layers */
+@import url(./flow.css);
+@import url(./layout.css);
+@import url(./components.css);
+@import url(./feedback.css);
+@import url(./utilities.css);
+
+/* Pages scopes */
+@import url(./pages/auth.css);
+@import url(./pages/doc.css);
+@import url(./pages/details.css);

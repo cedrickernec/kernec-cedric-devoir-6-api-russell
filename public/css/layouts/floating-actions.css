@@ -5,22 +5,17 @@
 .floating-actions {
     position: fixed;
     top: 0;
-    right: 30px;
-    width: 160px;
+    right: var(--content-page-padding);
+    width: auto;
 
     display: flex;
-    justify-content: space-between;
+    gap: var(--space-sm);
 
-    background: white;
-    padding: 10px;
-    border-radius: 0 0 8px 8px;
-    box-shadow: var(--box-shadow-sm);
+    background: var(--surface-primary);
+    padding: var(--space-sm);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: var(--border-light);
 
-    transition: margin-right 0.4s ease;
     z-index: var(--z-floating-top);
-}
-
-.floating-actions a.btn.btn--primary {
-    font-size: var(--size-icon);
-    padding: 12px 12px;
 }

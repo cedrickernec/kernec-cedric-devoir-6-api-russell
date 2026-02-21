@@ -1,18 +1,26 @@
 /**
  * ===================================================================
- * CATWAYS LIVE FILTER
+ * CATWAYS LIVE FILTER CONTROLLER
  * ===================================================================
- * - Filtrage en temps réel des catways :
- *   - Numéro
- *   - Type
- *   - État (ok / hs / warning)
- * - Met à jour le compteur
- * - Gère la ligne "aucun résultat"
- * - Notifie la table des changements de visibilité
+ * - Filtre dynamiquement les lignes de la table Catways
+ * - Applique plusieurs critères combinable :
+ *      → Numéro
+ *      → Type
+ *      → État (OK / HS / WARNING)
+ * - Met à jour le compteur de résultats visibles
+ * - Gère l'affichage de la ligne "aucun résultat"
+ * - Notifie tableCore des changements de visibilité
+ * ===================================================================
+ * Synchronisé avec tableCore via l'event "table:visibility-change"
  * ===================================================================
  */
 
 export function initCatwaysLiveFilter() {
+
+    // ========================================================
+    // DOM REFERENCES
+    // ========================================================
+
     const rows = Array.from(document.querySelectorAll(".js-catway-row"));
 
     const numberSelect = document.querySelector("#filter-catway");
@@ -23,20 +31,29 @@ export function initCatwaysLiveFilter() {
     const resetButton = document.querySelector("#filters-reset");
     const countLabel = document.querySelector("#catways-count");
 
-    // Sécurité
+    // Sécurité : Si le filtre n'existe pas → abandon
     if (!numberSelect || !typeSelect || !stateOk || !stateHs || !stateWarn) return;
 
     const totalCount = rows.length;
+
+    // ========================================================
+    // COUNTER MANAGEMENT
+    // ========================================================
 
     function updateCounter(visibleCount) {
         if (!countLabel) return;
         countLabel.textContent = `(${visibleCount} / ${totalCount})`;
     }
 
+    // ========================================================
+    // FILTER ENGINE
+    // ========================================================
+
     function applyFilters() {
         const number = numberSelect.value;
         const type = typeSelect.value;
 
+        // États autorisés sélectionnés
         const allowedStates = [];
         if (stateOk.checked) allowedStates.push("OK");
         if (stateHs.checked) allowedStates.push("HS");
@@ -51,17 +68,17 @@ export function initCatwaysLiveFilter() {
 
             let visible = true;
 
-            // Numéro
+            // ----- FILTER : NUMBER -----
             if (number && rowNumber !== number) {
                 visible = false;
             }
 
-            // Type
+            // ----- FILTER : TYPE -----
             if (visible && type && rowType !== type) {
                 visible = false;
             }
 
-            // État
+            // ----- FILTER : STATE -----
             if (visible && allowedStates.length > 0 && !allowedStates.includes(rowState)) {
                 visible = false;
             }
@@ -70,6 +87,7 @@ export function initCatwaysLiveFilter() {
             if (visible) visibleCount++;
         });
 
+        // Gestion ligne "aucun résultat"
         const noResultRow = document.getElementById("no-results-row");
         if (noResultRow) {
             noResultRow.hidden = visibleCount !== 0;
@@ -77,10 +95,15 @@ export function initCatwaysLiveFilter() {
 
         updateCounter(visibleCount);
 
+        // Synchronisation avec tableCore (select-all / bulk delete)
         document.dispatchEvent(
             new CustomEvent("table:visibility-change")
         );
     }
+
+    // ========================================================
+    // RESET FILTERS
+    // ========================================================
 
     function resetFilters() {
         numberSelect.value = "";
@@ -105,7 +128,10 @@ export function initCatwaysLiveFilter() {
         );
     }
 
-    // Events
+    // ========================================================
+    // EVENTS
+    // ========================================================
+
     numberSelect.addEventListener("change", applyFilters);
     typeSelect.addEventListener("change", applyFilters);
     stateOk.addEventListener("change", applyFilters);
@@ -116,6 +142,6 @@ export function initCatwaysLiveFilter() {
         resetButton.addEventListener("click", resetFilters);
     }
 
-    // Initialisation
+    // Initialisation compteur
     updateCounter(totalCount);
 }

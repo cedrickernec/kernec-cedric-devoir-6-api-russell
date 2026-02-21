@@ -1,0 +1,33 @@
+/**
+ * ===================================================================
+ * FLOW TOKENS — VERTICAL RHYTHM SYSTEM
+ * ===================================================================
+ * Définit le rythme vertical global de l’application.
+ *
+ * Contient :
+ *      - Espacements entre blocs UI
+ *      - Stack spacing cohérent
+ * ===================================================================
+ * Rôle :
+ *      → Garantir une hiérarchie visuelle constante.
+ *      → Éviter les margin arbitraires dans les composants.
+ * ===================================================================
+ * Utilisation :
+ *      - gap
+ *      - margin-block
+ *      - séparation sections
+ * ===================================================================
+ * Ne remplace PAS :
+ *      - padding interne
+ *      - micro spacing
+ * ===================================================================
+ */
+
+:root {
+
+   --flow-micro:                             var(--space-xs);
+   --flow-tight:                             var(--space-sm);
+   --flow-normal:                            var(--space-lg);
+   --flow-loose:                             var(--space-xxl);
+   
+}

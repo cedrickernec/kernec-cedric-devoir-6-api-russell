@@ -11,16 +11,15 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
 
-    <!-- Layouts/pages styles -->
-    <link rel="stylesheet" href="/css/layouts/app-layout.css" />
-    <link rel="stylesheet" href="/css/pages/dashboard.css" />
-    <link rel="stylesheet" href="/css/pages/details.css" />
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/app.css" />
   </head>
 
   <body
     data-session-max-age="<%= sessionMaxAge %>"
     data-force-warning="<%= forceSessionWarning %>"
     data-just-logged-in="<%= justLoggedIn %>"
+    class="<%= bodyClass || '' %>"
   >
     <div class="layout">
       <!-- ======================== SIDEBAR =========================== -->
@@ -31,69 +30,73 @@
         <!-- ====== SIDEBAR-MENU ====== -->
 
         <nav class="sidebar-menu" aria-label="Navigation principale">
-          <p>
-            <a
-              href="/dashboard"
-              class="btn btn-nav <%= activePage === 'dashboard' ? 'is-active' : '' %>"
-              aria-current="<%= activePage === 'dashboard' ? 'page' : false %>"
-            >
-              <i class="fa-solid fa-house-chimney-user" aria-hidden="true"></i>
-              Dashboard
-            </a>
-          </p>
-          <p>
-            <a
-              href="/users"
-              class="btn btn-nav <%= activePage === 'users' ? 'is-active' : '' %>"
-              aria-current="<%= activePage === 'users' ? 'page' : false %>"
-            >
-              <i class="fa-solid fa-users" aria-hidden="true"></i>
-              Utilisateurs
-            </a>
-          </p>
-          <p>
-            <a
-              href="/catways"
-              class="btn btn-nav <%= activePage === 'catways' ? 'is-active' : '' %>"
-              aria-current="<%= activePage === 'catways' ? 'page' : false %>"
-            >
-              <i class="fa-solid fa-anchor" aria-hidden="true"></i>
-              Catways
-            </a>
-          </p>
-          <p>
-            <a
-              href="/reservations"
-              class="btn btn-nav <%= activePage === 'reservations' ? 'is-active' : '' %>"
-              aria-current="<%= activePage === 'reservations' ? 'page' : false %>"
-            >
-              <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-              Réservations
-            </a>
-          </p>
+          <div class="sidebar-menu-main">
+            <p>
+              <a
+                href="/dashboard"
+                class="btn btn-nav <%= activePage === 'dashboard' ? 'is-active' : '' %>"
+                aria-current="<%= activePage === 'dashboard' ? 'page' : false %>"
+              >
+                <i class="fa-solid fa-house-chimney-user" aria-hidden="true"></i>
+                Dashboard
+              </a>
+            </p>
+            <p>
+              <a
+                href="/users"
+                class="btn btn-nav <%= activePage === 'users' ? 'is-active' : '' %>"
+                aria-current="<%= activePage === 'users' ? 'page' : false %>"
+              >
+                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                Utilisateurs
+              </a>
+            </p>
+            <p>
+              <a
+                href="/catways"
+                class="btn btn-nav <%= activePage === 'catways' ? 'is-active' : '' %>"
+                aria-current="<%= activePage === 'catways' ? 'page' : false %>"
+              >
+                <i class="fa-solid fa-anchor" aria-hidden="true"></i>
+                Catways
+              </a>
+            </p>
+            <p>
+              <a
+                href="/reservations"
+                class="btn btn-nav <%= activePage === 'reservations' ? 'is-active' : '' %>"
+                aria-current="<%= activePage === 'reservations' ? 'page' : false %>"
+              >
+                <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                Réservations
+              </a>
+            </p>
+          </div>
+
+
+          <div class="sidebar-menu-secondary">
+            <p>
+              <a
+                href="/documentation"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-nav <%= activePage === 'documentation' ? 'is-active' : '' %>"
+                aria-current="<%= activePage === 'documentation' ? 'page' : false %>"
+              >
+                <i class="fa-solid fa-book" aria-hidden="true"></i>
+                Documentation
+              </a>
+            </p>
+          </div>
         </nav>
-        <div class="sidebar-doc">
-          <p>
-            <a
-              href="/documentation"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-nav <%= activePage === 'documentation' ? 'is-active' : '' %>"
-              aria-current="<%= activePage === 'documentation' ? 'page' : false %>"
-            >
-              <i class="fa-solid fa-book" aria-hidden="true"></i>
-              Documentation
-            </a>
-          </p>
-        </div>
 
         <!-- ====== SIDEBAR-FOOTER ====== -->
 
         <div class="sidebar-footer">
           <div class="sidebar-footer-content">
             <div class="sidebar-clock">
-              <p id="sidebar-date"><%= currentDate %></p>
-              <p id="sidebar-time"><%= currentTime %></p>
+              <p id="sidebar-date" class="sidebar-date"><%= currentDate %></p>
+              <p id="sidebar-time" class="sidebar-time"><%= currentTime %></p>
             </div>
 
             <section class="sidebar-user" aria-label="Utilisateur connecté">
@@ -257,8 +260,12 @@
       </div>
     </div>
 
+    <!--====== UI LAYER ======-->
+    
+    <div id="ui-layer" class="ui-layer" aria-hidden="true"></div>
+
     <!--====== SCRIPTS ======-->
 
-    <script type="module" src="/js/bootstrap/app.bootstrap.js"></script>
+    <script type="module" src="/js/bootstrap/appBootstrap.js"></script>
   </body>
 </html>

@@ -4,24 +4,25 @@
 
 .badge {
     display: inline-block;
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: 0.75em;
-    font-weight: bold;
-    color: white;
+    padding: var(--badge-padding-y) var(--badge-padding-x);
+    border-radius: var(--radius-md);
+    font-size: var(--badge-font-size);
+    font-weight: var(--badge-weight);
 }
 
-.badge--success {
+/* DOC BADGES */
+
+.doc-badge--success {
     background: #114b15ff;
     color: #67ed70ff
 }
 
-.badge--error {
+.doc-badge--error {
     background: #4b1111ff;
     color: #ed6767ff
 }
 
-.badge--500 {
+.doc-badge--500 {
     background: #820000ff;
     color: #ffa8a8ff
 }

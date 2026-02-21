@@ -2,53 +2,52 @@
   GLOBAL ERRORS
   ========================================================= -->
 
-<h2 id="errors">Erreurs globales de l'API</h2>
-
-<div class="route-block">
+<div class="card card--doc">
 
   <p class="example-title">
-    Erreur <span class="badge badge--error">401 Unauthorized</span> :
+    Erreur <span class="badge doc-badge--error">401 Unauthorized</span> :
   </p>
 
   <p class="error-type">Token manquant</p>
   
-  <pre><code>{
+<pre><code>{
     "success": false,
     "message": "Accès refusé: aucun token fourni."
 }</code></pre>
 
   <p class="error-type">Token expiré</p>
   
-  <pre><code>{
+<pre><code>{
     "success": false,
     "message": "Token expiré. Veuillez vous reconnecter."
 }</code></pre>
 
   <p class="error-type">Token invalide</p>
   
-  <pre><code>{
+<pre><code>{
     "success": false,
     "message": "Accès refusé: token invalide."
 }</code></pre>
 
   <p class="example-title">
-    Erreur <span class="badge badge--error">404 Not Found</span> :
+    Erreur <span class="badge doc-badge--error">404 Not Found</span> :
   </p>
 
   <p class="error-type">Route introuvable</p>
-  <pre><code>{
+
+<pre><code>{
     "success": false,
     "error": "Route API introuvable.",
     "path": "/nom/route/introuvable"
 }</code></pre>
 
   <p class="example-title">
-    Erreur <span class="badge badge--500">500 Internal Serveur Error</span> :
+    Erreur <span class="badge doc-badge--500">500 Internal Serveur Error</span> :
   </p>
 
   <p class="error-type">Erreur interne serveur</p>
   
-  <pre><code>{
+<pre><code>{
     "success": false,
     "message": "Erreur interne du serveur.",
 }</code></pre>

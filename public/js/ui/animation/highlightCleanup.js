@@ -1,9 +1,11 @@
 /**
  * ===================================================================
- * TEMPORARY CLEARING HIGHLIGHTING
+ * HIGHLIGHT CLEANUP (POST-ANIMATION)
  * ===================================================================
  * - Supprime l'attribut data-highlight après un délai
- * - (utilisé pour les animations de céation/mise à jour)
+ * - Permet de déterminer proprement les animations visuelles
+ * ===================================================================
+ * Utilisé pour les animations de céation/mise à jour.
  * ===================================================================
  */
 

@@ -1,89 +1,154 @@
 /**
- * ======================================================
- * TOOLTIP
- * ======================================================
- * - Affiche des info-bulles
- * - Se positionne intelligemment
- * ======================================================
- */
+ * ==============================================================
+ * TOOLTIP SYSTEM (UI LAYER PORTAL)
+ * ==============================================================
+ * - Une seule tooltip globale rendue dans #ui-layer
+ * - Animation gérée uniquement par le CSS existant
+ * - Positionnement intelligent selon l'espace disponible :
+ *      → RIGHT → LEFT → BOTTOM → TOP
+ * ============================================================== */
 
-let activeTooltip = null;
-let activeTrigger = null;
+function initTooltipSystem() {
 
-/* ===============================
-   HOVER IN
-=============================== */
-document.addEventListener("mouseover", e => {
-    const tooltip = e.target.closest(".tooltip");
-    if (!tooltip) return;
+    // ==================================================
+    // INITIALISATION
+    // ==================================================
 
-    const content = tooltip.querySelector(".tooltip__content");
-    if (!content) return;
+    const layer = document.getElementById("ui-layer");
+    if (!layer) return;
 
-    // Sécurité : une seule tooltip active
-    if (activeTooltip) {
-        activeTooltip.remove();
-        activeTooltip = null;
+    const OFFSET = 10;
+    let activeTrigger = null;
+
+    // Tooltip unique
+    const tooltip = document.createElement("div");
+    tooltip.className = "tooltip-floating";
+    layer.appendChild(tooltip);
+
+    // ==================================================
+    // POSITION CHECK HELPER
+    // ==================================================
+
+    function fitsRight(r, t) {
+        return r.right + OFFSET + t.width < window.innerWidth;
     }
 
-    activeTrigger = tooltip;
+    function fitsLeft(r, t) {
+        return r.left - OFFSET - t.width > 0;
+    }
 
-    // Clone du contenu
-    activeTooltip = content.cloneNode(true);
-    activeTooltip.style.position = "fixed";
-    activeTooltip.style.opacity = "1";
-    activeTooltip.style.pointerEvents = "none";
+    function fitsBottom(r, t) {
+        return r.bottom + OFFSET + t.height < window.innerHeight;
+    }
 
-    document.body.appendChild(activeTooltip);
+    // ==================================================
+    // POSITIONING ENGINE
+    // ==================================================
 
-    positionTooltip(activeTrigger, activeTooltip);
-});
+    function position(trigger) {
 
-/* ===============================
-   HOVER OUT
-=============================== */
-document.addEventListener("mouseleave", e => {
-    if (!activeTrigger) return;
+        const r = trigger.getBoundingClientRect();
 
-    if (!activeTrigger.contains(e.relatedTarget)) {
-        activeTooltip?.remove();
-        activeTooltip = null;
+        // Position temporaire pour mesurer la tooltip
+        tooltip.style.left = "0px";
+        tooltip.style.top = "0px";
+
+        const t = tooltip.getBoundingClientRect();
+
+        tooltip.classList.remove(
+            "tooltip-right",
+            "tooltip-left",
+            "tooltip-bottom",
+            "tooltip-top"
+        );
+
+        let x, y;
+
+        // ---- PRIORITÉ RIGHT
+        if (fitsRight(r, t)) {
+            tooltip.classList.add("tooltip-right");
+
+            x = r.right + OFFSET;
+            y = r.top + r.height / 2 - t.height / 2;
+        }
+
+        // ---- LEFT
+        else if (fitsLeft(r, t)) {
+            tooltip.classList.add("tooltip-left");
+
+            x = r.left - t.width - OFFSET;
+            y = r.top + r.height / 2 - t.height / 2;
+        }
+
+        // ---- BOTTOM
+        else if (fitsBottom(r, t)) {
+            tooltip.classList.add("tooltip-bottom");
+
+            x = r.left + r.width / 2 - t.width / 2;
+            y = r.bottom + OFFSET;
+        }
+
+        // ---- TOP (fallback)
+        else {
+            tooltip.classList.add("tooltip-top");
+
+            x = r.left + r.width / 2 - t.width / 2;
+            y = r.top - t.height - OFFSET;
+        }
+
+        tooltip.style.left = `${x}px`;
+        tooltip.style.top = `${y}px`;
+    }
+
+    // ==================================================
+    // VISIBILITY CONTROL
+    // ==================================================
+
+    function show(trigger) {
+        activeTrigger = trigger;
+        tooltip.textContent = trigger.dataset.tooltip || "";
+
+        tooltip.style.transition = "none";
+        tooltip.classList.add("is-visible")
+
+        position(trigger);
+
+        tooltip.offsetHeight;
+        tooltip.style.transition = "";
+    }
+
+    function hide() {
+        tooltip.classList.remove("is-visible");
         activeTrigger = null;
     }
-}, true);
 
-/* ===============================
-   POSITION LOGIC
-=============================== */
-function positionTooltip(trigger, tooltip) {
-    if (!trigger || !tooltip) return;
+    // ==================================================
+    // EVENTS
+    // ==================================================
 
-    // Reset classes
-    tooltip.classList.remove("is-left", "is-bottom");
+    // Hover IN
+    document.addEventListener("mouseover", e => {
+        const trigger = e.target.closest("[data-tooltip]");
+        if (!trigger) return;
+        show(trigger);
+    });
 
-    const triggerRect = trigger.getBoundingClientRect();
-    const OFFSET = 25;
+    // Hover OUT
+    document.addEventListener("mouseout", e => {
+        if (!activeTrigger) return;
+        if (activeTrigger.contains(e.relatedTarget)) return;
+        hide();
+    });
 
-    // Position par défaut : à droite
-    let left = triggerRect.right + OFFSET;
-    let top = triggerRect.top + triggerRect.height / 2;
+    // Reposition ON SCROLL
+    document.addEventListener("scroll", () => {
+        if (activeTrigger) position(activeTrigger);
+    }, true);
 
-    tooltip.style.left = `${left}px`;
-    tooltip.style.top = `${top}px`;
-    tooltip.style.transform = "translateY(-50%)";
-
-    const tooltipRect = tooltip.getBoundingClientRect();
-
-    /* Dépasse à droite → bascule à gauche */
-    if (tooltipRect.right > window.innerWidth) {
-        tooltip.style.left = `${triggerRect.left - tooltipRect.width - OFFSET}px`;
-        tooltip.classList.add("is-left");
-    }
-
-    /* Dépasse en haut → bascule en bas */
-    if (tooltipRect.top < 0) {
-        tooltip.style.top = `${triggerRect.bottom + OFFSET}px`;
-        tooltip.style.transform = "none";
-        tooltip.classList.add("is-bottom");
-    }
+    // Reposition ON RESIZE
+    window.addEventListener("resize", () => {
+        if (activeTrigger) position(activeTrigger);
+    });
 }
+
+initTooltipSystem();

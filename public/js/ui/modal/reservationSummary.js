@@ -1,8 +1,13 @@
 /**
  * ===================================================================
- * RESERVATION SUMMARY (CONTENT BUILDER)
+ * RESERVATION SUMMARY CONTENT BUILDER
  * ===================================================================
- * - Génère le contenu DOM du récapitulatif de réservation
+ * - Génère le contenu DOM du récapitulatif de réservation avant submit
+ * - Affiche :
+ *          → informations client / bateau
+ *          → liste des réservations sélectionnées
+ *          → durée totale
+ *          → avertissement en cas de chevauchement
  * ===================================================================
  */
 
@@ -10,7 +15,9 @@ export function reservationSummary({ data }) {
     const wrapper = document.createElement("div");
     wrapper.className = "modal-context";
 
-    /* ================= CONTEXT ================= */
+    // ==================================================
+    // CONTEXT HEADER
+    // ==================================================
 
     const header = document.createElement("p");
     header.className = "modal-context-subheader";
@@ -21,13 +28,15 @@ export function reservationSummary({ data }) {
     `;
     wrapper.appendChild(header);
 
-    /* ================= OVERLAPPING MESSAGE ================= */
+    // ==================================================
+    // OVERLAP DETECTION WARNING
+    // ==================================================
 
     const hasOverlap = hasOverlappingReservations(data.reservations);
 
     if (hasOverlap) {
         const warning = document.createElement("div");
-        warning.className = "modal-context-warning";
+        warning.className = "modal-context-info";
         warning.innerHTML = `
             <span class="bold"><i class="fa-solid fa-triangle-exclamation modal-context-icon"></i> Attention</span>
             <span class="italic">Certaines réservations sélectionnées se chevauchent dans le temps.
@@ -36,7 +45,9 @@ export function reservationSummary({ data }) {
         wrapper.appendChild(warning);
     }
 
-    /* ================= LIST ================= */
+    // ==================================================
+    // RESERVATIONS LIST RENDERING
+    // ==================================================
 
     const list = document.createElement("div");
     list.className = "modal-context-inline-block";
@@ -76,7 +87,10 @@ export function reservationSummary({ data }) {
     
     wrapper.appendChild(list);
 
-    /* ================= TOTAL DURATION ================= */
+    // ==================================================
+    // TOTAL DURATION CALCULATION
+    // ==================================================
+
     const totalNights = data.reservations.reduce((sum, r) => {
         return typeof r.duration === "number" ? sum + r.duration : sum;
     }, 0);
@@ -91,6 +105,11 @@ export function reservationSummary({ data }) {
 
     return wrapper;
 }
+
+// ==================================================
+// OVERLAP DETECTION ALGORITHM
+// (détecte si deux périodes se chevauchent)
+// ==================================================
 
 function hasOverlappingReservations(reservations) {
     const dated = reservations

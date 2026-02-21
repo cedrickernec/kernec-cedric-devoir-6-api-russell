@@ -1,5 +1,14 @@
+/**
+ * ===================================================================
+ * USER VALIDATORS
+ * ===================================================================
+ * - Validation username, email et password
+ * - Validation création et mise à jour utilisateur
+ * ===================================================================
+ */
+
 // =====================================
-// VALIDATION USERNAME
+// USERNAME VALIDATION
 // =====================================
 export const validateUsername = (username) => {
   const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
@@ -16,7 +25,7 @@ export const validateUsername = (username) => {
 };
 
 // =====================================
-// VALIDATION EMAIL
+// EMAIL VALIDATION
 // =====================================
 export const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
@@ -33,7 +42,7 @@ export const validateEmail = (email) => {
 };
 
 // =====================================
-// VALIDATION PASSWORD
+// PASSWORD VALIDATION
 // =====================================
 export const validatePassword = (password) => {
   const errors = {
@@ -53,7 +62,7 @@ export const validatePassword = (password) => {
     uppercase: /[A-Z]/.test(password),
     lowercase: /[a-z]/.test(password),
     number: /\d/.test(password),
-    special: /[!@#$%^&*()\-_=+\[\]{};:,.?]/.test(password)
+    special: /[!@#$%^&*()\-_=+[\]{};:,.?]/.test(password)
   };
 
   // Filtrer les règles échouées
@@ -74,7 +83,7 @@ export const validatePassword = (password) => {
 };
 
 // =====================================
-// VALIDATION MODIFICATION UTILISATEUR
+// USER UPDATE VALIDATION
 // =====================================
 export function validateUserUpdate(body) {
   const errors = {};
@@ -103,7 +112,7 @@ export function validateUserUpdate(body) {
 };
 
 // =====================================
-// VALIDATION CRÉATION UTILISATEUR
+// USER CREATE VALIDATION
 // =====================================
 
 export function validateUserCreate({ username, email, password }) {
@@ -119,7 +128,7 @@ export function validateUserCreate({ username, email, password }) {
   if (emailError) {
     errors.email = emailError;
   }
-  // Username
+  // Password
   const passwordValidation = validatePassword(password);
   if (!passwordValidation.valid) {
     errors.password = passwordValidation.errors;

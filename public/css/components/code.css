@@ -3,12 +3,11 @@
    ====================================================== */
 
 pre {
-    background: #272822;
-    color: #f8f8f2;
-    padding: 12px;
-    border-radius: 6px;
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: var(--code-padding-block) var(--code-padding-inline);
+    border-radius: var(--code-radius);
     overflow-x: auto;
-    margin-top: 8px;
 }
 
 pre code {
@@ -17,7 +16,8 @@ pre code {
 }
 
 code {
-    padding: 3px 6px;
-    border-radius: 4px;
-    font-size: 14px;
+    padding: var(--code-inline-padding-y) var(--code-inline-padding-x);
+    border-radius: var(--code-radius);
+    font-size: var(--code-font-size);
+    font-family: var(--font-family-mono);
 }

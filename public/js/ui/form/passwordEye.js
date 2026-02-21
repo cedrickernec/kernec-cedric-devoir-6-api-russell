@@ -2,9 +2,9 @@
  * ===================================================================
  * PASSWORD VISIBILITY TOGGLE
  * ===================================================================
- * - Permet d'afficher / masquer le mot de passe
- * - Met à jour l'icône (eye / eye-slash)
- * - Met à jour l'attribut aria-label pour l'accessibilité
+ * - Affiche / Masque le mot de passe utilisateur
+ * - Synchronise l'icône visuelle (eye / eye-slash)
+ * - Met à jour l'attribut ARIA pour l'accessibilité
  * ===================================================================
  */
 
@@ -17,20 +17,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const icon = toggleBtn.querySelector("i");
 
+    // État initial accessibilité
     toggleBtn.setAttribute("aria-label", "Afficher le mot de passe");
+
+    // =====================================================
+    // TOGGLE HANDLER
+    // =====================================================
 
     toggleBtn.addEventListener("click", () => {
 
         const isHidden = passwordInput.type === "password";
 
-        // Toggle du type de champ
+        // Toggle visibilité champ
         passwordInput.type = isHidden ? "text" : "password";
 
-        // Toggle des icônes
+        // Synchronisation icônes
         icon.classList.toggle("fa-eye", !isHidden);
         icon.classList.toggle("fa-eye-slash", isHidden);
 
-        // Accessibilité
+        // Mise à jour accessibilité
         toggleBtn.setAttribute(
             "aria-label",
             isHidden

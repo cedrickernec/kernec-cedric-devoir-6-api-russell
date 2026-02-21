@@ -1,0 +1,336 @@
+/**
+ * ===================================================================
+ * COMPONENT TOKENS — UI CONTRACT
+ * ===================================================================
+ * Définit les variables sémantiques utilisées par les composants UI.
+ *
+ * Contient :
+ *      - Buttons
+ *      - Forms
+ *      - Tables
+ *      - Filters
+ *      - Modals
+ *      - Status / Badges
+ *      - Tooltip
+ *      - etc.
+ * ===================================================================
+ * Rôle :
+ *      → Servir de contrat entre Design System et composants.
+ *      → Empêcher l’usage direct des tokens physiques.
+ * ===================================================================
+ * Architecture :
+ *      theme → tokens → variables → composants
+ * ===================================================================
+ * Ne doit PAS contenir :
+ *      - styles CSS
+ *      - valeurs spécifiques à une page
+ * ===================================================================
+ * Les composants doivent utiliser UNIQUEMENT ces variables.
+ * ===================================================================
+ */
+
+:root {
+
+   /* =============== BUTTONS =============== */
+
+   /* Base */
+   --btn-radius:                             var(--radius-md);
+   --btn-gap:                                var(--flow-normal);
+   --btn-padding-x:                          var(--control-padding-x);
+
+   --btn-font-size:                          var(--text-small-size);
+   --btn-font-weight:                        var(--text-bold);
+   --btn-letter-spacing:                     0.02rem;
+
+   --btn-min-width:                          150px;
+   --btn-height:                             var(--control-height-sm);
+   --btn-shadow:                             var(--shadow-sm);
+
+   /* Disabled */
+   --btn-disabled-bg:                        var(--surface-disabled);
+
+   /* Primary */
+   --btn-primary-text:                       var(--color-neutral-700);
+   --btn-primary-bg:                         var(--surface-primary);
+   --btn-primary-text-hover:                 var(--color-text-negatif);
+   --btn-primary-bg-hover:                   var(--color-neutral-900);
+
+   /* Navigation */
+   --btn-nav-text-size:                      var(--text-body-size);
+   --btn-nav-active-text:                    var(--color-text-negatif);
+   --btn-nav-active-bg:                      var(--color-primary);
+   --btn-nav-text-hover:                     var(--color-text-negatif);
+   --btn-nav-bg-hover:                       var(--color-neutral-900);
+   --btn-nav-height:                         var(--control-height-md);
+
+   /* Confirm */
+   --btn-confirm-text:                       var(--color-text-negatif);
+   --btn-confirm-bg:                         var(--color-primary);
+   --btn-confirm-bg-hover:                   var(--color-primary-hover);
+
+   /* Cancel */
+   --btn-cancel-bg:                          var(--color-neutral-200);
+   --btn-cancel-bg-hover:                    var(--color-neutral-100);
+
+   /* Danger */
+   --btn-danger-text:                        var(--color-text-negatif);
+   --btn-danger-bg:                          var(--color-neutral-700);
+   --btn-danger-bg-hover:                    var(--color-danger);
+
+   /* Info */
+   --btn-info-text-size:                     var(--text-body-size);
+
+   /* Close */
+   --btn-close-size:                         var(--text-body-size);
+   --btn-close-color:                        var(--color-neutral-500);
+   --btn-close-color-hover:                  var(--color-danger);
+
+   /* Icon */
+   --btn-icon-bg:                            var(--color-neutral-100);
+   --btn-icon-size-xs:                       var(--icon-size-xs);
+   --btn-icon-size-sm:                       var(--icon-size-sm);
+   --btn-icon-size-md:                       var(--icon-size-md);
+   --btn-icon-size-lg:                       var(--icon-size-lg);
+   --btn-icon-padding:                       var(--space-sm);
+
+   /* Toggle */
+   --btn-toggle-bg:                          var(--color-neutral-100);
+   --btn-toggle-min-width:                   120px;
+
+   --btn-toggle-actif-bg:                    var(--color-primary);
+   --btn-toggle-actif-bg-hover:              var(--color-danger);
+   --btn-toggle-actif-border-hover:          var(--color-danger-hover);
+   
+   --btn-toggle-inactif-bg-hover:            var(--color-primary);
+   --btn-toggle-inactif-border-hover:        var(--color-primary-hover);
+   
+   --btn-toggle-actif-text:                  var(--color-text-negatif);
+   --btn-toggle-icon-hover:                  var(--color-text-negatif);
+
+   /* =============== TABLE =============== */
+
+   /* Structure */
+   --table-bg:                               var(--surface-primary);
+   --table-row-alt-bg:                       var(--color-neutral-50);
+   --table-row-min-height:                   50px;
+
+   /* Columns */
+   --table-col-checkbox-width:               48px;
+   --table-col-action-width:                 64px;
+   --table-col-date-width:                   110px;
+   --table-col-dash-width:                   30px;
+   --table-col-catway-width:                 70px;
+   --table-col-type-width:                   55px;
+   --table-col-username-width:               175px;
+   --table-col-status-width:                 125px;
+   --table-col-reserve-width:                125px;
+
+   /* Header */
+   --table-header-text:                      var(--color-text-negatif);
+   --table-header-bg:                        var(--color-primary);
+   --table-header-padding:                   var(--space-md);
+
+   /* Cells */
+   --table-cell-padding-y:                   var(--space-md);
+   --table-cell-padding-x:                   var(--space-md);
+   --table-cell-border:                      var(--border-light);
+
+   /* Hover / Interaction / highlight */
+   --table-row-hover-bg:                     var(--surface-hover);
+
+   --table-row-active-bg:                    var(--surface-active);
+   --table-row-active-border:                var(--border-accent-primary);
+
+   --table-row-highlight-bg:                 var(--surface-active);
+   --table-row-highlight-border:             var(--border-accent-primary);
+
+   --table-row-exit-bg:                      var(--surface-delete);
+   --table-row-exit-border:                  var(--border-accent-danger);
+
+   /* Checkbox */
+   --table-checkbox-accent:                  var(--color-danger);
+   --table-checkbox-scale:                   1.1;
+
+   /* =============== FORM INPUT DECORATOR =============== */
+
+   --input-icon-padding-inline:              40px;
+   --input-icon-offset-inline:               var(--space-md);
+   --input-icon-adjust-x:                    8px;
+
+   /* =============== FORM CONTROLS =============== */
+
+   /* Base */
+   --form-control-text:                      var(--color-text);
+   --form-control-bg:                        var(--surface-primary);
+   --form-control-border:                    var(--border-default);
+
+   --form-control-height:                    var(--control-height-md);
+   --form-control-padding-x:                 var(--space-md);
+
+   /* Focus */
+   --form-control-focus-bg:                  var(--interactive-focus-bg);
+   --form-control-focus-border:              var(--interactive-focus-border);
+
+   /* Disabled */
+   --form-control-disabled-bg:               var(--surface-muted);
+   --form-control-disabled-text:             var(--color-neutral-500);
+
+   /* Checkbox accent */
+   --form-checkbox-accent:                   var(--color-primary);
+
+
+   /* =============== FILTER BAR =============== */
+
+   /* Container */
+   --filter-gap:                             var(--flow-normal);
+   --filter-padding:                         var(--space-md);
+   --filters-bg:                             var(--surface-primary);
+   --filters-shadow:                         var(--shadow-sm);
+   
+   /* Filter group */
+   --filter-group-text:                      var(--color-text-muted);
+   --filter-group-active-bg:                 var(--color-primary-soft);
+   --filter-group-active-border:             var(--color-primary);
+   --filter-group-gap:                       var(--flow-tight);
+
+   /* Search input */
+   --filter-search-min-width:                220px;
+
+   /* Inputs focus */
+   --filter-input-focus-bg:                  var(--interactive-focus-bg);
+   --filter-input-focus-border:              var(--interactive-focus-border);
+
+   /* Checkbox base */
+   --filter-checkbox-text:                   var(--color-text-muted);
+   --filter-checkbox-hover-shadow:           var(--interactive-hover-shadow);
+   --filter-checkbox-hover-scale:            var(--motion-hover-scale);
+   --filter-checkbox-hover-brightness:       var(--motion-hover-brightness);
+
+   /* =============== STATUS =============== */
+
+   /* Base */
+   --status-radius:                          var(--radius-pill);
+   --status-font-size:                       var(--text-small-size);
+   --status-padding-inline:                  16px;
+   
+   /* Ok */
+   --status-ok-text:                         var(--color-secondary);
+   --status-ok-bg:                           var(--color-secondary-soft);
+   --status-ok-border:                       var(--color-secondary);
+   
+   /* Warning */
+   --status-warning-text:                    var(--color-warning);
+   --status-warning-bg:                      var(--color-warning-soft);
+   --status-warning-border:                  var(--color-warning);
+   
+   /* Danger */
+   --status-danger-text:                     var(--color-danger-hard);
+   --status-danger-bg:                       var(--color-danger-soft);
+   --status-danger-border:                   var(--color-danger-hard);
+   
+   /* Upcoming */
+   --status-upcoming-text:                   var(--color-text-negatif);
+   --status-upcoming-bg:                     var(--color-neutral-900);
+
+   /* In progress */
+   --status-progress-text:                   var(--color-text-negatif);
+   --status-progress-bg:                     var(--color-primary);
+
+   /* Finished */
+   --status-finished-text:                   var(--color-neutral-100);
+   --status-finished-bg:                     var(--color-neutral-500);
+
+   /* =============== BADGE =============== */
+
+   --badge-size:                             22px;
+   --badge-weight:                           var(--text-bold);
+   --badge-radius:                           25%;
+   --badge-font-size:                        var(--text-very-small-size);
+   --badge-padding-y:                        var(--space-xs);
+   --badge-padding-x:                        var(--space-sm);
+
+   /* =============== SIDE PANEL =============== */
+
+   --side-panel-shadow:                      -16px 0 24px rgba(from var(--theme-black) r g b / 0.08);
+
+   /* Side panel toggle */
+   --side-panel-toggle-width:                36px;
+   --side-panel-toggle-height:               64px;
+   --side-panel-toggle-top:                  50%;
+   --side-panel-toggle-overlap-x:            0.5;
+
+   /* =============== MODAL =============== */
+
+   /* Layout */
+   --modal-max-width:                        var(--size-content-sm);
+   --modal-width-offset:                     2rem;
+   --modal-max-height:                       90vh;
+
+   --modal-padding:                          var(--space-xl);
+   --modal-radius:                           var(--radius-lg);
+   --modal-gap:                              var(--flow-normal);
+
+   /* Backdrop */
+   --modal-backdrop-bg:                      rgba(from var(--theme-black) r g b / 0.5);
+   --modal-backdrop-blur:                    2px;
+
+   /* Header */
+   --modal-header-padding-bottom:            var(--space-md);
+
+   /* Footer */
+   --modal-footer-padding-top:               var(--space-lg);
+
+   /* Close button */
+   --modal-close-offset:                     var(--space-md);
+
+   /* =============== TOOLTIP =============== */
+   
+   /* Base */
+   --tooltip-min-width:                      240px;
+   --tooltip-max-width:                      260px;
+
+   --tooltip-radius:                         var(--radius-md);
+
+   --tooltip-padding-block:                  8px;
+   --tooltip-padding-inline:                 12px;
+
+   --tooltip-bg:                             var(--color-neutral-900);
+   --tooltip-color-text:                     var(--color-text-negatif);
+   --tooltip-size-text:                      var(--text-small-size);
+
+   /* Arrow */
+   --tooltip-arrow-size:                     8px;
+   --tooltip-arrow-offset:                   -4px;
+   
+   /* =============== SESSION WARNING =============== */
+
+   --session-warning-min-width:              var(--size-content-xs);
+   --session-warning-radius:                 var(--radius-lg);
+   --session-warning-padding-block:          24px;
+   --session-warning-padding-inline:         28px;
+   --session-warning-padding-bottom-extra:   77px;
+
+   --session-countdown-border-width:         3px;
+   --session-countdown-padding-block:        20px;
+   --session-countdown-padding-inline:       16px;
+   --session-countdown-letter-spacing:       0.4px;
+
+   --pill-padding-y:                         6px;
+   --pill-padding-x:                         10px;
+   --session-countdown-time-radius:          var(--radius-md);
+
+   /* =============== CODE BLOCK =============== */
+
+   --code-bg:                                var(--color-neutral-900);
+   --code-text:                              var(--color-neutral-100);
+
+   --code-font-size:                         var(--font-size-200);
+
+   --code-radius:                            var(--radius-md);
+   --code-padding-block:                     12px;
+   --code-padding-inline:                    12px;
+
+   --code-inline-padding-y:                  3px;
+   --code-inline-padding-x:                  6px;
+
+}

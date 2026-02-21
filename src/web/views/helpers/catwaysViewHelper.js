@@ -9,9 +9,10 @@ export const renderCreateCatwayPage = (res, {
     startNumber = null,
     endNumber = null
 }) => {
-    res.render("catways/catwayCreate", {
+    res.render("catways/create", {
         title: "Création d'un catway",
         activePage : "catways",
+        bodyClass: "scroll-main create-page",
         errors,
         globalError,
         formData,
@@ -29,9 +30,10 @@ export const renderEditCatwayPage = (res, {
     errors = {},
     globalError = null
 }) => {
-    res.render("catways/catwayEdit", {
+    res.render("catways/edit", {
         title: "Édition d'un catway",
         activePage : "catways",
+        bodyClass: "scroll-main edit-page",
         catway,
         errors,
         globalError

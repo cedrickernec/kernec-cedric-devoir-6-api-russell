@@ -1,0 +1,99 @@
+/**
+ * ===================================================================
+ * LAYOUT CONFIG — APPLICATION STRUCTURE
+ * ===================================================================
+ * Définit les espacements structurels majeurs de l’application.
+ *
+ * Contient :
+ *      - Padding layout globaux
+ *      - Marges structurelles
+ *      - Contraintes d’agencement principales
+ * ===================================================================
+ * Rôle :
+ *      → Assurer une cohérence entre les layouts.
+ *      → Centraliser les dimensions structurelles.
+ * ===================================================================
+ * Ne doit PAS contenir :
+ *      - spacing composant
+ *      - styles visuels
+ * ===================================================================
+ */
+
+:root {
+
+   /* =============== CONTENT WIDTH =============== */
+
+   --size-content-xs:                        420px;
+   --size-content-sm:                        520px;
+   --size-content-md:                        720px;
+   --size-content-lg:                        960px;
+   --size-content-xl:                        1140px;
+
+   /* =============== CONTROL MIN SIZE =============== */
+
+   --control-min-width:                      360px;
+   --control-min-height-xs:                  80px;
+   --control-min-height-sm:                  120px;
+   --control-min-height-md:                  180px;
+
+   /* =============== CONTROL HEIGHTS =============== */
+
+   --control-height-xs:                      28px;
+   --control-height-sm:                      32px;
+   --control-height-md:                      40px;
+   --control-height-lg:                      48px;
+
+   /* =============== CONTROL PADDING =============== */
+
+   --control-padding-y:                      var(--space-sm);
+   --control-padding-x:                      var(--space-md);
+
+   /* =============== AUTH STRUCTURE =============== */
+
+   /* Base */
+   --auth-padding:                           calc(var(--space-xl) * 2.5);     
+   --auth-safe-gap:                          clamp(16px, 4vw, 64px);
+   --auth-hero-min-width:                    calc(var(--size-content-sm) / 2);
+
+   /* Hero kicker */
+   --hero-kicker-padding-left:               var(--space-md);
+   --hero-kicker-height:                     16px;
+
+   /* Hero text */
+   --auth-hero-text-max-width:               var(--size-content-sm);
+
+   /* Hero background */
+   --auth-hero-width:                        70%;
+
+   /* Auth card */
+   --auth-card-min-width:                    var(--control-min-width);
+   --auth-card-width:                        var(--size-content-sm);
+   --auth-card-padding:                      calc(var(--space-lg) * 2);
+
+   /* =============== SIDEPANEL STRUCTURE =============== */
+
+   --side-panel-padding:                     var(--space-xl);
+   --side-panel-width:                       var(--size-content-xs);
+   --side-panel-grid-template-columns:       100px 1fr;
+
+   /* =============== SIDEBAR STRUCTURE =============== */
+
+   --side-bar-padding:                       var(--space-xxl);
+   --side-bar-width:                         calc(var(--size-content-sm) / 2);
+
+   /* =============== CONTENT PAGE STRUCTURE =============== */
+
+   --content-page-padding:                   var(--space-xxl);
+
+   /* =============== MODAL STRUCTURE =============== */
+
+   --modal-context-col-badge:                26px;
+   --modal-context-col-catway:               80px;
+   --modal-context-col-date:                 80px;
+   --modal-context-col-arrow:                20px;
+   
+   /* =============== FORM STRUCTURE =============== */
+
+   --form-width:                             var(--size-content-sm);
+   
+}

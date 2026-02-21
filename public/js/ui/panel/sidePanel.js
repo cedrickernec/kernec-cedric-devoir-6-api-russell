@@ -1,9 +1,10 @@
 /**
  * ===================================================================
- * SIDE PANEL INTERFACE CONTROLLER
+ * SIDE PANEL UI CONTROLLER
  * ===================================================================
  * - Gère l'ouverture / fermeture du side panel
  * - Injecte dynamiquement le contenu et les actions
+ * - Gère accessibilité (focus trap + escape)
  * - Expose des helpers d'état
  * ===================================================================
  */
@@ -11,6 +12,10 @@
 import { escapeManager } from "../accessibility/escapeManager.js";
 import { createFocusTrap } from "../accessibility/focusTrap.js";
 import { isKeyboardInteraction } from "../accessibility/interactionMode.js";
+
+// ==================================================
+// DOM REFERENCES
+// ==================================================
 
 const panel = document.getElementById("side-panel");
 if (!panel) {
@@ -29,10 +34,9 @@ const panelActions = panel?.querySelector(".side-panel-actions");
 // ==================================================
 
 let currentEntityId = null;
-let currentActions = null;
 
 // ==================================================
-// PANEL OPEN
+// OPEN PANEL
 // ==================================================
 
 export function openSidePanel({
@@ -56,7 +60,6 @@ export function openSidePanel({
   panelToggle?.setAttribute("aria-expanded", "true");
 
   currentEntityId = entityId;
-  currentActions = actions;
 
   // ==================================================
   // ACTIONS VISIBILITY
@@ -112,7 +115,10 @@ export function openSidePanel({
     }
   }
 
-  // Gestion Escape & focus
+  // ==================================================
+  // ACCESSIBILITY
+  // ==================================================
+
   panel.focus({ preventScroll: true });
 
   focusTrap.activate({
@@ -126,7 +132,7 @@ export function openSidePanel({
 }
 
 // ==================================================
-// PANEL CLOSE
+// CLOSE PANEL
 // ==================================================
 
 export function closeSidePanel() {
@@ -139,7 +145,6 @@ export function closeSidePanel() {
 
   panelContent.innerHTML = "";
   currentEntityId = null;
-  currentActions = null;
 
   document
   .querySelectorAll(".js-panel-row.is-active")

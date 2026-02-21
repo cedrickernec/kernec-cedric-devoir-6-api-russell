@@ -22,13 +22,12 @@
       href="/images/pexels-robert-stokoe-105922-714666.jpg"
     />
 
-    <!-- Layout styles -->
-    <link rel="stylesheet" href="/css/layouts/auth-layout.css" />
-    <link rel="stylesheet" href="/css/pages/auth.css" />
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/auth.css" />
   </head>
 
   <body
-    class="<%= (typeof disableAnimations !== 'undefined' && disableAnimations) ? 'no-animations' : '' %>"
+    class="<%= bodyClass || '' %> <%= (typeof disableAnimations !== 'undefined' && disableAnimations) ? 'no-animations' : '' %>"
   >
     <div class="auth-container">
       <!-- ======================== HERO =========================== -->
@@ -54,11 +53,11 @@
 
       <!-- ======================== CONTENT =========================== -->
 
-      <main class="auth-content"><%- body %></main>
+      <main class="card card--auth card--elevated card--rounded-lg"><%- body %></main>
     </div>
     
     <!--====== SCRIPTS ======-->
 
-    <script type="module" src="/js/bootstrap/auth.bootstrap.js"></script>
+    <script type="module" src="/js/bootstrap/authBootstrap.js"></script>
   </body>
 </html>
