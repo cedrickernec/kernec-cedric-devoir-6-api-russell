@@ -7,10 +7,8 @@
  * ===================================================================
  */
 
-import User from "../../../api/models/User.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
-import mongoose from "mongoose";
-import { deleteUser } from "../../gateways/api/userApi.js";
+import { fetchUsers, deleteUser } from "../../gateways/api/userApi.js";
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
 // ==================================================
@@ -27,17 +25,20 @@ export const checkEmailAvailability = async (req, res) => {
     }
 
     // Requête dynamique
-    const query = { email };
-    if (
-      excludeId &&
-      excludeId !== "undefined" &&
-      mongoose.Types.ObjectId.isValid(excludeId)) {
-      query._id = { $ne: excludeId };
+    const apiResponse = await fetchUsers(req, res);
+
+    if (handleAuthExpired(apiResponse, req, res)) return;
+
+    if (!apiResponse?.success) {
+      return res.status(500).json({ available: false });
     }
 
-    const existingUser = await User.findOne(query);
+    const users = apiResponse.data || [];
+    const exists = await users.some(user =>
+      user.email === email && (!excludeId || user.id !== excludeId)
+    );
 
-    res.json({ available: !existingUser });
+    res.json({ available: !exists });
 
   } catch (error) {
     console.error("Erreur vérification email :", error);
