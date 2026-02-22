@@ -9,7 +9,10 @@
 
 import Catway from "../../../api/models/Catway.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
-import { deleteCatway } from "../../gateways/api/catwayApi.js";
+import {
+  deleteBulkCatways,
+  checkBulkCatwayDelete
+} from "../../gateways/api/catwayApi.js";
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
 // ==================================================
@@ -44,47 +47,43 @@ export const checkCatwayNumberAvailability = async (req, res) => {
 };
 
 // ==================================================
+// CHECK BULK CATWAY
+// ==================================================
+
+export async function checkBulkCatwayDeleteAjax(req, res) {
+  try {
+    const result = await checkBulkCatwayDelete(req.body, req, res);
+    res.json(result);
+  } catch (err) {
+    console.error("Bulk check error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Erreur serveur lors de la vérification"
+    });
+  }
+}
+
+// ==================================================
 // BULK DELETE - TABLE
 // ==================================================
 
 export const deleteCatways = async (req, res) => {
   try {
-    const { ids } = req.body;
+    const apiResponse = await deleteBulkCatways(req.body, req, res);
 
-    // Sécurité payload
-    if (!Array.isArray(ids) || ids.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: COMMON_MESSAGES.INVALID_REQUEST
-      });
+    if (handleAuthExpired(apiResponse, req, res)) return;
+
+    if (apiResponse.success === false) {
+      return res.status(409).json(apiResponse);
     }
 
-    for (const catwayNumber of ids) {
-      const apiResponse = await deleteCatway(
-        catwayNumber,
-        req,
-        res,
-        req.body.password
-      );
-
-      if (handleAuthExpired(apiResponse, req, res)) return;
-
-      if (apiResponse.success === false) {
-        return res.status(409).json({
-          success: false,
-          message: apiResponse.message,
-          context: apiResponse.context || null
-        });
-      }
-    }
-
-    res.json({
-      success: true,
-      count: ids.length
-    });
+    res.json(apiResponse);
 
   } catch (error) {
-    console.error("Suppression échouée :", error);
-    res.status(500).json({ success: false });
+    console.error("Suppression bulk échouée :", error);
+    res.status(500).json({
+      success: false,
+      message: COMMON_MESSAGES.DELETE_ERROR
+    });
   }
 };

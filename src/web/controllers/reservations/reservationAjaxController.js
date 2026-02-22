@@ -7,9 +7,29 @@
  * ===================================================================
  */
 
-import { deleteReservation } from "../../gateways/api/reservationApi.js";
+import {
+  checkBulkReservationDelete,
+  deleteBulkReservations
+} from "../../gateways/api/reservationApi.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
+
+// ==================================================
+// CHECK BULK RESERVATION
+// ==================================================
+
+export async function checkBulkReservationDeleteAjax(req, res) {
+  try {
+    const result = await checkBulkReservationDelete(req.body, req, res);
+    res.json(result);
+  } catch (err) {
+    console.error("Bulk check error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Erreur serveur lors de la vérification"
+    });
+  }
+}
 
 // ==================================================
 // BULK DELETE - TABLE
@@ -17,44 +37,18 @@ import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js"
 
 export const deleteReservations = async (req, res) => {
   try {
-    const { ids } = req.body;
+    const apiResponse = await deleteBulkReservations(req.body, req, res);
 
-    // Sécurité payload
-    if (!Array.isArray(ids) || ids.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: COMMON_MESSAGES.INVALID_REQUEST
-      });
+    if (handleAuthExpired(apiResponse, req, res)) return;
+
+    if (apiResponse.success === false) {
+        return res.status(409).json(apiResponse);
     }
 
-    for (const compositeId of ids) {
-      const [catwayNumber, reservationId] = compositeId.split("|");
-
-      const apiResponse = await deleteReservation(
-        catwayNumber,
-        reservationId,
-        req,
-        res,
-        req.body.password);
-
-      if (handleAuthExpired(apiResponse, req, res)) return;
-
-      if (apiResponse.success === false) {
-        return res.status(409).json({
-          success: false,
-          message: apiResponse.message,
-          context: apiResponse.context || null
-        });
-      }
-    }
-
-    res.json({
-      success: true,
-      count: ids.length
-    });
+    res.json(apiResponse);
 
   } catch (error) {
-    console.error("Suppression échouée :", error);
+    console.error("Suppression bulk échouée :", error);
     res.status(500).json({
       success: false,
       message: COMMON_MESSAGES.DELETE_ERROR

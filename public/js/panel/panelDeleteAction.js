@@ -29,6 +29,7 @@ panel?.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-panel-action='delete']");
   if (!btn) return;
 
+  const checkUrl = btn.dataset.checkUrl;
   const deleteUrl = btn.dataset.deleteUrl;
   const rowSelector = btn.dataset.rowSelector;
   const entityType = btn.dataset.entityType;
@@ -43,11 +44,12 @@ panel?.addEventListener("click", (e) => {
   // ==================================================
 
   runDeleteFlow({
+    checkUrl,
     deleteUrl,
     deleteType: entityType,
     count: 1,
 
-    buildBody: (password => ({ password })),
+    buildBody: (password) => ({ password }),
 
     // ==================================================
     // SUCCESS HANDLER

@@ -23,7 +23,8 @@ export function initReservationsTable() {
         deleteBtnId: "delete-selected",
         selectAllId: "select-all",
         
-        deleteUrl: "/ajax/reservations",
+        checkUrl: "/ajax/reservations/bulk-check",
+        bulkUrl: "/ajax/reservations/bulk",
         deleteType: "reservation",
 
         messages: {

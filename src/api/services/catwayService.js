@@ -132,6 +132,146 @@ export async function updateCatwayService(catwayNumber, data) {
 }
 
 // ===============================================
+// CHECK BULK DELETE CATWAYS
+// ===============================================
+
+export async function checkBulkCatwaysBeforeDeleteService(ids) {
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+        throw ApiError.badRequest("Liste invalide.");
+    }
+
+    let requiresPassword = false;
+
+    let aggregatedStats = {
+        upComing: 0,
+        inProgress: 0,
+        finished: 0
+    };
+
+    for (const catwayNumber of ids) {
+
+        const catway = await findCatwayByNumber(catwayNumber);
+
+        if (!catway) {
+            throw ApiError.notFound(
+                "Catway introuvable.",
+                { catwayNumber }
+            );
+        }
+
+        const hasReservations = await catwayHasReservations(catwayNumber);
+
+        if (hasReservations) {
+            requiresPassword = true;
+
+            const reservations = await getReservationsByCatway(catwayNumber);
+            const stats = computeReservationStats(reservations);
+
+            aggregatedStats.upComing += stats.upComing;
+            aggregatedStats.inProgress += stats.inProgress;
+            aggregatedStats.finished += stats.finished;
+        }
+    }
+
+    if (requiresPassword) {
+        throw ApiError.businessConflict(
+            "La sélection contient des catways liés à des réservations.",
+            {
+                reason: "password_required",
+                reservationsStats: aggregatedStats
+            }
+        );
+    }
+
+    return { success: true };
+}
+
+// ===============================================
+// BULK DELETE CATWAYS
+// ===============================================
+
+export async function deleteCatwaysBulkService(ids, { userId, password }) {
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+        throw ApiError.badRequest("Requête invalide.");
+    }
+
+    // 1) Parsing des IDs
+    const parsedIds = ids.map(rawId => {
+        const number = Number(rawId);
+
+        if (Number.isNaN(number)) {
+            throw ApiError.badRequest(
+                "Numéro de catway invalide.",
+                { value: rawId }
+            );
+        }
+
+        return number;
+    });
+
+    // 2) Récupération + validation complète avant suppression
+    const catways = [];
+    let requiresPassword = false;
+
+    for (const catwayNumber of parsedIds) {
+
+        const catway = await findCatwayByNumber(catwayNumber);
+
+        if (!catway) {
+            throw ApiError.notFound(
+                "Catway introuvable.",
+                { catwayNumber }
+            );
+        }
+
+        const hasReservations = await catwayHasReservations(catwayNumber);
+
+        if (hasReservations) {
+            requiresPassword = true;
+        }
+
+        // Stockage
+        catways.push(catway);
+    }
+
+    // 3) Vérification password une seule fois
+    if (requiresPassword) {
+
+        if (!password) {
+            throw ApiError.businessConflict(
+                "Ce catway contient des réservations. La suppression nécessite une confirmation par mot de passe.",
+                { reason: "password_required" }
+            );
+        }
+
+        const isValid = await verifyUserPassword(userId, password);
+
+        if (!isValid) {
+            throw ApiError.businessConflict(
+                "Mot de passe incorrect.",
+                { reason: "invalid_password" }
+            );
+        }
+    }
+
+    // 4) Suppression effective (après validation complète)
+    for (const catway of catways) {
+
+        if (await catwayHasReservations(catway.catwayNumber)) {
+            await deleteAllReservationsByCatway(catway.catwayNumber);
+        }
+
+        await deleteCatwayByNumber(catway.catwayNumber);
+    }
+
+    return {
+        count: catways.length
+    };
+}
+
+// ===============================================
 // DELETE CATWAY
 // ===============================================
 

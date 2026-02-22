@@ -243,7 +243,7 @@ export function confirmDelete({
               Attention
             </p>
             <p class="italic">
-              La sélection contient un ou plusieurs catways affiliés à des réservations.
+              La sélection contient des catways liés à des réservations.
             </p>
           </div>
 
@@ -289,6 +289,15 @@ export function confirmDelete({
   passwordInput.type = "password";
   passwordInput.className = "modal-field";
   passwordInput.placeholder = "Mot de passe requis";
+
+  passwordInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      const confirmBtn = document.getElementById("btn-modal-confirm");
+      confirmBtn?.click();
+    }
+  });
 
   passwordInput.addEventListener("input", () => {
     passwordInput.removeAttribute("data-invalid");

@@ -70,6 +70,36 @@ export async function updateCatway(number, data, req, res) {
 }
 
 // ==================================================
+// CHECK BULK DELETE
+// ==================================================
+
+export function checkBulkCatwayDelete(payload, req, res) {
+    return apiFetch(
+        "/api/catways/bulk-check",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        }, req, res
+    );
+}
+
+// ==================================================
+// DELETE BULK RESERVATIONS
+// ==================================================
+
+export function deleteBulkCatways(payload, req, res) {
+    return apiFetch(
+        "/api/catways/bulk",
+        {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        }, req, res
+    );
+}
+
+// ==================================================
 // DELETE CATWAY
 // ==================================================
 

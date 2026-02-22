@@ -14,8 +14,10 @@ import {
     getCatwayByNumberService,
     findNextCatwayNumberService,
     createCatwayService,
-    deleteCatwayService,
-    updateCatwayService
+    updateCatwayService,
+    checkBulkCatwaysBeforeDeleteService,
+    deleteCatwaysBulkService,
+    deleteCatwayService
 } from "../services/catwayService.js";
 
 import { validateCatwayCreate } from "../validators/catwayValidators.js";
@@ -182,6 +184,52 @@ export const updateCatway = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+};
+
+// ===============================================
+// CHECK BULK CATWAYS BEFORE DELETE
+// ===============================================
+
+export const checkCatwaysBeforeDelete = async (req, res, next) => {
+    try {
+        // 1) Validation
+        const { ids } = req.body;
+
+        await checkBulkCatwaysBeforeDeleteService(ids);
+
+        // 2) Réponse
+        res.status(200).json({
+            success: true
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+// ===============================================
+// DELETE BULK CATWAYS
+// ===============================================
+
+export const deleteCatwaysBulk = async (req, res, next) => {
+  try {
+
+    const { ids, password } = req.body;
+    const userId = req.user.id;
+
+    const result = await deleteCatwaysBulkService(ids, {
+      userId,
+      password
+    });
+
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+
+  } catch (error) {
+    next(error);
+  }
 };
 
 // ===============================================

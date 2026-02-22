@@ -23,7 +23,8 @@ export function initUsersTable() {
         deleteBtnId: "delete-selected",
         selectAllId: "select-all",
         
-        deleteUrl: "/ajax/users",
+        checkUrl: null,
+        bulkUrl: "/ajax/users/bulk",
         deleteType: "user",
 
         messages: {

@@ -2,7 +2,7 @@
  * ===================================================================
  * BULK TABLE CORE ENGINE
  * ===================================================================
- * - Gestion générique des tables avec seélection multiple
+ * - Gestion générique des tables avec sélection multiple
  * - Sélection multiple persistante (indépendante des filtres)
  * - "Select all" agit uniquement sur les lignes visibles
  * - Suppression en masse avec confirmation sécurisée
@@ -22,7 +22,8 @@ export function initBulkTable({
   checkboxName,
   deleteBtnId,
   selectAllId,
-  deleteUrl,
+  checkUrl,
+  bulkUrl,
   deleteType,
   messages
 }) {
@@ -174,7 +175,8 @@ export function initBulkTable({
     const ids = Array.from(selectedIds);
 
     runDeleteFlow({
-      deleteUrl,
+      checkUrl,
+      deleteUrl: bulkUrl,
       deleteType,
       count: ids.length,
       buildBody: (password) => ({ ids, password }),
