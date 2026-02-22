@@ -19,7 +19,6 @@ const router = express.Router();
 
 // Routes Catways
 router.post("/create", authGuard, postCreateCatway);
-
 router.post("/:catwayNumber/edit", authGuard, validateNumberParam("catwayNumber"), postEditCatway);
 
 // Sous-ressource Réservations

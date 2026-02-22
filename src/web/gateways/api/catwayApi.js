@@ -36,7 +36,18 @@ export async function fetchCatwayByNumber(number, req, res) {
 
 export async function fetchNextCatwayNumber(req, res) {
 
-    return apiFetch(`/api/catways/next-number`, {
+    return apiFetch("/api/catways/next-number", {
+        method: "GET"
+    }, req, res);
+}
+
+// ==================================================
+// CHECK CATWAY NUMBER
+// ==================================================
+
+export async function checkCatwayNumber(payload, req, res) {
+
+    return apiFetch(`/api/catways/check-number?number=${payload.number}&excludeId=${payload.excludeId || ""}`, {
         method: "GET"
     }, req, res);
 }

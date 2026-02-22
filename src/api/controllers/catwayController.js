@@ -13,6 +13,7 @@ import {
     getAllCatwaysService,
     getCatwayByNumberService,
     findNextCatwayNumberService,
+    checkCatwayNumberService,
     createCatwayService,
     updateCatwayService,
     checkBulkCatwaysBeforeDeleteService,
@@ -97,6 +98,26 @@ export const getNextCatwayNumber = async (req, res, next) => {
         next(error)
     }
 }
+
+// ===============================================
+// CHECK CATWAY NUMBER AVAILABILITY
+// ===============================================
+
+export const checkCatwayNumber = async (req, res, next) => {
+  try {
+    const { number, excludeId } = req.query;
+
+    const available = await checkCatwayNumberService(
+      number,
+      excludeId
+    );
+
+    res.json({ available });
+
+  } catch (error) {
+    next(error);
+  }
+};
 
 // ===============================================
 // CREATE CATWAY

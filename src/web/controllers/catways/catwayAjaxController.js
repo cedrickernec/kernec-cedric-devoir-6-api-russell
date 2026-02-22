@@ -7,9 +7,9 @@
  * ===================================================================
  */
 
-import Catway from "../../../api/models/Catway.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import {
+  checkCatwayNumber,
   deleteBulkCatways,
   checkBulkCatwayDelete
 } from "../../gateways/api/catwayApi.js";
@@ -21,25 +21,8 @@ import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js"
 
 export const checkCatwayNumberAvailability = async (req, res) => {
   try {
-    const { number, excludeId } = req.query;
-
-    // Validation minimale
-    if (!number) return res.json({ available: false});
-
-    const catwayNumberInt = Number(number);
-    if (Number.isNaN(catwayNumberInt))
-      return res.json({ available: false });
-
-    // Requête dynamique
-    const query = { catwayNumber: catwayNumberInt };
-    if (excludeId) query._id = {
-      $ne: excludeId
-    };
-
-    const existing = await Catway.findOne(query);
-
-    res.json({ available: !existing });
-
+    const apiResponse = await checkCatwayNumber(req.query, req, res);
+    res.json(apiResponse);
   } catch (error) {
     console.error("Erreur check catway number:", error);
     res.status(500).json({ available: false });

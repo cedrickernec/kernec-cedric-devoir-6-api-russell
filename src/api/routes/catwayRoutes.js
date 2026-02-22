@@ -12,6 +12,7 @@ import {
     getAllCatways,
     getCatwayByNumber,
     getNextCatwayNumber,
+    checkCatwayNumber,
     createCatway,
     updateCatway,
     checkCatwaysBeforeDelete,
@@ -25,6 +26,7 @@ const router = Router();
 // Routes Catways
 router.get("/", authMiddleware, getAllCatways);
 router.get("/next-number", authMiddleware, getNextCatwayNumber);
+router.get("/check-number", authMiddleware, checkCatwayNumber);
 router.post("/bulk-check", authMiddleware, checkCatwaysBeforeDelete);
 router.delete("/bulk", authMiddleware, deleteCatwaysBulk);
 router.get("/:id", authMiddleware, getCatwayByNumber);

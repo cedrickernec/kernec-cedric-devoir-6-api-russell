@@ -78,6 +78,28 @@ export async function findNextCatwayNumberService() {
 }
 
 // ===============================================
+// CHECK CATWAY NUMBER AVAILABILITY
+// ===============================================
+
+export async function checkCatwayNumberService(number, excludeId) {
+
+    if (!number) return false;
+
+    const catwayNumberInt = Number(number);
+    if (Number.isNaN(catwayNumberInt)) return false;
+
+    const existing = await findCatwayByNumber(catwayNumberInt);
+
+    if (!existing) return true;
+
+    if (excludeId && existing._id.toString() === excludeId) {
+        return true;
+    }
+
+    return false;
+}
+
+// ===============================================
 // CREATE CATWAY
 // ===============================================
 
