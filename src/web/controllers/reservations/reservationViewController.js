@@ -48,8 +48,8 @@ export const getReservationsPage = async (req, res, next) => {
 
       const STATUS_ORDER = {
         upcoming: 1,
-        active: 2,
-        past: 3
+        "in-progress": 2,
+        finished: 3
       };
       
       reservationsView.sort((a, b) => {
