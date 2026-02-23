@@ -7,13 +7,15 @@
 import express from "express";
 
 import {
-    deleteReservations
+    deleteReservations,
+    checkBulkReservationDeleteAjax
 } from "../../controllers/reservations/reservationAjaxController.js";
 
 import { authGuard } from "../../middlewares/auth/authGuard.js";
 
 const router = express.Router();
 
-router.delete("/", authGuard, deleteReservations);
+router.post("/bulk-check", authGuard, checkBulkReservationDeleteAjax);
+router.delete("/bulk", authGuard, deleteReservations);
 
 export default router;

@@ -263,6 +263,117 @@ export async function updateReservationService(catwayNumber, idReservation, data
 }
 
 // ===============================================
+// CHECK BULK DELETE RESERVATIONS
+// ===============================================
+
+export async function checkReservationsBeforeDeleteService(ids) {
+
+    for (const { catwayNumber, reservationId } of ids) {
+
+        const reservation = await findReservationById(catwayNumber, reservationId);
+
+        if (!reservation) {
+            throw ApiError.notFound(
+                "Réservation introuvable.",
+                { catwayNumber, reservationId }
+            );
+        }
+
+        if (!canDeleteReservation(reservation)) {
+
+            const status = getReservationStatus(reservation);
+
+            throw ApiError.businessConflict(
+                "Au moins une réservation nécessite une confirmation par mot de passe.",
+                {
+                    reason: "password_required",
+                    status,
+                    clientName: reservation.clientName,
+                    boatName: reservation.boatName,
+                    startDate: reservation.startDate,
+                    endDate: reservation.endDate
+                }
+            );
+        }
+    }
+
+    return true;
+}
+
+// ===============================================
+// BULK DELETE RESERVATIONS
+// ===============================================
+
+export async function deleteReservationsBulkService(ids, { userId, password }) {
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+        throw ApiError.badRequest("Requête invalide.");
+    }
+
+    // 1) Parsing des IDs
+    const parsed = ids.map(compositeId => {
+        const [catwayNumber, reservationId] = compositeId.split("|");
+        return { catwayNumber, reservationId };
+    });
+
+    // 2) Récupération + validation complète avant suppression
+    const reservations = [];
+    let requiresPassword = false;
+
+    for (const { catwayNumber, reservationId } of parsed) {
+
+        const reservation = await findReservationById(catwayNumber, reservationId);
+
+        if (!reservation) {
+            throw ApiError.notFound(
+                "Réservation introuvable.",
+                { catwayNumber, reservationId }
+            );
+        }
+
+        // Stockage
+        reservations.push(reservation);
+
+        // Détection : password nécessaire ?
+        if (!canDeleteReservation(reservation)) {
+            requiresPassword = true;
+        }
+    }
+
+    // 3) Vérification password une seule fois
+    if (requiresPassword) {
+
+        if (!password) {
+            throw ApiError.businessConflict(
+                "La sélection nécessite une confirmation par mot de passe.",
+                { reason: "password_required" }
+            );
+        }
+
+        const isValid = await verifyUserPassword(userId, password);
+
+        if (!isValid) {
+            throw ApiError.businessConflict(
+                "Mot de passe incorrect.",
+                { reason: "invalid_password" }
+            );
+        }
+    }
+
+    // 4) Suppression effective (après validation complète)
+    for (const reservation of reservations) {
+        await deleteReservation(
+            reservation.catwayNumber,
+            reservation._id
+        );
+    }
+
+    return {
+        count: reservations.length
+    };
+}
+
+// ===============================================
 // DELETE RESERVATION
 // ===============================================
 

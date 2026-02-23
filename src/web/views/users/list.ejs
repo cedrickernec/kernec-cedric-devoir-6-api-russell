@@ -78,11 +78,7 @@
     </thead>
 
     <tbody>
-      <% if (!users || users.length === 0) { %>
-      <tr>
-        <td colspan="5" class="no-data" role="status">Aucune utilisateur existant.</td>
-      </tr>
-      <% } else { %> <% for (let i = 0; i < users.length; i++) { %>
+      <% for (let i = 0; i < users.length; i++) { %>
       <tr
         class="js-user-row js-panel-row"
         data-entity-id="<%= users[i].id %>"
@@ -128,9 +124,20 @@
           ></a>
         </td>
       </tr>
-      <% } %> <% } %>
-      <tr id="no-results-row" class="no-data" role="status" aria-live="polite" hidden>
-        <td colspan="5">Aucun utilisateur correspondant à la recherche</td>
+      <% } %>
+
+      <tr
+        id="no-results-row"
+        class="no-data"
+        role="status"
+        aria-live="polite"
+        data-empty="Aucun utilisateur existant."
+        data-filter="Aucun utilisateur correspondant."
+        hidden
+      >
+        <td colspan="5" id="no-results-cell">
+          <!-- Contenu injecté dynamiquement -->
+        </td>
       </tr>
     </tbody>
   </table>

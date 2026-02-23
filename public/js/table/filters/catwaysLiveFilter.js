@@ -15,6 +15,8 @@
  * ===================================================================
  */
 
+import { handleNoResult } from "../noResultHandler.js";
+
 export function initCatwaysLiveFilter() {
 
     // ========================================================
@@ -30,6 +32,16 @@ export function initCatwaysLiveFilter() {
     const stateWarn = document.querySelector("#filter-state-warning");
     const resetButton = document.querySelector("#filters-reset");
     const countLabel = document.querySelector("#catways-count");
+
+    function isFilterActive() {
+        return (
+            numberSelect.value !== "" ||
+            typeSelect.value !== "" ||
+            stateOk.checked ||
+            stateHs.checked ||
+            stateWarn.checked
+        )
+    }
 
     // Sécurité : Si le filtre n'existe pas → abandon
     if (!numberSelect || !typeSelect || !stateOk || !stateHs || !stateWarn) return;
@@ -88,10 +100,7 @@ export function initCatwaysLiveFilter() {
         });
 
         // Gestion ligne "aucun résultat"
-        const noResultRow = document.getElementById("no-results-row");
-        if (noResultRow) {
-            noResultRow.hidden = visibleCount !== 0;
-        }
+        handleNoResult("no-results-row", visibleCount, isFilterActive);
 
         updateCounter(visibleCount);
 
@@ -122,6 +131,7 @@ export function initCatwaysLiveFilter() {
         }
 
         updateCounter(totalCount);
+        handleNoResult("no-results-row", totalCount, false);
 
         document.dispatchEvent(
             new CustomEvent("table:visibility-change")
@@ -144,4 +154,5 @@ export function initCatwaysLiveFilter() {
 
     // Initialisation compteur
     updateCounter(totalCount);
+    handleNoResult("no-results-row", totalCount, isFilterActive);
 }

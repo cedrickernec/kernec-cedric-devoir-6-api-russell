@@ -17,6 +17,7 @@
  */
 
 import { normalizeString } from "../../utils/normalizeString.js";
+import { handleNoResult } from "../noResultHandler.js";
 
 export function initReservationsLiveFilter() {
 
@@ -36,6 +37,17 @@ export function initReservationsLiveFilter() {
     const statusFinished = document.querySelector("#filter-status-finished")
     const resetButton = document.querySelector("#filters-reset");
     const countLabel = document.querySelector("#reservations-count");
+
+    function isFilterActive() {
+        return (
+            (searchInput && searchInput.value.trim() !== "") ||
+            (startInput && startInput.value !== "") ||
+            (endInput && endInput.value !== "") ||
+            (statusUpcoming?.checked) ||
+            (statusInProgress?.checked) ||
+            (statusFinished?.checked)
+        );
+    }
 
     // Sécurité : Si le filtre n'existe pas → abandon
     if (!searchInput && !startInput && !endInput) return;
@@ -114,10 +126,7 @@ export function initReservationsLiveFilter() {
         });
 
         // Gestion ligne "aucun résultat"
-        const noResultRow = document.getElementById("no-results-row");
-        if (noResultRow) {
-            noResultRow.hidden = visibleCount !== 0;
-        }
+        handleNoResult("no-results-row", visibleCount, isFilterActive);
 
         updateCounter(visibleCount);
 
@@ -150,6 +159,7 @@ export function initReservationsLiveFilter() {
         }
 
         updateCounter(totalCount);
+        handleNoResult("no-results-row", totalCount, false);
 
         document.dispatchEvent(
             new CustomEvent("table:visibility-change")
@@ -175,4 +185,5 @@ export function initReservationsLiveFilter() {
 
     // Initialisation compteur
     updateCounter(totalCount);
+    handleNoResult("no-results-row", totalCount, isFilterActive);
 }

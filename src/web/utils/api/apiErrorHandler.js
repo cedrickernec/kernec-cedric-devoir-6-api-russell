@@ -36,7 +36,8 @@ export function handleApiError(apiResponse, req, res) {
     if (detail?.reason === "invalid_password") {
         res.status(401).json({
             success: false,
-            message: apiResponse.message
+            message: apiResponse.message,
+            context: detail
         });
         return false;
     }

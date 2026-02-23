@@ -26,6 +26,7 @@ import { COMMON_MESSAGES } from "../messages/commonMessages.js";
 // ========================================================
 
 export function runDeleteFlow({
+    checkUrl,
     deleteUrl,
     deleteType,
     count = 1,
@@ -67,6 +68,40 @@ export function runDeleteFlow({
                 const body = buildBody
                   ? buildBody(password)
                   : { password };
+
+                if (requirePassword && !password) {
+                    showToast("error", "Mot de passe requis.");
+                    throw { code: "PASSWORD_REQUIRED" };
+                }
+                
+                if (!password && checkUrl) {
+                    const checkRes = await fetch(checkUrl, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                        },
+                        body: JSON.stringify(body)
+                    });
+
+                    const checkData = await checkRes.json();
+
+                    if (!checkData.success) {
+                        const detail = checkData.context || {};
+
+                        if (detail.reason === "password_required") {
+                            openDeleteModal({
+                                requirePassword: true,
+                                message: checkData.message,
+                                context: checkData.context
+                            });
+                            return false;
+                        }
+
+                        showToast("error", checkData.message || COMMON_MESSAGES.DELETE_ERROR);
+                        return false;
+                    }
+                }
 
                 const res = await fetch(deleteUrl, {
                     method: "DELETE",

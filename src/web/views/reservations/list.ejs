@@ -96,11 +96,7 @@
     </thead>
 
     <tbody>
-      <% if (!reservations || reservations.length === 0) { %>
-      <tr>
-        <td colspan="10" class="no-data" role="status">Aucune réservation.</td>
-      </tr>
-      <% } else { %> <% for (let i = 0; i < reservations.length; i++) { %>
+      <% for (let i = 0; i < reservations.length; i++) { %>
       <tr
         class="js-reservation-row js-panel-row"
         data-entity-id="<%= reservations[i].id %>"
@@ -159,16 +155,20 @@
           </a>
         </td>
       </tr>
-      <% } %> <% } %>
+      <% } %>
 
       <tr
         id="no-results-row"
         class="no-data"
         role="status"
         aria-live="polite"
+        data-empty="Aucune réservation existante."
+        data-filter="Aucune réservation correspondante."
         hidden
       >
-        <td colspan="10">Aucune réservation correspondante</td>
+        <td colspan="10">
+          <!-- Contenu injecté dynamiquement -->
+        </td>
       </tr>
     </tbody>
   </table>

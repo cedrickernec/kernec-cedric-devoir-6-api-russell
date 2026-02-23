@@ -10,11 +10,15 @@
  */
 
 import {
-    createCatwayService,
-    deleteCatwayService,
     getAllCatwaysService,
     getCatwayByNumberService,
-    updateCatwayService
+    findNextCatwayNumberService,
+    checkCatwayNumberService,
+    createCatwayService,
+    updateCatwayService,
+    checkBulkCatwaysBeforeDeleteService,
+    deleteCatwaysBulkService,
+    deleteCatwayService
 } from "../services/catwayService.js";
 
 import { validateCatwayCreate } from "../validators/catwayValidators.js";
@@ -73,6 +77,46 @@ export const getCatwayByNumber = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+};
+
+// ===============================================
+// GET NEXT CATWAY NUMBER
+// ===============================================
+
+export const getNextCatwayNumber = async (req, res, next) => {
+    try {
+        // 1) Récupération du numéro de catway
+        const nextNumber = await findNextCatwayNumberService();
+
+        // 2) Réponse
+        res.status(200).json({
+            success: true,
+            data: nextNumber
+        });
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+// ===============================================
+// CHECK CATWAY NUMBER AVAILABILITY
+// ===============================================
+
+export const checkCatwayNumber = async (req, res, next) => {
+  try {
+    const { number, excludeId } = req.query;
+
+    const available = await checkCatwayNumberService(
+      number,
+      excludeId
+    );
+
+    res.json({ available });
+
+  } catch (error) {
+    next(error);
+  }
 };
 
 // ===============================================
@@ -161,6 +205,52 @@ export const updateCatway = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+};
+
+// ===============================================
+// CHECK BULK CATWAYS BEFORE DELETE
+// ===============================================
+
+export const checkCatwaysBeforeDelete = async (req, res, next) => {
+    try {
+        // 1) Validation
+        const { ids } = req.body;
+
+        await checkBulkCatwaysBeforeDeleteService(ids);
+
+        // 2) Réponse
+        res.status(200).json({
+            success: true
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+// ===============================================
+// DELETE BULK CATWAYS
+// ===============================================
+
+export const deleteCatwaysBulk = async (req, res, next) => {
+  try {
+
+    const { ids, password } = req.body;
+    const userId = req.user.id;
+
+    const result = await deleteCatwaysBulkService(ids, {
+      userId,
+      password
+    });
+
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+
+  } catch (error) {
+    next(error);
+  }
 };
 
 // ===============================================

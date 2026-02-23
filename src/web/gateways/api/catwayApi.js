@@ -31,6 +31,28 @@ export async function fetchCatwayByNumber(number, req, res) {
 }
 
 // ==================================================
+// FETCH NEXT CATWAY NUMBER
+// ==================================================
+
+export async function fetchNextCatwayNumber(req, res) {
+
+    return apiFetch("/api/catways/next-number", {
+        method: "GET"
+    }, req, res);
+}
+
+// ==================================================
+// CHECK CATWAY NUMBER
+// ==================================================
+
+export async function checkCatwayNumber(payload, req, res) {
+
+    return apiFetch(`/api/catways/check-number?number=${payload.number}&excludeId=${payload.excludeId || ""}`, {
+        method: "GET"
+    }, req, res);
+}
+
+// ==================================================
 // CREATE CATWAY
 // ==================================================
 
@@ -54,6 +76,36 @@ export async function updateCatway(number, data, req, res) {
         `/api/catways/${number}`, {
             method: "PUT",
             body: JSON.stringify(data)
+        }, req, res
+    );
+}
+
+// ==================================================
+// CHECK BULK DELETE
+// ==================================================
+
+export function checkBulkCatwayDelete(payload, req, res) {
+    return apiFetch(
+        "/api/catways/bulk-check",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        }, req, res
+    );
+}
+
+// ==================================================
+// DELETE BULK RESERVATIONS
+// ==================================================
+
+export function deleteBulkCatways(payload, req, res) {
+    return apiFetch(
+        "/api/catways/bulk",
+        {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
         }, req, res
     );
 }

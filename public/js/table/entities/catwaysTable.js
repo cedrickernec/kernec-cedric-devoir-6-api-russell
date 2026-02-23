@@ -23,7 +23,8 @@ export function initCatwaysTable() {
         deleteBtnId: "delete-selected",
         selectAllId: "select-all",
 
-        deleteUrl: "/ajax/catways",
+        checkUrl: "/ajax/catways/bulk-check",
+        bulkUrl: "/ajax/catways/bulk",
         deleteType: "catway",
 
         messages: {

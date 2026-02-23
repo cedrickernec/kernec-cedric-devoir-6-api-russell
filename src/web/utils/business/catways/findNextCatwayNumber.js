@@ -10,25 +10,16 @@
  * ===================================================================
  */
 
-import Catway from "../../../../api/models/Catway.js";
+import { fetchNextCatwayNumber } from "../../../gateways/api/catwayApi.js";
 
-export async function findNextCatwayNumber() {
+export async function findNextCatwayNumber(req, res) {
 
-    // Récupération des numéros existants
-    const catways = await Catway
-    .find({}, { catwayNumber: 1, _id: 0 })
-    .sort({ catwayNumber: 1 });
+    // Récupération API
+    const apiData = await fetchNextCatwayNumber(req, res);
 
-    let expected = 1;
-
-    // Recherche du premier trou dans la séquence
-    for (const catway of catways) {
-        if (catway.catwayNumber !== expected) {
-            return expected;
-        }
-        expected++;
+    if (!apiData?.success) {
+        throw new Error("Impossible de récupérer le prochain numéro de catway.")
     }
 
-    // Aucun trou → prochain numéro logique
-    return expected;
+    return apiData.data;
 }

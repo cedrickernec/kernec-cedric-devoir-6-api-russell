@@ -41,7 +41,7 @@ if (!process.env.MONGO_URI) {
 // SESSION TIMING
 // ==================================================
 
-const SESSION_DURATION = ms(process.env.SESSION_DURATION || "30m");
+const SESSION_DURATION = ms(process.env.SESSION_DURATION || "1h");
 
 // ==================================================
 // SESSION MIDDLEWARE

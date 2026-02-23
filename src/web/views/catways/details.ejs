@@ -158,14 +158,7 @@
           </tr>
         </thead>
         <tbody>
-          <% if (!otherReservations || otherReservations.length === 0) { %>
-          <tr>
-            <td colspan="5" class="no-data">
-              Aucune réservation existante associée.
-            </td>
-          </tr>
-          <% } else { %> <% for (let i = 0; i < otherReservations.length; i++) {
-          %>
+          <% for (let i = 0; i < otherReservations.length; i++) { %>
           <tr
             class="js-reservation-row js-panel-row"
             data-entity-id="<%= otherReservations[i].id %>"
@@ -196,16 +189,20 @@
               <%= otherReservations[i].endDateFormatted %>
             </td>
           </tr>
-          <% } %> <% } %>
+          <% } %>
 
           <tr
             id="no-results-row"
             class="no-data"
             role="status"
             aria-live="polite"
+            data-empty="Aucune réservation associée."
+            data-filter="Aucune réservation correspondante."
             hidden
           >
-            <td colspan="5">Aucune réservation correspondante</td>
+            <td colspan="5" id="no-results-cell">
+              <!-- Contenu injecté dynamquement -->
+            </td>
           </tr>
         </tbody>
       </table>

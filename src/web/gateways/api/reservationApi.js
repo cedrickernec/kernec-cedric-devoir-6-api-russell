@@ -83,6 +83,36 @@ export function updateReservation(catwayNumber, reservationId, payload, req, res
 }
 
 // ==================================================
+// CHECK BULK DELETE
+// ==================================================
+
+export function checkBulkReservationDelete(payload, req, res) {
+    return apiFetch(
+        "/api/reservations/bulk-check",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        }, req, res
+    );
+}
+
+// ==================================================
+// DELETE BULK RESERVATIONS
+// ==================================================
+
+export function deleteBulkReservations(payload, req, res) {
+    return apiFetch(
+        "/api/reservations/bulk",
+        {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        }, req, res
+    );
+}
+
+// ==================================================
 // DELETE RESERVATION
 // ==================================================
 

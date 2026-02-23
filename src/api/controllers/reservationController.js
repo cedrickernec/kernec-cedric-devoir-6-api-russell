@@ -16,6 +16,8 @@ import {
     getReservationAvailabilityService,
     createReservationService,
     updateReservationService,
+    checkReservationsBeforeDeleteService,
+    deleteReservationsBulkService,
     deleteReservationService
 } from "../services/reservationService.js"
 
@@ -249,6 +251,64 @@ export const updateReservation = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+};
+
+// ===============================================
+// CHECK BULK RESERVATIONS BEFORE DELETE
+// ===============================================
+
+export const checkReservationsBeforeDelete = async (req, res, next) => {
+    try {
+        // 1) Validation
+        const { ids } = req.body;
+
+        if (!Array.isArray(ids) || ids.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Requête invalide."
+            });
+        }
+
+        // 2) Service
+        const parsedIds = ids.map(compositeId => {
+            const [catwayNumber, reservationId] = compositeId.split("|");
+            return { catwayNumber, reservationId };
+        });
+
+        await checkReservationsBeforeDeleteService(parsedIds);
+
+        return res.json({
+            success: true
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+// ===============================================
+// DELETE BULK RESERVATIONS
+// ===============================================
+
+export const deleteReservationsBulk = async (req, res, next) => {
+  try {
+
+    const { ids, password } = req.body;
+    const userId = req.user.id;
+
+    const result = await deleteReservationsBulkService(ids, {
+      userId,
+      password
+    });
+
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+
+  } catch (error) {
+    next(error);
+  }
 };
 
 // ===============================================

@@ -98,11 +98,7 @@
     </thead>
 
     <tbody>
-      <% if (!catways || catways.length === 0) { %>
-      <tr>
-        <td colspan="6" class="no-data">Aucun catway existant.</td>
-      </tr>
-      <% } else { %> <% for (let i = 0; i < catways.length; i++) { %>
+      <% for (let i = 0; i < catways.length; i++) { %>
       <tr
         class="js-catway-row js-panel-row"
         data-entity-id="<%= catways[i].number %>"
@@ -154,11 +150,20 @@
           </a>
         </td>
       </tr>
-      <% } %> <% } %>
+      <% } %>
 
-      <!-- Ligne aucun résultat -->
-      <tr id="no-results-row" class="no-data" role="status" aria-live="polite" hidden>
-        <td colspan="6">Aucun catway correspondant aux filtres</td>
+      <tr
+        id="no-results-row"
+        class="no-data"
+        role="status"
+        aria-live="polite"
+        data-empty="Aucun catway existant."
+        data-filter="Aucune catway correspondant."
+        hidden
+      >
+        <td colspan="6" id="no-results-cell">
+          <!-- Contenu injecté dynamiquement -->
+        </td>
       </tr>
     </tbody>
   </table>

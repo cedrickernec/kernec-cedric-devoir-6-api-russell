@@ -128,7 +128,8 @@ import { isKeyboardInteraction } from "../accessibility/interactionMode.js";
         close();
 
       } catch (err) {
-        if(err?.code === "PASSWORD_INVALID") {
+        
+        if(err?.code === "PASSWORD_INVALID" || err?.code === "PASSWORD_REQUIRED") {
 
           const passwordField = modal.querySelector("#password-confirm");
           if (passwordField) {

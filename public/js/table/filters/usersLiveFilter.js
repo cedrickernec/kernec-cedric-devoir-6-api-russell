@@ -15,6 +15,7 @@
  */
 
 import { normalizeString } from "../../utils/normalizeString.js";
+import { handleNoResult } from "../noResultHandler.js";
 
 export function initUsersLiveFilter() {
 
@@ -27,6 +28,10 @@ export function initUsersLiveFilter() {
     const searchInput = document.querySelector("#filter-search");
     const resetButton = document.querySelector("#filters-reset");
     const countLabel = document.querySelector("#users-count");
+
+    function isFilterActive() {
+        return searchInput.value.trim() !== "";
+    }
 
     // Sécurité : Si le filtre n'existe pas → abandon
     if (!searchInput) return;
@@ -67,10 +72,7 @@ export function initUsersLiveFilter() {
         });
 
         // Gestion ligne "aucun résultat"
-        const noResultRow = document.getElementById("no-results-row");
-        if (noResultRow) {
-            noResultRow.hidden = visibleCount !== 0;
-        }
+        handleNoResult("no-results-row", visibleCount, isFilterActive);
 
         updateCounter(visibleCount);
 
@@ -91,12 +93,8 @@ export function initUsersLiveFilter() {
             row.hidden = false;
         });
 
-        const noResultRow = document.getElementById("no-results-row");
-        if (noResultRow) {
-            noResultRow.hidden = true;
-        }
-
         updateCounter(totalCount);
+        handleNoResult("no-results-row", totalCount, false);
 
         document.dispatchEvent(
             new CustomEvent("table:visibility-change")
@@ -115,4 +113,5 @@ export function initUsersLiveFilter() {
 
     // Initialisation compteur
     updateCounter(totalCount);
+    handleNoResult("no-results-row", totalCount, isFilterActive);
 }
