@@ -235,14 +235,17 @@
 
 .modal-context-badge--upcoming {
     color: var(--color-neutral-900);
+    background: var(--surface-primary);
 }
 
 .modal-context-badge--in-progress {
     color: var(--color-primary);
+    background: var(--surface-primary);
 }
 
 .modal-context-badge--finished {
     color: var(--color-neutral-500);
+    background: var(--surface-primary);
 }
 
 /* Cells */
@@ -272,7 +275,7 @@
 .modal-field {
     width: 100%;
     height: var(--form-control-height);
-    padding-inline: var(--form-control-padding-x);
+    padding-inline: var(--form-control-padding);
     margin-top: var(--space-sm);
     border-radius: var(--radius-md);
     border: var(--form-control-border);

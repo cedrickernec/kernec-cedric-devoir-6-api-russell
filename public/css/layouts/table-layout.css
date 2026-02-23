@@ -11,10 +11,6 @@
     gap: var(--flow-normal);
 }
 
-.table-section.no-gap {
-    gap: 0;
-}
-
 .table-section-header {
     display: flex;
     flex-direction: column;

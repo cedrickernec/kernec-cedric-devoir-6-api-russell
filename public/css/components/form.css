@@ -46,12 +46,9 @@
    FORM CONTROLS
    ===================================================== */
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.form-control {
     height: var(--form-control-height);
-    padding-inline: var(--form-control-padding-x);
-    padding-block: 0;
+    padding-inline: var(--form-control-padding);
 
     border-radius: var(--radius-md);
     border: var(--form-control-border);
@@ -63,9 +60,14 @@
     transition: var(--transition-normal);
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+
+textarea.form-control {
+    min-height: calc(var(--form-control-height) * 2);
+    padding-block: var(--form-control-padding);
+    resize: vertical;
+}
+
+.form-control:focus {
     outline: none;
     background: var(--form-control-focus-bg);
     border-color: var(--form-control-focus-border);
@@ -307,6 +309,7 @@
 .form-group--row {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     gap: var(--space-xl);
 }
 
