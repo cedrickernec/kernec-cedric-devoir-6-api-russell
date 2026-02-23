@@ -30,7 +30,12 @@ export const checkEmailAvailability = async (req, res) => {
     if (handleAuthExpired(apiResponse, req, res)) return;
 
     if (!apiResponse?.success) {
-      return res.status(500).json({ available: false });
+      return res.json({
+        success: true,
+        message: null,
+        data: { available: false },
+        status: 200
+      });
     }
 
     const users = apiResponse.data || [];
@@ -38,11 +43,21 @@ export const checkEmailAvailability = async (req, res) => {
       user.email === email && (!excludeId || user.id !== excludeId)
     );
 
-    res.json({ available: !exists });
+    res.json({
+      success: true,
+      message: null,
+      data: { available: !exists },
+      status: 200
+    });
 
   } catch (error) {
     console.error("Erreur vérification email :", error);
-    res.status(500).json({ available: false });
+    res.status(500).json({
+      success: false,
+      message: "Erreur vérification email",
+      data: { available: false },
+      status: 500
+    });
   }
 };
 
