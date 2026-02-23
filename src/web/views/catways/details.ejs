@@ -97,23 +97,24 @@
     </dl>
   
     <div class="detail-action" aria-label="Actions catway">
-      <a
-        href="/catways"
-        class="btn btn--primary"
-        aria-label="Retour à la liste des catways"
-      >
-        <i class="fa-solid fa-arrow-left"></i>
-        Retour à la liste
-      </a>
       <% if (from === "reservation" && reservationId) { %>
-      <a
-        href="/catways/<%= catwayNumber %>/reservations/<%= reservationId %>"
-        class="btn btn--primary"
-        aria-label="Retour à la réservation"
-      >
-        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-        Retour à la réservation
-      </a>
+        <a
+          href="/catways/<%= catwayNumber %>/reservations/<%= reservationId %>"
+          class="btn btn--primary"
+          aria-label="Retour à la réservation"
+        >
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+          Retour à la réservation
+        </a>
+      <% } else { %>
+        <a
+          href="/catways"
+          class="btn btn--primary"
+          aria-label="Retour à la liste des catways"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+          Retour à la liste
+        </a>
       <% } %>
       <a
         href="/catways/<%= catway.number %>/edit"
