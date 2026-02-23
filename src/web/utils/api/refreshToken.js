@@ -11,6 +11,8 @@
  * ===================================================================
  */
 
+import { apiFetch } from "../../gateways/api/apiFetch.js";
+
 export async function tryRefreshToken(req) {
 
     // Récupère le refreshToken à partir de la session
@@ -21,20 +23,19 @@ export async function tryRefreshToken(req) {
     try {
 
         // Appel API
-        const response = await fetch("http://localhost:3000/api/auth/refresh", {
+        const response = await apiFetch("/api/auth/refresh", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ refreshToken })
-        });
+        }, req);
 
         // Échec API → refresh impossible
-        if (!response.ok) return false;
-
-        const data = await response.json();
+        if (!response.success || !response.data?.accessToken) {
+            return false;
+        }
 
         // Mise à jour de la session
         // Remplacement du token expirée
-        req.session.user.token = data.accessToken;
+        req.session.user.token = response.data.accessToken;
 
         return true;
 
