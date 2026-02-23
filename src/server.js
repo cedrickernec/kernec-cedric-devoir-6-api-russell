@@ -129,5 +129,5 @@ app.use(webErrorHandler); // 500 - Erreur serveur
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.info(`🚀 Serveur lancé sur http://localhost:${PORT}`);
+    console.info(`🚀 Serveur lancé sur le port ${PORT}`);
 });

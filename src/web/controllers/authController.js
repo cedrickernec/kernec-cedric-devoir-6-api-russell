@@ -8,6 +8,8 @@
  * ===================================================================
  */
 
+import { apiFetch } from "../gateways/api/apiFetch.js";
+
 // ==================================================
 // HELPERS
 // ==================================================
@@ -30,22 +32,25 @@ function getSafeRedirect(value, fallback = "/dashboard") {
 // ==================================================
 
 export const postLogin = async (req, res) => {
+
+    console.log("Protocol :", req.protocol);
+    console.log("NODE_ENV :", process.env.NODE_ENV);
+    console.log("Secure :", req.secure);
+    console.log("X-Forwarded-Proto :",req.get("x-forwarded-proto"));
+
     const { email, password } = req.body;
 
     try {
         // Appel API
-        const apiResponse = await fetch("http://localhost:3000/api/auth/login", {
+        const apiResponse = await apiFetch("/api/auth/login", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
             body: JSON.stringify({ email, password })
-        });
+        }, req);
 
-        const apiData = await apiResponse.json();
+        const apiData = apiResponse.data;
 
         // Erreur d'authentification
-        if (!apiResponse.ok || !apiData?.data || !apiData?.accessToken) {
+        if (!apiResponse.success || !apiData?.accessToken) {
             req.session.authError = "Identifiants incorrects.";
             req.session.disableAnimations = true;
             
@@ -99,12 +104,12 @@ export const getLogout = async (req, res) => {
 
     // Appel API
     try {
-        await fetch("http://localhost:3000/api/auth/logout", {
+        await apiFetch("/api/auth/logout", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             }
-        });
+        }, req, res);
 
     } catch (error) {
         console.warn("Erreur logout :", error.message);

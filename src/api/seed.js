@@ -43,8 +43,8 @@ const seedDatabase = async () => {
         await connectDB();
 
         console.info("🧹 Nettoyage des collections...");
-        await Catway.deleteMany();
         await Reservation.deleteMany();
+        await Catway.deleteMany();
 
         console.info("📥 Insertion des Catways...");
         await Catway.insertMany(catwaysData);

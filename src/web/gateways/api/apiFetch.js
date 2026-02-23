@@ -11,18 +11,22 @@
 
 import { tryRefreshToken } from "../../utils/api/refreshToken.js";
 
-export async function apiFetch(url, options = {}, req, res) {
+export async function apiFetch(url, options = {}, req) {
+
+    const publicRoutes = ["/api/auth/login", "/api/auth/refresh"];
+    const isAuthRoute = url.startsWith("/api/auth/");
+    const isPublic = publicRoutes.includes(url);
+    const token = req.session?.user?.token;
 
     // ==================================================
     // TOKEN
     // ==================================================
 
-    const token = req.session?.user?.token;
-
-    if (!token) {
+    if (!token && !isPublic) {
         return {
             success: false,
-            authExpired: true
+            authExpired: true,
+            message: "Non authentifié."
         };
     }
 
@@ -30,16 +34,20 @@ export async function apiFetch(url, options = {}, req, res) {
     // FETCH
     // ==================================================
 
+    const baseUrl = process.env.NODE_ENV === "production"
+    ? `${req.protocol}://${req.get("host")}`
+    : `http://localhost:3000`;
+    
     let response;
 
     try {
-        response = await fetch(`http://localhost:3000${url}`, {
+        response = await fetch(`${baseUrl}${url}`, {
             ...options,
             headers: {
-                Authorization: `Bearer ${token}`,
+                ...(options.headers || {}),
+                ...(token && !isPublic ? { Authorization: `Bearer ${token}` } : {}),
                 "Content-Type": "application/json",
-                Accept: "application/json",
-                ...(options.headers || {})
+                Accept: "application/json"
             }
         });
 
@@ -55,17 +63,18 @@ export async function apiFetch(url, options = {}, req, res) {
     // JWT expiré → tentative refresh
     // ==================================================
 
-    if (response.status === 401) {
+    if (response.status === 401 && !isPublic && !isAuthRoute) {
 
         const refreshed = await tryRefreshToken(req);
 
         if (refreshed) {
-            return apiFetch(url, options, req, res);
+            return apiFetch(url, options, req);
         }
 
         return {
             success: false,
-            authExpired: true
+            authExpired: true,
+            message: "Session expirée."
         };
     }
 
@@ -88,9 +97,10 @@ export async function apiFetch(url, options = {}, req, res) {
     if (!response.ok) {
         return {
             success: false,
-            message: data?.message || null,
+            message: data?.message || "Erreur API",
             errors: data?.errors || {},
-            context: data?.context || null
+            context: data?.context || null,
+            status: response.status
         };
     }
 
@@ -98,9 +108,13 @@ export async function apiFetch(url, options = {}, req, res) {
     // SUCCÈS
     // ==================================================
 
+    
+    const payload = isAuthRoute ? data : (data?.data ?? data);
+
     return {
         success: true,
         message: data?.message || null,
-        data: data?.data ?? data
+        data: payload,
+        status: response.status
     };
 }
