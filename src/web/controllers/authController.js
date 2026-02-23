@@ -33,11 +33,6 @@ function getSafeRedirect(value, fallback = "/dashboard") {
 
 export const postLogin = async (req, res) => {
 
-    console.log("Protocol :", req.protocol);
-    console.log("NODE_ENV :", process.env.NODE_ENV);
-    console.log("Secure :", req.secure);
-    console.log("X-Forwarded-Proto :",req.get("x-forwarded-proto"));
-
     const { email, password } = req.body;
 
     try {

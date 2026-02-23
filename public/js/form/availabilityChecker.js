@@ -73,6 +73,7 @@ export function createAvailabilityChecker({
     // ========================================================
 
     const checkAvailability = async (value) => {
+
         try {
             const url = getUrl(value, input);
             const res = await fetch(url, { credentials: "same-origin" });
@@ -81,10 +82,14 @@ export function createAvailabilityChecker({
 
             const data = await res.json();
 
-            if (!data.available) {
+            const isAvailable = data?.data?.available;
+
+            if (!isAvailable) {
                 showError(conflictMessage);
             } else {
-                clearError();
+                if (feedback.dataset.source === "ajax") {
+                    clearError();
+                }
             }
 
         } catch {
@@ -105,9 +110,10 @@ export function createAvailabilityChecker({
 
         const value = input.value.trim();
 
-        clearError();
-
-        if (!value) return;
+        if (!value) {
+            clearError();
+            return;
+        };
 
         // Validation locale avant appel serveur
         const formatError = validateFormat(value);
@@ -117,6 +123,8 @@ export function createAvailabilityChecker({
             return;
         }
 
+        clearError();
+        
         timeout = setTimeout(async () => {
 
             // Évite les appels identiques successifs
