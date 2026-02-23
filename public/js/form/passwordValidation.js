@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // ========================================================
         
         if (strengthPercent <= 20) {
-            strengthBar.style.backgroundColor = "var(--danger-2)";
+            strengthBar.style.backgroundColor = "#ff145c";
             strengthLabel.textContent = "Mot de passe très faible";
         } else if (strengthPercent <= 40) {
             strengthBar.style.backgroundColor = "#f57c00";
@@ -106,10 +106,10 @@ document.addEventListener("DOMContentLoaded", () => {
             strengthBar.style.backgroundColor = "#fbc02d";
             strengthLabel.textContent = "Mot de passe moyen";
         } else if (strengthPercent <= 80) {
-            strengthBar.style.backgroundColor = "var(--accent-secondary)";
+            strengthBar.style.backgroundColor = "#03a976";
             strengthLabel.textContent = "Mot de passe fort";
         } else {
-            strengthBar.style.backgroundColor = "var(--accent-primary)";
+            strengthBar.style.backgroundColor = "#0267c7";
             strengthLabel.textContent = "Mot de passe très fort";
         }
     });

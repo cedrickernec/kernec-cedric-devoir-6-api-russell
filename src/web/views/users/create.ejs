@@ -19,6 +19,7 @@
     <input
       type="text"
       id="username"
+      class="form-control"
       name="username"
       value="<%= formData.username || '' %>"
       aria-invalid="<%= errors.username ? 'true' : 'false' %>"
@@ -38,6 +39,7 @@
     <input
       type="email"
       id="email"
+      class="form-control"
       name="email"
       pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"
       aria-describedby="email-error email-feedback"
@@ -70,6 +72,7 @@
       <input
         type="password"
         id="password"
+        class="form-control"
         name="password"
         autocomplete="new-password"
         aria-invalid="<%= errors.password ? 'true' : 'false' %>"

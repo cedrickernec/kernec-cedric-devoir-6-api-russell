@@ -24,6 +24,7 @@
     <input
       type="number"
       id="catwayNumber"
+      class="form-control"
       value="<%= catway.number %>"
       aria-disabled="true"
       disabled
@@ -45,6 +46,7 @@
     <input
       type="text"
       id="catwayType"
+      class="form-control"
       value="<%= catway.type === 'short' ? 'short' : 'long' %>"
       aria-disabled="true"
       disabled
@@ -60,10 +62,11 @@
 
   <!-- ===== STATE ===== -->
   <div class="form-group">
-    <label for="goodStateCheckbox">
+    <label class="checkbox-inline" for="goodStateCheckbox">
       <input
         type="checkbox"
         id="goodStateCheckbox"
+        class="form-control"
         data-toggle-checkbox="catwayState"
         data-toggle-value="bon état"
         <%= catway.state.trim() === "bon état" ? "checked" : "" %>
@@ -76,8 +79,10 @@
     <label for="catwayState">État du catway</label>
     <textarea
       id="catwayState"
+      class="form-control"
       name="catwayState"
       rows="3"
+      placeholder="Veuillez saisir une description sur l'état du catway"
       required
     ><%= catway.state %></textarea>
   </div>
@@ -86,10 +91,11 @@
     class="form-group <%= catway.state.trim() === 'bon état' ? 'hidden' : '' %>"
     id="outOfServiceGroup"
     >
-    <label for="OutOfServiceCheckbox">
+    <label class="checkbox-inline" for="OutOfServiceCheckbox">
       <input
         type="checkbox"
         id="OutOfServiceCheckbox"
+        class="form-control"
         name="isOutOfService"
         <%= catway.isOutOfService ? "checked" : "" %>
       >

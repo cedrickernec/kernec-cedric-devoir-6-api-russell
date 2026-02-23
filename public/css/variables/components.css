@@ -165,7 +165,7 @@
    --form-control-border:                    var(--border-default);
 
    --form-control-height:                    var(--control-height-md);
-   --form-control-padding-x:                 var(--space-md);
+   --form-control-padding:                   var(--space-md);
 
    /* Focus */
    --form-control-focus-bg:                  var(--interactive-focus-bg);

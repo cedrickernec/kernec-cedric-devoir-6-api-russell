@@ -14,6 +14,7 @@
     <input
       type="number"
       id="catwayNumber"
+      class="form-control"
       name="catwayNumber"
       min="1"
       step="1"
@@ -38,7 +39,7 @@
 
   <div class="form-group">
     <label for="catwayType">Type</label>
-    <select id="catwayType" name="catwayType" required>
+    <select id="catwayType" class="form-control" name="catwayType" required>
       <option value="">- Choisir -</option>
       <option
         value="short"
@@ -58,10 +59,11 @@
   <!--====== STATE ======-->
 
   <div class="form-group">
-    <label for="goodStateCheckbox">
+    <label class="checkbox-inline" for="goodStateCheckbox">
       <input
         type="checkbox"
         id="goodStateCheckbox"
+        class="form-control"
         data-toggle-checkbox="catwayState"
         data-toggle-value="bon état"
         checked
@@ -74,8 +76,10 @@
     <label for="catwayState">État du catway</label>
     <textarea
       id="catwayState"
+      class="form-control"
       name="catwayState"
       rows="3"
+      placeholder="Veuillez saisir une description sur l'état du catway"
       readonly
       aria-readonly="true"
       required

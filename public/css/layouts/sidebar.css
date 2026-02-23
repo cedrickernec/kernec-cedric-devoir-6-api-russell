@@ -32,6 +32,7 @@
     flex-direction: column;
     gap: var(--flow-tight);
     height: 100%;
+    padding: var(--space-xs);
 
     flex: 1;
     min-height: var(--control-min-height-xs);
