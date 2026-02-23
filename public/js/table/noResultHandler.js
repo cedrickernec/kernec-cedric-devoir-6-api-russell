@@ -1,4 +1,15 @@
-
+/**
+ * ===================================================================
+ * NO RESULT HANDLER
+ * ===================================================================
+ * Middleware utilisé côté web pour gérer l'affichage lorsqu'un
+ * résultat n'est pas présent dans un tableau.
+ * 
+ * - Permet d'afficher un message adapté :
+ *      - Liste vide
+ *      - Aucun résultat après filtrage
+ * ===================================================================
+ */
 
 export function handleNoResult(rowId, visibleCount, isFilterActive) {
 
