@@ -83,7 +83,7 @@ export function initReservationsLiveFilter() {
         let visibleCount = 0;
 
         rows.forEach(row => {
-            const rowCatway = row.dataset.catway;
+            const rowCatway = row.dataset.catwayNumber;
             const client = normalizeString(row.dataset.client || "");
             const boat = normalizeString(row.dataset.boat || "");
             const rowStart = row.dataset.start;
