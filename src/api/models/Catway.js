@@ -38,7 +38,11 @@ const CatwaySchema = new mongoose.Schema({
 // INSTANCE METHODS
 // ===============================================
 
-// Indique si le catway est indisponible
+/**
+ * Indique si le catway est indisponible
+ * 
+ * @return {boolean}
+ */ 
 CatwaySchema.methods.isUnavailable = function () {
     return this.isOutOfService === true;
 };
