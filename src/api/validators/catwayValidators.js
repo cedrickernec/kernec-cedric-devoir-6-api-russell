@@ -8,6 +8,18 @@
  * ===================================================================
  */
 
+// =====================================
+// CATWAY CREATE VALIDATION
+// =====================================
+/**
+ * Valide les données de création d'un catway.
+ *
+ * @function validateCatwayCreate
+ *
+ * @param {Object} body
+ *
+ * @returns {Object} errors - Objet contenant les erreurs par champ
+ */
 export function validateCatwayCreate(body) {
     const errors = {};
 
@@ -42,6 +54,18 @@ export function validateCatwayCreate(body) {
     return errors
 };
 
+// =====================================
+// CATWAY UPDATE VALIDATION
+// =====================================
+/**
+ * Valide les données de mise à jour d'un catway.
+ *
+ * @function validateCatwayUpdate
+ *
+ * @param {Object} body
+ *
+ * @returns {Object} errors - Objet contenant les erreurs par champ
+ */
 export function validateCatwayUpdate(body) {
     const errors = {};
 

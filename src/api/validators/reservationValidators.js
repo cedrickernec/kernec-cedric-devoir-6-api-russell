@@ -10,7 +10,18 @@
 
 import { ApiError } from "../utils/errors/apiError.js";
 
-// Champs obligatoires
+// =====================================
+// RESERVATION CREATE VALIDATION
+// =====================================
+/**
+ * Valide les champs obligatoires pour la création d'une réservation.
+ *
+ * @function validateReservationCreate
+ *
+ * @param {Object} body
+ *
+ * @returns {Object} errors
+ */
 export function validateReservationCreate(body) {
     const errors = {};
     const { clientName, boatName, startDate, endDate } = body;
@@ -30,7 +41,18 @@ export function validateReservationCreate(body) {
     return errors;
 }
 
-// Champs obligatoires
+// =====================================
+// AVAILABILITY INPUT VALIDATION
+// =====================================
+/**
+ * Valide les champs obligatoires pour une requête de disponibilité.
+ *
+ * @function validateAvailabilityInput
+ *
+ * @param {Object} body
+ *
+ * @returns {Object} errors
+ */
 export function validateAvailabilityInput(body) {
     const errors = {};
     const { startDate, endDate } = body;
@@ -44,7 +66,22 @@ export function validateAvailabilityInput(body) {
     return errors;
 }
 
-// Validation cohérence période
+// =====================================
+// RESERVATION PERIOD VALIDATION
+// =====================================
+/**
+ * Vérifie la cohérence d'une période de réservation.
+ *
+ * - start < end
+ * - Dates valides
+ *
+ * @function validateReservationPeriod
+ *
+ * @param {Date} start
+ * @param {Date} end
+ *
+ * @throws {ApiError} 400 - Période invalide
+ */
 export function validateReservationPeriod(start, end) {
     if (!start || !end) {
         throw ApiError.badRequest(

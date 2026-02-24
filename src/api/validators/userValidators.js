@@ -10,6 +10,15 @@
 // =====================================
 // USERNAME VALIDATION
 // =====================================
+/**
+ * Valide un nom d'utilisateur.
+ *
+ * @function validateUsername
+ *
+ * @param {string} username
+ *
+ * @returns {string|null} - Message d'erreur ou null si valide
+ */
 export const validateUsername = (username) => {
   const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
 
@@ -27,6 +36,15 @@ export const validateUsername = (username) => {
 // =====================================
 // EMAIL VALIDATION
 // =====================================
+/**
+ * Valide un email.
+ *
+ * @function validateEmail
+ *
+ * @param {string} email
+ *
+ * @returns {string|null} - Message d'erreur ou null si valide
+ */
 export const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
 
@@ -44,6 +62,25 @@ export const validateEmail = (email) => {
 // =====================================
 // PASSWORD VALIDATION
 // =====================================
+/**
+ * Valide un mot de passe selon les règles de sécurité définies.
+ *
+ * Règles :
+ * - 8 caractères minimum
+ * - 1 majuscule
+ * - 1 minuscule
+ * - 1 chiffre
+ * - 1 caractère spécial
+ *
+ * @function validatePassword
+ *
+ * @param {string} password
+ *
+ * @returns {{
+ *   valid: boolean,
+ *   errors: Object|string|null
+ * }}
+ */
 export const validatePassword = (password) => {
   const errors = {
     minLength: "8 caractères minimum requis",
@@ -85,6 +122,15 @@ export const validatePassword = (password) => {
 // =====================================
 // USER UPDATE VALIDATION
 // =====================================
+/**
+ * Valide les champs modifiés lors d'une mise à jour utilisateur.
+ *
+ * @function validateUserUpdate
+ *
+ * @param {Object} body
+ *
+ * @returns {Object} errors
+ */
 export function validateUserUpdate(body) {
   const errors = {};
 
@@ -114,7 +160,18 @@ export function validateUserUpdate(body) {
 // =====================================
 // USER CREATE VALIDATION
 // =====================================
-
+/**
+ * Valide les données de création d'un utilisateur.
+ *
+ * @function validateUserCreate
+ *
+ * @param {Object} options
+ * @param {string} options.username
+ * @param {string} options.email
+ * @param {string} options.password
+ *
+ * @returns {Object} errors
+ */
 export function validateUserCreate({ username, email, password }) {
   const errors = {};
 
