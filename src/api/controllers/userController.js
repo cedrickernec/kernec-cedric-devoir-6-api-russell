@@ -32,7 +32,19 @@ import { pickAllowedFields } from "../utils/errors/pickAllowedFields.js";
 // ===============================================
 // GET ALL USERS
 // ===============================================
-
+/**
+ * @async
+ * Récupère la liste complète des utilisateurs.
+ *
+ * @route GET /api/users
+ * @group Users
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Liste des utilisateurs
+ */
 export const getAllUsers = async (req, res, next) => {
     try {
         // 1) Service
@@ -56,7 +68,23 @@ export const getAllUsers = async (req, res, next) => {
 // ===============================================
 // GET USER BY ID
 // ===============================================
-
+/**
+ * @async
+ * Récupère un utilisateur par son identifiant.
+ *
+ * @route GET /api/users/:id
+ * @group Users
+ *
+ * @param {Object} req
+ * @param {Object} req.params
+ * @param {string} req.params.id - Identifiant utilisateur
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Détail de l'utilisateur
+ * @throws {ApiError} 400 - Identifiant invalide
+ * @throws {ApiError} 404 - Utilisateur introuvable
+ */
 export const getUserById = async (req, res, next) => {
     try {
         // 1) Validation ID
@@ -82,7 +110,25 @@ export const getUserById = async (req, res, next) => {
 // ===============================================
 // CREATE USER
 // ===============================================
-
+/**
+ * @async
+ * Crée un nouvel utilisateur.
+ *
+ * @route POST /api/users
+ * @group Users
+ *
+ * @param {Object} req
+ * @param {Object} req.body
+ * @param {string} req.body.username - Nom d'utilisateur
+ * @param {string} req.body.email - Email
+ * @param {string} req.body.password - Mot de passe
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 201 - Utilisateur créé
+ * @throws {ApiError} 400 - Données invalides
+ * @throws {ApiError} 409 - Email déjà utilisé
+ */
 export const createUser = async (req, res, next) => {
     try {
         // 1) Filtrage strict
@@ -121,7 +167,27 @@ export const createUser = async (req, res, next) => {
 // ===============================================
 // UPDATE USER
 // ===============================================
-
+/**
+ * @async
+ * Met à jour les informations d'un utilisateur.
+ *
+ * @route PUT /api/users/:id
+ * @group Users
+ *
+ * @param {Object} req
+ * @param {Object} req.params
+ * @param {string} req.params.id - Identifiant utilisateur
+ * @param {Object} req.body
+ * @param {string} [req.body.username] - Nouveau nom d'utilisateur
+ * @param {string} [req.body.email] - Nouvel email
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Utilisateur mis à jour
+ * @throws {ApiError} 400 - Données invalides
+ * @throws {ApiError} 404 - Utilisateur introuvable
+ * @throws {ApiError} 409 - Email déjà utilisé
+ */
 export const updateUser = async (req, res, next) => {
     try {
         // 1) Validation ID
@@ -167,7 +233,25 @@ export const updateUser = async (req, res, next) => {
 // ===============================================
 // UPDATE PASSWORD
 // ===============================================
-
+/**
+ * @async
+ * Met à jour le mot de passe d'un utilisateur.
+ *
+ * @route PUT /api/users/:id/password
+ * @group Users
+ *
+ * @param {Object} req
+ * @param {Object} req.params
+ * @param {string} req.params.id - Identifiant utilisateur
+ * @param {Object} req.body
+ * @param {string} req.body.newPassword - Nouveau mot de passe
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Mot de passe mis à jour
+ * @throws {ApiError} 400 - Mot de passe manquant ou invalide
+ * @throws {ApiError} 404 - Utilisateur introuvable
+ */
 export const updatePassword = async (req, res, next) => {
     try {
         // 1) Validation ID
@@ -202,7 +286,24 @@ export const updatePassword = async (req, res, next) => {
 // ===============================================
 // DELETE USER
 // ===============================================
-
+/**
+ * @async
+ * Supprime un utilisateur.
+ *
+ * @route DELETE /api/users/:id
+ * @group Users
+ *
+ * @param {Object} req
+ * @param {Object} req.params
+ * @param {string} req.params.id - Identifiant utilisateur
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Utilisateur supprimé
+ * @throws {ApiError} 400 - Identifiant invalide
+ * @throws {ApiError} 403 - Suppression interdite (ex: auto-suppression protégée)
+ * @throws {ApiError} 404 - Utilisateur introuvable
+ */
 export const deleteUser = async (req, res, next) => {
     try {
         // 1) Validation ID

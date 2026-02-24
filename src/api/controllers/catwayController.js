@@ -35,7 +35,19 @@ import { ApiError } from "../utils/errors/apiError.js";
 // ===============================================
 // GET ALL CATWAYS
 // ===============================================
-
+/**
+ * @async
+ * Récupère la liste complète des catways.
+ *
+ * @route GET /api/catways
+ * @group Catways
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Liste des catways
+ */
 export const getAllCatways = async (req, res, next) => {
     try {
         // 1) Service
@@ -59,7 +71,23 @@ export const getAllCatways = async (req, res, next) => {
 // ===============================================
 // GET CATWAY BY NUMBER
 // ===============================================
-
+/**
+ * @async
+ * Récupère un catway par son numéro.
+ *
+ * @route GET /api/catways/:id
+ * @group Catways
+ *
+ * @param {Object} req
+ * @param {Object} req.params
+ * @param {number} req.params.id - Numéro du catway
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Détail du catway
+ * @throws {ApiError} 400 - Numéro invalide
+ * @throws {ApiError} 404 - Catway introuvable
+ */
 export const getCatwayByNumber = async (req, res, next) => {
     try {
         // 1) Validation ID
@@ -82,7 +110,19 @@ export const getCatwayByNumber = async (req, res, next) => {
 // ===============================================
 // GET NEXT CATWAY NUMBER
 // ===============================================
-
+/**
+ * @async
+ * Retourne le prochain numéro de catway disponible.
+ *
+ * @route GET /api/catways/next-number
+ * @group Catways
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Numéro suggéré
+ */
 export const getNextCatwayNumber = async (req, res, next) => {
     try {
         // 1) Récupération du numéro de catway
@@ -102,7 +142,22 @@ export const getNextCatwayNumber = async (req, res, next) => {
 // ===============================================
 // CHECK CATWAY NUMBER AVAILABILITY
 // ===============================================
-
+/**
+ * @async
+ * Vérifie la disponibilité d'un numéro de catway.
+ *
+ * @route GET /api/catways/check-number
+ * @group Catways
+ *
+ * @param {Object} req
+ * @param {Object} req.query
+ * @param {number} req.query.number - Numéro à vérifier
+ * @param {string} [req.query.excludeId] - ID à exclure lors d'une mise à jour
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Statut de disponibilité
+ */
 export const checkCatwayNumber = async (req, res, next) => {
   try {
     const { number, excludeId } = req.query;
@@ -122,7 +177,25 @@ export const checkCatwayNumber = async (req, res, next) => {
 // ===============================================
 // CREATE CATWAY
 // ===============================================
-
+/**
+ * @async
+ * Crée un nouveau catway.
+ *
+ * @route POST /api/catways
+ * @group Catways
+ *
+ * @param {Object} req
+ * @param {Object} req.body
+ * @param {number} req.body.catwayNumber - Numéro du catway
+ * @param {string} req.body.catwayType - Type du catway
+ * @param {string} req.body.catwayState - État du catway
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 201 - Catway créé
+ * @throws {ApiError} 400 - Données invalides
+ * @throws {ApiError} 409 - Numéro de catway existant
+ */
 export const createCatway = async (req, res, next) => {
     try {
         // 1) Filtrage strict
@@ -164,7 +237,26 @@ export const createCatway = async (req, res, next) => {
 // ===============================================
 // UPDATE CATWAY
 // ===============================================
-
+/**
+ * @async
+ * Met à jour un catway existant.
+ *
+ * @route PUT /api/catways/:id
+ * @group Catways
+ *
+ * @param {Object} req
+ * @param {Object} req.params
+ * @param {number} req.params.id - Numéro du catway
+ * @param {Object} req.body
+ * @param {string} [req.body.catwayState] - Nouvel état
+ * @param {boolean} [req.body.isOutOfService] - Indique si hors service
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Catway mis à jour
+ * @throws {ApiError} 400 - Données invalides
+ * @throws {ApiError} 404 - Catway introuvable
+ */
 export const updateCatway = async (req, res, next) => {
     try {
         // 1) Validation ID
@@ -210,7 +302,24 @@ export const updateCatway = async (req, res, next) => {
 // ===============================================
 // CHECK BULK CATWAYS BEFORE DELETE
 // ===============================================
-
+/**
+ * @async
+ * Vérifie les contraintes avant suppression multiple de catways.
+ *
+ * @route POST /api/catways/bulk-check
+ * @group Catways
+ *
+ * @param {Object} req
+ * @param {Object} req.body
+ * @param {Array<string>} req.body.ids - Liste des identifiants
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Validation réussie
+ * @throws {ApiError} 400 - Identifiant invalide
+ * @throws {ApiError} 404 - Catway introuvable
+ * @throws {ApiError} 409 - La selection comporte un catway lié à des réservations
+ */
 export const checkCatwaysBeforeDelete = async (req, res, next) => {
     try {
         // 1) Validation
@@ -231,7 +340,26 @@ export const checkCatwaysBeforeDelete = async (req, res, next) => {
 // ===============================================
 // DELETE BULK CATWAYS
 // ===============================================
-
+/**
+ * @async
+ * Supprime plusieurs catways.
+ *
+ * @route DELETE /api/catways/bulk
+ * @group Catways
+ *
+ * @param {Object} req
+ * @param {Object} req.body
+ * @param {Array<string>} req.body.ids - Liste des identifiants
+ * @param {string} [req.body.password] - Mot de passe de confirmation
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Résultat de suppression
+ * @throws {ApiError} 400 - Identifiant invalide
+ * @throws {ApiError} 401 - Mot de passe invalide
+ * @throws {ApiError} 404 - Catway introuvable
+ * @throws {ApiError} 409 - Mot de passe requis
+ */
 export const deleteCatwaysBulk = async (req, res, next) => {
   try {
 
@@ -256,7 +384,27 @@ export const deleteCatwaysBulk = async (req, res, next) => {
 // ===============================================
 // DELETE CATWAY
 // ===============================================
-
+/**
+ * @async
+ * Supprime un catway.
+ *
+ * @route DELETE /api/catways/:id
+ * @group Catways
+ *
+ * @param {Object} req
+ * @param {Object} req.params
+ * @param {number} req.params.id - Numéro du catway
+ * @param {Object} req.body
+ * @param {string} [req.body.password] - Mot de passe de confirmation
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Catway supprimé
+ * @throws {ApiError} 400 - Numéro de catway invalide
+ * @throws {ApiError} 401 - Mot de passe invalide
+ * @throws {ApiError} 404 - Catway introuvable
+ * @throws {ApiError} 409 - Mot de passe requis
+ */
 export const deleteCatway = async (req, res, next) => {
     try{
         // 1) Validation ID

@@ -171,7 +171,20 @@ export async function checkBulkCatwaysBeforeDeleteService(ids) {
         finished: 0
     };
 
-    for (const catwayNumber of ids) {
+    const parsedIds = ids.map(rawId => {
+        const number = Number(rawId);
+
+        if (Number.isNaN(number)) {
+            throw ApiError.badRequest(
+                "Numéro de catway invalide.",
+                { value: rawId }
+            );
+        }
+
+        return number;
+    });
+
+    for (const catwayNumber of parsedIds) {
 
         const catway = await findCatwayByNumber(catwayNumber);
 
@@ -263,7 +276,7 @@ export async function deleteCatwaysBulkService(ids, { userId, password }) {
 
         if (!password) {
             throw ApiError.businessConflict(
-                "Ce catway contient des réservations. La suppression nécessite une confirmation par mot de passe.",
+                "La sélection contient des catways liés à des réservations. La suppression nécessite une confirmation par mot de passe.",
                 { reason: "password_required" }
             );
         }
@@ -271,7 +284,7 @@ export async function deleteCatwaysBulkService(ids, { userId, password }) {
         const isValid = await verifyUserPassword(userId, password);
 
         if (!isValid) {
-            throw ApiError.businessConflict(
+            throw ApiError.unauthorized(
                 "Mot de passe incorrect.",
                 { reason: "invalid_password" }
             );
@@ -338,7 +351,7 @@ export async function deleteCatwayService(catwayNumber, options = {}) {
 
     const isValid = await verifyUserPassword(userId, password);
     if (!isValid) {
-        throw ApiError.businessConflict(
+        throw ApiError.unauthorized(
             "Mot de passe incorrect.",
             {
                 reason: "invalid_password"

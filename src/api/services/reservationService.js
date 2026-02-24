@@ -345,7 +345,7 @@ export async function deleteReservationsBulkService(ids, { userId, password }) {
 
         if (!password) {
             throw ApiError.businessConflict(
-                "La sélection nécessite une confirmation par mot de passe.",
+                "La sélection contient des réservations en cours ou terminée. La suppression nécessite une confirmation par mot de passe.",
                 { reason: "password_required" }
             );
         }
@@ -353,7 +353,7 @@ export async function deleteReservationsBulkService(ids, { userId, password }) {
         const isValid = await verifyUserPassword(userId, password);
 
         if (!isValid) {
-            throw ApiError.businessConflict(
+            throw ApiError.unauthorized(
                 "Mot de passe incorrect.",
                 { reason: "invalid_password" }
             );
@@ -418,7 +418,7 @@ export async function deleteReservationService(catwayNumber, idReservation, opti
     
         const isValid = await verifyUserPassword(userId, password);
         if (!isValid) {
-            throw ApiError.businessConflict(
+            throw ApiError.unauthorized(
                 "Mot de passe incorrect.",
                 {
                     reason: "invalid_password"

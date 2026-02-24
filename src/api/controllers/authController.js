@@ -17,7 +17,24 @@ import { pickAllowedFields } from "../utils/errors/pickAllowedFields.js";
 // ===============================================
 // LOGIN
 // ===============================================
-
+/**
+ * @async
+ * Authentifie un utilisateur.
+ *
+ * @route POST /api/auth/login
+ * @group Authentification
+ *
+ * @param {Object} req
+ * @param {Object} req.body
+ * @param {string} req.body.email - Email utilisateur
+ * @param {string} req.body.password - Mot de passe utilisateur
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Tokens d'accès et informations utilisateur
+ * @throws {ApiError} 400 - Email ou mot de passe manquant
+ * @throws {ApiError} 401 - Identifiants invalides
+ */
 export const login = async (req, res, next) => {
     try {
       // 1) Filtrage strict
@@ -61,7 +78,22 @@ export const login = async (req, res, next) => {
 // ===============================================
 // REFRESH TOKEN
 // ===============================================
-
+/**
+ * @async
+ * Génère un nouveau token d'accès à partir d'un refresh token valide.
+ *
+ * @route POST /api/auth/refresh
+ * @group Authentification
+ *
+ * @param {Object} req
+ * @param {Object} req.body
+ * @param {string} req.body.refreshToken - Refresh token valide
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Nouveau access token
+ * @throws {ApiError} 401 - Token invalide ou expiré
+ */
 export const refreshToken = async (req, res, next) => {
     try {
         const { refreshToken } = req.body;
@@ -96,7 +128,19 @@ export const refreshToken = async (req, res, next) => {
 // ===============================================
 // LOGOUT
 // ===============================================
-
+/**
+ * @async
+ * Déconnecte l'utilisateur.
+ *
+ * @route POST /api/auth/logout
+ * @group Authentification
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Object} 200 - Confirmation de déconnexion
+ */
 export const logout = async (req, res, next) => {
     try {
         return res.status(200).json({
