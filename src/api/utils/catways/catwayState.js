@@ -11,6 +11,22 @@
  * ===================================================================
  */
 
+/**
+ * Calcule la clé d'état simplifiée d'un catway pour l'UI.
+ *
+ * Règles :
+ * - HS       → Hors service
+ * - OK       → Bon état
+ * - WARNING  → Tout autre état
+ *
+ * @function computeCatwayStateKey
+ *
+ * @param {Object} options
+ * @param {string} options.catwayState
+ * @param {boolean} options.isOutOfService
+ *
+ * @returns {"HS"|"OK"|"WARNING"}
+ */
 export function computeCatwayStateKey({ catwayState, isOutOfService }) {
 
     if (isOutOfService) {

@@ -15,6 +15,23 @@ const BLOKED_STATES = [
     "hors service"
 ];
 
+
+/**
+ * Filtre et retourne les catways compatibles avec une période donnée.
+ *
+ * @function getAvailableCatways
+ *
+ * @param {Object} options
+ * @param {Array<Object>} options.catways - Liste des catways disponibles
+ * @param {Array<Object>} options.reservations - Liste des réservations existantes
+ * @param {Date} options.startDate - Date de début recherchée
+ * @param {Date} options.endDate - Date de fin recherchée
+ * @param {boolean} [options.allowPartial=false] - Autorise disponibilité partielle
+ * @param {string|null} [options.selectedType=null] - Filtre sur type (short/long)
+ * @param {number|null} [options.selectedCatwayNumber=null] - Filtre sur numéro précis
+ *
+ * @returns {Array<{catway: Object, compatibility: Object}>}
+ */
 export function getAvailableCatways({
     catways,
     reservations,

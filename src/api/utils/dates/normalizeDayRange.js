@@ -9,6 +9,16 @@
  * ===================================================================
  */
 
+/**
+ * Normalise un intervalle de dates.
+ *
+ * @function normalizeDayRange
+ *
+ * @param {Date} startDate
+ * @param {Date} endDate
+ *
+ * @returns {{ start: Date, end: Date }}
+ */
 export const normalizeDayRange = (startDate, endDate) => {
 
     return { start: startDate, end: endDate };

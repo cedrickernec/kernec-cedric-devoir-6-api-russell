@@ -23,6 +23,29 @@ function dayStart(date) {
   ));
 }
 
+/**
+ * Calcule la compatibilité d'un catway avec une période demandée.
+ *
+ * Statuts possibles :
+ * - "full"    : période entièrement disponible
+ * - "partial" : sous-périodes disponibles
+ * - "none"    : aucune disponibilité
+ *
+ * @function getCatwayCompatibility
+ *
+ * @param {Object} options
+ * @param {number} options.catwayNumber
+ * @param {Array<Object>} options.reservations
+ * @param {Date} options.startDate
+ * @param {Date} options.endDate
+ *
+ * @returns {{
+ *   status: "full"|"partial"|"none",
+ *   from?: Date,
+ *   to?: Date,
+ *   slots?: Array<{from: Date, to: Date}>
+ * }}
+ */
 export function getCatwayCompatibility({
   catwayNumber,
   reservations,

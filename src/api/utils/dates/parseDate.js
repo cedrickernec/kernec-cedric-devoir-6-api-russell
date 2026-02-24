@@ -13,6 +13,21 @@ import { ApiError } from "../errors/apiError.js";
 
 const RESERVATION_HOUR = 6;
 
+/**
+ * Parse et valide une date au format strict YYYY-MM-DD.
+ *
+ * - Vérifie le format
+ * - Vérifie cohérence jour/mois
+ * - Retourne une Date UTC normalisée
+ *
+ * @function parseDate
+ *
+ * @param {string} dateStr - Date au format YYYY-MM-DD
+ *
+ * @returns {Date}
+ *
+ * @throws {ApiError} 400 - Format invalide ou date incohérente
+ */
 export const parseDate = (dateStr) => {
 
     // 1) Type

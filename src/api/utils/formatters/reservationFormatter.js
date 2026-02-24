@@ -12,6 +12,22 @@
 import { formatDateISO } from "../dates/formatDateISO.js";
 import { getReservationStatus } from "../reservations/reservationStatus.js";
 
+/**
+ * Formate une réservation détaillée pour la réponse API.
+ *
+ * Structure :
+ * - catway
+ * - client
+ * - reservation
+ *
+ * @function formatReservation
+ *
+ * @param {Object} options
+ * @param {Object} options.reservation - Document Mongo Reservation
+ * @param {Object} options.catway - Document Mongo Catway
+ *
+ * @returns {Object|null}
+ */
 export function formatReservation({ reservation, catway }) {
   if (!reservation || !catway) return null;
 
@@ -39,6 +55,15 @@ export function formatReservation({ reservation, catway }) {
   };
 }
 
+/**
+ * Formate une liste simplifiée de réservations.
+ *
+ * @function formatReservationsList
+ *
+ * @param {Array<Object>} reservations
+ *
+ * @returns {Array<Object>}
+ */
 export function formatReservationsList(reservations) {
 
   return reservations.map((reservation) => {
@@ -60,6 +85,20 @@ export function formatReservationsList(reservations) {
   });
 }
 
+/**
+ * Formate le résultat de disponibilité pour l'API.
+ *
+ * Gère les trois statuts :
+ * - full
+ * - partial
+ * - none
+ *
+ * @function formatAvailability
+ *
+ * @param {Array<{catway: Object, compatibility: Object}>} apiAvailability
+ *
+ * @returns {Array<Object>}
+ */
 export function formatAvailability(apiAvailability) {
 
   return apiAvailability.map(({ catway, compatibility }) => {

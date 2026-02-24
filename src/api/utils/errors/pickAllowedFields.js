@@ -11,6 +11,19 @@
 
 import { ApiError } from "./apiError.js";
 
+/**
+ * Filtre un body de requête en ne conservant que les champs autorisés.
+ * Lance une erreur si des champs non autorisés sont détectés.
+ *
+ * @function pickAllowedFields
+ *
+ * @param {Object} body - Données reçues dans la requête
+ * @param {Array<string>} allowedFields - Liste blanche des champs autorisés
+ *
+ * @returns {Object} - Objet filtré ne contenant que les champs autorisés
+ *
+ * @throws {ApiError} 400 - Champs non autorisés détectés
+ */
 export const pickAllowedFields = (body, allowedFields) => {
   const receivedFields = Object.keys(body);
 

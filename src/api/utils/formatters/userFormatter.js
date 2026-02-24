@@ -9,6 +9,16 @@
  * ============================================================
  */
 
+/**
+ * Formate un utilisateur pour la réponse API.
+ * Supprime les champs sensibles (ex: password).
+ *
+ * @function formatUser
+ *
+ * @param {Object} user - Document Mongo User
+ *
+ * @returns {Object|null}
+ */
 export function formatUser(user) {
     if (!user) return null;
 
@@ -23,6 +33,15 @@ export function formatUser(user) {
     };
 }
 
+/**
+ * Formate une liste d'utilisateurs.
+ *
+ * @function formatUsersList
+ *
+ * @param {Array<Object>} users
+ *
+ * @returns {Array<Object>}
+ */
 export function formatUsersList(users) {
 
     return users.map(formatUser);

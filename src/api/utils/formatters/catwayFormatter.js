@@ -10,6 +10,16 @@
  */
 import { computeCatwayStateKey } from "../catways/catwayState.js";
 
+/**
+ * Formate un document Catway pour la réponse API.
+ * Supprime les champs sensibles et ajoute la clé d'état simplifiée.
+ *
+ * @function formatCatway
+ *
+ * @param {Object} catway - Document Mongo Catway
+ *
+ * @returns {Object|null}
+ */
 export function formatCatway(catway) {
     if (!catway) return null;
 
@@ -30,6 +40,15 @@ export function formatCatway(catway) {
     };
 }
 
+/**
+ * Formate une liste de catways.
+ *
+ * @function formatCatwaysList
+ *
+ * @param {Array<Object>} catways
+ *
+ * @returns {Array<Object>}
+ */
 export function formatCatwaysList(catways) {
 
     return catways.map(formatCatway);

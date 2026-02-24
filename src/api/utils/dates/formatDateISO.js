@@ -6,6 +6,16 @@
  * ===================================================================
  */
 
+/**
+ * Formate une date au format ISO simplifié (YYYY-MM-DD).
+ * Retourne null si la date est absente ou invalide.
+ *
+ * @function formatDateISO
+ *
+ * @param {Date|string|null|undefined} date
+ *
+ * @returns {string|null}
+ */
 export function formatDateISO(date) {
     
     if (!date) return null;
