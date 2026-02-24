@@ -39,7 +39,7 @@
 }
 
 .menu-list.open {
-    max-height: var(--doc-menu-max-height);
+    max-height: none;
 }
 
 .menu-list a {

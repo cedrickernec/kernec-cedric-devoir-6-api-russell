@@ -519,6 +519,99 @@
     </div>
 
     <!-- ======================================================
+    RESERVATIONS - BULK CHECK
+    ========================================================= -->
+
+    <div class="card card--doc">
+        <p id="reservations-bulk-check">
+            <span class="method">POST</span> <code>/api/reservations/bulk-check</code> - Vérifier que la sélection
+            ne contient aucune donnée sensible
+        </p>
+
+        <!-- ========== SUCCESS ========== -->
+        <details>
+            <summary>Réponses valides</summary>
+
+            <p class="example-title">Exemple requête :</p>
+
+<pre><code>{
+    "ids": [
+        "20|699ce49b3990671881a87cca"
+        "7|699ce4183990671881a87cb1"
+    ]
+}</code></pre>
+
+            <p class="example-title">
+            Réponse <span class="badge doc-badge--success">200 OK</span> :
+            </p>
+<pre><code>{
+    "success": true
+}</code></pre>
+        </details>
+
+        <!-- ========== ERRORS ========== -->
+        <details>
+            <summary>Erreurs possibles</summary>
+
+            <p class="example-title">
+            Erreur <span class="badge doc-badge--error">400 Bad Request</span> :
+            </p>
+
+            <!-- DONNÉES INVALIDES -->
+            <p class="error-type">Contrôle de validation des champs</p>
+            
+<pre><code>{
+    "success": false,
+    "message": "Numéro de catway invalide."
+}</code></pre>
+
+<pre><code>{
+    "success": false,
+    "message": "Identifiant réservation invalide."
+}</code></pre>
+
+            <p class="example-title">
+            Erreur <span class="badge doc-badge--error">404 Not Found</span> :
+            </p>
+
+            <!-- RESERVATION INTROUVABLE -->
+            <p class="error-type">Réservation introuvable</p>
+
+<pre><code>{
+    "success": false,
+    "message": "Réservation introuvable.",
+    "context": {
+        "catwayNumber": "7",
+        "reservationId": "..."
+    }
+}</code></pre>
+
+            <p class="example-title">
+            Erreur <span class="badge doc-badge--error">409 Conflict</span> :
+            </p>
+
+            <!-- PASSWORD REQUIRED -->
+            <p class="error-type">Contrôle de sensibilité des données sélectionnées</p>
+
+<pre><code>{
+    "success": false,
+    "message": "Au moins une réservation nécessite une confirmation par mot de passe.",
+    "context": {
+        "reason": "password_required",
+        "status": {
+            "key": "IN_PROGRESS",
+            "label": "En cours"
+        },
+        "clientName": "test",
+        "boatName": "test",
+        "startDate": "2026-02-24T06:00:00.000Z",
+        "endDate": "2026-02-27T06:00:00.000Z"
+    }
+}</code></pre>
+        </details>
+    </div>
+
+    <!-- ======================================================
     RESERVATIONS - UPDATE
     ========================================================= -->
 
@@ -718,11 +811,119 @@
     </div>
 
     <!-- ======================================================
+    RESERVATIONS - BULK
+    ========================================================= -->
+
+    <div class="card card--doc">
+        <p id="reservations-bulk">
+            <span class="method">DELETE</span> <code>/api/reservations/bulk</code> - Supprimer
+            une sélection de réservations
+        </p>
+
+        <!-- ========== SUCCESS ========== -->
+        <details>
+            <summary>Réponses valides</summary>
+
+            <p class="example-title">Exemple requête :</p>
+
+<pre><code>{
+    "ids": [
+        "7|699dafb7bf307f0d2e12a2ce",
+        "9|842hedg9fh245j2a85s1n3ad",
+        ...
+    ],
+    "password": ""
+}</code></pre>
+
+            <p class="example-title">
+            Réponse <span class="badge doc-badge--success">200 OK</span> :
+            </p>
+
+<pre><code>{
+    "success": true,
+    "data": {
+        "count": 2
+    }
+}</code></pre>
+        </details>
+
+        <!-- ========== ERRORS ========== -->
+        <details>
+            <summary>Erreurs possibles</summary>
+
+            <p class="example-title">
+            Erreur <span class="badge doc-badge--error">400 Bad Request</span> :
+            </p>
+
+            <!-- IDENTIFIANT INVALIDE -->
+            <p class="error-type">Numéro de catway invalide</p>
+
+<pre><code>{
+    "success": false,
+    "message": "Numéro de catway invalide."
+}</code></pre>
+
+            <p class="error-type">Identifiant réservation invalide</p>
+
+<pre><code>{
+    "success": false,
+    "message": "Identifiant réservation invalide."
+}</code></pre>
+
+            <p class="example-title">
+            Erreur <span class="badge doc-badge--error">401 Unauthorized</span> :
+            </p>
+
+            <!-- MOT DE PASSE INVALIDE -->
+            <p class="error-type">Mot de passe invalide</p>
+
+<pre><code>{
+    "success": false,
+    "message": "Mot de passe incorrect.",
+    "context": {
+        "reason": "invalid_password"
+    }
+}</code></pre>
+
+            <p class="example-title">
+            Erreur <span class="badge doc-badge--error">404 Not Found</span> :
+            </p>
+
+            <!-- RESERVATION INTROUVABLE -->
+            <p class="error-type">Réservation introuvable</p>
+
+<pre><code>{
+    "success": false,
+    "message": "Réservation introuvable.",
+    "context": {
+        "catwayNumber": 32,
+        "reservationId": "..."
+    }
+}</code></pre>
+
+            <p class="example-title">
+            Erreur <span class="badge doc-badge--error">409 Conflict</span> :
+            </p>
+
+            <!-- PASSWORD REQUIS -->
+            <p class="error-type">Mot de passe requis</p>
+            
+<pre><code>{
+    "success": false,
+    "message": "La sélection contient des réservations en cours ou terminée. La suppression nécessite une confirmation par mot de passe.",
+    "context": {
+        "reason": "password_required"
+    }
+}</code></pre>
+        </details>
+    </div>
+
+    <!-- ======================================================
     RESERVATIONS - DELETE
     ========================================================= -->
 
     <div class="card card--doc">
-        <p id="reservations-update">
+        <p id="reservations-delete">
             <span class="method">DELETE</span>
             <code>/api/catways/:id/reservations/:idReservation</code> - Supprimer une
             réservation
@@ -782,6 +983,21 @@
 }</code></pre>
 
             <p class="example-title">
+            Erreur <span class="badge doc-badge--error">401 Unauthorized</span> :
+            </p>
+
+            <!-- MOT DE PASSE INVALIDE -->
+            <p class="error-type">Mot de passe invalide</p>
+
+<pre><code>{
+    "success": false,
+    "message": "Mot de passe incorrect.",
+    "context": {
+        "reason": "invalid_password"
+    }
+}</code></pre>
+
+            <p class="example-title">
             Erreur <span class="badge doc-badge--error">404 Not Found</span> :
             </p>
 
@@ -828,17 +1044,6 @@
         "boatName": "L'Intrépide",
         "startDate": "2026-02-05T06:00:00.000Z",
         "endDate": "2026-02-14T06:00:00.000Z"
-    }
-}</code></pre>
-        
-        <!-- PASSWORD INVALIDE -->
-        <p class="error-type">Mot de passe invalide</p>
-
-<pre><code>{
-    "success": false,
-    "message": "Mot de passe incorrect.",
-    "context": {
-        "reason": "invalid_password"
     }
 }</code></pre>
         </details>
