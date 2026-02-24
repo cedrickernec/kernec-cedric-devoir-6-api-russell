@@ -16,6 +16,22 @@
 import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/errors/apiError.js";
 
+/**
+ * Middleware d'authentification JWT.
+ *
+ * Vérifie la présence et la validité d'un token Bearer.
+ * Injecte l'utilisateur décodé dans req.user.
+ *
+ * @function authMiddleware
+ *
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ *
+ * @throws {ApiError} 401 - Token absent, invalide ou expiré
+ *
+ * @returns {void}
+ */
 export const authMiddleware = (req, res, next) => {
     try {
         // 1) Vérification header

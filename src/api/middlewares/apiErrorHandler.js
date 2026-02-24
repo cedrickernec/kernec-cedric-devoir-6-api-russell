@@ -7,6 +7,16 @@
  * ===================================================================
  */
 
+/**
+ * Middleware 404 pour les routes API non trouvées.
+ *
+ * @function apiNotFoundHandler
+ *
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ *
+ * @returns {void}
+ */
 export const apiNotFoundHandler = (req, res) => {
     res.status(404).json({
         success: false,
@@ -18,7 +28,20 @@ export const apiNotFoundHandler = (req, res) => {
 // ==================================================
 // GLOBAL ERROR
 // ==================================================
-
+/**
+ * Middleware global de gestion centralisée des erreurs API.
+ *
+ * Transforme une ApiError (ou erreur standard) en réponse JSON normalisée.
+ *
+ * @function apiErrorHandler
+ *
+ * @param {Error} err - Erreur capturée
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} _next
+ *
+ * @returns {void}
+ */
 export const apiErrorHandler = (err, req, res, _next) => {
     const status = err.status || 500;
     const response =  { success: false };
