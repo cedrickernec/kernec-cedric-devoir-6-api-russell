@@ -45,7 +45,14 @@ import { ApiError } from "../utils/errors/apiError.js";
 // ===============================================
 // GET ALL RESERVATION
 // ===============================================
-
+/**
+ * @async
+ * Récupère l'ensemble des réservations.
+ *
+ * @function getAllReservationsService
+ *
+ * @returns {Promise<Array<Object>>} - Liste des réservations
+ */
 export async function getAllReservationsService() {
 
     return getAllReservations();
@@ -54,7 +61,17 @@ export async function getAllReservationsService() {
 // ===============================================
 // GET RESERVATIONS BY CATWAY
 // ===============================================
-
+/**
+ * @async
+ * Récupère toutes les réservations d'un catway donné.
+ *
+ * @function getReservationsByCatwayService
+ *
+ * @param {number} catwayNumber - Numéro du catway
+ *
+ * @returns {Promise<Array<Object>>} - Liste des réservations du catway
+ * @throws {ApiError} 404 - Catway introuvable
+ */
 export async function getReservationsByCatwayService(catwayNumber) {
 
     const catway = await findCatwayByNumber(catwayNumber);
@@ -72,7 +89,18 @@ export async function getReservationsByCatwayService(catwayNumber) {
 // ===============================================
 // GET RESERVATION BY ID
 // ===============================================
-
+/**
+ * @async
+ * Récupère une réservation spécifique d'un catway.
+ *
+ * @function getReservationByIdService
+ *
+ * @param {number} catwayNumber - Numéro du catway
+ * @param {string} idReservation - Identifiant de la réservation
+ *
+ * @returns {Promise<Object>} - { reservation, catway }
+ * @throws {ApiError} 404 - Catway ou réservation introuvable
+ */
 export async function getReservationByIdService(catwayNumber, idReservation) {
 
     const catway = await findCatwayByNumber(catwayNumber);
@@ -99,7 +127,21 @@ export async function getReservationByIdService(catwayNumber, idReservation) {
 // ===============================================
 // GET AVAILABILITY
 // ===============================================
-
+/**
+ * @async
+ * Recherche les catways disponibles sur une période donnée.
+ *
+ * @function getReservationAvailabilityService
+ *
+ * @param {Object} options
+ * @param {string} options.startDate - Date de début (YYYY-MM-DD)
+ * @param {string} options.endDate - Date de fin (YYYY-MM-DD)
+ * @param {string} [options.catwayType] - Type de catway filtré
+ * @param {boolean} [options.allowPartial] - Autorise disponibilité partielle
+ * @param {number|string} [options.catwayNumber] - Catway spécifique
+ *
+ * @returns {Promise<Array<Object>>} - Liste des disponibilités calculées
+ */
 export async function getReservationAvailabilityService({
     startDate,
     endDate,
@@ -127,7 +169,25 @@ export async function getReservationAvailabilityService({
 // ===============================================
 // CREATE RESERVATION
 // ===============================================
-
+/**
+ * @async
+ * Crée une réservation après contrôle de disponibilité et état du catway.
+ *
+ * @function createReservationService
+ *
+ * @param {number} catwayNumber - Numéro du catway
+ * @param {Object} data - Données de réservation
+ * @param {string} data.clientName
+ * @param {string} data.boatName
+ * @param {string} data.startDate
+ * @param {string} data.endDate
+ *
+ * @returns {Promise<Object>} - { reservation, catway }
+ *
+ * @throws {ApiError} 404 - Catway introuvable
+ * @throws {ApiError} 409 - Conflit de réservation
+ * @throws {ApiError} 409 - Catway hors service
+ */
 export async function createReservationService(catwayNumber, data) {
 
     const catway = await findCatwayByNumber(catwayNumber);
@@ -184,7 +244,22 @@ export async function createReservationService(catwayNumber, data) {
 // ===============================================
 // UPDATE RESERVATION
 // ===============================================
-
+/**
+ * @async
+ * Met à jour une réservation après validation métier.
+ *
+ * @function updateReservationService
+ *
+ * @param {number} catwayNumber - Numéro du catway
+ * @param {string} idReservation - Identifiant de la réservation
+ * @param {Object} data - Données à mettre à jour
+ *
+ * @returns {Promise<Object>} - { reservation, catway }
+ *
+ * @throws {ApiError} 404 - Catway ou réservation introuvable
+ * @throws {ApiError} 403 - Modification interdite (réservation terminée)
+ * @throws {ApiError} 409 - Conflit de réservation
+ */
 export async function updateReservationService(catwayNumber, idReservation, data) {
 
     const catway = await findCatwayByNumber(catwayNumber);
@@ -265,7 +340,19 @@ export async function updateReservationService(catwayNumber, idReservation, data
 // ===============================================
 // CHECK BULK DELETE RESERVATIONS
 // ===============================================
-
+/**
+ * @async
+ * Vérifie si une suppression multiple de réservations nécessite une confirmation par mot de passe.
+ *
+ * @function checkReservationsBeforeDeleteService
+ *
+ * @param {Array<{catwayNumber: number, reservationId: string}>} ids
+ *
+ * @returns {Promise<boolean>} - true si aucune contrainte
+ *
+ * @throws {ApiError} 404 - Réservation introuvable
+ * @throws {ApiError} 409 - Confirmation par mot de passe requise
+ */
 export async function checkReservationsBeforeDeleteService(ids) {
 
     for (const { catwayNumber, reservationId } of ids) {
@@ -303,7 +390,24 @@ export async function checkReservationsBeforeDeleteService(ids) {
 // ===============================================
 // BULK DELETE RESERVATIONS
 // ===============================================
-
+/**
+ * @async
+ * Supprime plusieurs réservations après validation complète.
+ *
+ * @function deleteReservationsBulkService
+ *
+ * @param {Array<string>} ids - Identifiants composites "catwayNumber|reservationId"
+ * @param {Object} options
+ * @param {string} options.userId - ID utilisateur demandeur
+ * @param {string} [options.password] - Mot de passe de confirmation
+ *
+ * @returns {Promise<{count: number}>} - Nombre de réservations supprimées
+ *
+ * @throws {ApiError} 400 - Requête invalide
+ * @throws {ApiError} 404 - Réservation introuvable
+ * @throws {ApiError} 401 - Mot de passe incorrect
+ * @throws {ApiError} 409 - Confirmation requise
+ */
 export async function deleteReservationsBulkService(ids, { userId, password }) {
 
     if (!Array.isArray(ids) || ids.length === 0) {
@@ -376,7 +480,24 @@ export async function deleteReservationsBulkService(ids, { userId, password }) {
 // ===============================================
 // DELETE RESERVATION
 // ===============================================
-
+/**
+ * @async
+ * Supprime une réservation unique avec gestion des règles métier.
+ *
+ * @function deleteReservationService
+ *
+ * @param {number} catwayNumber - Numéro du catway
+ * @param {string} idReservation - Identifiant de la réservation
+ * @param {Object} [options]
+ * @param {string} [options.userId] - ID utilisateur demandeur
+ * @param {string} [options.password] - Mot de passe de confirmation
+ *
+ * @returns {Promise<Object>} - { reservation, catway }
+ *
+ * @throws {ApiError} 404 - Catway ou réservation introuvable
+ * @throws {ApiError} 401 - Mot de passe incorrect
+ * @throws {ApiError} 409 - Confirmation requise
+ */
 export async function deleteReservationService(catwayNumber, idReservation, options = {}) {
 
     const { userId, password } = options;

@@ -20,7 +20,27 @@ import {
 // ===============================================
 // LOGIN
 // ===============================================
-
+/**
+ * @async
+ * Authentifie un utilisateur et génère les tokens d'accès.
+ * 
+ * @function loginService
+ * 
+ * @param {string} email - Email utilisateur
+ * @param {string} password - Mot de passe en clair
+ * 
+ * @returns {Promise<{
+ *      accessToken: string,
+ *      refreshToken: string,
+ *      user: Object
+ * }>} - Retourne les tokens (access/refresh) et l'utilisateur (password à ne jamais renvoyer en clair côté controller).
+ * @throws {ApiError} 401 - Email ou mot de passe incorrect.
+ * 
+ * @requires process.env.JWT_SECRET
+ * @requires process.env.JWT_REFRESH_SECRET
+ * @requires process.env.ACCESS_TOKEN_DURATION
+ * @requires process.env.REFRESH_TOKEN_DURATION
+ */
 export async function loginService(email, password) {
 
     const user = await findUserByEmailWithPassword(email);
