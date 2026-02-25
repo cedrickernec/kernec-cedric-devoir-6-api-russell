@@ -10,7 +10,29 @@
 
 import { computeReservationStatus } from "../business/reservations/reservationStatus.js";
 
-export function mapApiStatusToToViewStatus(apiStatus, startDate, endDate) {
+/**
+ * Combine le statut métier API avec le statut visuel UI.
+ *
+ * - Conserve key et label issus de l'API
+ * - Ajoute className, aria et semantic calculés dynamiquement
+ *
+ * @function mapApiStatusToViewStatus
+ *
+ * @param {Object} apiStatus
+ * @param {string} apiStatus.key
+ * @param {string} apiStatus.label
+ *
+ * @param {Date|string} startDate
+ * @param {Date|string} endDate
+ *
+ * @returns {Object} - Statut enrichi pour la vue
+ * @returns {string} - returns.key
+ * @returns {string} - returns.label
+ * @returns {string} - returns.className
+ * @returns {string} - returns.aria
+ * @returns {string} - returns.semantic
+ */
+export function mapApiStatusToViewStatus(apiStatus, startDate, endDate) {
 
     // Calcul du statut UI basé sur les dates
     const computed = computeReservationStatus({

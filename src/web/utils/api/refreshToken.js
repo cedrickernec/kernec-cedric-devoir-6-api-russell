@@ -13,6 +13,23 @@
 
 import { apiFetch } from "../../gateways/api/apiFetch.js";
 
+/**
+ * Tente de renouveler le JWT utilisateur via le refreshToken en session.
+ *
+ * - Lit le refreshToken depuis req.session.user.refreshToken
+ * - Appelle l'API /api/auth/refresh
+ * - Met à jour req.session.user.token avec le nouveau accessToken
+ *
+ * @async
+ * @function tryRefreshToken
+ *
+ * @param {Object} req - Requête Express
+ * @param {Object} req.session
+ * @param {Object} [req.session.user]
+ * @param {string} [req.session.user.refreshToken]
+ *
+ * @returns {Promise<boolean>} - true si le token a été rafraîchi, sinon false
+ */
 export async function tryRefreshToken(req) {
 
     // Récupère le refreshToken à partir de la session

@@ -2,15 +2,22 @@
  * ===================================================================
  * COMPUTE RESERVATION NIGHTS - WEB
  * ===================================================================
- * - Calcul le nombre de nuits entre deux dates
- * - Ignore les dates invalides
- * - Retourne :
- *      - null  → données invalides
- *      - 0     → séjour nul ou incohérent
- *      - n     → nombre de nuits
- * ===================================================================
+ * Calcule le nombre de nuits entre deux dates.
+ *
+ * - Retourne null si les dates sont absentes ou invalides
+ * - Retourne 0 si la date de fin est antérieure ou égale à la date de début
+ * - Retourne un nombre entier correspondant au nombre de nuits
+ *
+ * @function computeNightsBetweenDates
+ *
+ * @param {Date|string} startDate - Date de début
+ * @param {Date|string} endDate - Date de fin
+ *
+ * @returns {number|null}
+ * - null → données invalides
+ * - 0    → séjour nul ou incohérent
+ * - n    → nombre de nuits
  */
-
 export function computeNightsBetweenDates(startDate, endDate) {
 
     // ==================================================

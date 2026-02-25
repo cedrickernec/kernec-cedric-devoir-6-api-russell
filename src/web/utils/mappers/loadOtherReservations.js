@@ -14,6 +14,25 @@
 import { fetchReservationsByCatway } from "../../gateways/api/reservationApi.js";
 import { mapReservationToList } from "./reservationMapper.js";
 
+/**
+ * Charge les réservations associées à un catway,
+ * en excluant la réservation courante.
+ *
+ * - Appelle le gateway API
+ * - Vérifie la validité de la réponse
+ * - Exclut currentId
+ * - Transforme les données en ViewModel liste
+ *
+ * @async
+ * @function loadOtherReservations
+ *
+ * @param {number|string} catwayNumber - Numéro du catway
+ * @param {string} currentId - Identifiant à exclure
+ * @param {Object} req - Requête Express
+ * @param {Object} res - Réponse Express
+ *
+ * @returns {Promise<Object[]>} - Liste de réservations mappées
+ */
 export async function loadOtherReservations(catwayNumber, currentId, req, res) {
 
     // Appel API

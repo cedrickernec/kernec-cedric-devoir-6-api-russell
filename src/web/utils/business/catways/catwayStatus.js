@@ -2,16 +2,23 @@
  * ===================================================================
  * CATWAY STATUS BUILDER
  * ===================================================================
- * - Construit l'état visuel d'un catway pour l'interface utilisateur
- * - Associe :
- *      → label affiché
- *      → class CSS
- *      → texte d'accesibilité (ARIA)
- * ===================================================================
- * Centralise toute la logique d'état UI des catways.
- * ===================================================================
+ * Construit l'état visuel d'un catway pour l'interface.
+ *
+ * - Associe label affiché
+ * - Définit la classe CSS correspondante
+ * - Fournit le texte d’accessibilité (ARIA)
+ *
+ * @function buildCatwayStatus
+ *
+ * @param {Object} params
+ * @param {string} params.catwayState - État textuel du catway
+ * @param {boolean} params.isOutOfService - Indique si le catway est hors service
+ *
+ * @returns {Object} - Métadonnées UI
+ * @returns {string} - returns.label
+ * @returns {string} - returns.className
+ * @returns {string} - returns.aria
  */
-
 export function buildCatwayStatus({ catwayState, isOutOfService }) {
 
     if (isOutOfService) {

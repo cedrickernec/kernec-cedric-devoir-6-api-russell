@@ -2,10 +2,13 @@
  * ===================================================================
  * VALIDATION RULE - USER PASSWORD
  * ===================================================================
- * - Liste centralisée des règles de sécurité du mot de passe
- * ===================================================================
+ * Règles de validation du mot de passe utilisateur.
+ *
+ * - Liste utilisée pour affichage UI
+ * - Doit correspondre aux règles de validation backend
+ *
+ * @constant {string[]}
  */
-
 export const PASSWORD_RULES = [
   "8 caractères minimum requis",
   "1 lettre majuscule requise",

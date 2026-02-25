@@ -2,11 +2,19 @@
  * ===================================================================
  * FORMAT API ERRORS
  * ===================================================================
- * - Normalise les erreurs renvoyées par l'API
- *   pour correspondre au format attendu par les vues
- * ===================================================================
+ * Normalise les erreurs renvoyées par l'API
+ * pour correspondre au format attendu par les vues.
+ *
+ * - Conserve les erreurs existantes
+ * - Reformate le champ password si présent
+ *
+ * @function formatApiErrors
+ *
+ * @param {Object} apiData - Données issues de apiFetch
+ * @param {Object} [apiData.errors]
+ *
+ * @returns {Object} - Objet d'erreurs normalisé
  */
-
 export function formatApiErrors(apiData) {
 
     const errors = apiData.errors || {};

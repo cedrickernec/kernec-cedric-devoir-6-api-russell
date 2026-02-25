@@ -13,7 +13,15 @@ import { formatDateFR } from "../formatters/dateFormatter.js";
 // ==================================================
 // MAPPER - USER LIST (TABLE)
 // ==================================================
-
+/**
+ * Transforme un utilisateur API en modèle liste.
+ *
+ * @function mapUserToList
+ *
+ * @param {Object} user
+ *
+ * @returns {Object} - Modèle liste
+ */
 export function mapUserToList(user) {
   return {
     id: user.id,
@@ -27,7 +35,18 @@ export function mapUserToList(user) {
 // ==================================================
 // MAPPER - USER DETAIL
 // ==================================================
-
+/**
+ * Transforme un utilisateur API en modèle détail.
+ *
+ * - Gère les valeurs fallback
+ * - Formate les dates
+ *
+ * @function mapUserDetail
+ *
+ * @param {Object|null} user
+ *
+ * @returns {Object} - Modèle détail
+ */
 export function mapUserDetail(user) {
   if (!user) {
     return {
@@ -63,7 +82,15 @@ export function mapUserDetail(user) {
 // ==================================================
 // MAPPER - USER FORM
 // ==================================================
-
+/**
+ * Transforme un utilisateur API en modèle formulaire.
+ *
+ * @function mapUserToForm
+ *
+ * @param {Object} user
+ *
+ * @returns {Object} - Modèle formulaire
+ */
 export function mapUserToForm(user) {
   return {
     id: user.id,

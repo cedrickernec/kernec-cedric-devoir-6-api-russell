@@ -10,6 +10,24 @@
 
 import { normalizeDateRange } from "../../normalizeDateRange.js";
 
+/**
+ * Calcule le statut temporel d'une réservation.
+ *
+ * - Compare la date actuelle avec startDate et endDate
+ * - Retourne les métadonnées UI associées
+ *
+ * @function computeReservationStatus
+ *
+ * @param {Object} params
+ * @param {Date|string} params.startDate
+ * @param {Date|string} params.endDate
+ *
+ * @returns {Object} - Métadonnées de statut
+ * @returns {string} - returns.label
+ * @returns {string} - returns.className
+ * @returns {string} - returns.aria
+ * @returns {string} - returns.semantic
+ */
 export function computeReservationStatus({startDate, endDate}) {
     const now = new Date();
     const start = normalizeDateRange(startDate, "start");

@@ -2,11 +2,19 @@
  * ===================================================================
  * NORMALIZE DATE (START/END)
  * ===================================================================
- * - Normalise la date de début et de fin d'une journée
- * ===================================================================
+ * Normalise une date en début ou fin de journée logique.
+ *
+ * - "start" → 06:00:00.000
+ * - "end"   → 05:59:59.999
+ *
+ * @function normalizeDateRange
+ *
  * @param {Date|string} date
- * @param {"start"|"end"} mode
- * @returns {Date}
+ * @param {"start"|"end"} [mode="start"]
+ *
+ * @returns {Date|null}
+ *
+ * @throws {Error} - Si la date est invalide
  */
 
 export function normalizeDateRange(date, mode = "start") {
