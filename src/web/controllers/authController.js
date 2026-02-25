@@ -30,7 +30,22 @@ function getSafeRedirect(value, fallback = "/dashboard") {
 // ==================================================
 // LOGIN
 // ==================================================
-
+/**
+ * Traite la connexion utilisateur.
+ *
+ * - Appelle l'API d'authentification
+ * - Stocke le JWT en session serveur
+ * - Gère les erreurs d'authentification
+ * - Sécurise la redirection
+ *
+ * @async
+ * @function postLogin
+ *
+ * @param {Object} req
+ * @param {Object} res
+ *
+ * @returns {Promise<void>}
+ */
 export const postLogin = async (req, res) => {
 
     const { email, password } = req.body;
@@ -80,7 +95,22 @@ export const postLogin = async (req, res) => {
 // ==================================================
 // LOGOUT
 // ==================================================
-
+/**
+ * Déconnecte l'utilisateur.
+ *
+ * - Appelle l'API de logout
+ * - Détruit la session serveur
+ * - Nettoie le cookie de session
+ * - Redirige vers la page de connexion
+ *
+ * @async
+ * @function getLogout
+ *
+ * @param {Object} req
+ * @param {Object} res
+ *
+ * @returns {Promise<void>}
+ */
 export const getLogout = async (req, res) => {
 
     const referer = req.headers.referer;

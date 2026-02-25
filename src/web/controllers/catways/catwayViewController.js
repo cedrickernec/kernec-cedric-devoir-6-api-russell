@@ -34,7 +34,23 @@ import { loadOtherReservations } from "../../utils/mappers/loadOtherReservations
 // ==================================================
 // CATWAYS LIST
 // ==================================================
-
+/**
+ * Affiche la liste des catways.
+ *
+ * - Appelle l'API (gateway) pour récupérer les catways
+ * - Gère l'expiration d'authentification
+ * - Mappe les données vers un modèle de vue (liste)
+ * - Rend la vue EJS correspondante
+ *
+ * @async
+ * @function getCatwaysPage
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getCatwaysPage = async (req, res, next) => {
     try {
       const apiData = await fetchCatways(req, res);
@@ -62,7 +78,27 @@ export const getCatwaysPage = async (req, res, next) => {
 // ==================================================
 // CATWAY DETAILS - FULL PAGE (BY NUMBER)
 // ==================================================
-
+/**
+ * Affiche le détail d'un catway (par numéro).
+ *
+ * - Valide et parse catwayNumber via req.params
+ * - Appelle l'API (gateway) pour récupérer le catway
+ * - Gère l'expiration d'authentification
+ * - Gère le cas 404 (catway introuvable)
+ * - Charge les autres réservation du cawtay (contexte)
+ * - Supporte des paramètres de navigation (from, reservationId)
+ * - Mappe les données vers un modèle de vue (détail)
+ * - Rend la vue EJS correspondante
+ *
+ * @async
+ * @function getCatwayByNumber
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getCatwayByNumber = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
@@ -113,7 +149,25 @@ export const getCatwayByNumber = async (req, res, next) => {
 // ==================================================
 // CATWAY PANEL
 // ==================================================
-
+/**
+ * Rend le panneau latéral (partial) d'un catway.
+ *
+ * - Valide et parse catwayNumber via req.params
+ * - Appelle l'API (gateway) pour récupérer le catway
+ * - Gère l'expiration d'authentification
+ * - Retourne un partial EJS sans layout
+ * - En cas d'erreur : rend le parial "pannelError" (404/500)
+ * - Mappe les données vers un modèle de vue (détail)
+ *
+ * @async
+ * @function getCatwayPanel
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getCatwayPanel = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
@@ -159,7 +213,21 @@ export const getCatwayPanel = async (req, res, next) => {
 // ==================================================
 // CREATE CATWAY PAGE
 // ==================================================
-
+/**
+ * Affiche la page de création d'un catway.
+ *
+ * - Appelle l'API (gateway) pour proposer le prochain numéro disponible
+ * - Rend le formulaire EJS de création avec une valeur suggérée pour catwayNumber
+ *
+ * @async
+ * @function getCreateCatwayPage
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getCreateCatwayPage = async (req, res, next) => {
   try {
     const suggestedNumber = await findNextCatwayNumber(req, res);
@@ -176,7 +244,25 @@ export const getCreateCatwayPage = async (req, res, next) => {
 // ==================================================
 // EDIT CATWAY PAGE (BY NUMBER)
 // ==================================================
-
+/**
+ * Affiche la page d'édition d'un catway (par numéro).
+ *
+ * - Valide et parse catwayNumber via req.params
+ * - Appelle l'API (gateway) pour charger le catway
+ * - Gère l'expiration d'authentification
+ * - Gère le 404 (catway introuvable)
+ * - Mappe les données vers un modèle de formulaire
+ * - Rend la vue EJS correspondante
+ *
+ * @async
+ * @function getEditCatwayByNumber
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getEditCatwayByNumber = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);

@@ -32,7 +32,23 @@ import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.j
 // ==================================================
 // USERS LIST
 // ==================================================
-
+/**
+ * Affiche la liste des utilisateurs.
+ *
+ * - Appelle l'API (gateway) pour récupérer les utilisateurs
+ * - Gère l'expiration d'authentification
+ * - Mappe les données vers un modèle de vue (liste)
+ * - Rend la vue EJS correspondante
+ *
+ * @async
+ * @function getUsersPage
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getUsersPage = async (req, res, next) => {
   try {
     const apiData = await fetchUsers(req, res);
@@ -60,7 +76,25 @@ export const getUsersPage = async (req, res, next) => {
 // ==================================================
 // USER DETAILS - FULL PAGE
 // ==================================================
-
+/**
+ * Affiche la page détail d'un utilisateur.
+ * 
+ * - Récupère l'identifiant via req.params
+ * - Appelle l'API (gateway) pour récupérer l'utilisateur
+ * - Gère l'expiration d'authentification
+ * - Gère le cas 404 (utilisateur introuvable)
+ * - Mappe les données vers un modèle de vue (détail)
+ * - Rend la vue EJS correspondante
+ *
+ * @async
+ * @function getUserById
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getUserById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -97,7 +131,25 @@ export const getUserById = async (req, res, next) => {
 // ==================================================
 // USER PANEL
 // ==================================================
-
+/**
+ * Rend le panneau latéral (partial) d'un utilisateur.
+ *
+ * - Récupère l'identifiant via req.params
+ * - Appelle l'API (gateway) pour récupérer l'utilisateur
+ * - Gère l'expiration d'authentification
+ * - Retourne un partial EJS sans layout
+ * - En cas d'erreur : rend le parial "pannelError" (404/500)
+ * - Mappe les données vers un modèle de vue (détail)
+ *
+ * @async
+ * @function getUserPanel
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getUserPanel = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -137,7 +189,19 @@ export const getUserPanel = async (req, res, next) => {
 // ==================================================
 // CREATE USER PAGE
 // ==================================================
-
+/**
+ * Affiche la page de création utilisateur.
+ * 
+ * - Rend le formulaire EJS de création
+ *
+ * @function getCreateUserPage
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {void}
+ */
 export const getCreateUserPage = (req, res, next) => {
   try {
     renderCreateUserPage(res, {});
@@ -149,7 +213,25 @@ export const getCreateUserPage = (req, res, next) => {
 // ==================================================
 // EDIT USER PAGE
 // ==================================================
-
+/**
+ * Affiche la page d'édition utilisateur.
+ * 
+ * - Récupère l'identifiant via req.params
+ * - Appelle l'API (gateway) pour charger l'utilisateur
+ * - Gère l'expiration d'authentification
+ * - Gère le 404 (utilisateur introuvable)
+ * - Mappe les données vers un modèle de formulaire
+ * - Rend la vue EJS correspondante
+ *
+ * @async
+ * @function getEditUserPage
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getEditUserPage = async (req, res, next) => {
   try {
     const { id } = req.params;

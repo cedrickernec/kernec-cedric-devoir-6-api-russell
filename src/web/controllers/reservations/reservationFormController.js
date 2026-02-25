@@ -37,7 +37,25 @@ import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.j
 // ==================================================
 // CREATE RESERVATION
 // ==================================================
-
+/**
+ * Traite la création d'une réservation (wizard multi-étapes).
+ *
+ * - Step "client" : validation + sauvegarde du brouillon en session
+ * - Step "dates"  : recherche de disponibilités, sélection et création
+ * - Supporte la création multiple (sélection de catways)
+ * - Mappe les erreurs API vers la vue EJS (champs / métier / global)
+ * - Pose un flash message de succès
+ * - Redirection (selon contexte)
+ *
+ * @async
+ * @function postCreateReservation
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const postCreateReservation = async (req, res, next) => {
     try {
         const {
@@ -255,7 +273,19 @@ export const postCreateReservation = async (req, res, next) => {
 // ==================================================
 // CANCEL CREATE RESERVATION
 // ==================================================
-
+/**
+ * Annule la création de réservation.
+ *
+ * - Nettoie le brouillon et l'état du wizard en session
+ * - Redirige soit vers un catway pré-sélectionné, soit vers la liste des réservations
+ *
+ * @function cancelCreateReservation
+ *
+ * @param {Object} req
+ * @param {Object} res
+ *
+ * @returns {void}
+ */
 export const cancelCreateReservation = (req, res) => {
 
     const preselectedCatway =
@@ -277,7 +307,27 @@ export const cancelCreateReservation = (req, res) => {
 // ==================================================
 // EDIT RESERVATION
 // ==================================================
-
+/**
+ * Traite la modification d'une réservation.
+ *
+ * - Récupère et valide les identifiants via req.params
+ * - Construit le payload depuis le formulaire
+ * - Appelle l'API (gateway) de mise à jour
+ * - Gère l'expiration d'authentification
+ * - En cas d'erreur : recharge la réservation + contexte (autres réservations)
+ * - Mappe les erreurs API vers la vue EJS (champs / métier / global)
+ * - Pose un flash message de succès
+ * - Redirige vers la page détail réservation
+ *
+ * @async
+ * @function postEditReservation
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const postEditReservation = async (req, res, next) => {
     try {
         const { id, catwayNumber } = req.params;
@@ -382,7 +432,26 @@ export const postEditReservation = async (req, res, next) => {
 // ==================================================
 // DELETE RESERVATION
 // ==================================================
-
+/**
+ * Supprime une réservation.
+ *
+ * - Récupère et valide les identifiants via req.params
+ * - Appelle l'API (gateway) de suppression (avec confirmation de mot de passe si nécessaire)
+ * - Gère l'expiration d'authentification
+ * - Passe par le handler d'erreurs API partagé
+ * - Supporte le mode AJAX (JSON) et le mode HTML (redirect)
+ * - Pose un flash message de succès
+ * - Redirige vers la liste des réservations
+ *
+ * @async
+ * @function deleteReservationAction
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const deleteReservationAction = async (req, res, next) => {
     try {
         const { id, catwayNumber } = req.params;

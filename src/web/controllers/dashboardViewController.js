@@ -17,7 +17,23 @@ import { COMMON_MESSAGES } from "../../../public/js/messages/commonMessages.js";
 // ==================================================
 // DASHBOARD PAGE
 // ==================================================
-
+/**
+ * Affiche le dashboard utilisateur.
+ *
+ * - Charge les réservations via l'API
+ * - Filtre les réservations à venir
+ * - Gère l'expiration d'authentification
+ * - Tolère les erreurs partielles de chargement
+ *
+ * @async
+ * @function getDashboard
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getDashboard = async (req, res, next) => {
     let reservations = [];
     let dashboardError = null;

@@ -10,7 +10,17 @@
 // ==================================================
 // DOCUMENTATION PAGE
 // ==================================================
-
+/**
+ * Affiche la page de documentation technique.
+ *
+ * @function getDocumentation
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {void}
+ */
 export const getDocumentation = (req, res, next) => {
     try {
         res.render("documentation/index", {

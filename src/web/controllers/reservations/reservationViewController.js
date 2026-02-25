@@ -33,7 +33,24 @@ import { loadOtherReservations } from "../../utils/mappers/loadOtherReservations
 // ==================================================
 // RESERVATIONS LIST
 // ==================================================
-
+/**
+ * Affiche la liste des réservations.
+ *
+ * - Appelle l'API (gateway) pour récupérer les réservations
+ * - Gère l'expiration d'authentification
+ * - Mappe les données vers un modèle de vue (liste)
+ * - Trie par statut, puis date de début, puis numéro de catway
+ * - Rend la vue EJS correspondante
+ *
+ * @async
+ * @function getReservationsPage
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getReservationsPage = async (req, res, next) => {
     try {
       const apiData = await fetchReservations(req, res);
@@ -91,7 +108,26 @@ export const getReservationsPage = async (req, res, next) => {
 // ==================================================
 // RESERVATION DETAILS - FULL PAGE
 // ==================================================
-
+/**
+ * Affiche la page détail d'une réservation.
+ *
+ * - Récupère les identifiants via req.params
+ * - Valide la présence du catwayNumber via req.params
+ * - Appelle l'API (gateway) pour récupérer la réservation
+ * - Gère l'expiration d'authentification
+ * - Gère le cas 404 (réservation introuvable)
+ * - Mappe les données vers un modèle de vue (détail)
+ * - Rend la vue EJS correspondante
+ *
+ * @async
+ * @function getReservationById
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getReservationById = async (req, res, next) => {
   try {
     const { id, catwayNumber } = req.params;
@@ -132,7 +168,26 @@ export const getReservationById = async (req, res, next) => {
 // ==================================================
 // RESERVATION PANEL
 // ==================================================
-
+/**
+ * Rend le panneau latéral (partial) d'une réservation.
+ *
+ * - Récupère les identifiants via req.params
+ * - Valide la présence du catwayNumber via req.params
+ * - Appelle l'API (gateway) pour récupérer l'utilisateur
+ * - Gère l'expiration d'authentification
+ * - Retourne un partial EJS sans layout
+ * - En cas d'erreur : rend le parial "pannelError" (404/500)
+ * - Mappe les données vers un modèle de vue (détail)
+ *
+ * @async
+ * @function getReservationPanel
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getReservationPanel = async (req, res, next) => {
   try {
     const { id, catwayNumber } = req.params;
@@ -176,7 +231,25 @@ export const getReservationPanel = async (req, res, next) => {
 // ==================================================
 // CREATE RESERVATION PAGE
 // ==================================================
-
+/**
+ * Affiche l'assistant (wizard) de création de réservation.
+ *
+ * - Step 1 : informations client/bateau
+ * - Step 2 : choix des dates + recherche de disponibilités
+ * - Gère un brouillon en session (reservationDraft)
+ * - Supporte un catway pré-sélectionné via querystring
+ * - Sécurise la navigation entre étapes
+ * - Rend la vue EJS correspondante
+ *
+ * @async
+ * @function getCreateReservationPage
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getCreateReservationPage = async (req, res, next) => {
     try {
       const step = req.query.step || "client";
@@ -239,7 +312,26 @@ export const getCreateReservationPage = async (req, res, next) => {
 // ==================================================
 // EDIT RESERVATION PAGE
 // ==================================================
-
+/**
+ * Affiche la page d'édition d'une réservation.
+ *
+ * - Récupère les identifiants via req.params
+ * - Valide la présence du catwayNumber via req.params
+ * - Gère l'expiration d'authentification
+ * - Gère le 404 (réservation introuvable)
+ * - Charge les autres réservations du catway (contexte de conflit)
+ * - Mappe les données vers un modèle de formulaire
+ * - Rend la vue EJS correspondante
+ *
+ * @async
+ * @function getEditReservationPage
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 export const getEditReservationPage = async (req, res, next) => {
   try {
     const { id, catwayNumber } = req.params;
