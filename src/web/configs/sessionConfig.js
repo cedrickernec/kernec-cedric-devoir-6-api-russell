@@ -46,7 +46,17 @@ const SESSION_DURATION = ms(process.env.SESSION_DURATION || "1h");
 // ==================================================
 // SESSION MIDDLEWARE
 // ==================================================
-
+/**
+ * Middleware Express de gestion de session.
+ *
+ * - Configure express-session
+ * - Stocke les sessions en base MongoDB via connect-mongo
+ * - Sécurise les cookies selon l'environnement (production / dev)
+ * - Centralise la durée de session
+ * - Active le mode "rolling" (renouvellement à chaque requête)
+ *
+ * @type {import("express").RequestHandler}
+ */
 export const sessionMiddleware = session({
     name: "russell.sid",
     secret: process.env.SESSION_SECRET,
@@ -69,9 +79,22 @@ export const sessionMiddleware = session({
 // ==================================================
 // SHARED EXPORTS
 // ==================================================
-
+/**
+ * Informations liées à l'environnement d'exécution.
+ *
+ * - isProduction : indique si l'application tourne en production
+ *
+ * @type {{ isProduction: boolean }}
+ */
 export const environment = {
     isProduction,
 };
 
+/**
+ * Durée maximale d'une session (en millisecondes).
+ *
+ * Utilisée pour synchroniser la logique côté serveur et côté client.
+ *
+ * @type {number}
+ */
 export const sessionMaxAge = SESSION_DURATION;
