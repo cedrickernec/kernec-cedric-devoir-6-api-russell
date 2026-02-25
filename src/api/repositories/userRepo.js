@@ -12,7 +12,17 @@ import User from "../models/User.js";
 // ===============================================
 // GET ALL USERS
 // ===============================================
-
+/**
+ * Récupère tous les utilisateurs.
+ *
+ * - Trie par username (ordre alphabétique)
+ * - Exclut le champ password
+ *
+ * @async
+ * @function getAllUsers
+ *
+ * @returns {Promise<Object[]>}
+ */
 export async function getAllUsers() {
 
     return User.find()
@@ -24,7 +34,18 @@ export async function getAllUsers() {
 // ===============================================
 // FIND USER BY ID
 // ===============================================
-
+/**
+ * Recherche un utilisateur par identifiant.
+ *
+ * - Exclut le champ password
+ *
+ * @async
+ * @function findUserById
+ *
+ * @param {string} id
+ *
+ * @returns {Promise<Object|null>}
+ */
 export async function findUserById(id) {
 
     return User.findById(id).select("-password");
@@ -34,7 +55,17 @@ export async function findUserById(id) {
 // FIND USER BY ID (WITH PASSWORD)
 // - For updatePassword
 // ===============================================
-
+/**
+ * Recherche un utilisateur par identifiant
+ * en incluant le mot de passe.
+ *
+ * @async
+ * @function findUserByIdWithPassword
+ *
+ * @param {string} id
+ *
+ * @returns {Promise<Object|null>}
+ */
 export async function findUserByIdWithPassword(id) {
 
     return User.findById(id);
@@ -43,7 +74,18 @@ export async function findUserByIdWithPassword(id) {
 // ===============================================
 // FIND USER BY EMAIL
 // ===============================================
-
+/**
+ * Recherche un utilisateur par email.
+ *
+ * - Exclut le champ password
+ *
+ * @async
+ * @function findUserByEmail
+ *
+ * @param {string} email
+ *
+ * @returns {Promise<Object|null>}
+ */
 export async function findUserByEmail(email) {
 
     return User.findOne({ email }).select("-password");
@@ -53,7 +95,17 @@ export async function findUserByEmail(email) {
 // FIND USER BY EMAIL (WITH PASSWORD)
 // - For login
 // ===============================================
-
+/**
+ * Recherche un utilisateur par email
+ * en incluant le mot de passe.
+ *
+ * @async
+ * @function findUserByEmailWithPassword
+ *
+ * @param {string} email
+ *
+ * @returns {Promise<Object|null>}
+ */
 export async function findUserByEmailWithPassword(email) {
 
     return User.findOne({ email });
@@ -62,7 +114,16 @@ export async function findUserByEmailWithPassword(email) {
 // ===============================================
 // CREATE USER
 // ===============================================
-
+/**
+ * Crée un nouvel utilisateur.
+ *
+ * @async
+ * @function createUser
+ *
+ * @param {Object} data
+ *
+ * @returns {Promise<Object>}
+ */
 export async function createUser(data) {
 
     return User.create(data);
@@ -71,7 +132,20 @@ export async function createUser(data) {
 // ===============================================
 // UPDATE USER
 // ===============================================
-
+/**
+ * Met à jour un utilisateur par identifiant.
+ *
+ * - Retourne la version mise à jour
+ * - Exclut le champ password
+ *
+ * @async
+ * @function updateUserById
+ *
+ * @param {string} id
+ * @param {Object} data
+ *
+ * @returns {Promise<Object|null>}
+ */
 export async function updateUserById(id, data) {
 
     return User.findByIdAndUpdate(
@@ -84,7 +158,16 @@ export async function updateUserById(id, data) {
 // ===============================================
 // DELETE USER
 // ===============================================
-
+/**
+ * Supprime un utilisateur par identifiant.
+ *
+ * @async
+ * @function deleteUserById
+ *
+ * @param {string} id
+ *
+ * @returns {Promise<Object|null>}
+ */
 export async function deleteUserById(id) {
 
     return User.findByIdAndDelete(id).select("-password");

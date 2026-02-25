@@ -13,7 +13,14 @@ import Reservation from "../models/Reservation.js";
 // ===============================================
 // GET ALL CATWAYS
 // ===============================================
-
+/**
+ * Récupère tous les catways.
+ *
+ * @async
+ * @function getAllCatways
+ *
+ * @returns {Promise<Object[]>}
+ */
 export async function getAllCatways() {
 
     return Catway.find().sort({ catwayNumber: 1 });
@@ -22,7 +29,16 @@ export async function getAllCatways() {
 // ===============================================
 // FIND CATWAY BY NUMBER
 // ===============================================
-
+/**
+ * Recherche un catway par numéro.
+ *
+ * @async
+ * @function findCatwayByNumber
+ *
+ * @param {number|string} catwayNumber
+ *
+ * @returns {Promise<Object|null>}
+ */
 export async function findCatwayByNumber(catwayNumber) {
 
     return Catway.findOne({ catwayNumber }).select("-__v");
@@ -31,7 +47,16 @@ export async function findCatwayByNumber(catwayNumber) {
 // ===============================================
 // CREATE CATWAY
 // ===============================================
-
+/**
+ * Crée un nouveau catway.
+ *
+ * @async
+ * @function createCatway
+ *
+ * @param {Object} data
+ *
+ * @returns {Promise<Object>}
+ */
 export async function createCatway(data) {
 
     return Catway.create(data);
@@ -40,7 +65,17 @@ export async function createCatway(data) {
 // ===============================================
 // UPDATE CATWAY
 // ===============================================
-
+/**
+ * Met à jour un catway par numéro.
+ *
+ * @async
+ * @function updateCatwayByNumber
+ *
+ * @param {number|string} catwayNumber
+ * @param {Object} data
+ *
+ * @returns {Promise<Object|null>}
+ */
 export async function updateCatwayByNumber(catwayNumber, data) {
 
     return Catway.findOneAndUpdate(
@@ -53,7 +88,16 @@ export async function updateCatwayByNumber(catwayNumber, data) {
 // ===============================================
 // DELETE CATWAY
 // ===============================================
-
+/**
+ * Supprime un catway par numéro.
+ *
+ * @async
+ * @function deleteCatwayByNumber
+ *
+ * @param {number|string} catwayNumber
+ *
+ * @returns {Promise<Object|null>}
+ */
 export async function deleteCatwayByNumber(catwayNumber) {
 
     return Catway.findOneAndDelete({ catwayNumber });
@@ -62,7 +106,16 @@ export async function deleteCatwayByNumber(catwayNumber) {
 // ===============================================
 // CHECK CATWAY HAS RESERVATIONS
 // ===============================================
-
+/**
+ * Vérifie si un catway possède au moins une réservation.
+ *
+ * @async
+ * @function catwayHasReservations
+ *
+ * @param {number|string} catwayNumber
+ *
+ * @returns {Promise<Object|null>}
+ */
 export async function catwayHasReservations(catwayNumber) {
     return Reservation.findOne({ catwayNumber });
 }
@@ -70,7 +123,16 @@ export async function catwayHasReservations(catwayNumber) {
 // ===============================================
 // DELETE ALL RESERVATION BY CATWAY
 // ===============================================
-
+/**
+ * Supprime toutes les réservations d'un catway.
+ *
+ * @async
+ * @function deleteAllReservationsByCatway
+ *
+ * @param {number|string} catwayNumber
+ *
+ * @returns {Promise<Object>}
+ */
 export async function deleteAllReservationsByCatway(catwayNumber) {
 
     return Reservation.deleteMany({ catwayNumber });
