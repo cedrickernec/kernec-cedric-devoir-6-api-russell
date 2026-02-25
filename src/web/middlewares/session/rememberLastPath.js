@@ -8,6 +8,29 @@
  * ===================================================================
  */
 
+/**
+ * Middleware de mémorisation du dernier chemin visité.
+ *
+ * - Stocke la dernière page HTML visitée
+ * - Ignore routes API, assets statiques et login
+ * - Utilisé pour améliorer les redirections UX
+ *
+ * @function rememberLastPath
+ *
+ * @param {Object} req - Requête Express
+ * @param {string} req.path
+ * @param {string} req.method
+ * @param {Object} req.headers
+ * @param {Object} req.session
+ * @param {Object} [req.session.user]
+ * @param {string} req.originalUrl
+ *
+ * @param {Object} res - Réponse Express
+ *
+ * @param {Function} next - Passe au middleware suivant
+ *
+ * @returns {void}
+ */
 export const rememberLastPath = (req, res, next) => {
 
     // ==================================================
