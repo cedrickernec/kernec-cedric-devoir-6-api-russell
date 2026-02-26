@@ -1,7 +1,17 @@
 /**
- * ===================================================================
  * HOME ROUTES (WEB)
- * ===================================================================
+ * =========================================================================================
+ * @module homeRoutes
+ *
+ * Routeur des pages publiques principales.
+ *
+ * - Page d’accueil
+ * - Page de connexion
+ * - Accessible sans authentification (publicPage)
+ *
+ * Routes :
+ * GET /
+ * GET /login
  */
 
 import express from "express";

@@ -1,14 +1,6 @@
 /**
- * ===================================================================
  * LAST NAVIGATION TRACKER
- * ===================================================================
- * - Mémorise la dernière page visitée par l'utilisateur
- * - Ignore API, assets et pages publiques
- * - Utilisé pour améliorer les redirections UX
- * ===================================================================
- */
-
-/**
+ * =========================================================================================
  * Middleware de mémorisation du dernier chemin visité.
  *
  * - Stocke la dernière page HTML visitée
@@ -31,6 +23,7 @@
  *
  * @returns {void}
  */
+
 export const rememberLastPath = (req, res, next) => {
 
     // ==================================================

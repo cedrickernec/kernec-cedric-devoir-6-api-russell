@@ -1,17 +1,14 @@
 /**
- * ===================================================================
  * WEB ERROR HANDLERS
- * ===================================================================
+ * =========================================================================================
  * - Gestion des erreurs 404
  * - Gestion centralisée des erreurs
  * - Adaptation automatique de l'UI selon le contexte
- * ===================================================================
  */
 
-// ==================================================
-// 404 HANDLER
-// ==================================================
 /**
+ * 404 HANDLER
+ * =========================================================================================
  * Middleware 404.
  *
  * - Intercepte les routes non trouvées
@@ -31,10 +28,9 @@ export const webNotFoundHandler = (req, res) => {
     });
 };
 
-// ==================================================
-// GLOBAL ERROR HANDLER
-// ==================================================
 /**
+ * GLOBAL ERROR HANDLER
+ * =========================================================================================
  * Middleware global de gestion des erreurs.
  *
  * - Intercepte les erreurs applicatives
@@ -58,6 +54,7 @@ export const webNotFoundHandler = (req, res) => {
  *
  * @returns {void}
  */
+
 export const webErrorHandler = (err, req, res, _next) => {
     const status = err.status || 500;
 

@@ -1,7 +1,21 @@
 /**
- * ===================================================================
  * USERS VIEW ROUTES (WEB)
- * ===================================================================
+ * =========================================================================================
+ * @module viewRoutes
+ *
+ * Routeur des vues Utilisateurs (couche Web).
+ *
+ * - Protège les routes via authGuard
+ * - Valide les paramètres dynamiques (ObjectId)
+ * - Rend les pages EJS et panneaux partiels
+ *
+ * Routes :
+ * GET    /
+ * GET    /create
+ * GET    /:id
+ * GET    /:id/edit
+ * GET    /:id/panel
+ * DELETE /:id
  */
 
 import express from "express";

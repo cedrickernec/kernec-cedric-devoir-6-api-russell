@@ -1,14 +1,21 @@
 /**
- * ===================================================================
  * DATE FORMATTER - ISO
- * ===================================================================
- * - Convertit une date vers le format YYYY-MM-DD
- * ===================================================================
+ * =========================================================================================
+ * @module formatDateISO
+ *
+ * Convertit une date (Date ou valeur convertible) vers le format ISO simplifié YYYY-MM-DD.
+ *
+ * Comportements :
+ * - Retourne null si la date est absente ou invalide
+ *
+ * Effets de bord :
+ * - Aucun (fonction pure)
  */
 
 /**
- * Formate une date au format ISO simplifié (YYYY-MM-DD).
- * Retourne null si la date est absente ou invalide.
+ * FORMAT DATE ISO
+ * =========================================================================================
+ * Formate une date au format YYYY-MM-DD.
  *
  * @function formatDateISO
  *
@@ -16,6 +23,7 @@
  *
  * @returns {string|null}
  */
+
 export function formatDateISO(date) {
     
     if (!date) return null;

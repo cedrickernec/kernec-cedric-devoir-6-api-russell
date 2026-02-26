@@ -1,12 +1,31 @@
 /**
- * ===================================================================
  * AUTH CONTROLLERS
- * ===================================================================
- * - Reçoit les requêtes HTTP
- * - Filtre et valide les entrées utilisateur
- * - Appelle les services métier d'authentification
- * - Formate les réponses API
- * ===================================================================
+ * =========================================================================================
+ * @module authController
+ *
+ * Contrôleurs HTTP liés à l'authentification API.
+ *
+ * Responsabilités :
+ * - Recevoir et valider les requêtes d'authentification
+ * - Filtrer strictement les données entrantes
+ * - Orchestrer les services métier d'auth
+ * - Formater les réponses JSON standardisées
+ *
+ * Déclenché par :
+ * - Routes /api/auth/*
+ *
+ * Dépendances :
+ * - authService (logique métier)
+ * - ApiError (gestion d'erreurs standardisée)
+ * - jsonwebtoken (gestion JWT)
+ *
+ * Sécurité :
+ * - Validation stricte des champs autorisés
+ * - Vérification des tokens via secrets d'environnement
+ *
+ * Effets de bord :
+ * - Génération de JWT (access / refresh)
+ * - Retour de données utilisateur
  */
 
 import jwt from "jsonwebtoken";
@@ -14,27 +33,29 @@ import { ApiError } from "../utils/errors/apiError.js";
 import { loginService } from "../services/authService.js";
 import { pickAllowedFields } from "../utils/errors/pickAllowedFields.js";
 
-// ===============================================
-// LOGIN
-// ===============================================
 /**
+ * LOGIN USER
+ * =========================================================================================
+ * Authentifie un utilisateur et génère des tokens JWT.
+ *
  * @async
- * Authentifie un utilisateur.
+ * @function login
  *
  * @route POST /api/auth/login
- * @group Authentification
  *
  * @param {Object} req
  * @param {Object} req.body
- * @param {string} req.body.email - Email utilisateur
- * @param {string} req.body.password - Mot de passe utilisateur
+ * @param {string} req.body.email
+ * @param {string} req.body.password
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 200 - Tokens d'accès et informations utilisateur
- * @throws {ApiError} 400 - Email ou mot de passe manquant
+ * @returns {Promise<void>}
+ *
+ * @throws {ApiError} 400 - Données manquantes
  * @throws {ApiError} 401 - Identifiants invalides
  */
+
 export const login = async (req, res, next) => {
     try {
       // 1) Filtrage strict
@@ -75,25 +96,27 @@ export const login = async (req, res, next) => {
     }
 };
 
-// ===============================================
-// REFRESH TOKEN
-// ===============================================
 /**
+ * REFRESH ACCESS TOKEN
+ * =========================================================================================
+ * Génère un nouveau access token à partir d'un refresh token valide.
+ *
  * @async
- * Génère un nouveau token d'accès à partir d'un refresh token valide.
+ * @function refreshToken
  *
  * @route POST /api/auth/refresh
- * @group Authentification
  *
  * @param {Object} req
  * @param {Object} req.body
- * @param {string} req.body.refreshToken - Refresh token valide
+ * @param {string} req.body.refreshToken
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 200 - Nouveau access token
+ * @returns {Promise<void>}
+ *
  * @throws {ApiError} 401 - Token invalide ou expiré
  */
+
 export const refreshToken = async (req, res, next) => {
     try {
         const { refreshToken } = req.body;
@@ -125,22 +148,23 @@ export const refreshToken = async (req, res, next) => {
     }
 };
 
-// ===============================================
-// LOGOUT
-// ===============================================
 /**
+ * LOGOUT USER
+ * =========================================================================================
+ * Termine la session côté client (stateless API).
+ *
  * @async
- * Déconnecte l'utilisateur.
+ * @function logout
  *
  * @route POST /api/auth/logout
- * @group Authentification
  *
  * @param {Object} req
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 200 - Confirmation de déconnexion
+ * @returns {Promise<void>}
  */
+
 export const logout = async (req, res, next) => {
     try {
         return res.status(200).json({

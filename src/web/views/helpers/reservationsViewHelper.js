@@ -1,11 +1,23 @@
 /**
- * VIEW HELPER - CREATE PAGE RENDER
+ * VIEW HELPER - RESERVATIONS
  * =========================================================================================
- * Rend la page de création d'une réservation.
+ * @module reservationsViewHelper
  *
- * - Gère le système multi-step
- * - Injecte les résultats de recherche de disponibilité
- * - Centralise les erreurs et données formulaire
+ * Helpers de rendu pour les pages Réservations.
+ *
+ * Responsabilités :
+ * - Gérer le multi-step de création
+ * - Centraliser l’injection des données vues
+ * - Uniformiser les paramètres UI
+ *
+ * Effets de bord :
+ * - Appel direct à res.render()
+ */
+
+/**
+ * RENDER CREATE RESERVATION PAGE
+ * =========================================================================================
+ * Rend la page de création d’une réservation.
  *
  * @function renderCreateReservationPage
  *
@@ -46,13 +58,9 @@ export const renderCreateReservationPage = (res, {
 };
 
 /**
- * VIEW HELPER - EDIT PAGE RENDER
+ * RENDER EDIT RESERVATION PAGE
  * =========================================================================================
- * Rend la page d'édition d'une réservation.
- *
- * - Injecte la réservation principale
- * - Injecte les autres réservations associées
- * - Centralise erreurs et données formulaire
+ * Rend la page d’édition d’une réservation.
  *
  * @function renderEditReservationPage
  *

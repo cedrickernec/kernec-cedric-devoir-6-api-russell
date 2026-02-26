@@ -1,22 +1,33 @@
 /**
- * ============================================================
  * RESERVATION RULES
- * ============================================================
- * - Règles définies de ce qui est autorisé ou non
- * ============================================================
+ * =========================================================================================
+ * @module reservationRules
+ *
+ * Centralise les règles métier “pures” liées aux réservations.
+ *
+ * Fonctionnalités :
+ * - Déterminer si une réservation a commencé / est terminée
+ * - Déterminer si une réservation peut être modifiée
+ * - Déterminer si une réservation peut être supprimée sans confirmation
+ *
+ * Format attendu :
+ * - Les fonctions prennent une réservation (objet) + une date de référence optionnelle (tests)
  */
 
 /**
- * Indique si une réservation a déjà commencé.
+ * HAS RESERVATION STARTED
+ * =========================================================================================
+ * Indique si une réservation a commencé.
  *
  * @function hasReservationStarted
  *
  * @param {Object} reservation
  * @param {Date} reservation.startDate
- * @param {Date} [now=new Date()] - Date de référence (utile pour tests)
+ * @param {Date} [now=new Date()]
  *
- * @returns {boolean} - true si la réservation est commencée
+ * @returns {boolean}
  */
+
 export function hasReservationStarted(reservation, now = new Date()) {
     return Boolean(
         reservation.startDate &&
@@ -25,16 +36,19 @@ export function hasReservationStarted(reservation, now = new Date()) {
 }
 
 /**
+ * IS RESERVATION FINISHED
+ * =========================================================================================
  * Indique si une réservation est terminée.
  *
  * @function isReservationFinished
  *
  * @param {Object} reservation
  * @param {Date} reservation.endDate
- * @param {Date} [now=new Date()] - Date de référence (utile pour tests)
+ * @param {Date} [now=new Date()]
  *
- * @returns {boolean} - true si la réservation est terminée
+ * @returns {boolean}
  */
+
 export function isReservationFinished(reservation, now = new Date()) {
     return Boolean(
         reservation.endDate &&
@@ -43,33 +57,35 @@ export function isReservationFinished(reservation, now = new Date()) {
 }
 
 /**
+ * CAN UPDATE RESERVATION
+ * =========================================================================================
  * Détermine si une réservation peut être modifiée.
- *
- * Une réservation terminée ne peut plus être modifiée.
  *
  * @function canUpdateReservation
  *
  * @param {Object} reservation
  * @param {Date} [now=new Date()]
  *
- * @returns {boolean} - true si la modification est autorisée
+ * @returns {boolean}
  */
+
 export function canUpdateReservation(reservation, now = new Date()) {
     return !isReservationFinished(reservation, now);
 }
 
 /**
+ * CAN DELETE RESERVATION
+ * =========================================================================================
  * Détermine si une réservation peut être supprimée sans confirmation.
- *
- * Une réservation déjà commencée nécessite une confirmation par mot de passe.
  *
  * @function canDeleteReservation
  *
  * @param {Object} reservation
  * @param {Date} [now=new Date()]
  *
- * @returns {boolean} - true si la suppression est autorisée sans confirmation
+ * @returns {boolean}
  */
+
 export function canDeleteReservation(reservation, now = new Date()) {
     return !hasReservationStarted(reservation, now);
 }

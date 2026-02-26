@@ -1,11 +1,9 @@
 /**
- * ===================================================================
  * FORM CONTROLLER - USERS
- * ===================================================================
+ * =========================================================================================
  * - Gestion soumission formulaires
  * - Mapping erreurs API → vue EJS
  * - Redirections + flash messages
- * ===================================================================
  */
 
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
@@ -29,10 +27,9 @@ import { handleApiError } from "../../utils/api/apiErrorHandler.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 
-// ==================================================
-// CREATE USER
-// ==================================================
 /**
+ * CREATE USER
+ * =========================================================================================
  * Traite la création d'un utilisateur.
  *
  * - Construit le payload depuis le formulaire
@@ -51,6 +48,7 @@ import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
  *
  * @returns {Promise<void>}
  */
+
 export const postCreateUser = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -111,10 +109,9 @@ export const postCreateUser = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// EDIT USER 
-// ==================================================
 /**
+ * EDIT USER 
+ * =========================================================================================
  * Traite la modification d'un utilisateur.
  * 
  * - Récupère l'identifiant via req.params
@@ -134,6 +131,7 @@ export const postCreateUser = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const postEditUser = async (req, res, next) => {
   try {
     const { username, email } = req.body;
@@ -193,10 +191,9 @@ export const postEditUser = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// EDIT USER PASSWORD
-// ==================================================
 /**
+ * EDIT USER PASSWORD
+ * =========================================================================================
  * Traite la modification du mot de passe utilisateur.
  * 
  * - Récupère l'identifiant via req.params
@@ -216,6 +213,7 @@ export const postEditUser = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const postEditUserPassword = async (req, res, next) => {
   try {
     const { password } = req.body;
@@ -286,10 +284,9 @@ export const postEditUserPassword = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// DELETE USER
-// ==================================================
 /**
+ * DELETE USER
+ * =========================================================================================
  * Supprime un utilisateur.
  *
  * - Récupère l'identifiant via req.params
@@ -309,6 +306,7 @@ export const postEditUserPassword = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const deleteUserAction = async (req, res, next) => {
     try {
         const { id } = req.params;

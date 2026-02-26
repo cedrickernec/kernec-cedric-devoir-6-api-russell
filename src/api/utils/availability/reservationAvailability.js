@@ -1,17 +1,37 @@
 /**
- * ===================================================================
  * CATWAY COMPATIBILITY CALCULATION
- * ===================================================================
- * Règles :
- * - full    : aucun chevauchement, période entièrement disponible
- * - partial : une sous-période est disponible
+ * =========================================================================================
+ * @module reservationAvailability
+ *
+ * Calcule la compatibilité d’un catway avec une période demandée.
+ *
+ * Statuts :
+ * - full    : période entièrement disponible
+ * - partial : au moins un créneau disponible dans la période
  * - none    : aucun créneau compatible
- * 
- * Retour :
- * - none    → {status, slots}
- * - partial → {status, from, to}
- * - none    → {status, from, to, slots}
- * ===================================================================
+ *
+ * Dépendances :
+ * - Aucune (calcul local à partir des dates et des réservations)
+ *
+ * Format attendu :
+ * - reservations : tableau contenant startDate/endDate et catwayNumber
+ * - startDate/endDate : Date
+ *
+ * Effets de bord :
+ * - Aucun (fonction pure)
+ */
+
+
+/**
+ * DAY START
+ * =========================================================================================
+ * Normalise une date au début du jour (UTC) pour des comparaisons cohérentes.
+ *
+ * @function dayStart
+ *
+ * @param {Date|string|number} date
+ *
+ * @returns {Date}
  */
 
 function dayStart(date) {
@@ -24,12 +44,9 @@ function dayStart(date) {
 }
 
 /**
- * Calcule la compatibilité d'un catway avec une période demandée.
- *
- * Statuts possibles :
- * - "full"    : période entièrement disponible
- * - "partial" : sous-périodes disponibles
- * - "none"    : aucune disponibilité
+ * GET CATWAY COMPATIBILITY
+ * =========================================================================================
+ * Calcule la compatibilité d’un catway avec une période demandée.
  *
  * @function getCatwayCompatibility
  *
@@ -46,6 +63,7 @@ function dayStart(date) {
  *   slots?: Array<{from: Date, to: Date}>
  * }}
  */
+
 export function getCatwayCompatibility({
   catwayNumber,
   reservations,

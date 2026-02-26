@@ -1,7 +1,15 @@
 /**
- * ===================================================================
  * DASHBOARD ROUTE (WEB)
- * ===================================================================
+ * =========================================================================================
+ * @module dashboardRoutes
+ *
+ * Routeur du dashboard utilisateur (couche Web).
+ *
+ * - Protège la route via authGuard
+ * - Rend la page dashboard
+ *
+ * Route :
+ * GET /
  */
 
 import express from "express";

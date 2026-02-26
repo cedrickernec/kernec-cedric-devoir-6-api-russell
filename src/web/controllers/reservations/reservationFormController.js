@@ -1,11 +1,9 @@
 /**
- * ===================================================================
  * FORM CONTROLLER - RESERVATIONS
- * ===================================================================
+ * =========================================================================================
  * - Gestion soumission formulaires
  * - Mapping erreurs API → vue EJS
  * - Redirections + flash messages
- * ===================================================================
  */
 
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
@@ -34,10 +32,9 @@ import { loadOtherReservations } from "../../utils/mappers/loadOtherReservations
 import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservationMessage.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 
-// ==================================================
-// CREATE RESERVATION
-// ==================================================
 /**
+ * CREATE RESERVATION
+ * =========================================================================================
  * Traite la création d'une réservation (wizard multi-étapes).
  *
  * - Step "client" : validation + sauvegarde du brouillon en session
@@ -56,6 +53,7 @@ import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.j
  *
  * @returns {Promise<void>}
  */
+
 export const postCreateReservation = async (req, res, next) => {
     try {
         const {
@@ -270,10 +268,9 @@ export const postCreateReservation = async (req, res, next) => {
     }
 };
 
-// ==================================================
-// CANCEL CREATE RESERVATION
-// ==================================================
 /**
+ * CANCEL CREATE RESERVATION
+ * =========================================================================================
  * Annule la création de réservation.
  *
  * - Nettoie le brouillon et l'état du wizard en session
@@ -304,10 +301,9 @@ export const cancelCreateReservation = (req, res) => {
     res.redirect("/reservations");
 };
 
-// ==================================================
-// EDIT RESERVATION
-// ==================================================
 /**
+ * EDIT RESERVATION
+ * =========================================================================================
  * Traite la modification d'une réservation.
  *
  * - Récupère et valide les identifiants via req.params
@@ -328,6 +324,7 @@ export const cancelCreateReservation = (req, res) => {
  *
  * @returns {Promise<void>}
  */
+
 export const postEditReservation = async (req, res, next) => {
     try {
         const { id, catwayNumber } = req.params;
@@ -429,10 +426,9 @@ export const postEditReservation = async (req, res, next) => {
     }
 };
 
-// ==================================================
-// DELETE RESERVATION
-// ==================================================
 /**
+ * DELETE RESERVATION
+ * =========================================================================================
  * Supprime une réservation.
  *
  * - Récupère et valide les identifiants via req.params
@@ -452,6 +448,7 @@ export const postEditReservation = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const deleteReservationAction = async (req, res, next) => {
     try {
         const { id, catwayNumber } = req.params;

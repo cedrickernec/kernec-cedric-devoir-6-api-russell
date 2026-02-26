@@ -1,25 +1,33 @@
 /**
- * ===================================================================
  * RESERVATION STATISTICS
- * ===================================================================
- * - Calcul les statistiques d'état des réservations
- * ===================================================================
- */
-
-import { getReservationStatus } from "./reservationStatus.js";
-
-/**
- * Calcule les statistiques d'état d'un ensemble de réservations.
+ * =========================================================================================
+ * @module reservationStats
  *
- * Compte :
+ * Calcule des statistiques d’état sur une liste de réservations.
+ *
+ * Compteurs :
  * - total
  * - upComing
  * - inProgress
  * - finished
  *
+ * Dépendances :
+ * - getReservationStatus
+ *
+ * Effets de bord :
+ * - Aucun (fonction pure)
+ */
+
+import { getReservationStatus } from "./reservationStatus.js";
+
+/**
+ * COMPUTE RESERVATION STATS
+ * =========================================================================================
+ * Calcule les statistiques d’état d’un ensemble de réservations.
+ *
  * @function computeReservationStats
  *
- * @param {Array<Object>} reservations - Liste des réservations
+ * @param {Array<Object>} reservations Liste de réservations
  *
  * @returns {{
  *   total: number,
@@ -28,6 +36,7 @@ import { getReservationStatus } from "./reservationStatus.js";
  *   finished: number
  * }}
  */
+
 export function computeReservationStats(reservations) {
 
     const stats = {

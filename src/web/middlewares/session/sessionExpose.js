@@ -1,16 +1,8 @@
-/**
- * ===================================================================
- * SESSION DATA EXPOSER
- * ===================================================================
- * - Expose les données de session aux vues
- * - Gère l'avertissement d'expiration
- * - Centralise les flags liés à la session
- * ===================================================================
- */
-
 import { sessionMaxAge } from "../../configs/sessionConfig.js";
 
 /**
+ * SESSION DATA EXPOSER
+ * =========================================================================================
  * Middleware d'exposition des données de session aux vues.
  *
  * - Injecte sessionMaxAge dans res.locals
@@ -30,6 +22,7 @@ import { sessionMaxAge } from "../../configs/sessionConfig.js";
  *
  * @returns {void}
  */
+
 export const exposeSessionData = (req, res, next) => {
     res.locals.sessionMaxAge = sessionMaxAge;
     res.locals.forceSessionWarning = process.env.FORCE_SESSION_WARNING === "true";

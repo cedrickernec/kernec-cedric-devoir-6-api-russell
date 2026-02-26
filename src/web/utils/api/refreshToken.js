@@ -1,35 +1,39 @@
 /**
- * ===================================================================
- * AUTH - REFRESH TOKEN HANDLER
- * ===================================================================
- * - Tente de renouveler automatiquement le JWT utilisateur
- * - Utilise le refreshToken stocké en session
- * - Met à jour le accessToken en cas de succès
- * ===================================================================
- * Utilisé pour maintenir une session active côté WEB
- * sans forcer une reconnexion utilisateur.
- * ===================================================================
+ * WEB REFRESH TOKEN HANDLER
+ * =========================================================================================
+ * @module refreshToken
+ *
+ * Gestion automatique du renouvellement JWT côté Web.
+ *
+ * Responsabilités :
+ * - Lire le refreshToken stocké en session
+ * - Appeler l’API /api/auth/refresh
+ * - Mettre à jour l’accessToken en session
+ *
+ * Dépendances :
+ * - apiFetch
+ *
+ * Effets de bord :
+ * - Met à jour req.session.user.token
  */
 
 import { apiFetch } from "../../gateways/api/apiFetch.js";
 
 /**
- * Tente de renouveler le JWT utilisateur via le refreshToken en session.
+ * TRY REFRESH TOKEN
+ * =========================================================================================
+ * Tente de renouveler le JWT utilisateur via le refreshToken.
  *
- * - Lit le refreshToken depuis req.session.user.refreshToken
- * - Appelle l'API /api/auth/refresh
- * - Met à jour req.session.user.token avec le nouveau accessToken
- *
- * @async
  * @function tryRefreshToken
+ * @async
  *
- * @param {Object} req - Requête Express
- * @param {Object} req.session
- * @param {Object} [req.session.user]
- * @param {string} [req.session.user.refreshToken]
+ * @param {Object} req
  *
- * @returns {Promise<boolean>} - true si le token a été rafraîchi, sinon false
+ * @returns {Promise<boolean>}
+ * - true  → token renouvelé
+ * - false → échec du refresh
  */
+
 export async function tryRefreshToken(req) {
 
     // Récupère le refreshToken à partir de la session

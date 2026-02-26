@@ -1,7 +1,27 @@
 /**
- * ===================================================================
  * CATWAYS ROUTES (API)
- * ===================================================================
+ * =========================================================================================
+ * @module catwayRoutes
+ *
+ * Déclare les routes API liées aux catways et monte la sous-ressource réservations.
+ *
+ * Fonctionnalités :
+ * - CRUD catways
+ * - Endpoints utilitaires (next-number, check-number)
+ * - Endpoints bulk (bulk-check, bulk delete)
+ * - Sous-ressource : /:id/reservations (routes imbriquées)
+ *
+ * Dépendances :
+ * - catwayController
+ * - authMiddleware
+ * - reservationNestedRoutes
+ * - Express Router
+ *
+ * Sécurité :
+ * - Routes protégées via authMiddleware
+ *
+ * Effets de bord :
+ * - Enregistrement de routes et middleware dans l’application
  */
 
 import reservationRoutes from "./reservationNestedRoutes.js";

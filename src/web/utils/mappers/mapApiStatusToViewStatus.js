@@ -1,20 +1,24 @@
 /**
- * ===================================================================
- * STATUS MAPPER - API → VIEW
- * ===================================================================
- * - Combine le statut métier API avec le statut visuel UI
- * - Conserve la source API (clé/label)
- * - Ajoute les métadonnées d'affichage (classe, aria, sémantic)
- * ===================================================================
+ * STATUS MAPPER - API TO VIEW
+ * =========================================================================================
+ * @module mapApiStatusToViewStatus
+ *
+ * Combine le statut métier API avec le statut visuel UI.
+ *
+ * Responsabilités :
+ * - Conserver key/label API
+ * - Injecter className / aria / semantic
+ *
+ * Dépendances :
+ * - computeReservationStatus
  */
 
 import { computeReservationStatus } from "../business/reservations/reservationStatus.js";
 
 /**
- * Combine le statut métier API avec le statut visuel UI.
- *
- * - Conserve key et label issus de l'API
- * - Ajoute className, aria et semantic calculés dynamiquement
+ * MAP API STATUS TO VIEW STATUS
+ * =========================================================================================
+ * Enrichit le statut API avec des métadonnées UI.
  *
  * @function mapApiStatusToViewStatus
  *
@@ -32,6 +36,7 @@ import { computeReservationStatus } from "../business/reservations/reservationSt
  * @returns {string} - returns.aria
  * @returns {string} - returns.semantic
  */
+
 export function mapApiStatusToViewStatus(apiStatus, startDate, endDate) {
 
     // Calcul du statut UI basé sur les dates

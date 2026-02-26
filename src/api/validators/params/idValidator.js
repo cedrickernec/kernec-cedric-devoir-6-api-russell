@@ -1,29 +1,36 @@
 /**
- * ===================================================================
  * ID VALIDATOR
- * ===================================================================
- * - Empêche les identifiants invalide d'atteindre les services :
- *    - Valide les identifiant transmis dans les routes
- * ===================================================================
+ * =========================================================================================
+ * @module idValidator
+ *
+ * Validation des identifiants transmis via les routes.
+ *
+ * Objectifs :
+ * - Empêcher les identifiants invalides d’atteindre la couche service
+ * - Normaliser les entrées (ex: numéro → Number)
+ *
+ * Stratégie :
+ * - Erreur immédiate via ApiError (400) en cas d’entrée invalide
  */
 
 import mongoose from "mongoose";
 import { ApiError } from "../../utils/errors/apiError.js";
 
-// ===============================================
-// VALIDATE CATWAY NUMBER
-// ===============================================
+
 /**
+ * VALIDATE CATWAY NUMBER
+ * =========================================================================================
  * Valide et normalise un numéro de catway.
  *
  * @function validateCatwayNumber
  *
- * @param {string|number} catwayNumber
+ * @param {string|number} catwayNumber Numéro brut (params/query)
  *
- * @returns {number}
+ * @returns {number} Numéro normalisé
  *
- * @throws {ApiError} 400 - Numéro invalide
+ * @throws {ApiError} 400 Numéro invalide
  */
+
 export function validateCatwayNumber(catwayNumber) {
 
   if (isNaN(catwayNumber)) {
@@ -33,21 +40,21 @@ export function validateCatwayNumber(catwayNumber) {
   return Number(catwayNumber);
 }
 
-// ===============================================
-// VALIDATE MONGODB OBJECT ID
-// ===============================================
 /**
- * Valide un identifiant MongoDB ObjectId.
+ * VALIDATE MONGODB OBJECT ID
+ * =========================================================================================
+ * Valide un identifiant MongoDB de type ObjectId.
  *
  * @function validateObjectId
  *
- * @param {string} id
- * @param {string} [label="Identifiant"] - Libellé personnalisé pour le message d'erreur
+ * @param {string} id Identifiant brut
+ * @param {string} [label="Identifiant"] Libellé personnalisé utilisé dans le message d’erreur
  *
- * @returns {string}
+ * @returns {string} Identifiant validé (inchangé)
  *
- * @throws {ApiError} 400 - Identifiant invalide
+ * @throws {ApiError} 400 Identifiant invalide
  */
+
 export function validateObjectId(id, label = "Identifiant") {
   
   if (!mongoose.Types.ObjectId.isValid(id)) {

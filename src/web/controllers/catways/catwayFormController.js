@@ -1,11 +1,9 @@
 /**
- * ===================================================================
  * FORM CONTROLLER - CATWAYS
- * ===================================================================
+ * =========================================================================================
  * - Gestion soumission formulaires
  * - Mapping erreurs API → vue EJS
  * - Redirections + flash messages
- * ===================================================================
  */
 
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
@@ -26,10 +24,9 @@ import { handleApiError } from "../../utils/api/apiErrorHandler.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 
-// ==================================================
-// CREATE CATWAY
-// ==================================================
 /**
+ * CREATE CATWAY
+ * =========================================================================================
  * Traite la création d'un catway.
  *
  * - Construit le payload depuis le formulaire
@@ -48,6 +45,7 @@ import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.j
  *
  * @returns {Promise<void>}
  */
+
 export const postCreateCatway = async (req, res, next) => {
     try {
         const { catwayNumber, catwayType, catwayState } = req.body;
@@ -101,10 +99,9 @@ export const postCreateCatway = async (req, res, next) => {
     }
 };
 
-// ==================================================
-// EDIT CATWAY
-// ==================================================
 /**
+ * EDIT CATWAY
+ * =========================================================================================
  * Traite la modification d'un catway.
  *
  * - Valide et parse catwayNumber via req.params
@@ -124,6 +121,7 @@ export const postCreateCatway = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const postEditCatway = async (req, res, next) => {
     try {
         const catwayNumber = Number(req.params.catwayNumber);
@@ -185,10 +183,9 @@ export const postEditCatway = async (req, res, next) => {
     }
 };
 
-// ==================================================
-// DELETE CATWAY
-// ==================================================
 /**
+ * DELETE CATWAY
+ * =========================================================================================
  * Supprime un catway.
  *
  * - Valide et parse catwayNumber via req.params
@@ -208,6 +205,7 @@ export const postEditCatway = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const deleteCatwayAction = async (req, res, next) => {
     try {
         const catwayNumber = Number(req.params.catwayNumber);

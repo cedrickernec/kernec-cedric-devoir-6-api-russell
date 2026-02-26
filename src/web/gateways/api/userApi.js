@@ -1,19 +1,24 @@
 /**
- * ===================================================================
  * USER API GATEWAY
- * ===================================================================
- * - Couche d'accès HTTP aux endpoints User
- * - Délègue les appels à apiFetch
- * - Ne contient aucune logique métier
- * ===================================================================
+ * =========================================================================================
+ * @module userApi
+ *
+ * Couche d’accès HTTP aux endpoints User.
+ *
+ * Responsabilités :
+ * - Encapsuler les endpoints utilisateur
+ * - Déléguer les appels à apiFetch
+ * - Ne contenir aucune logique métier
+ *
+ * Effets de bord :
+ * - Appels HTTP vers API interne
  */
 
 import { apiFetch } from "./apiFetch.js";
 
-// ==================================================
-// FETCH USERS
-// ==================================================
 /**
+ * FETCH USERS
+ * =========================================================================================
  * Récupère la liste des utilisateurs.
  *
  * @async
@@ -24,6 +29,7 @@ import { apiFetch } from "./apiFetch.js";
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function fetchUsers(req, res) {
 
     return apiFetch("/api/users", {
@@ -31,10 +37,9 @@ export async function fetchUsers(req, res) {
     }, req, res);
 }
 
-// ==================================================
-// FETCH USER BY ID
-// ==================================================
 /**
+ * FETCH USER BY ID
+ * =========================================================================================
  * Récupère un utilisateur par identifiant.
  *
  * @async
@@ -46,6 +51,7 @@ export async function fetchUsers(req, res) {
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function fetchUserById(id, req, res) {
 
     return apiFetch(`/api/users/${id}`, {
@@ -53,10 +59,9 @@ export async function fetchUserById(id, req, res) {
     }, req, res);
 }
 
-// ==================================================
-// CREATE USER
-// ==================================================
 /**
+ * CREATE USER
+ * =========================================================================================
  * Crée un utilisateur.
  *
  * @async
@@ -68,6 +73,7 @@ export async function fetchUserById(id, req, res) {
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function createUser(data, req, res) {
 
     return apiFetch(
@@ -78,10 +84,9 @@ export async function createUser(data, req, res) {
     );
 }
 
-// ==================================================
-// UPDATE USER
-// ==================================================
 /**
+ * UPDATE USER
+ * =========================================================================================
  * Met à jour un utilisateur.
  *
  * @async
@@ -94,6 +99,7 @@ export async function createUser(data, req, res) {
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function updateUser(id, data, req, res) {
 
     return apiFetch(
@@ -104,10 +110,9 @@ export async function updateUser(id, data, req, res) {
     );
 }
 
-// ==================================================
-// UPDATE USER (PASSWORD)
-// ==================================================
 /**
+ * UPDATE USER (PASSWORD)
+ * =========================================================================================
  * Met à jour le mot de passe d'un utilisateur.
  *
  * @async
@@ -120,6 +125,7 @@ export async function updateUser(id, data, req, res) {
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function updatePassword(id, data, req, res) {
 
     return apiFetch(
@@ -130,10 +136,9 @@ export async function updatePassword(id, data, req, res) {
     );
 }
 
-// ==================================================
-// DELETE USER
-// ==================================================
 /**
+ * DELETE USER
+ * =========================================================================================
  * Supprime un utilisateur.
  *
  * @async
@@ -145,6 +150,7 @@ export async function updatePassword(id, data, req, res) {
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function deleteUser(id, req, res) {
 
     return apiFetch(

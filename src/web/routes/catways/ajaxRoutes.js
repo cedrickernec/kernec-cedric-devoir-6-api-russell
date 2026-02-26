@@ -1,7 +1,18 @@
 /**
- * ===================================================================
  * CATWAYS AJAX ROUTES (WEB)
- * ===================================================================
+ * =========================================================================================
+ * @module ajaxRoutes
+ * 
+ * Routeur AJAX des catways (couche Web).
+ *
+ * - Protège les routes via authGuard
+ * - Délègue la logique aux contrôleurs AJAX
+ * - Expose uniquement des réponses JSON
+ *
+ * Routes :
+ * GET    /check-number
+ * POST   /bulk-check
+ * DELETE /bulk
  */
 
 import express from "express";

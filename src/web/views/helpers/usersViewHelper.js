@@ -1,12 +1,28 @@
+/**
+ * VIEW HELPER - USERS
+ * =========================================================================================
+ * @module usersViewHelper
+ *
+ * Helpers de rendu pour les pages Utilisateurs.
+ *
+ * Responsabilités :
+ * - Injecter les règles de mot de passe
+ * - Centraliser erreurs et données formulaire
+ * - Uniformiser les layouts
+ *
+ * Dépendances :
+ * - PASSWORD_RULES
+ *
+ * Effets de bord :
+ * - Appel direct à res.render()
+ */
+
 import { PASSWORD_RULES } from "../../utils/business/users/userValidator.js";
 
 /**
- * VIEW HELPER - CREATE PAGE RENDER
+ * RENDER CREATE USER PAGE
  * =========================================================================================
- * Rend la page de création d'un utilisateur.
- *
- * - Injecte les règles de mot de passe
- * - Centralise erreurs et données formulaire
+ * Rend la page de création d’un utilisateur.
  *
  * @function renderCreateUserPage
  *
@@ -36,13 +52,9 @@ export const renderCreateUserPage = (res, {
 };
 
 /**
- * VIEW HELPER - EDIT PAGE RENDER
+ * RENDER EDIT USER PAGE
  * =========================================================================================
- * Rend la page d'édition d'un utilisateur.
- *
- * - Injecte les données utilisateur
- * - Injecte les règles de mot de passe
- * - Centralise erreurs
+ * Rend la page d’édition d’un utilisateur.
  *
  * @function renderEditUserPage
  *

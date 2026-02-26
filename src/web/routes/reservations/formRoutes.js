@@ -1,9 +1,17 @@
 /**
- * ===================================================================
  * RESERVATIONS FORM ROUTES (WEB)
- * ===================================================================
- * - Routes globales non dépendantes de catways
- * ===================================================================
+ * =========================================================================================
+ * @module formRoutes
+ * 
+ * Routeur des formulaires Réservations (couche Web).
+ *
+ * - Routes globales non dépendantes d’un catway
+ * - Protège les routes via authGuard
+ * - Délègue la logique aux contrôleurs Form
+ *
+ * Routes :
+ * POST /create
+ * GET  /create/cancel
  */
 
 import express from "express";

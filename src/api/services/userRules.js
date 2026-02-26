@@ -1,21 +1,27 @@
 /**
- * ============================================================
  * USER RULES
- * ============================================================
- * - Règles définies de ce qui est autorisé ou non
- * ============================================================
+ * =========================================================================================
+ * @module userRules
+ *
+ * Centralise les règles métier “pures” liées aux utilisateurs.
+ *
+ * Fonctionnalités :
+ * - Interdire l’auto-suppression (règle de protection)
  */
 
 /**
+ * CAN DELETE USER
+ * =========================================================================================
  * Détermine si un utilisateur peut supprimer un autre utilisateur.
  *
  * @function canDeleteUser
  *
- * @param {string} currentUserId - ID de l'utilisateur connecté
- * @param {string} targetUserId - ID de l'utilisateur cible
+ * @param {string} currentUserId
+ * @param {string} targetUserId
  *
- * @returns {boolean} - true si la suppression est autorisée
+ * @returns {boolean}
  */
+
 export function canDeleteUser(currentUserId, targetUserId) {
     return currentUserId !== targetUserId;
 }

@@ -1,7 +1,17 @@
 /**
- * ===================================================================
  * RESERVATIONS AJAX ROUTES (WEB)
- * ===================================================================
+ * =========================================================================================
+ * @module ajaxRoutes
+ * 
+ * Routeur AJAX des réservations (couche Web).
+ *
+ * - Protège les routes via authGuard
+ * - Expose uniquement des réponses JSON
+ * - Gère les suppressions multiples
+ *
+ * Routes :
+ * POST   /bulk-check
+ * DELETE /bulk
  */
 
 import express from "express";

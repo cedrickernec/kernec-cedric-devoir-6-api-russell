@@ -1,11 +1,9 @@
 /**
- * ===================================================================
  * AUTH VIEW CONTROLLER
- * ===================================================================
+ * =========================================================================================
  * - Gestion de la connexion / deconnexion utilisateur
  * - Délègue l'authentification à l'API
  * - Stock le JWT en session serveur
- * ===================================================================
  */
 
 import { apiFetch } from "../gateways/api/apiFetch.js";
@@ -27,10 +25,9 @@ function getSafeRedirect(value, fallback = "/dashboard") {
     return trimmed;
 }
 
-// ==================================================
-// LOGIN
-// ==================================================
 /**
+ * LOGIN
+ * =========================================================================================
  * Traite la connexion utilisateur.
  *
  * - Appelle l'API d'authentification
@@ -46,6 +43,7 @@ function getSafeRedirect(value, fallback = "/dashboard") {
  *
  * @returns {Promise<void>}
  */
+
 export const postLogin = async (req, res) => {
 
     const { email, password } = req.body;
@@ -92,10 +90,9 @@ export const postLogin = async (req, res) => {
     }
 }
 
-// ==================================================
-// LOGOUT
-// ==================================================
 /**
+ * LOGOUT
+ * =========================================================================================
  * Déconnecte l'utilisateur.
  *
  * - Appelle l'API de logout
@@ -111,6 +108,7 @@ export const postLogin = async (req, res) => {
  *
  * @returns {Promise<void>}
  */
+
 export const getLogout = async (req, res) => {
 
     const referer = req.headers.referer;

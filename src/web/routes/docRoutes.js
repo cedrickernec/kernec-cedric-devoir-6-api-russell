@@ -1,7 +1,15 @@
 /**
- * ===================================================================
  * DOUCMENTATION ROUTE (WEB)
- * ===================================================================
+ * =========================================================================================
+ * @module docRoutes
+ *
+ * Routeur de la documentation (couche Web).
+ *
+ * - Route publique
+ * - Rend la page de documentation
+ *
+ * Route :
+ * GET /
  */
 
 import { Router } from "express";

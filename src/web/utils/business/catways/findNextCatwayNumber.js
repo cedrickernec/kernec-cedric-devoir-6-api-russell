@@ -1,33 +1,39 @@
 /**
- * ===================================================================
- * CATWAY NUMBER HELPER
- * ===================================================================
- * - Détermine le prochain numéro de catway disponible
- * - Détecte automatiquement les trous dans la numérotation
- * - Garantit une attribution séquentielle cohérente
- * ===================================================================
- * Utilisé lors de la création d'un nouveau catway.
- * ===================================================================
+ * CATWAY NUMBER HELPER (WEB)
+ * =========================================================================================
+ * @module findNextCatwayNumber
+ *
+ * Détermine le prochain numéro de catway disponible.
+ *
+ * Responsabilités :
+ * - Interroger l’API via gateway
+ * - Garantir une attribution cohérente
+ *
+ * Dépendances :
+ * - fetchNextCatwayNumber
+ *
+ * Effets de bord :
+ * - Lance une erreur en cas d’échec API
  */
 
 import { fetchNextCatwayNumber } from "../../../gateways/api/catwayApi.js";
 
 /**
- * Détermine le prochain numéro de catway disponible.
+ * FIND NEXT CATWAY NUMBER
+ * =========================================================================================
+ * Récupère le prochain numéro disponible via l’API.
  *
- * - Appelle le gateway API
- * - Lance une erreur si la récupération échoue
- *
- * @async
  * @function findNextCatwayNumber
+ * @async
  *
- * @param {Object} req - Requête Express
- * @param {Object} res - Réponse Express
+ * @param {Object} req
+ * @param {Object} res
  *
- * @returns {Promise<number>} - Prochain numéro disponible
+ * @returns {Promise<number>}
  *
- * @throws {Error} - Si l'API ne retourne pas un succès
+ * @throws {Error} Si l’API retourne un échec
  */
+
 export async function findNextCatwayNumber(req, res) {
 
     // Récupération API

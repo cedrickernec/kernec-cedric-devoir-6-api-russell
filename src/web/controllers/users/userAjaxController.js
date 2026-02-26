@@ -1,20 +1,17 @@
 /**
- * ===================================================================
  * AJAX CONTROLLER - USERS
- * ===================================================================
+ * =========================================================================================
  * - Validation asynchrone formulaire
  * - Suppression multiple via AJAX
- * ===================================================================
  */
 
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { fetchUsers, deleteUser } from "../../gateways/api/userApi.js";
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
-// ==================================================
-// CHECK - EMAIL AVAILABILITY
-// ==================================================
 /**
+ * CHECK - EMAIL AVAILABILITY
+ * =========================================================================================
  * Vérifie la disponibilité d'un email via requête AJAX.
  *
  * @async
@@ -71,10 +68,9 @@ export const checkEmailAvailability = async (req, res) => {
   }
 };
 
-// ==================================================
-// BULK DELETE - TABLE
-// ==================================================
 /**
+ * BULK DELETE - TABLE
+ * =========================================================================================
  * Supprime plusieurs utilisateurs via AJAX.
  *
  * @async

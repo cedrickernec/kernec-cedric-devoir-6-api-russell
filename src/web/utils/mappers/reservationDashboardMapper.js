@@ -1,22 +1,27 @@
 /**
- * ===================================================================
  * VIEW MAPPER - RESERVATIONS DASHBOARD
- * ===================================================================
- * - Transforme une réservation API en modèle dashboard
- * - Formate les dates pour affichage rapide
- * - Calcule le statut visuel temps réel
- * ===================================================================
+ * =========================================================================================
+ * @module reservationDashboardMapper
+ *
+ * Adaptateur API → Dashboard ViewModel.
+ *
+ * Responsabilités :
+ * - Formater les dates
+ * - Calculer le statut temps réel
+ * - Conserver données brutes nécessaires
+ *
+ * Dépendances :
+ * - formatDateFR
+ * - computeReservationStatus
  */
 
 import { formatDateFR } from "../formatters/dateFormatter.js";
 import { computeReservationStatus } from "../business/reservations/reservationStatus.js";
 
 /**
+ * MAP RESERVATION TO DASHBOARD
+ * =========================================================================================
  * Transforme une réservation API en modèle Dashboard.
- *
- * - Formate les dates pour affichage rapide
- * - Calcule le statut visuel en temps réel
- * - Conserve les dates brutes pour logique interne
  *
  * @function mapReservationToDashboard
  *
@@ -30,6 +35,7 @@ import { computeReservationStatus } from "../business/reservations/reservationSt
  *
  * @returns {Object} - Modèle Dashboard
  */
+
 export function mapReservationToDashboard(reservation) {
   return {
     id: reservation.id,

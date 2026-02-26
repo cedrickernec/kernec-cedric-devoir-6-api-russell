@@ -1,11 +1,9 @@
 /**
- * ===================================================================
  * VIEW CONTROLLER - USERS
- * ===================================================================
+ * =========================================================================================
  * - Rendu page EJS
  * - Chargement des données via API gateway
  * - Gestion pannel latéral
- * ===================================================================
  */
 
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
@@ -29,10 +27,9 @@ import {
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 
-// ==================================================
-// USERS LIST
-// ==================================================
 /**
+ * USERS LIST
+ * =========================================================================================
  * Affiche la liste des utilisateurs.
  *
  * - Appelle l'API (gateway) pour récupérer les utilisateurs
@@ -73,10 +70,9 @@ export const getUsersPage = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// USER DETAILS - FULL PAGE
-// ==================================================
 /**
+ * USER DETAILS - FULL PAGE
+ * =========================================================================================
  * Affiche la page détail d'un utilisateur.
  * 
  * - Récupère l'identifiant via req.params
@@ -128,10 +124,9 @@ export const getUserById = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// USER PANEL
-// ==================================================
 /**
+ * USER PANEL
+ * =========================================================================================
  * Rend le panneau latéral (partial) d'un utilisateur.
  *
  * - Récupère l'identifiant via req.params
@@ -186,10 +181,9 @@ export const getUserPanel = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// CREATE USER PAGE
-// ==================================================
 /**
+ * CREATE USER PAGE
+ * =========================================================================================
  * Affiche la page de création utilisateur.
  * 
  * - Rend le formulaire EJS de création
@@ -210,10 +204,9 @@ export const getCreateUserPage = (req, res, next) => {
   }
 };
 
-// ==================================================
-// EDIT USER PAGE
-// ==================================================
 /**
+ * EDIT USER PAGE
+ * =========================================================================================
  * Affiche la page d'édition utilisateur.
  * 
  * - Récupère l'identifiant via req.params
@@ -232,6 +225,7 @@ export const getCreateUserPage = (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const getEditUserPage = async (req, res, next) => {
   try {
     const { id } = req.params;

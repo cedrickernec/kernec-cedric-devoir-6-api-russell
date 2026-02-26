@@ -1,10 +1,30 @@
 /**
- * ===================================================================
  * RESERVATIONS NESTED ROUTES (API)
- * ===================================================================
- * - Routes dépendantes de catways :
- *      - /catways/:id/reservations
- * ===================================================================
+ * =========================================================================================
+ * @module reservationNestedRoutes
+ *
+ * Déclare les routes de réservation dépendantes d’un catway (sous-ressource).
+ *
+ * Format attendu :
+ * - Préfixe monté par catwayRoutes : /api/catways/:id/reservations
+ *
+ * Fonctionnalités :
+ * - GET / : liste des réservations d’un catway
+ * - GET /:idReservation : détail d’une réservation
+ * - POST / : création
+ * - PUT /:idReservation : mise à jour
+ * - DELETE /:idReservation : suppression
+ *
+ * Dépendances :
+ * - reservationController
+ * - authMiddleware
+ * - Express Router (mergeParams=true)
+ *
+ * Sécurité :
+ * - Routes protégées via authMiddleware
+ *
+ * Effets de bord :
+ * - mergeParams active la récupération de :id depuis le routeur parent
  */
 
 import { Router } from "express";

@@ -1,12 +1,18 @@
 /**
- * ===================================================================
  * EXPRESS SESSION CONFIGURATION
- * ===================================================================
- * - Configure express-session
- * - Stockage MongoDB via connect-mongo
- * - Sécurisation des cookies selon l'environnement
- * - Durée de session centralisée
- * ===================================================================
+ * =========================================================================================
+ * Configure la gestion de session Express.
+ *
+ * Responsabilités :
+ * - Initialiser express-session
+ * - Stocker les sessions en MongoDB (connect-mongo)
+ * - Sécuriser les cookies selon l'environnement
+ * - Centraliser la durée de session
+ *
+ * Exports :
+ * - sessionMiddleware : middleware de session prêt à brancher sur app.use()
+ * - environment      : informations d'environnement (ex: isProduction)
+ * - sessionMaxAge    : durée de session (ms), utile pour synchroniser le front
  */
 
 import session from "express-session";
@@ -49,14 +55,14 @@ const SESSION_DURATION = ms(process.env.SESSION_DURATION || "1h");
 /**
  * Middleware Express de gestion de session.
  *
- * - Configure express-session
- * - Stocke les sessions en base MongoDB via connect-mongo
- * - Sécurise les cookies selon l'environnement (production / dev)
- * - Centralise la durée de session
- * - Active le mode "rolling" (renouvellement à chaque requête)
+ * Paramétrage :
+ * - Store MongoDB via connect-mongo
+ * - Cookies sécurisés en production
+ * - "rolling" activé : prolonge la session à chaque requête
  *
- * @type {import("express").RequestHandler}
+ * @type {Function}
  */
+
 export const sessionMiddleware = session({
     name: "russell.sid",
     secret: process.env.SESSION_SECRET,
@@ -80,21 +86,19 @@ export const sessionMiddleware = session({
 // SHARED EXPORTS
 // ==================================================
 /**
- * Informations liées à l'environnement d'exécution.
- *
- * - isProduction : indique si l'application tourne en production
+ * Informations d'environnement.
  *
  * @type {{ isProduction: boolean }}
  */
+
 export const environment = {
     isProduction,
 };
 
 /**
- * Durée maximale d'une session (en millisecondes).
- *
- * Utilisée pour synchroniser la logique côté serveur et côté client.
+ * Durée maximale d'une session (ms).
  *
  * @type {number}
  */
+
 export const sessionMaxAge = SESSION_DURATION;

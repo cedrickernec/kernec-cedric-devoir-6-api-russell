@@ -1,10 +1,8 @@
 /**
- * ===================================================================
  * AJAX CONTROLLER - RESERVATIONS
- * ===================================================================
+ * =========================================================================================
  * - Validation asynchrone formulaire
  * - Suppression multiple via AJAX
- * ===================================================================
  */
 
 import {
@@ -14,10 +12,9 @@ import {
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
-// ==================================================
-// CHECK BULK RESERVATION
-// ==================================================
 /**
+ * CHECK BULK RESERVATION
+ * =========================================================================================
  * Vérifie si une suppression multiple de réservations nécessite une confirmation.
  *
  * - Appelle l'API de "bulk-check"
@@ -31,6 +28,7 @@ import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js"
  *
  * @returns {Promise<void>}
  */
+
 export async function checkBulkReservationDeleteAjax(req, res) {
   try {
     const result = await checkBulkReservationDelete(req.body, req, res);
@@ -44,10 +42,9 @@ export async function checkBulkReservationDeleteAjax(req, res) {
   }
 }
 
-// ==================================================
-// BULK DELETE - TABLE
-// ==================================================
 /**
+ * BULK DELETE - TABLE
+ * =========================================================================================
  * Supprime plusieurs réservations via AJAX.
  *
  * - Appelle l'API de suppression bulk
@@ -62,6 +59,7 @@ export async function checkBulkReservationDeleteAjax(req, res) {
  *
  * @returns {Promise<void>}
  */
+
 export const deleteReservations = async (req, res) => {
   try {
     const apiResponse = await deleteBulkReservations(req.body, req, res);

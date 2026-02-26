@@ -1,23 +1,12 @@
-/**
- * ===================================================================
- * DASHBOARD VIEW CONTROLLER
- * ===================================================================
- * - Affiche le dashboard utilisateur
- * - Charge les réservations actives
- * - Tolère les erreurs de chargement partiel
- * ===================================================================
- */
-
 import { formatDateLongFR } from "../utils/formatters/dateFormatter.js";
 import { mapReservationToDashboard } from "../utils/mappers/reservationDashboardMapper.js";
 import { fetchReservations } from "../gateways/api/reservationApi.js";
 import { handleAuthExpired } from "../middlewares/auth/authExpiredHandler.js";
 import { COMMON_MESSAGES } from "../../../public/js/messages/commonMessages.js";
 
-// ==================================================
-// DASHBOARD PAGE
-// ==================================================
 /**
+ * DASHBOARD PAGE
+ * =========================================================================================
  * Affiche le dashboard utilisateur.
  *
  * - Charge les réservations via l'API
@@ -34,6 +23,7 @@ import { COMMON_MESSAGES } from "../../../public/js/messages/commonMessages.js";
  *
  * @returns {Promise<void>}
  */
+
 export const getDashboard = async (req, res, next) => {
     let reservations = [];
     let dashboardError = null;

@@ -1,11 +1,9 @@
 /**
- * ===================================================================
  * VIEW CONTROLLER - CATWAYS
- * ===================================================================
+ * =========================================================================================
  * - Rendu page EJS
  * - Chargement des données via API gateway
  * - Gestion pannel latéral
- * ===================================================================
  */
 
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
@@ -31,10 +29,9 @@ import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.j
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { loadOtherReservations } from "../../utils/mappers/loadOtherReservations.js";
 
-// ==================================================
-// CATWAYS LIST
-// ==================================================
 /**
+ * CATWAYS LIST
+ * =========================================================================================
  * Affiche la liste des catways.
  *
  * - Appelle l'API (gateway) pour récupérer les catways
@@ -51,6 +48,7 @@ import { loadOtherReservations } from "../../utils/mappers/loadOtherReservations
  *
  * @returns {Promise<void>}
  */
+
 export const getCatwaysPage = async (req, res, next) => {
     try {
       const apiData = await fetchCatways(req, res);
@@ -75,10 +73,9 @@ export const getCatwaysPage = async (req, res, next) => {
     }
 };
 
-// ==================================================
-// CATWAY DETAILS - FULL PAGE (BY NUMBER)
-// ==================================================
 /**
+ * CATWAY DETAILS - FULL PAGE (BY NUMBER)
+ * =========================================================================================
  * Affiche le détail d'un catway (par numéro).
  *
  * - Valide et parse catwayNumber via req.params
@@ -99,6 +96,7 @@ export const getCatwaysPage = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const getCatwayByNumber = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
@@ -146,10 +144,9 @@ export const getCatwayByNumber = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// CATWAY PANEL
-// ==================================================
 /**
+ * CATWAY PANEL
+ * =========================================================================================
  * Rend le panneau latéral (partial) d'un catway.
  *
  * - Valide et parse catwayNumber via req.params
@@ -168,6 +165,7 @@ export const getCatwayByNumber = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const getCatwayPanel = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);
@@ -210,10 +208,9 @@ export const getCatwayPanel = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// CREATE CATWAY PAGE
-// ==================================================
 /**
+ * CREATE CATWAY PAGE
+ * =========================================================================================
  * Affiche la page de création d'un catway.
  *
  * - Appelle l'API (gateway) pour proposer le prochain numéro disponible
@@ -241,10 +238,9 @@ export const getCreateCatwayPage = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// EDIT CATWAY PAGE (BY NUMBER)
-// ==================================================
 /**
+ * EDIT CATWAY PAGE (BY NUMBER)
+ * =========================================================================================
  * Affiche la page d'édition d'un catway (par numéro).
  *
  * - Valide et parse catwayNumber via req.params
@@ -263,6 +259,7 @@ export const getCreateCatwayPage = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const getEditCatwayByNumber = async (req, res, next) => {
   try {
     const catwayNumber = Number(req.params.catwayNumber);

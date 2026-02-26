@@ -1,24 +1,27 @@
 /**
- * ============================================================
  * USER FORMATTER
- * ============================================================
- * - Formate les réponses retournées :
- *      - Nettoie les documents Mongo
- *      - Contrôle les champs exposés
- *      - Définit l'ordre des clés
- * ============================================================
+ * =========================================================================================
+ * @module userFormatter
+ *
+ * Formate les utilisateurs pour les réponses API.
+ *
+ * Objectifs :
+ * - Contrôler les champs exposés (jamais de password)
+ * - Normaliser l’ordre des clés
  */
 
 /**
- * Formate un utilisateur pour la réponse API.
- * Supprime les champs sensibles (ex: password).
+ * FORMAT USER
+ * =========================================================================================
+ * Transforme un document User en objet JSON API.
  *
  * @function formatUser
  *
- * @param {Object} user - Document Mongo User
+ * @param {Object} user Document Mongo User
  *
  * @returns {Object|null}
  */
+
 export function formatUser(user) {
     if (!user) return null;
 
@@ -34,7 +37,9 @@ export function formatUser(user) {
 }
 
 /**
- * Formate une liste d'utilisateurs.
+ * FORMAT USERS LIST
+ * =========================================================================================
+ * Formate une liste d’utilisateurs.
  *
  * @function formatUsersList
  *
@@ -42,6 +47,7 @@ export function formatUser(user) {
  *
  * @returns {Array<Object>}
  */
+
 export function formatUsersList(users) {
 
     return users.map(formatUser);

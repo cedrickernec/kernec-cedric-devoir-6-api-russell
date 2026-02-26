@@ -1,24 +1,33 @@
 /**
- * ===================================================================
  * RESERVATION PERIOD PARSER
- * ===================================================================
- * - Parse et valide une période de réservation
- * - Normalise les dates au format jour (début / fin)
- * ===================================================================
+ * =========================================================================================
+ * @module parseReservationPeriod
+ *
+ * Parse, valide et normalise une période de réservation.
+ *
+ * Fonctionnalités :
+ * - Conversion des entrées en Date (via parseDate)
+ * - Validation de cohérence de période (via validateReservationPeriod)
+ * - Normalisation de l’intervalle (via normalizeDayRange)
+ * - Variante update : conserve les dates existantes si non fournies
+ *
+ * Dépendances :
+ * - dates.parseDate
+ * - dates.normalizeDayRange
+ * - validators.validateReservationPeriod
+ *
+ * Effets de bord :
+ * - Peut lever une ApiError si la période est invalide
  */
 
 import { parseDate } from "../dates/parseDate.js";
 import { normalizeDayRange } from "../dates/normalizeDayRange.js";
 import { validateReservationPeriod } from "../../validators/reservationValidators.js";
 
-// ===============================================
-// CREATE PERDIODE PARSING
-// ===============================================
 /**
+ * PARSE RESERVATION PERIOD (CREATE)
+ * =========================================================================================
  * Parse et valide une période de réservation (création).
- *
- * Convertit les dates brutes en Date, valide la cohérence
- * puis normalise au format début/fin de journée.
  *
  * @function parseReservationPeriod
  *
@@ -27,8 +36,9 @@ import { validateReservationPeriod } from "../../validators/reservationValidator
  *
  * @returns {{start: Date, end: Date}}
  *
- * @throws {ApiError} 400 - Période invalide
+ * @throws {ApiError} 400 Période invalide
  */
+
 export function parseReservationPeriod(startDate, endDate) {
 
     const rawStart = parseDate(startDate);
@@ -39,12 +49,11 @@ export function parseReservationPeriod(startDate, endDate) {
     return normalizeDayRange(rawStart, rawEnd);
 }
 
-// ===============================================
-// UPDATE PERIOD PARSING
-// ===============================================
 /**
- * Parse et valide une période de réservation lors d'une mise à jour.
- * Conserve les dates existantes si aucune nouvelle valeur fournie.
+ * PARSE RESERVATION PERIOD (UPDATE)
+ * =========================================================================================
+ * Parse et valide une période de réservation (mise à jour).
+ * Conserve les dates existantes si aucune nouvelle valeur n’est fournie.
  *
  * @function parseReservationUpdatePeriod
  *
@@ -55,8 +64,9 @@ export function parseReservationPeriod(startDate, endDate) {
  *
  * @returns {{start: Date, end: Date}}
  *
- * @throws {ApiError} 400 - Période invalide
+ * @throws {ApiError} 400 Période invalide
  */
+
 export function parseReservationUpdatePeriod(
     existingStart,
     existingEnd,

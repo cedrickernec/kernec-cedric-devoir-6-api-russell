@@ -1,13 +1,6 @@
 /**
- * ===================================================================
  * PUBLIC ERROR PAGE CONFIG
- * ===================================================================
- * - Configure l'UI des pages d'erreur publiques
- * - Désactive navigation retour et logout
- * ===================================================================
- */
-
-/**
+ * =========================================================================================
  * Middleware de configuration des pages publiques.
  *
  * - Configure l'UI des pages d'erreur publiques
@@ -23,6 +16,7 @@
  *
  * @returns {void}
  */
+
 export const publicPage = (req, res, next) => {
     
     res.locals.errorUI = {

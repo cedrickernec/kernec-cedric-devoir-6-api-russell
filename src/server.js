@@ -1,13 +1,31 @@
 /**
- * ===================================================================
  * APPLICATION ENTRY POINT
- * ===================================================================
- * - Initialise l'application Express
- * - Configure la base de données
- * - Enregistre les middlewares globaux
- * - Monte les routes WEB et API
- * - Centralise la gestion des erreurs
- * ===================================================================
+ * =========================================================================================
+ * @module server
+ *
+ * Point d’entrée principal de l’application.
+ *
+ * Responsabilités :
+ * - Charger les variables d’environnement
+ * - Initialiser la connexion base de données
+ * - Configurer Express (middlewares globaux)
+ * - Monter les routes Web et API
+ * - Centraliser la gestion des erreurs
+ * - Démarrer le serveur HTTP
+ *
+ * Dépendances :
+ * - express
+ * - connectDB
+ * - registerWebRoutes
+ * - registerApiRoutes
+ *
+ * Sécurité :
+ * - Active trust proxy en production
+ * - Centralise la gestion d’erreurs API et Web
+ *
+ * Effets de bord :
+ * - Démarrage du serveur HTTP
+ * - Connexion base de données
  */
 
 // ============================================
@@ -20,7 +38,7 @@ import "dotenv/config";
 // DATABASE
 // ============================================
 
-import { connectDB } from "./api/config/db.js";
+import { connectDB } from "./api/config/databaseConnection.js";
 connectDB();
 
 // ============================================

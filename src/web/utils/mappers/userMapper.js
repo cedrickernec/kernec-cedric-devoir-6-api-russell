@@ -1,19 +1,27 @@
 /**
- * ===================================================================
  * VIEW MAPPER - USERS
- * ===================================================================
- * - Transforme les données API en ViewModels utilisables par les vues
- * - Centralise le formatage des dates et valeurs fallback
- * - Évite toute logique de présentation dans les contrôleurs
- * ===================================================================
-*/
+ * =========================================================================================
+ * @module userMapper
+ *
+ * Adaptateur API → ViewModel pour les utilisateurs.
+ *
+ * Responsabilités :
+ * - Centraliser le formatage des dates
+ * - Gérer les valeurs fallback
+ * - Éviter toute logique UI dans les contrôleurs
+ *
+ * Dépendances :
+ * - formatDateFR
+ *
+ * Effets de bord :
+ * - Aucun
+ */
 
 import { formatDateFR } from "../formatters/dateFormatter.js";
 
-// ==================================================
-// MAPPER - USER LIST (TABLE)
-// ==================================================
 /**
+ * MAP USER TO LIST
+ * =========================================================================================
  * Transforme un utilisateur API en modèle liste.
  *
  * @function mapUserToList
@@ -22,6 +30,7 @@ import { formatDateFR } from "../formatters/dateFormatter.js";
  *
  * @returns {Object} - Modèle liste
  */
+
 export function mapUserToList(user) {
   return {
     id: user.id,
@@ -32,10 +41,9 @@ export function mapUserToList(user) {
   }
 }
 
-// ==================================================
-// MAPPER - USER DETAIL
-// ==================================================
 /**
+ * MAP USER DETAIL
+ * =========================================================================================
  * Transforme un utilisateur API en modèle détail.
  *
  * - Gère les valeurs fallback
@@ -47,6 +55,7 @@ export function mapUserToList(user) {
  *
  * @returns {Object} - Modèle détail
  */
+
 export function mapUserDetail(user) {
   if (!user) {
     return {
@@ -79,10 +88,9 @@ export function mapUserDetail(user) {
   };
 }
 
-// ==================================================
-// MAPPER - USER FORM
-// ==================================================
 /**
+ * MAP USER TO FORM
+ * =========================================================================================
  * Transforme un utilisateur API en modèle formulaire.
  *
  * @function mapUserToForm
@@ -91,6 +99,7 @@ export function mapUserDetail(user) {
  *
  * @returns {Object} - Modèle formulaire
  */
+
 export function mapUserToForm(user) {
   return {
     id: user.id,

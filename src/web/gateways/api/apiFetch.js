@@ -1,34 +1,48 @@
 /**
- * ===================================================================
  * API FETCH
- * ===================================================================
- * - Couche d'abstraction des appels HTTP vers l'API
- * - Injecte automatiquement le token JWT
- * - Centralise la gestion des réponses HTTP
- * - Garantit un format de retour uniforme
- * ===================================================================
- * 
- * Résultat standard retourné par apiFetch.
+ * =========================================================================================
+ * @module apiFetch
  *
+ * Couche d’abstraction des appels HTTP vers l’API backend.
+ *
+ * Responsabilités :
+ * - Injecter automatiquement le JWT en header Authorization
+ * - Tenter un refresh automatique en cas de 401
+ * - Normaliser toutes les réponses dans un format uniforme
+ * - Gérer la détection d’expiration de session
+ *
+ * Dépendances :
+ * - tryRefreshToken
+ * - Session Express
+ * - API backend interne
+ *
+ * Sécurité :
+ * - Ne transmet le token que si requis
+ * - Ne retourne jamais directement la réponse brute fetch
+ *
+ * Effets de bord :
+ * - Peut déclencher un refreshToken
+ * - Peut signaler authExpired au contrôleur
+ */
+
+/**
  * @typedef {Object} ApiFetchResult
  *
- * @property {boolean} success - Indique si la requête a réussi
- * @property {string|null} [message] - Message informatif ou d'erreur
- * @property {*} [data] - Données retournées par l'API
- * @property {Object} [errors] - Erreurs de validation éventuelles
- * @property {string|null} [context] - Contexte technique (debug)
- * @property {number} [status] - Code HTTP
- * @property {boolean} [authExpired] - Indique si la session est expirée
+ * @property {boolean} success
+ * @property {string|null} [message]
+ * @property {*} [data]
+ * @property {Object} [errors]
+ * @property {Object|null} [context]
+ * @property {number} [status]
+ * @property {boolean} [authExpired]
  */
 
 import { tryRefreshToken } from "../../utils/api/refreshToken.js";
 
 /**
- * Effectue un appel HTTP vers l'API backend.
- *
- * - Injecte automatiquement le token JWT si nécessaire
- * - Tente un refresh automatique en cas de 401
- * - Normalise toutes les réponses dans un format uniforme
+ * API FETCH FUNCTION
+ * =========================================================================================
+ * Effectue un appel HTTP vers l’API backend.
  *
  * @async
  * @function apiFetch
@@ -43,6 +57,7 @@ import { tryRefreshToken } from "../../utils/api/refreshToken.js";
  *
  * @returns {Promise<ApiFetchResult>}
  */
+
 export async function apiFetch(url, options = {}, req) {
 
     const publicRoutes = ["/api/auth/login", "/api/auth/refresh"];

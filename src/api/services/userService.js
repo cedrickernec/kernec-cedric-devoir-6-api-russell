@@ -1,12 +1,27 @@
 /**
- * ============================================================
  * USER SERVICE
- * ============================================================
- * - Décide si une action métier est autorisée :
- *      - Contient la logique métier de l'application
- *      - Applique les règles fonctionnelles
- *      - Appelle les validators, les rules et les repositories
- * ============================================================
+ * =========================================================================================
+ * @module userService
+ *
+ * Porte la logique métier des utilisateurs.
+ *
+ * Fonctionnalités :
+ * - Consultation (liste / détail)
+ * - Création (unicité email + hash password)
+ * - Mise à jour (unicité email)
+ * - Mise à jour mot de passe (validation + non réutilisation)
+ * - Suppression (règles métier : interdiction auto-suppression)
+ *
+ * Dépendances :
+ * - userRepo (CRUD)
+ * - bcrypt (hash / compare)
+ * - userValidators (validatePassword)
+ * - userRules (canDeleteUser)
+ * - ApiError
+ *
+ * Sécurité :
+ * - Hashage systématique des mots de passe
+ * - Protection contre réutilisation de l’ancien mot de passe
  */
 
 import bcrypt from "bcrypt";
@@ -28,36 +43,37 @@ import {
 import { canDeleteUser } from "./userRules.js";
 import { ApiError } from "../utils/errors/apiError.js";
 
-// ===============================================
-// GET ALL USERS
-// ===============================================
 /**
+ * GET ALL USERS
+ * =========================================================================================
+ * Retourne la liste des utilisateurs.
+ *
  * @async
- * Récupère tous les utilisateurs par son identifiant.
- * 
  * @function getAllUsersService
- * 
- * @returns {Promise<Array<Object>>} - Liste des utilisateurs (formatage côté controller/formatter)
+ *
+ * @returns {Promise<Array<Object>>}
  */
+
 export async function getAllUsersService() {
 
     return getAllUsers();
 }
 
-// ===============================================
-// GET USER BY ID
-// ===============================================
 /**
+ * GET USER BY ID
+ * =========================================================================================
+ * Retourne un utilisateur par identifiant.
+ *
  * @async
- * Récupère un utilisateur par son identifiant.
- * 
  * @function getUserByIdService
- * 
- * @param {string} id - ObjectId de l'utilisateur
- * 
- * @returns {Promise<Object>} - Utilisateur trouvé
- * @throws {ApiError} 404 - Utilisateur introuvable
+ *
+ * @param {string} id
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 404 Utilisateur introuvable
  */
+
 export async function getUserByIdService(id) {
 
     const user = await findUserById(id);
@@ -72,23 +88,21 @@ export async function getUserByIdService(id) {
     return user;
 }
 
-// ===============================================
-// CREATE USER
-// ===============================================
 /**
+ * CREATE USER
+ * =========================================================================================
+ * Crée un utilisateur (unicité email + hash password).
+ *
  * @async
- * Crée un utilisateur après contrôle d'unicité email et hash du mot de passe.
- * 
  * @function createUserService
- * 
- * @param {Object} data - Donnée de création
- * @param {string} data.username - Nom d'utilisateur
- * @param {string} data.email - Email utilisateur (doit être unique)
- * @param {string} data.password - Mot de passe en clair (sera hashé)
- * 
- * @returns {Promise<Object>} - Utilisateur créé
- * @throws {ApiError} 409 - Conflit d'unicité (email déjà utilisé)
+ *
+ * @param {Object} data
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 409 Email déjà utilisé
  */
+
 export async function createUserService(data) {
 
     const existing = await findUserByEmail(data.email);
@@ -110,23 +124,21 @@ export async function createUserService(data) {
     });
 }
 
-// ===============================================
-// UPDATE USER
-// ===============================================
 /**
+ * UPDATE USER
+ * =========================================================================================
+ * Met à jour un utilisateur (existence + unicité email si modifiée).
+ *
  * @async
- * Met à jour un utilisateur après contrôle d'existence et unicité email.
- * 
  * @function updateUserService
- * 
- * @param {string} id - ObjectId de l'utilisateur à modifier
- * @param {Object} cleanData - Champs autorisés/filtrés côté controller
- * @param {string} [cleanData.username] - Nouvel username
- * @param {string} [cleanData.email] - Nouvel email (doit rester unique)
- * 
- * @returns {Promise<Object>} - Utilisateur mis à jour
- * @throws {ApiError} 404 - Utilisateur introuvable
- * @throws {ApiError} 409 - Conflit d'unicité (email déjà utilisé)
+ *
+ * @param {string} id
+ * @param {Object} cleanData
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 404 Utilisateur introuvable
+ * @throws {ApiError} 409 Email déjà utilisé
  */
 export async function updateUserService(id, cleanData) {
 
@@ -154,23 +166,23 @@ export async function updateUserService(id, cleanData) {
     return updateUserById(id, cleanData);
 }
 
-// ===============================================
-// UPDATE PASSWORD
-// ===============================================
 /**
+ * UPDATE PASSWORD
+ * =========================================================================================
+ * Met à jour le mot de passe (validation + différent de l’ancien).
+ *
  * @async
- * Met à jour le mot de passe d'un utilisateur (validation + interdiction de réutiliser l'ancien).
- * 
  * @function updatePasswordService
- * 
- * @param {string} id - OvjectId de l'utilisateur
- * @param {string} newPassword - Nouveau mot de passe en clair
- * 
- * @returns {Promise<boolean>} - True si la mise à jour a été effectuée
- * @throws {ApiError} 404 - Utilisateur introuvable
- * @throws {ApiError} 400 - Mot de passe invalide (règles de validation)
- * @throws {ApiError} 400 - Nouveau mot de passe identique à l'ancien
+ *
+ * @param {string} id
+ * @param {string} newPassword
+ *
+ * @returns {Promise<boolean>}
+ *
+ * @throws {ApiError} 404 Utilisateur introuvable
+ * @throws {ApiError} 400 Mot de passe invalide ou identique à l’ancien
  */
+
 export async function updatePasswordService(id, newPassword) {
 
     const user = await findUserByIdWithPassword(id);
@@ -208,22 +220,23 @@ export async function updatePasswordService(id, newPassword) {
     return true;
 }
 
-// ===============================================
-// DELETE USER
-// ===============================================
 /**
+ * DELETE USER
+ * =========================================================================================
+ * Supprime un utilisateur cible si les règles métier l’autorisent.
+ *
  * @async
- * Supprime un utilisateur cible si les règles métier l'autorisent.
- * 
  * @function deleteUserService
- * 
- * @param {string} currentUserId - ObjectId de l'utilisateur connecté (demandeur)
- * @param {string} targetUserId - ObjectId de l'utilisateur à supprimer (cible)
- * 
- * @returns {Promise<Object>} - Utilisateur supprimé
- * @throws {ApiError} 404 - Utilisateur introuvable
- * @throws {ApiError} 403 - Suppression interdite (ex: auto-suppression)
+ *
+ * @param {string} currentUserId
+ * @param {string} targetUserId
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 404 Utilisateur introuvable
+ * @throws {ApiError} 403 Suppression interdite (règle métier)
  */
+
 export async function deleteUserService(currentUserId, targetUserId) {
     
     const user = await findUserById(targetUserId);

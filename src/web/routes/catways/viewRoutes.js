@@ -1,7 +1,26 @@
 /**
- * ===================================================================
  * CATWAYS VIEW ROUTES (WEB)
- * ===================================================================
+ * =========================================================================================
+ * @module viewRoutes
+ * 
+ * Routeur des vues Catways (couche Web).
+ *
+ * - Protège les routes via authGuard
+ * - Valide les paramètres dynamiques
+ * - Délègue la logique aux contrôleurs View
+ * - Gère le rendu EJS complet et partiels
+ * - Monte les sous-routes Réservations
+ *
+ * Routes principales :
+ * GET    /
+ * GET    /create
+ * GET    /:catwayNumber
+ * GET    /:catwayNumber/edit
+ * GET    /:catwayNumber/panel
+ * DELETE /:catwayNumber
+ *
+ * Sous-ressource :
+ * /:catwayNumber/reservations
  */
 
 import express from "express";

@@ -1,12 +1,33 @@
 /**
- * ===================================================================
  * RESERVATION CONTROLLERS
- * ===================================================================
- * - Reçoit les requêtes HTTP
- * - Filtre et valide les entrées utilisateur
- * - Appelle les services métier
- * - Formate les réponses API
- * ===================================================================
+ * =========================================================================================
+ * @module reservationController
+ *
+ * Contrôleurs HTTP liés aux réservations.
+ *
+ * Responsabilités :
+ * - Valider les identifiants (catway / reservation)
+ * - Filtrer strictement les données entrantes
+ * - Orchestrer les services métier réservation
+ * - Normaliser les réponses JSON API
+ *
+ * Déclenché par :
+ * - Routes /api/reservations/*
+ * - Routes /api/catways/:id/reservations/*
+ *
+ * Dépendances :
+ * - reservationService
+ * - reservationValidators
+ * - reservationFormatter
+ * - ApiError
+ *
+ * Sécurité :
+ * - Validation stricte des ObjectId et numéros de catway
+ * - Filtrage des champs autorisés
+ * - Vérification des conflits de dates
+ *
+ * Effets de bord :
+ * - Création, modification et suppression persistante de réservations
  */
 
 import {
@@ -40,22 +61,22 @@ import {
 import { pickAllowedFields } from "../utils/errors/pickAllowedFields.js";
 import { ApiError } from "../utils/errors/apiError.js";
 
-// ===============================================
-// GET ALL RESERVATIONS
-// ===============================================
 /**
- * @async
- * Récupère l'ensemble des réservations.
+ * GET ALL RESERVATIONS
+ * =========================================================================================
+ * Retourne l’ensemble des réservations.
  *
+ * @async
+ * @function getAllReservations
  * @route GET /api/reservations
- * @group Reservations
  *
  * @param {Object} req
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 200 - Liste des réservations
+ * @returns {Promise<void>}
  */
+
 export const getAllReservations = async (req, res, next) => {
     try {
         const reservations = await getAllReservationsService();
@@ -74,26 +95,27 @@ export const getAllReservations = async (req, res, next) => {
     }
 };
 
-// ===============================================
-// GET RESERVATIONS BY CATWAY
-// ===============================================
 /**
- * @async
- * Récupère les réservations associées à un catway.
+ * GET RESERVATIONS BY CATWAY
+ * =========================================================================================
+ * Retourne les réservations associées à un catway.
  *
+ * @async
+ * @function getReservationsByCatway
  * @route GET /api/catways/:id/reservations
- * @group Reservations
  *
  * @param {Object} req
  * @param {Object} req.params
- * @param {number} req.params.id - Numéro du catway
+ * @param {number} req.params.id
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 200 - Liste des réservations
- * @throws {ApiError} 400 - Identifiant invalide
+ * @returns {Promise<void>}
+ *
+ * @throws {ApiError} 400 - Numéro de catway invalide
  * @throws {ApiError} 404 - Catway introuvable
  */
+
 export const getReservationsByCatway = async (req, res, next) => {
     try {
         // 1) Validation IDs
@@ -117,27 +139,28 @@ export const getReservationsByCatway = async (req, res, next) => {
     }
 };
 
-// ===============================================
-// GET RESERVATION BY ID
-// ===============================================
 /**
- * @async
- * Récupère une réservation spécifique.
+ * GET RESERVATION BY ID
+ * =========================================================================================
+ * Retourne le détail d’une réservation spécifique.
  *
+ * @async
+ * @function getReservationById
  * @route GET /api/catways/:id/reservations/:idReservation
- * @group Reservations
  *
  * @param {Object} req
  * @param {Object} req.params
- * @param {number} req.params.id - Numéro du catway
- * @param {string} req.params.idReservation - Identifiant de la réservation
+ * @param {number} req.params.id
+ * @param {string} req.params.idReservation
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 200 - Détail de la réservation
+ * @returns {Promise<void>}
+ *
  * @throws {ApiError} 400 - Identifiant invalide
  * @throws {ApiError} 404 - Réservation introuvable
  */
+
 export const getReservationById = async (req, res, next) => {
     try {
         // 1) Validation IDs
@@ -161,29 +184,30 @@ export const getReservationById = async (req, res, next) => {
     }
 };
 
-// ===============================================
-// GET AVAILABILITY 
-// ===============================================
 /**
- * @async
+ * GET RESERVATION AVAILABILITY
+ * =========================================================================================
  * Vérifie la disponibilité des catways sur une période donnée.
  *
+ * @async
+ * @function getReservationAvailability
  * @route POST /api/reservations/availability
- * @group Reservations
  *
  * @param {Object} req
  * @param {Object} req.body
- * @param {string} req.body.startDate - Date de début
- * @param {string} req.body.endDate - Date de fin
- * @param {string} [req.body.catwayType] - Type de catway
- * @param {boolean} [req.body.allowPartial] - Autorise les disponibilités partielles
- * @param {number} [req.body.catwayNumber] - Numéro spécifique
+ * @param {string} req.body.startDate
+ * @param {string} req.body.endDate
+ * @param {string} [req.body.catwayType]
+ * @param {boolean} [req.body.allowPartial]
+ * @param {number} [req.body.catwayNumber]
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 200 - Résultat de disponibilité
+ * @returns {Promise<void>}
+ *
  * @throws {ApiError} 400 - Données invalides
  */
+
 export const getReservationAvailability = async (req, res, next) => {
     try {
         // 1) Filtrage strict
@@ -227,32 +251,33 @@ export const getReservationAvailability = async (req, res, next) => {
     }
 }
 
-// ===============================================
-// CREATE RESERVATION
-// ===============================================
 /**
- * @async
- * Crée une nouvelle réservation.
+ * CREATE RESERVATION
+ * =========================================================================================
+ * Crée une nouvelle réservation pour un catway.
  *
+ * @async
+ * @function createReservation
  * @route POST /api/catways/:id/reservations
- * @group Reservations
  *
  * @param {Object} req
  * @param {Object} req.params
- * @param {number} req.params.id - Numéro du catway
+ * @param {number} req.params.id
  * @param {Object} req.body
- * @param {string} req.body.clientName - Nom du client
- * @param {string} req.body.boatName - Nom du bateau
- * @param {string} req.body.startDate - Date de début
- * @param {string} req.body.endDate - Date de fin
+ * @param {string} req.body.clientName
+ * @param {string} req.body.boatName
+ * @param {string} req.body.startDate
+ * @param {string} req.body.endDate
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 201 - Réservation créée
+ * @returns {Promise<void>}
+ *
  * @throws {ApiError} 400 - Données invalides
  * @throws {ApiError} 404 - Catway introuvable
- * @throws {ApiError} 409 - Conflit de réservation (dates chevauchantes ou catway hors service)
+ * @throws {ApiError} 409 - Conflit de réservation
  */
+
 export const createReservation = async (req, res, next) => {
     try {
         // 1) Validation IDs
@@ -291,20 +316,19 @@ export const createReservation = async (req, res, next) => {
     }
 };
 
-// ===============================================
-// UPDATE RESERVATION
-// ===============================================
 /**
- * @async
+ * UPDATE RESERVATION
+ * =========================================================================================
  * Met à jour une réservation existante.
  *
+ * @async
+ * @function updateReservation
  * @route PUT /api/catways/:id/reservations/:idReservation
- * @group Reservations
  *
  * @param {Object} req
  * @param {Object} req.params
- * @param {number} req.params.id - Numéro du catway
- * @param {string} req.params.idReservation - Identifiant de la réservation
+ * @param {number} req.params.id
+ * @param {string} req.params.idReservation
  * @param {Object} req.body
  * @param {string} [req.body.clientName]
  * @param {string} [req.body.boatName]
@@ -313,11 +337,13 @@ export const createReservation = async (req, res, next) => {
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 200 - Réservation mise à jour
+ * @returns {Promise<void>}
+ *
  * @throws {ApiError} 400 - Données invalides
- * @throws {ApiError} 404 - Catway/Réservation introuvable
+ * @throws {ApiError} 404 - Ressource introuvable
  * @throws {ApiError} 409 - Conflit de dates
  */
+
 export const updateReservation = async (req, res, next) => {
     try {
         // 1) Validation IDs
@@ -362,27 +388,28 @@ export const updateReservation = async (req, res, next) => {
     }
 };
 
-// ===============================================
-// CHECK BULK RESERVATIONS BEFORE DELETE
-// ===============================================
 /**
- * @async
+ * CHECK BULK RESERVATIONS BEFORE DELETE
+ * =========================================================================================
  * Vérifie les contraintes avant suppression multiple de réservations.
  *
+ * @async
+ * @function checkReservationsBeforeDelete
  * @route POST /api/reservations/bulk-check
- * @group Reservations
  *
  * @param {Object} req
  * @param {Object} req.body
- * @param {Array<string>} req.body.ids - Liste d'identifiants composite (catway|reservation)
+ * @param {Array<string>} req.body.ids - Format composite "catway|reservation"
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 200 - Validation réussie
- * @throws {ApiError} 400 - Identifiant invalide
+ * @returns {Promise<void>}
+ *
+ * @throws {ApiError} 400 - Identifiant composite invalide
  * @throws {ApiError} 404 - Réservation introuvable
  * @throws {ApiError} 409 - Mot de passe requis
  */
+
 export const checkReservationsBeforeDelete = async (req, res, next) => {
     try {
         // 1) Validation
@@ -423,29 +450,30 @@ export const checkReservationsBeforeDelete = async (req, res, next) => {
     }
 };
 
-// ===============================================
-// DELETE BULK RESERVATIONS
-// ===============================================
 /**
- * @async
+ * DELETE RESERVATIONS BULK
+ * =========================================================================================
  * Supprime plusieurs réservations.
  *
+ * @async
+ * @function deleteReservationsBulk
  * @route DELETE /api/reservations/bulk
- * @group Reservations
  *
  * @param {Object} req
  * @param {Object} req.body
- * @param {Array<string>} req.body.ids - Liste d'identifiants
- * @param {string} [req.body.password] - Mot de passe de confirmation
+ * @param {Array<string>} req.body.ids
+ * @param {string} [req.body.password]
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 200 - Résultat de suppression
+ * @returns {Promise<void>}
+ *
  * @throws {ApiError} 400 - Identifiant invalide
  * @throws {ApiError} 401 - Mot de passe invalide
  * @throws {ApiError} 404 - Réservation introuvable
  * @throws {ApiError} 409 - Mot de passe requis
  */
+
 export const deleteReservationsBulk = async (req, res, next) => {
   try {
 
@@ -485,31 +513,32 @@ export const deleteReservationsBulk = async (req, res, next) => {
   }
 };
 
-// ===============================================
-// DELETE RESERVATION
-// ===============================================
 /**
- * @async
- * Supprime une réservation.
+ * DELETE RESERVATION
+ * =========================================================================================
+ * Supprime une réservation spécifique.
  *
+ * @async
+ * @function deleteReservation
  * @route DELETE /api/catways/:id/reservations/:idReservation
- * @group Reservations
  *
  * @param {Object} req
  * @param {Object} req.params
- * @param {number} req.params.id - Numéro du catway
- * @param {string} req.params.idReservation - Identifiant de la réservation
+ * @param {number} req.params.id
+ * @param {string} req.params.idReservation
  * @param {Object} req.body
- * @param {string} [req.body.password] - Mot de passe de confirmation
+ * @param {string} [req.body.password]
  * @param {Object} res
  * @param {Function} next
  *
- * @returns {Object} 200 - Réservation supprimée
+ * @returns {Promise<void>}
+ *
  * @throws {ApiError} 400 - Identifiant invalide
  * @throws {ApiError} 401 - Mot de passe invalide
  * @throws {ApiError} 404 - Réservation introuvable
  * @throws {ApiError} 409 - Mot de passe requis
  */
+
 export const deleteReservation = async (req, res, next) => {
     try {
         // 1) Validation IDs

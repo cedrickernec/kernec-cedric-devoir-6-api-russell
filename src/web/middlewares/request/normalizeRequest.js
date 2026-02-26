@@ -1,14 +1,6 @@
 /**
- * ===================================================================
  * REQUEST NORMALISER
- * ===================================================================
- * - Normalise les données entrantes avant validation
- * - Centralise les règles de formatage
- * - Évite la dulication dans les contrôleurs
- * ===================================================================
- */
-
-/**
+ * =========================================================================================
  * Middleware de normalisation des données entrantes.
  *
  * - Transforme l'email en minuscule
@@ -26,6 +18,7 @@
  *
  * @returns {void}
  */
+
 export const normalizeRequest = (req, res, next) => {
 
     // ==================================================

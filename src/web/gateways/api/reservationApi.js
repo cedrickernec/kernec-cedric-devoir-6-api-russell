@@ -1,19 +1,24 @@
 /**
- * ===================================================================
  * RESERVATION API GATEWAY
- * ===================================================================
- * - Couche d'accès HTTP aux endpoints Reservation
- * - Délègue les appels à apiFetch
- * - Ne contient aucune logique métier
- * ===================================================================
+ * =========================================================================================
+ * @module reservationApi
+ *
+ * Couche d’accès HTTP aux endpoints Reservation.
+ *
+ * Responsabilités :
+ * - Encapsuler les endpoints Reservation
+ * - Déléguer les appels à apiFetch
+ * - Maintenir une séparation claire Web ↔ API
+ *
+ * Effets de bord :
+ * - Appels HTTP internes
  */
 
 import { apiFetch } from "./apiFetch.js";
 
-// ==================================================
-// FETCH RESERVATIONS
-// ==================================================
 /**
+ * FETCH RESERVATIONS
+ * =========================================================================================
  * Récupère la liste des réservations.
  *
  * @async
@@ -24,16 +29,16 @@ import { apiFetch } from "./apiFetch.js";
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function fetchReservations(req, res) {
     return apiFetch("/api/reservations", {
         method: "GET"
     }, req, res);
 }
 
-// ==================================================
-// FETCH RESERVATIONS BY CATWAY
-// ==================================================
 /**
+ * FETCH RESERVATIONS BY CATWAY
+ * =========================================================================================
  * Récupère les réservations d'un catway.
  *
  * @async
@@ -45,16 +50,16 @@ export async function fetchReservations(req, res) {
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function fetchReservationsByCatway(catwayNumber, req, res) {
     return apiFetch(`/api/catways/${catwayNumber}/reservations`, {
         method: "GET"
     }, req, res);
 }
 
-// ==================================================
-// FETCH RESERVATIONS BY ID
-// ==================================================
 /**
+ * FETCH RESERVATIONS BY ID
+ * =========================================================================================
  * Récupère une réservation par identifiant.
  *
  * @async
@@ -67,6 +72,7 @@ export async function fetchReservationsByCatway(catwayNumber, req, res) {
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function fetchReservationById(catwayNumber, reservationId, req, res) {
     return apiFetch(
         `/api/catways/${catwayNumber}/reservations/${reservationId}`, {
@@ -75,10 +81,9 @@ export async function fetchReservationById(catwayNumber, reservationId, req, res
     );
 }
 
-// ==================================================
-// FETCH RESERVATION AVAILABILITY
-// ==================================================
 /**
+ * FETCH RESERVATION AVAILABILITY
+ * =========================================================================================
  * Recherche la disponibilité des catways sur une période.
  *
  * - Envoie un payload contenant startDate/endDate et filtres éventuels
@@ -97,6 +102,7 @@ export async function fetchReservationById(catwayNumber, reservationId, req, res
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function fetchReservationAvailability(payload, req, res) {
     return apiFetch(
         "/api/reservations/availability", {
@@ -107,10 +113,9 @@ export async function fetchReservationAvailability(payload, req, res) {
     );
 }
 
-// ==================================================
-// CREATE RESERVATION
-// ==================================================
 /**
+ * CREATE RESERVATION
+ * =========================================================================================
  * Crée une réservation.
  *
  * @async
@@ -123,6 +128,7 @@ export async function fetchReservationAvailability(payload, req, res) {
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function createReservation(catwayNumber, payload, req, res) {
     return apiFetch(
         `/api/catways/${catwayNumber}/reservations`, {
@@ -133,10 +139,9 @@ export async function createReservation(catwayNumber, payload, req, res) {
     );
 }
 
-// ==================================================
-// UPDATE RESERVATION
-// ==================================================
 /**
+ * UPDATE RESERVATION
+ * =========================================================================================
  * Met à jour une réservation.
  *
  * @async
@@ -150,6 +155,7 @@ export async function createReservation(catwayNumber, payload, req, res) {
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function updateReservation(catwayNumber, reservationId, payload, req, res) {
     return apiFetch(
         `/api/catways/${catwayNumber}/reservations/${reservationId}`, {
@@ -160,10 +166,9 @@ export async function updateReservation(catwayNumber, reservationId, payload, re
     );
 }
 
-// ==================================================
-// CHECK BULK RESERVATION DELETE
-// ==================================================
 /**
+ * CHECK BULK RESERVATION DELETE
+ * =========================================================================================
  * Vérifie si une suppression multiple de réservations est autorisée.
  *
  * - Utilisé avant une suppression multiple côté UI (pré-check)
@@ -177,6 +182,7 @@ export async function updateReservation(catwayNumber, reservationId, payload, re
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function checkBulkReservationDelete(payload, req, res) {
     return apiFetch(
         "/api/reservations/bulk-check",
@@ -188,10 +194,9 @@ export async function checkBulkReservationDelete(payload, req, res) {
     );
 }
 
-// ==================================================
-// DELETE BULK RESERVATIONS
-// ==================================================
 /**
+ * DELETE BULK RESERVATIONS
+ * =========================================================================================
  * Supprime plusieurs réservations en une seule opération.
  *
  * - Utilisé pour la suppression multiple depuis la table (AJAX)
@@ -205,6 +210,7 @@ export async function checkBulkReservationDelete(payload, req, res) {
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function deleteBulkReservations(payload, req, res) {
     return apiFetch(
         "/api/reservations/bulk",
@@ -216,10 +222,9 @@ export async function deleteBulkReservations(payload, req, res) {
     );
 }
 
-// ==================================================
-// DELETE RESERVATION
-// ==================================================
 /**
+ * DELETE RESERVATION
+ * =========================================================================================
  * Supprime une réservation.
  *
  * @async
@@ -233,6 +238,7 @@ export async function deleteBulkReservations(payload, req, res) {
  *
  * @returns {Promise<ApiFetchResult>} - Résultat normalisé de apiFetch
  */
+
 export async function deleteReservation(catwayNumber, reservationId, req, res, password = null) {
 
     const options = { method: "DELETE" };

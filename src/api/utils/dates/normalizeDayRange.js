@@ -1,16 +1,22 @@
 /**
- * ===================================================================
  * NORMALIZE DAY RANGE
- * ===================================================================
- * Fournir un intervalle de dates cohérent :
- *      - Normalise la date de début et de fin d'une réservation
- *      - Prépare les dates avant calcul de conflit
- *      - Garantit une comparaison fiable entre périodes
- * ===================================================================
+ * =========================================================================================
+ * @module normalizeDayRange
+ *
+ * Normalise un intervalle de dates pour garantir des comparaisons fiables.
+ *
+ * Remarque :
+ * - Ici, la fonction renvoie simplement {start, end} tel quel.
+ * - Si tu veux vraiment “normaliser” (début/fin de journée), c’est ici que ça devrait vivre.
+ *
+ * Effets de bord :
+ * - Aucun (fonction pure)
  */
 
 /**
- * Normalise un intervalle de dates.
+ * NORMALIZE DAY RANGE
+ * =========================================================================================
+ * Retourne un intervalle {start, end}.
  *
  * @function normalizeDayRange
  *
@@ -19,6 +25,7 @@
  *
  * @returns {{ start: Date, end: Date }}
  */
+
 export const normalizeDayRange = (startDate, endDate) => {
 
     return { start: startDate, end: endDate };

@@ -1,18 +1,8 @@
-/**
- * ===================================================================
- * SESSION CONTROLLER
- * ===================================================================
- * - Maintient la session active côté serveur
- * - Tente un refresh JWT si nécessaire
- * ===================================================================
- */
-
 import { tryRefreshToken } from "../utils/api/refreshToken.js";
 
-// ==================================================
-// SESSION KEEP ALIVE
-// ==================================================
 /**
+ * SESSION KEEP ALIVE
+ * =========================================================================================
  * Maintient la session active côté serveur.
  *
  * - Tente un refresh du token JWT si nécessaire

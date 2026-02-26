@@ -1,25 +1,36 @@
 /**
- * ===================================================================
  * CATWAY VALIDATORS
- * ===================================================================
- * - Empêche les données invalides d'entrer dans l'application :
- *      - Vérifie la validité des données entrantes
- *      - Contrôle les formats, types et champs obligatoires
- * ===================================================================
+ * =========================================================================================
+ * @module catwayValidators
+ *
+ * Validation des données Catway (création / mise à jour).
+ *
+ * Objectifs :
+ * - Empêcher des données incohérentes d’entrer dans l’application
+ * - Centraliser les règles de validation “formulaire”
+ *
+ * Stratégie :
+ * - Retourne un objet `errors` (pas de throw ici)
+ * - Le controller décide : si errors non vide → ApiError.validation(...)
  */
 
-// =====================================
-// CATWAY CREATE VALIDATION
-// =====================================
 /**
- * Valide les données de création d'un catway.
+ * VALIDATE CATWAY CREATE
+ * =========================================================================================
+ * Valide les données de création d’un catway.
+ *
+ * Règles principales :
+ * - catwayNumber requis, entier, >= 1
+ * - catwayType requis, dans ["short","long"]
+ * - catwayState requis
  *
  * @function validateCatwayCreate
  *
- * @param {Object} body
+ * @param {Object} body Données filtrées (cleanData)
  *
- * @returns {Object} errors - Objet contenant les erreurs par champ
+ * @returns {Object} errors Erreurs par champ (vide si OK)
  */
+
 export function validateCatwayCreate(body) {
     const errors = {};
 
@@ -54,18 +65,22 @@ export function validateCatwayCreate(body) {
     return errors
 };
 
-// =====================================
-// CATWAY UPDATE VALIDATION
-// =====================================
 /**
- * Valide les données de mise à jour d'un catway.
+ * VALIDATE CATWAY UPDATE
+ * =========================================================================================
+ * Valide les données de mise à jour d’un catway.
+ *
+ * Règles principales :
+ * - isOutOfService, si présent, doit être un booléen
+ * - catwayState, si présent, doit être une string non vide
  *
  * @function validateCatwayUpdate
  *
- * @param {Object} body
+ * @param {Object} body Données filtrées (cleanData)
  *
- * @returns {Object} errors - Objet contenant les erreurs par champ
+ * @returns {Object} errors Erreurs par champ (vide si OK)
  */
+
 export function validateCatwayUpdate(body) {
     const errors = {};
 

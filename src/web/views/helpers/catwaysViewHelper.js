@@ -1,14 +1,30 @@
 /**
- * VIEW HELPER - CREATE PAGE RENDER
+ * VIEW HELPER - CATWAYS
  * =========================================================================================
- * Rend la page de création d'un catway.
+ * @module catwaysViewHelper
  *
- * - Centralise les données envoyées à la vue
- * - Gère les erreurs et valeurs par défaut
+ * Helpers de rendu pour les pages Catways.
+ *
+ * Responsabilités :
+ * - Centraliser les appels res.render
+ * - Uniformiser les propriétés envoyées aux vues
+ * - Éviter la duplication dans les contrôleurs
+ *
+ * Dépendances :
+ * - Moteur EJS configuré dans l’application
+ *
+ * Effets de bord :
+ * - Appel direct à res.render()
+ */
+
+/**
+ * RENDER CREATE CATWAY PAGE
+ * =========================================================================================
+ * Rend la page de création d’un catway.
  *
  * @function renderCreateCatwayPage
  *
- * @param {Object} res - Réponse Express
+ * @param {Object} res
  * @param {Object} params
  * @param {Object} [params.errors]
  * @param {string|null} [params.globalError]
@@ -40,16 +56,13 @@ export const renderCreateCatwayPage = (res, {
 
 
 /**
- * VIEW HELPER - EDIT PAGE RENDER
+ * RENDER EDIT CATWAY PAGE
  * =========================================================================================
- * Rend la page d'édition d'un catway.
- *
- * - Injecte les données du catway
- * - Injecte les erreurs éventuelles
+ * Rend la page d’édition d’un catway.
  *
  * @function renderEditCatwayPage
  *
- * @param {Object} res - Réponse Express
+ * @param {Object} res
  * @param {Object} params
  * @param {Object} params.catway
  * @param {Object} [params.errors]

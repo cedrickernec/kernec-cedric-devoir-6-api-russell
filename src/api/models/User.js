@@ -1,10 +1,24 @@
 /**
- * ===================================================================
  * USER MODEL
- * ===================================================================
- * - Représente un utilisateur de l'application
- * - Stocke les informations d'authentification
- * ===================================================================
+ * =========================================================================================
+ * @module User
+ *
+ * Modèle Mongoose représentant un utilisateur de l’application.
+ *
+ * Responsabilités :
+ * - Définir la structure persistée d’un utilisateur
+ * - Stocker les informations d’authentification
+ * - Appliquer les contraintes de validation (required, unique, lowercase, trim)
+ *
+ * Dépendances :
+ * - mongoose
+ *
+ * Sécurité :
+ * - Contrainte d’unicité sur l’email
+ * - Normalisation automatique de l’email (lowercase, trim)
+ *
+ * Effets de bord :
+ * - Persistance en base MongoDB via Mongoose
  */
 
 import mongoose from "mongoose";

@@ -1,11 +1,9 @@
 /**
- * ===================================================================
  * VIEW CONTROLLER - RESERVATIONS
- * ===================================================================
+ * =========================================================================================
  * - Rendu page EJS
  * - Chargement des données via API gateway
  * - Gestion pannel latéral
- * ===================================================================
  */
 
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
@@ -30,10 +28,9 @@ import { RESERVATION_MESSAGES } from "../../../../public/js/messages/reservation
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { loadOtherReservations } from "../../utils/mappers/loadOtherReservations.js";
 
-// ==================================================
-// RESERVATIONS LIST
-// ==================================================
 /**
+ * RESERVATIONS LIST
+ * =========================================================================================
  * Affiche la liste des réservations.
  *
  * - Appelle l'API (gateway) pour récupérer les réservations
@@ -51,6 +48,7 @@ import { loadOtherReservations } from "../../utils/mappers/loadOtherReservations
  *
  * @returns {Promise<void>}
  */
+
 export const getReservationsPage = async (req, res, next) => {
     try {
       const apiData = await fetchReservations(req, res);
@@ -105,10 +103,9 @@ export const getReservationsPage = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// RESERVATION DETAILS - FULL PAGE
-// ==================================================
 /**
+ * RESERVATION DETAILS - FULL PAGE
+ * =========================================================================================
  * Affiche la page détail d'une réservation.
  *
  * - Récupère les identifiants via req.params
@@ -128,6 +125,7 @@ export const getReservationsPage = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const getReservationById = async (req, res, next) => {
   try {
     const { id, catwayNumber } = req.params;
@@ -165,10 +163,9 @@ export const getReservationById = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// RESERVATION PANEL
-// ==================================================
 /**
+ * RESERVATION PANEL
+ * =========================================================================================
  * Rend le panneau latéral (partial) d'une réservation.
  *
  * - Récupère les identifiants via req.params
@@ -188,6 +185,7 @@ export const getReservationById = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const getReservationPanel = async (req, res, next) => {
   try {
     const { id, catwayNumber } = req.params;
@@ -228,10 +226,9 @@ export const getReservationPanel = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// CREATE RESERVATION PAGE
-// ==================================================
 /**
+ * CREATE RESERVATION PAGE
+ * =========================================================================================
  * Affiche l'assistant (wizard) de création de réservation.
  *
  * - Step 1 : informations client/bateau
@@ -250,6 +247,7 @@ export const getReservationPanel = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const getCreateReservationPage = async (req, res, next) => {
     try {
       const step = req.query.step || "client";
@@ -309,10 +307,9 @@ export const getCreateReservationPage = async (req, res, next) => {
     }
 };
 
-// ==================================================
-// EDIT RESERVATION PAGE
-// ==================================================
 /**
+ * EDIT RESERVATION PAGE
+ * =========================================================================================
  * Affiche la page d'édition d'une réservation.
  *
  * - Récupère les identifiants via req.params
@@ -332,6 +329,7 @@ export const getCreateReservationPage = async (req, res, next) => {
  *
  * @returns {Promise<void>}
  */
+
 export const getEditReservationPage = async (req, res, next) => {
   try {
     const { id, catwayNumber } = req.params;

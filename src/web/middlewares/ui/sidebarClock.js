@@ -1,15 +1,8 @@
-/**
- * ===================================================================
- * SIDEBAR CLOCK MIDDLEWARE
- * ===================================================================
- * - Fournit la date et l'heure actuelles auw vues
- * - Utilisé principalement par le sidebar
- * ===================================================================
- */
-
 import { formatDateFR, formatTimeFR } from "../../utils/formatters/dateFormatter.js";
 
 /**
+ * SIDEBAR CLOCK MIDDLEWARE
+ * =========================================================================================
  * Middleware d'injection de la date et heure actuelles.
  *
  * - Fournit la date formatée aux vues
@@ -26,6 +19,7 @@ import { formatDateFR, formatTimeFR } from "../../utils/formatters/dateFormatter
  *
  * @returns {void}
  */
+
 export default function sidebarClock(req, res, next) {
     const now = new Date();
 

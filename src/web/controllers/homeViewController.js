@@ -1,17 +1,6 @@
 /**
- * ===================================================================
- * HOME / LOGIN VIEW CONTROLLER
- * ===================================================================
- * - Affiche la page de connexion
- * - Gère les erreurs d'authentification
- * - Désactive animations après échec login
- * ===================================================================
- */
-
-// ==================================================
-// HOME PAGE
-// ==================================================
-/**
+ * HOME PAGE
+ * =========================================================================================
  * Affiche la page de connexion.
  *
  * - Redirige vers le dashboard si déjà connecté
@@ -26,6 +15,7 @@
  *
  * @returns {void}
  */
+
 export const getHomeView = (req, res, next) => {
     try {
 

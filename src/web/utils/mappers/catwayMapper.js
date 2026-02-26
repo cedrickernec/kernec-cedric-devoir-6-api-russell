@@ -1,20 +1,26 @@
 /**
- * ===================================================================
  * VIEW MAPPER - CATWAYS
- * ===================================================================
- * - Transforme les données API en ViewModels utilisables par les vues
- * - Centralise la logique d'adaptation UI (table / detail / formulaire)
- * - Évite toute logique de présentation dans les contrôleurs
- * ===================================================================
+ * =========================================================================================
+ * @module catwayMapper
+ *
+ * Adaptateur API → ViewModel pour les catways.
+ *
+ * Responsabilités :
+ * - Transformer les données API en modèles exploitables par les vues
+ * - Centraliser la logique de présentation (status, formatage dates)
+ * - Éviter toute logique UI dans les contrôleurs
+ *
+ * Dépendances :
+ * - buildCatwayStatus
+ * - formatDateFR
  */
 
 import { buildCatwayStatus } from "../business/catways/catwayStatus.js";
 import { formatDateFR } from "../formatters/dateFormatter.js";
 
-/* ==================================================
-  MAPPER - CATWAY LIST (TABLE)
-================================================== */
 /**
+ * MAP CATWAY TO LIST
+ * =========================================================================================
  * Transforme un catway API en modèle liste (table).
  *
  * - Construit le statut visuel via buildCatwayStatus
@@ -32,6 +38,7 @@ import { formatDateFR } from "../formatters/dateFormatter.js";
  *
  * @returns {Object} - Modèle liste
  */
+
 export function mapCatwayToList(catway) {
 
     const status = buildCatwayStatus({
@@ -48,10 +55,9 @@ export function mapCatwayToList(catway) {
   };
 }
 
-/* ==================================================
-  MAPPER - CATWAY DETAIL
-================================================== */
 /**
+ * MAP CATWAY TO DETAIL
+ * =========================================================================================
  * Transforme un catway API en modèle détail.
  *
  * - Ajoute les dates formatées
@@ -63,6 +69,7 @@ export function mapCatwayToList(catway) {
  *
  * @returns {Object} Modèle détail
  */
+
 export function mapCatwayToDetail(catway) {
 
   const status = buildCatwayStatus({
@@ -80,10 +87,9 @@ export function mapCatwayToDetail(catway) {
   };
 }
 
-/* ==================================================
-  MAPPER - CATWAY FORM
-================================================== */
 /**
+ * MAP CATWAY TO FORM
+ * =========================================================================================
  * Transforme un catway API en modèle formulaire.
  *
  * - Prépare les champs nécessaires à l'édition
@@ -94,6 +100,7 @@ export function mapCatwayToDetail(catway) {
  *
  * @returns {Object} Modèle formulaire
  */
+
 export function mapCatwayToForm(catway) {
     return {
       id: catway.id,

@@ -1,42 +1,36 @@
 /**
- * ===================================================================
- * API ERROR HANDLER
- * ===================================================================
- * - Centralise la gestion des erreurs API côté web
- * - Gère :
- *          → AJAX vs HTML
- *          → password_required
- *          → invalid_password
- *          → erreurs classiques
- * ===================================================================
+ * WEB API ERROR HANDLER
+ * =========================================================================================
+ * @module apiErrorHandler
+ *
+ * Handler centralisé des erreurs API côté Web.
+ *
+ * Responsabilités :
+ * - Interpréter la réponse normalisée issue de apiFetch
+ * - Gérer les cas métier spécifiques (password_required, invalid_password)
+ * - Adapter la réponse selon le contexte (AJAX ou HTML)
  */
 
 /**
- * Handler centralisé des erreurs API côté Web.
- *
- * - Retourne true si aucune erreur API n'est détectée
- * - Gère les cas spéciaux liés à la suppression protégée par mot de passe
- * - Adapte la réponse selon le contexte AJAX (JSON) ou HTML (render)
- *
- * Cas gérés via apiResponse.context.reason :
- * - "password_required" : renvoie 409 + JSON (needPassword)
- * - "invalid_password"  : renvoie 401 + JSON
- * - autres erreurs       : AJAX => 500 JSON, sinon => 500 render
+ * HANDLE API ERROR
+ * =========================================================================================
+ * Analyse une réponse API et gère les erreurs côté Web.
  *
  * @function handleApiError
  *
- * @param {Object} apiResponse - Réponse normalisée issue de apiFetch
+ * @param {Object} apiResponse - Réponse issue de apiFetch
  * @param {boolean} apiResponse.success
  * @param {string} [apiResponse.message]
  * @param {Object} [apiResponse.context]
  *
- * @param {Object} req - Requête Express
- * @param {Object} req.headers
+ * @param {Object} req
+ * @param {Object} res
  *
- * @param {Object} res - Réponse Express
- *
- * @returns {boolean} - true si on peut continuer, false si une réponse a été envoyée
+ * @returns {boolean}
+ * - true  → aucune erreur, le contrôleur peut continuer
+ * - false → une réponse a déjà été envoyée
  */
+
 export function handleApiError(apiResponse, req, res) {
 
     // Si pas d’erreur → on continue normalement

@@ -1,27 +1,31 @@
 /**
- * ===================================================================
  * LOAD OTHER RESERVATIONS HELPER
- * ===================================================================
- * - Charge les réservations d'un catway
- * - Exclut la réservation actuellement affichée
- * - Transforme les données API en ViewModel list
- * ===================================================================
- * Utilisé principalement dans les pages détails
- * pour afficher les réservations associées.
- * ===================================================================
+ * =========================================================================================
+ * @module loadOtherReservations
+ *
+ * Charge les réservations d’un catway pour affichage en page détail.
+ *
+ * Responsabilités :
+ * - Appeler le gateway API
+ * - Filtrer la réservation courante
+ * - Transformer les données en ViewModel
+ *
+ * Dépendances :
+ * - fetchReservationsByCatway
+ * - mapReservationToList
+ *
+ * Effets de bord :
+ * - Appel réseau via gateway
  */
 
 import { fetchReservationsByCatway } from "../../gateways/api/reservationApi.js";
 import { mapReservationToList } from "./reservationMapper.js";
 
 /**
+ * LOAD OTHER RESERVATIONS
+ * =========================================================================================
  * Charge les réservations associées à un catway,
  * en excluant la réservation courante.
- *
- * - Appelle le gateway API
- * - Vérifie la validité de la réponse
- * - Exclut currentId
- * - Transforme les données en ViewModel liste
  *
  * @async
  * @function loadOtherReservations
@@ -33,6 +37,7 @@ import { mapReservationToList } from "./reservationMapper.js";
  *
  * @returns {Promise<Object[]>} - Liste de réservations mappées
  */
+
 export async function loadOtherReservations(catwayNumber, currentId, req, res) {
 
     // Appel API

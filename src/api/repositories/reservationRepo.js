@@ -1,18 +1,27 @@
 /**
- * ===================================================================
  * RESERVATION REPOSITORY
- * ===================================================================
- * - Lit et écrit les données uniquement :
- *      - Centralise tous les accès à la base de données
- * ===================================================================
+ * =========================================================================================
+ * @module reservationRepo
+ *
+ * Couche d’accès aux données pour les réservations.
+ *
+ * Responsabilités :
+ * - Centraliser tous les accès MongoDB liés aux réservations
+ * - Effectuer uniquement des opérations CRUD
+ * - Ne contenir aucune logique métier
+ *
+ * Dépendances :
+ * - Reservation model
+ *
+ * Effets de bord :
+ * - Lecture et écriture en base MongoDB
  */
 
 import Reservation from "../models/Reservation.js";
 
-// ===============================================
-// GET ALL RESERVATION
-// ===============================================
 /**
+ * GET ALL RESERVATION
+ * =========================================================================================
  * Récupère toutes les réservations.
  *
  * - Triées par date de début décroissante
@@ -22,35 +31,33 @@ import Reservation from "../models/Reservation.js";
  *
  * @returns {Promise<Object[]>}
  */
+
 export async function getAllReservations() {
 
     return Reservation.find().sort({ startDate: -1 });
 }
 
-// ===============================================
-// GET RESERVATIONS BY CATWAY
-// ===============================================
 /**
- * Recherche une réservation par identifiant
- * et numéro de catway.
+ * GET RESERVATIONS BY CATWAY
+ * =========================================================================================
+ * Récupère toutes les réservations d’un catway.
  *
  * @async
- * @function findReservationById
+ * @function getReservationsByCatway
  *
  * @param {number|string} catwayNumber
- * @param {string} idReservation
  *
- * @returns {Promise<Object|null>}
+ * @returns {Promise<Object[]>}
  */
+
 export async function getReservationsByCatway(catwayNumber) {
 
     return Reservation.find({ catwayNumber }).sort({ startDate: -1 });
 }
 
-// ===============================================
-// FIND RESERVATION BY ID
-// ===============================================
 /**
+ * FIND RESERVATION BY ID
+ * =========================================================================================
  * Recherche une réservation par identifiant
  * et numéro de catway.
  *
@@ -62,15 +69,15 @@ export async function getReservationsByCatway(catwayNumber) {
  *
  * @returns {Promise<Object|null>}
  */
+
 export async function findReservationById(catwayNumber, idReservation) {
 
     return Reservation.findOne({ _id: idReservation, catwayNumber });
 }
 
-// ===============================================
-// GET RESERVATION OVERLAPPING PERIOD
-// ===============================================
 /**
+ * GET RESERVATION OVERLAPPING PERIOD
+ * =========================================================================================
  * Récupère les réservations chevauchant une période.
  *
  * @async
@@ -82,6 +89,7 @@ export async function findReservationById(catwayNumber, idReservation) {
  *
  * @returns {Promise<Object[]>}
  */
+
 export async function getReservationsOverlappingPeriod({ start, end }) {
     return Reservation.find({
         startDate: { $lte: end },
@@ -89,10 +97,9 @@ export async function getReservationsOverlappingPeriod({ start, end }) {
     });
 }
 
-// ===============================================
-// CREATE RESERVATION
-// ===============================================
 /**
+ * CREATE RESERVATION
+ * =========================================================================================
  * Crée une nouvelle réservation.
  *
  * @async
@@ -102,15 +109,15 @@ export async function getReservationsOverlappingPeriod({ start, end }) {
  *
  * @returns {Promise<Object>}
  */
+
 export async function createReservation(data) {
 
     return Reservation.create(data);
 }
 
-// ===============================================
-// DELETE RESERVATION
-// ===============================================
 /**
+ * DELETE RESERVATION
+ * =========================================================================================
  * Supprime une réservation.
  *
  * @async
@@ -121,15 +128,15 @@ export async function createReservation(data) {
  *
  * @returns {Promise<Object|null>}
  */
+
 export async function deleteReservation(catwayNumber, idReservation) {
 
     return Reservation.findOneAndDelete({ catwayNumber, _id: idReservation });
 }
 
-// ===============================================
-// FIND RESERVATION CONFLICT
-// ===============================================
 /**
+ * FIND RESERVATION CONFLICT
+ * =========================================================================================
  * Recherche un conflit de réservation.
  *
  * - Vérifie chevauchement de dates
@@ -146,6 +153,7 @@ export async function deleteReservation(catwayNumber, idReservation) {
  *
  * @returns {Promise<Object|null>}
  */
+
 export async function findReservationConflict({
     catwayNumber,
     start,
