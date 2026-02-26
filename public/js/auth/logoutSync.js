@@ -1,14 +1,20 @@
 /**
- * ===================================================================
  * AUTH - LOGOUT SESSION SYNCHRONISATION
- * ===================================================================
- * - Synchronise la déconnexion entre plusieurs onglets
- * - Lorsqu'un logout est effectué :
- *      → envoie un event broadcastChannel
- *      → force la déconnexion des autres onglets ouverts
- * ===================================================================
- * La navigation continue normalement après émission.
- * ===================================================================
+ * =========================================================================================
+ * @module logoutSync
+ * 
+ * Synchronise la déconnexion utilisateur entre plusieurs onglets.
+ *
+ * - Intercepte les clics sur les liens "/auth/logout"
+ * - Émet un message BroadcastChannel "FORCE_LOGOUT"
+ * - Les autres onglets peuvent réagir à cet événement
+ *
+ * Dépendances :
+ * - BroadcastChannel "russell-session"
+ * - Présence d’un lien a[href="/auth/logout"]
+ *
+ * Effets de bord :
+ * - Émet un message inter-onglet
  */
 
 (() => {

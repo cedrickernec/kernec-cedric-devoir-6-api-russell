@@ -1,35 +1,49 @@
 /**
- * ===================================================================
- * RESERVATION RECAP DATA EXTRACTOR
- * ===================================================================
- * - Transforme les identifiants sélectionnés en données métier
- * - Convertit les IDs encodés en objets exploitables
- * - Calcule automatiquement la durée de réservation
- * ===================================================================
- * Format attendu du selectionId : "type|catway|from|to"
- * Exemple : partial|12|2026-05-01|2026-05-05
- * ===================================================================
- * Utilisé par reservationValidationController (modale récapitulative)
- * ===================================================================
+ * RESERVATION RECAP MODULE
+ * =========================================================================================
+ * @module reservationRecap
+ *
+ * Transforme une sélection encodée en objets métier exploitables
+ * pour l'affichage d'un récapitulatif.
+ *
+ * Format attendu des identifiants :
+ * "type|catway|from|to"
+ * Exemple : "partial|12|2026-05-01|2026-05-05"
+ *
+ * Ce module :
+ * - Décode les identifiants
+ * - Formate les dates pour affichage
+ * - Calcule la durée via computeNightsBetweenDates
  */
 
 import { computeNightsBetweenDates } from "../../utils/computeReservationNights.js";
 
-// ========================================================
-// DATE FORMATTER
-// ========================================================
-
-function formatDateFR(date) {
-  return date instanceof Date && !isNaN(date)
-    ? date.toLocaleDateString("fr-FR")
-    : "-";
-}
-
-// ========================================================
-// MAIN EXTRACTION
-// ========================================================
+/**
+ * EXTRACT RESERVATION DATA
+ * =========================================================================================
+ * Convertit un Set d'identifiants encodés
+ * en tableau d'objets structurés pour l'UI.
+ *
+ * @function extractReservationData
+ * 
+ * @param {Set<string>} idsSet
+ * 
+ * @returns {Array<{
+ *   type: string,
+ *   catway: number,
+ *   startDate: string,
+ *   endDate: string,
+ *   duration: number|null
+ * }>}
+ */
 
 export function extractReservationData(idsSet) {
+
+  function formatDateFR(date) {
+    return date instanceof Date && !isNaN(date)
+      ? date.toLocaleDateString("fr-FR")
+      : "-";
+  }
 
   return Array.from(idsSet).map(raw => {
 
@@ -50,4 +64,4 @@ export function extractReservationData(idsSet) {
       duration: days,
     };
   });
-}
+};

@@ -1,21 +1,31 @@
 /**
- * ===================================================================
- * CATWAYS LIVE FILTER CONTROLLER
- * ===================================================================
- * - Filtre dynamiquement les lignes de la table Catways
- * - Applique plusieurs critères combinable :
- *      → Numéro
- *      → Type
- *      → État (OK / HS / WARNING)
- * - Met à jour le compteur de résultats visibles
- * - Gère l'affichage de la ligne "aucun résultat"
- * - Notifie tableCore des changements de visibilité
- * ===================================================================
- * Synchronisé avec tableCore via l'event "table:visibility-change"
- * ===================================================================
+ * CATWAYS LIVE FILTER MODULE
+ * =========================================================================================
+ * @module catwaysLiveFilter
+ *
+ * Implémente le filtrage dynamique côté client pour la table des catways.
+ *
+ * Responsabilités :
+ * - Appliquer des filtres combinables (numéro, type, état)
+ * - Mettre à jour la visibilité des lignes
+ * - Maintenir un compteur visible / total
+ * - Gérer l'affichage "aucun résultat"
+ * - Notifier les autres modules via l'événement "table:visibility-change"
+ *
+ * Ce module agit uniquement au niveau UI (aucun appel réseau).
  */
 
 import { handleNoResult } from "../noResultHandler.js";
+
+/**
+ * CATWAYS LIVE FILTER INITIALISATION
+ * =========================================================================================
+ * Initialise les filtres dynamiques et attache les listeners UI.
+ *
+ * @function initCatwaysLiveFilter
+ * 
+ * @returns {void}
+ */
 
 export function initCatwaysLiveFilter() {
 

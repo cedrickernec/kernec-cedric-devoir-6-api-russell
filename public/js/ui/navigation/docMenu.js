@@ -1,11 +1,17 @@
 /**
- * ===================================================================
- * DOC MENU
- * ===================================================================
- * - Gère l'ouverture / fermeture des sections du menu latéral
- * - Ferme automatiquement les autres sections lors d'un clic
- * - Supporte la fermeture via la touche Escape
- * ===================================================================
+ * DOC MENU MODULE
+ * =========================================================================================
+ * @module docMenu
+ *
+ * Contrôleur du menu latéral de documentation.
+ *
+ * Responsabilités :
+ * - Gérer l'ouverture / fermeture des groupes
+ * - Fermer automatiquement les autres sections
+ * - Intégrer la fermeture via Escape
+ * - Maintenir les attributs ARIA cohérents
+ *
+ * Dépend de escapeManager.
  */
 
 import { escapeManager } from "../accessibility/escapeManager.js";

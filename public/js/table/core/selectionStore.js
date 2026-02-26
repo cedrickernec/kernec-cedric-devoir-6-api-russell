@@ -1,53 +1,116 @@
 /**
- * ===================================================================
  * GLOBAL SELECTION STORE
- * ===================================================================
- * - Stockage centralisé des identifiants sélectionnés
- * - Partagé entre plusieurs composants UI
- * - Permet une synchronisation indépendante du DOM
- * ===================================================================
- * Concept :
- * → La selection vit dans la mémoire applicative
- * ===================================================================
+ * =========================================================================================
+ * @module selectionStore
+ *
+ * Stockage centralisé des identifiants sélectionnés.
+ *
+ * Objectif :
+ * - Maintenir une sélection persistante
+ * - Décorréler l’état mémoire du DOM
+ * - Permettre une synchronisation multi-composants
+ *
+ * La sélection vit uniquement en mémoire applicative.
+ */
+
+/**
+ * SELECTED IDs
+ * =========================================================================================
+ * Ensemble interne des identifiants sélectionnés.
+ *
+ * @type {Set<string>}
  */
 
 export const selectedIds = new Set();
 
-// ========================================================
-// MUTATIONS
-// ========================================================
+/**
+ * ADD SELECTION
+ * =========================================================================================
+ * Ajoute un identifiant à la sélection globale.
+ *
+ * @function addSelection
+ * 
+ * @param {string} id
+ * 
+ * @returns {void}
+ */
 
-// Ajoute un élément de la sélection globale
 export function addSelection(id) {
   selectedIds.add(id);
 }
 
-// Retire un élément de la sélection globale
+/**
+ * REMOVE SELECTION
+ * =========================================================================================
+ * Retire un identifiant de la sélection globale.
+ *
+ * @function removeSelection
+ * 
+ * @param {string} id
+ * 
+ * @returns {void}
+ */
+
 export function removeSelection(id) {
   selectedIds.delete(id);
 }
 
-// Vérifie si un élément est sélectionné
+/**
+ * HAS SELECTION
+ * =========================================================================================
+ * Vérifie si un identifiant est sélectionné.
+ *
+ * @function hasSelection
+ * 
+ * @param {string} id
+ * 
+ * @returns {boolean}
+ */
+
 export function hasSelection(id) {
   return selectedIds.has(id);
 }
 
-// Vide complètement la sélection
+/**
+ * CLEAR SELECTIONS
+ * =========================================================================================
+ * Vide complètement la sélection.
+ * 
+ * @function clearSelections
+ * 
+ * @returns {void}
+ */
+
 export function clearSelections() {
   selectedIds.clear();
 }
 
-// ========================================================
-// READERS
-// ========================================================
+/**
+ * GET SELECTIONS
+ * =========================================================================================
+ * Retourne l'ensemble des identifiants sélectionnés.
+ *
+ * @function getSelections
+ * 
+ * @returns {Set<string>}
+ */
 
-// Retourne l'ensemble des sélections
 export function getSelections() {
   return selectedIds;
 }
 
-// Compte les sélections appartenant à un catway
-// Format attendu : "catwayNumber|..."
+/**
+ * COUNT SELECTIONS BY CATWAY
+ * =========================================================================================
+ * Compte les sélections appartenant à un catway donné.
+ *
+ * @function countSelectionsByCatway
+ * 
+ * @param {string|number} catwayNumber
+ * 
+ * @returns {number}
+ */
+
 export function countSelectionsByCatway(catwayNumber) {
   return [...selectedIds].filter(id => id.startsWith(`${catwayNumber}|`)).length;
 }

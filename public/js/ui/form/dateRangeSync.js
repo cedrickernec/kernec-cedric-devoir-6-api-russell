@@ -1,12 +1,18 @@
 /**
- * ===================================================================
  * CALENDAR SYNCRONISATION
- * ===================================================================
- * - Empèche une sélection de date antérieur à la date de début saisie
- * - Synchronise la date de fin en fonction de la date de début saisie
- * ===================================================================
- * Applique automatiquement la logique métier "minimum 1 nuit"
- * ===================================================================
+ * =========================================================================================
+ * @module dateRangeSync
+ * 
+ * Synchronise les champs startDate / endDate.
+ *
+ * Règles appliquées :
+ * - La date de fin ne peut pas être antérieure à la date de début
+ * - Minimum 1 nuit obligatoire
+ * - Ajustement automatique si la date de fin devient invalide
+ *
+ * Effets de bord :
+ * - Modifie l'attribut min du champ endDate
+ * - Met à jour automatiquement la valeur si nécessaire
  */
 
 document.addEventListener("DOMContentLoaded", () => {

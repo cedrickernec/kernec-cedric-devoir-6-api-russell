@@ -1,17 +1,28 @@
 /**
- * ===================================================================
  * PARTIALS VIEW TOGGLE CONTROLLER
- * ===================================================================
- * - Permet de naviguer entre :
- *      → la liste principale des catways
- *      → la vue détaillée des créneaux partiels
- * - Génère dynamiquement les lignes partielles
- * - Restaure automatiquement l'état de sélection existant
- * ===================================================================
- * Interaction avec :
- *      → selectionStore (état global des sélections)
- *      → selectionController (toggle boutons)
- * ===================================================================
+ * =========================================================================================
+ * @module partialsToggle
+ * 
+ * Contrôleur de navigation entre :
+ * - La vue principale des catways
+ * - La vue détaillée des créneaux partiels
+ *
+ * Responsabilités :
+ * - Générer dynamiquement les lignes de créneaux partiels
+ * - Restaurer l'état de sélection existant (selectionStore)
+ * - Basculer l'affichage des sections
+ *
+ * Dépendances :
+ * - selectionStore (hasSelection)
+ * - Boutons .btn-show-partials
+ * - data-slots injecté côté serveur
+ * 
+ * Événements écoutés :
+ * - Click (delegation) sur .btn-show-partials
+ * 
+ * Effets de bord :
+ * - Manipulation du DOM (renderPartials, hide/show sections)
+ * - JSON.parse sur data-slots
  */
 
 import { hasSelection } from "./core/selectionStore.js";
@@ -84,7 +95,7 @@ function createPartialRow(catwayNumber, catwayType, slot) {
   `;
 
   const toggleBtn = row.querySelector(".btn-toggle");
-  if (hasSelection(selectionId)) {
+  if (isSelected) {
     toggleBtn.classList.add("is-active");
   }
 

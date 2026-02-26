@@ -1,14 +1,40 @@
 /**
- * ===================================================================
- * RESERVATION SUMMARY CONTENT BUILDER
- * ===================================================================
- * - Génère le contenu DOM du récapitulatif de réservation avant submit
- * - Affiche :
- *          → informations client / bateau
- *          → liste des réservations sélectionnées
- *          → durée totale
- *          → avertissement en cas de chevauchement
- * ===================================================================
+ * RESERVATION SUMMARY MODULE
+ * =========================================================================================
+ * @module reservationSummary
+ *
+ * Génère le contenu DOM du récapitulatif
+ * affiché avant la soumission d'une réservation.
+ *
+ * Responsabilités :
+ * - Afficher les informations client / bateau
+ * - Lister les réservations sélectionnées
+ * - Calculer et afficher la durée totale
+ * - Détecter d'éventuels chevauchements
+ */
+
+/**
+ * RESERVATION SUMMARY BUILDER
+ * =========================================================================================
+ * Construit le récapitulatif DOM d'une réservation.
+ *
+ * @function reservationSummary
+ * 
+ * @param {{
+ *   data: {
+ *     clientName: string,
+ *     boatName: string,
+ *     reservations: Array<{
+ *       type: string,
+ *       catway: number,
+ *       startDate: string,
+ *       endDate: string,
+ *       duration: number|null
+ *     }>
+ *   }
+ * }} options
+ * 
+ * @returns {HTMLElement}
  */
 
 export function reservationSummary({ data }) {
@@ -106,10 +132,21 @@ export function reservationSummary({ data }) {
     return wrapper;
 }
 
-// ==================================================
-// OVERLAP DETECTION ALGORITHM
-// (détecte si deux périodes se chevauchent)
-// ==================================================
+/**
+ * OVERLAP DETECTION ALGORITHM
+ * =========================================================================================
+ * Détecte si au moins deux réservations se chevauchent.
+ *
+ * Algorithme :
+ * - Convertit les dates au format Date
+ * - Compare chaque paire de périodes
+ *
+ * @function hasOverlappingReservations
+ * 
+ * @param {Array<Object>} reservations
+ * 
+ * @returns {boolean}
+ */
 
 function hasOverlappingReservations(reservations) {
     const dated = reservations

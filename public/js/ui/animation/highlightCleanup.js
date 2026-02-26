@@ -1,12 +1,14 @@
 /**
- * ===================================================================
  * HIGHLIGHT CLEANUP (POST-ANIMATION)
- * ===================================================================
- * - Supprime l'attribut data-highlight après un délai
- * - Permet de déterminer proprement les animations visuelles
- * ===================================================================
- * Utilisé pour les animations de céation/mise à jour.
- * ===================================================================
+ * =========================================================================================
+ * @module highlightCleanup
+ * 
+ * Supprime automatiquement l'attribut data-highlight="true"
+ * après un délai afin de finaliser les animations visuelles.
+ *
+ * Utilisé pour :
+ * - Mise en évidence post-création
+ * - Mise en évidence post-mise à jour
  */
 
 setTimeout(() => {

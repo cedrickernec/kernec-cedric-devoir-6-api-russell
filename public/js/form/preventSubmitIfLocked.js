@@ -1,17 +1,17 @@
 /**
- * ===================================================================
  * FORM GUARD - PREVENT SUBMIT IF INVALID OR LOCKED
- * ===================================================================
- * - Désactive automatiquement les boutons submit si :
- *      → un champ possède data-locked="true"   
- *      → un champ required est vide
- *      → un champ est invalide HTML5
- *      → en mode EDIT : aucune modification détectée
- * ===================================================================
+ * =========================================================================================
+ * @module preventSubmitIfLocked
+ * 
+ * Désactive automatiquement les boutons submit si :
+ * → un champ possède data-locked="true"   
+ * → un champ required est vide
+ * → un champ est invalide HTML5
+ * → en mode EDIT : aucune modification détectée
+
  * Sécurité :
- *      - Protection UX  (frontend)
- *      - Le backend reste la validation finale
- * ===================================================================
+ * - Protection UX  (frontend)
+ * - Le backend reste la validation finale
  */
 
 document.addEventListener("DOMContentLoaded", () => {

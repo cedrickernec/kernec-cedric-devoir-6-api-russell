@@ -1,20 +1,26 @@
 /**
- * ===================================================================
  * SIDE PANEL - DELETE ACTION HANDLER
- * ===================================================================
- * - Gère la suppression d'une entité depuis le side panel
- * - Lance le delete flow générique (confirmation + API)
- * - Anime la suppression visuelle de la ligne associée
- * - Affiche un toast feedback selon résultat
- * ===================================================================
- * Fonctionnement :
- * - Le bouton delete est configuré dynamiquement via
- *   les data-attributes ijectés lors de l'ouverture du panel
- * ===================================================================
+ * =========================================================================================
+ * @module panelDeleteAction
+ * 
+ * Gère l’action de suppression depuis le side panel.
+ *
+ * Fonctionnalités :
+ * - Récupère les URLs dynamiques via data-attributes
+ * - Lance le delete flow générique
+ * - Anime la suppression visuelle de la ligne
+ * - Ferme le panel après succès
+ *
+ * Dépendances :
+ * - runDeleteFlow()
+ * - closeSidePanel()
+ * - showToast()
+ * 
+ * Événement écouté :
+ * - Click sur [data-panel-action = "delete"]
  */
 
 /* global showToast */
-
 import { closeSidePanel } from "../ui/panel/sidePanel.js";
 import { COMMON_MESSAGES } from "../messages/commonMessages.js";
 import { runDeleteFlow } from "../delete/deleteFlow.js";

@@ -1,18 +1,34 @@
 /**
- * ===================================================================
  * SESSION LIFECYCLE CONTROLLER
- * ===================================================================
- * - Gère le cycle de vie complet de la session utilisateur
- * - Affiche un avertissement avant expiration
- * - Permet le refresh manuel ("Stay connected")
- * - Déconnecte automatiquement à l'expiration
- * - Synchronisation multi-onglets via BroadcastChannel
- * - Supporte un mode preview DEV
- * ===================================================================
- * Source des données :
- * - sessionMaxAge injecté côté serveur via EJS
- * - UI pilotée uniquement côté client
- * ===================================================================
+ * =========================================================================================
+ * @module sessionController
+ * 
+ * Contrôleur de cycle de vie de session (frontend).
+ *
+ * Responsabilités :
+ * - Gestion timers expiration
+ * - Affichage warning avant expiration
+ * - Refresh manuel via /auth/keep-alive
+ * - Synchronisation multi-onglets (BroadcastChannel)
+ * - Mode preview DEV (forceWarning)
+ *
+ * Dépendances :
+ * - document.body.dataset.sessionMaxAge
+ * - document.body.dataset.forceWarning
+ * - Élément #session-warning
+ * - Élément #stay-connected
+ *
+ * Événements Broadcast :
+ * - RESET_TIMERS
+ * - SHOW_WARNING
+ * - HIDE_WARNING
+ * - FORCE_LOGOUT
+ * 
+ * Effet de bord :
+ * - Manipulation du DOM
+ * - Redirection navigateur
+ * - Requête réseau (fetch keep-alive)
+ * - Timers globaux (setTimeout / setInterval)
  */
 
 (() => {

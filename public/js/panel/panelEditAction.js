@@ -1,17 +1,24 @@
 /**
- * ===================================================================
  * SIDE PANEL - EDIT ACTION HANDLER
- * ===================================================================
- * - Redirige vers la page d'édition de l'entité active
- * - Supporte deux modes :
- *      → Édition simple (/entity/:id/edit)
- *      → Édition imbriquée (nested resource)
- * ===================================================================
- * Source des données :
- * - L'ID courant provient de l'état interne du side panel
- * - Les URLs sont injectés dynamiquement via data-attributes
- * ===================================================================
-*/
+ * =========================================================================================
+ * @module panelEditAction
+ * 
+ * Gère l’action d’édition depuis le side panel.
+ *
+ * Supporte :
+ * - Mode standard : /entity/:id/edit
+ * - Mode nested : ressource imbriquée
+ *
+ * Dépendances :
+ * - getCurrentEntityId()
+ * - resolveNestedUrl()
+ *
+ * Effets de bord :
+ * - Redirection navigateur (window.location.href)
+ *
+ * Événement écouté :
+ * - Click sur [data-panel-action = "edit"]
+ */
 
 import { getCurrentEntityId } from "../ui/panel/sidePanel.js";
 import { resolveNestedUrl } from "../ui/panel/entityPanel.js";

@@ -1,16 +1,16 @@
 /**
- * ===================================================================
  * CHECKBOX STATE SYNCHRONISATION - CATWAY STATE MANAGEMENT
- * ===================================================================
+ * =========================================================================================
+ * @module checkboxTextToggle
+ * 
  * - Synchronise la checkbox "bon état" avec le textearea d'état
  * - Force la valeur "bon état" en mode verouillé
  * - Masque / désactive la checkbox "hors service"
  * - Garantit que les champs masqués ne soient jamais soumis
- * ===================================================================
+
  * Fonctionne pour :
- *    - Création (état par défaut)
- *    - Édition (réinjection des données existantes)
- * ===================================================================
+ * - Création (état par défaut)
+ * - Édition (réinjection des données existantes)
  */
 
 document.addEventListener("DOMContentLoaded", () => {

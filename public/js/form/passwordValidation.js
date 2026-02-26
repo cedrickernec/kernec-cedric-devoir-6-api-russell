@@ -1,12 +1,16 @@
 /**
- * ===================================================================
  * PASSWORD STRENGTH VALIDADOR - REALTIME FEEDBACK
- * ===================================================================
+ * =========================================================================================
+ * @module passwordValidation
+ * 
  * - Valide les règles du mot de passe en temps réel
  * - Met à jour visuellement chaqie règle
  * - Calcul de la force de robustesse du mot de passe (barre + label)
  * - Nettoie implicitement les erreurs backend
- * ===================================================================
+ * 
+ * Effet de bord :
+ * - Manipule dynamiquement le DOM
+ * - Met à jour styles inline de la barre
  */
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -1,16 +1,16 @@
 /**
- * ===================================================================
  * CATWAY NUMBER AVAILABILITY CHECKER - FORM VALIDATION
- * ===================================================================
+ * =========================================================================================
+ * @module availableCatway
+ * 
  * - Vérifie le format du numéro de catway
  * - Vérifie son unicité côté serveur
  * - Supporte le mode édition (excludeId)
  * - Bloque automatiquement le submit si invalide
- * ===================================================================
+ * 
  * Utilise :
- *    - createAvailabilityChecker (générique)
- *    - preventSubmitIfLocked pour la sécurité formulaire
- * ===================================================================
+ * - createAvailabilityChecker (générique)
+ * - preventSubmitIfLocked pour la sécurité formulaire
  */
 
 import { createAvailabilityChecker } from "./availabilityChecker.js";

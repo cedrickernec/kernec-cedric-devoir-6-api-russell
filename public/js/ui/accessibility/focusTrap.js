@@ -1,11 +1,31 @@
 /**
- * ===================================================================
- * FOCUS TRAP UTILITY
- * ===================================================================
- * - Bloque la navigation clavier à l'intérieur du conteneur
- * - Empêche le focus de sortir
- * - Restaure le focus précédent à la fermeture
- * ===================================================================
+ * FOCUS TRAP MODULE
+ * =========================================================================================
+ * @module focusTrap
+ *
+ * Fournit un utilitaire permettant de confiner
+ * la navigation clavier à l'intérieur d'un conteneur.
+ *
+ * Objectif :
+ * - Empêcher le focus de sortir via Tab / Shift+Tab
+ * - Restaurer le focus initial à la désactivation
+ *
+ * Principalement utilisé pour les modales et panels.
+ */
+
+/**
+ * FOCUS TRAP
+ * =========================================================================================
+ * Crée un piège de focus pour un conteneur donné.
+ *
+ * @function createFocusTrap
+ * 
+ * @param {HTMLElement} container
+ * 
+ * @returns {{
+ *   activate: (options?: { autoFocus?: boolean }) => void,
+ *   deactivate: () => void
+ * }}
  */
 
 export function createFocusTrap(container) {

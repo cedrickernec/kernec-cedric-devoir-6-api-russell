@@ -1,17 +1,17 @@
 /**
- * ===================================================================
  * EMAIL AVAILABILITY CHECKER - FORM VALIDATION
- * ===================================================================
+ * =========================================================================================
+ * @module availableEmail
+ * 
  * - Vérifie le format de l'email
  * - Vérifie l'unicité de l'email côté serveur
  * - Supporte le mode édition (excludeId)
  * - Combine validation HTML native + validation AJAX
  * - Bloque automatiquement le submit si invalide
- * ===================================================================
+ * 
  * Utilise :
- *    - createAvailabilityChecker (générique)
- *    - preventSubmitIfLocked pour la sécurité formulaire
- * ===================================================================
+ * - createAvailabilityChecker (générique)
+ * - preventSubmitIfLocked pour la sécurité formulaire
  */
 
 import { createAvailabilityChecker } from "./availabilityChecker.js";

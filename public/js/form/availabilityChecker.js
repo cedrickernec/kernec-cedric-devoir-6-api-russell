@@ -1,14 +1,26 @@
 /**
- * ===================================================================
  * GENERIC AVAILABILITY CHECKER - FORM VALIDATION
- * ===================================================================
- * - Gère la vérification asynchrone de disponibilité d'un champ
- * - Applique un debounce pour limiter les appels AJAX
- * - Synchronise l'état visuel du champs (invalid / locked)
- * - Empêche la soumission via preventSubmitIfLocked
- * ===================================================================
- * Réutilisable pour n'importe quel input.
- * ===================================================================
+ * =========================================================================================
+ * @module availabilityChecker
+ * 
+ * Crée un validateur asynchrone de disponibilité pour un champ input.
+ *
+ * Fonctionnalités :
+ * - Validation locale du format
+ * - Validation AJAX avec debounce
+ * - Gestion visuelle invalid / locked
+ * - Support preventSubmitIfLocked
+ *
+ * @function createAvailabilityChecker
+ * 
+ * @param {Object} options
+ * @param {string} options.inputId
+ * @param {string} options.feedbackId
+ * @param {Function} options.getUrl - (value, input) => string
+ * @param {Function} options.validateFormat - (value) => string|null
+ * @param {string} options.conflictMessage
+ * 
+ * @return {void}
  */
 
 export function createAvailabilityChecker({

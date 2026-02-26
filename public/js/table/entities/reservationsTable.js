@@ -1,20 +1,33 @@
 /**
- * ===================================================================
- * RESERVATIONS TABLE INITIALISER
- * ===================================================================
- * - Configure et initialise la table des réservations
- * - Active la sélection multiple
- * - Active la suppression en masse (bulk delete)
- * - Injecte les messages métier spécifique aux réservations
- * ===================================================================
- * Architecture :
- * → Adaptateur métier au-dessus du moteur générique entityTable
- * ===================================================================
+ * RESERVATIONS TABLE MODULE
+ * =========================================================================================
+ * @module reservationsTable
+ *
+ * Configure la table des réservations à partir du moteur générique entityTable.
+ *
+ * Rôle :
+ * - Activer la sélection multiple
+ * - Activer la suppression en masse
+ * - Injecter les messages métier spécifiques aux catways
+ *
+ * Ce module ne contient aucune logique métier :
+ * il se contente de fournir une configuration adaptée.
  */
 
 import { initEntityTable } from "../core/entityTable.js";
 import { RESERVATION_MESSAGES } from "../../messages/reservationMessage.js";
 import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
+
+/**
+ * RESERVATIONS TABLE INITIALISATION
+ * =========================================================================================
+ * Initialise la table des réservations avec sa configuration spécifique.
+ *
+ * @function initReservationsTable
+ * 
+ * @returns {void}
+ */
+
 
 export function initReservationsTable() {
     initEntityTable({
