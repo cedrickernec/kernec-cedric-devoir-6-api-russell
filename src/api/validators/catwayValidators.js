@@ -41,11 +41,11 @@ export function validateCatwayCreate(body) {
         const number = Number(body.catwayNumber);
 
         if (!Number.isFinite(number)) {
-            errors.catwayNumber = "Le numéro du catway doit être un nombre valide."
+            errors.catwayNumber = "Le numéro de catway doit être un nombre valide."
         } else if (!Number.isInteger(number)) {
-            errors.catwayNumber = "Le numéro du catway doit être un nombre entier."
+            errors.catwayNumber = "Le numéro de catway doit être un nombre entier."
         } else if (number <1) {
-            errors.catwayNumber = "Le numéro du catway doit être supérieur ou égal à 1."
+            errors.catwayNumber = "Le numéro de catway doit être supérieur ou égal à 1."
         }
     }
 
@@ -97,3 +97,45 @@ export function validateCatwayUpdate(body) {
 
     return errors;
 };
+
+/**
+ * VALIDATE CATWAY CHECK NUMBER
+ * =========================================================================================
+ * Valide les paramètres de vérification de disponibilité d’un numéro de catway.
+ *
+ * Règles principales :
+ * - catwayNumber requis
+ * - catwayNumber doit être un entier >= 1
+ * - excludeId optionnel (string si présent)
+ *
+ * @function validateCheckCatwayNumber
+ *
+ * @param {Object} query Paramètres de requête (req.query)
+ *
+ * @returns {Object} errors Erreurs par champ (vide si OK)
+ */
+
+export function validateCheckCatwayNumber(query) {
+    const errors = {};
+
+    // Numéro à vérifier
+    if (query.catwayNumber === undefined || query.catwayNumber === "") {
+        errors.catwayNumber = "Le paramètre catwayNumber est requis.";
+    } else {
+        const number = Number(query.catwayNumber);
+        if (!Number.isFinite(number)) {
+            errors.catwayNumber = "Le numéro de catway doit être un nombre valide.";
+        } else if (!Number.isInteger(number)) {
+            errors.catwayNumber = "Le numéro de catway doit être un nombre entier.";
+        } else if (number < 1) {
+            errors.catwayNumber = "Le numéro de catway doit être supérieur ou égal à 1.";
+        }
+    }
+
+    // excludeId
+    if (query.excludeId !== undefined && typeof query.excludeId !== "string") {
+        errors.excludeId = "excludeId doit être une chaîne de caractères valide.";
+    }
+
+    return errors;
+}

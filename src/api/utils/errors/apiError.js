@@ -84,12 +84,13 @@ export class ApiError extends Error {
      * @function forbidden
      *
      * @param {string} [message="Accès interdit"]
+     * @param {object|null} [context=null]
      *
      * @returns {ApiError}
      */
 
-    static forbidden(message = "Accès interdit") {
-        return new ApiError(403, message);
+    static forbidden(message = "Accès interdit", context = null) {
+        return new ApiError(403, message, context ? { context } : undefined);
     }
 
     /**
@@ -99,12 +100,13 @@ export class ApiError extends Error {
      * @function unauthorized
      *
      * @param {string} [message="Non autorisé"]
+     * @param {object|null} [context=null]
      *
      * @returns {ApiError}
      */
 
-    static unauthorized(message = "Non autorisé") {
-        return new ApiError(401, message);
+    static unauthorized(message = "Non autorisé", context = null) {
+        return new ApiError(401, message, context ? { context } : null);
     }
 
     /**

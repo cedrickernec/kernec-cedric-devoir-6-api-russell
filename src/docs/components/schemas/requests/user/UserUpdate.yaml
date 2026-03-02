@@ -1,0 +1,23 @@
+# ==========================================================
+# USER UPDATE REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de mise à jour
+# d'un utilisateur (username et/ou email).
+#
+# Aucun champ requis strictement,
+# mais au moins un champ doit être fourni côté logique métier.
+# ==========================================================
+
+description: Structure standardisée des requêtes de mise à jour d'un utilisateur.
+type: object
+
+properties:
+  username:
+    description: Nouveau nom d'utilisateur
+    $ref: "../../../../openapi.yaml#/components/schemas/UsernameRules"
+    example: nouveauUsername
+
+  email:
+    description: Nouveau email utilisateur
+    $ref: "../../../../openapi.yaml#/components/schemas/EmailRules"
+    example: nouveau@email.com

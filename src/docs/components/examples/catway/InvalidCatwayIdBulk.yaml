@@ -1,0 +1,13 @@
+# ==========================================================
+# EXAMPLE - INVALID CATWAY ID
+# ----------------------------------------------------------
+# Exemple retourné lorsque l'identifiant catway
+# fourni est invalide (format incorrect catwayNumber).
+# ==========================================================
+
+summary: Identifiant invalide
+value:
+  success: false
+  message: Numéro de catway invalide.
+  context:
+    value: "2ju3"

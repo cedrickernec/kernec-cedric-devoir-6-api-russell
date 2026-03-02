@@ -1,0 +1,27 @@
+# ==========================================================
+# AUTH REFRESH RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après rafraîchissement du token.
+#
+# Contient :
+# - success
+# - message
+# - accessToken
+# ==========================================================
+
+description: Structure standardisée des réponses de rafraîchissement de token.
+type: object
+required: [success, message, accessToken]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  message:
+    type: string
+    example: Token rafraîchi.
+
+  accessToken:
+    type: string
+    example: eyJhbGciOi...

@@ -1,0 +1,38 @@
+# ==========================================================
+# USER MODEL SCHEMA
+# ----------------------------------------------------------
+# Représente la structure métier d'un utilisateur
+# retourné par l’API (sans mot de passe).
+# ==========================================================
+
+description: Structure métier d'un utilisateur retourné par l'API.
+type: object
+required: [id, username, email, createdAt, updatedAt]
+
+properties:
+  id:
+    description: Identifiant unique MongoDB
+    type: string
+    example: 699ce49b3990671881a87cca
+
+  username:
+    description: Nom d'utilisateur
+    type: string
+    example: jDoe
+
+  email:
+    description: Email de l'utilisateur
+    type: string
+    example: john@doe.com
+
+  createdAt:
+    description: Date de création
+    type: string
+    format: date-time
+    example: 2026-01-08T12:55:05.016Z
+
+  updatedAt:
+    description: Date de dernière modification
+    type: string
+    format: date-time
+    example: 2026-01-09T18:24:32.845Z

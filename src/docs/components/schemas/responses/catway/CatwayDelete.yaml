@@ -1,0 +1,45 @@
+# ==========================================================
+# CATWAY DELETE RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après suppression
+# d'un catway.
+#
+# Contient :
+# - success
+# - message
+# - data (Catway et réservations associées supprimées)
+# ==========================================================
+
+description: Structure standardisée des réponses de suppression d'un catway.
+type: object
+required: [success, message, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  message:
+    type: string
+    example: Catway supprimé avec succès.
+
+  data:
+    type: object
+    required: [catway]
+
+    properties:
+      catway:
+        $ref: "../../../../openapi.yaml#/components/schemas/CatwayModel"
+
+      reservationsDeleted:
+        type: object
+        properties:
+          upComing:
+            type: integer
+            example: 2
+          inProgress:
+            type: integer
+            example: 1
+          finished:
+            type: integer
+            example: 5

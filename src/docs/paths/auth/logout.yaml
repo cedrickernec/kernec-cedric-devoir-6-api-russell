@@ -1,0 +1,33 @@
+# ==========================================================
+# AUTH - LOGOUT
+# ----------------------------------------------------------
+# Permet de déconnecter l'utilisateur authentifié.
+#
+# Objectif :
+# - Invalider le refreshToken côté serveur
+# - Terminer proprement la session
+#
+# Route publique (aucune authentification requise).
+# ==========================================================
+
+post:
+  tags: [Auth]
+  summary: Déconnexion utilisateur
+  description: Déconnecte l'utilisateur actuellement authentifié.
+  security: [] # Route publique
+  
+  responses:
+    "200":
+      description: Déconnecté avec succès
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "../../openapi.yaml#/components/schemas/SuccessMessageResponse"
+              - type: object
+                properties:
+                  message:
+                    example: Déconnecté avec succès.
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"

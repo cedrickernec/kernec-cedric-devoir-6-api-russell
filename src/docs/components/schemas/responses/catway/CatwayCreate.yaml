@@ -1,0 +1,26 @@
+# ==========================================================
+# CATWAY CREATE RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après création d’un catway.
+#
+# Contient :
+# - success
+# - message
+# - data (Catway)
+# ==========================================================
+
+description: Structure standardisée des réponses de création d'un catway.
+type: object
+required: [success, message, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  message:
+    type: string
+    example: Catway créé avec succès.
+
+  data:
+    $ref: "../../../../openapi.yaml#/components/schemas/CatwayModel"

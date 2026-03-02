@@ -1,0 +1,27 @@
+# ==========================================================
+# RESERVATION DELETE RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après suppression
+# d'une réservation.
+#
+# Contient :
+# - success
+# - message
+# - data (informations sur la réservation supprimée)
+# ==========================================================
+
+description: Structure standardisée des réponses de suppression d'une réservation.
+type: object
+required: [success, message, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  message:
+    type: string
+    example: Réservation supprimée avec succès.
+
+  data:
+    $ref: "../../../../openapi.yaml#/components/schemas/ReservationDetailModel"

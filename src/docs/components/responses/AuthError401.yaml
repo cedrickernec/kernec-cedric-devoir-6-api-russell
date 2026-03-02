@@ -1,0 +1,25 @@
+# ==========================================================
+# 401 UNAUTHORIZED RESPONSE
+# ----------------------------------------------------------
+# Réponse standardisée lorsque le token JWT est :
+# - Manquant
+# - Invalide
+# - Expiré
+#
+# Référence le schéma ErrorResponse.
+# ==========================================================
+
+description: Token manquant, invalide ou expiré
+content:
+  application/json:
+    schema:
+      $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+    examples:
+      expiredToken:
+        $ref: "../../openapi.yaml#/components/examples/ExpiredToken"
+
+      invalidToken:
+        $ref: "../../openapi.yaml#/components/examples/InvalidToken"
+
+      missingToken:
+        $ref: "../../openapi.yaml#/components/examples/MissingToken"

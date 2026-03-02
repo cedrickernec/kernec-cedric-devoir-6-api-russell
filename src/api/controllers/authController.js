@@ -81,7 +81,7 @@ export const login = async (req, res, next) => {
         // 4) Réponse
         res.status(200).json({
             success: true,
-            message: "Connexion réussi.",
+            message: "Connexion réussie.",
             accessToken,
             refreshToken,
             data: {
@@ -119,32 +119,48 @@ export const login = async (req, res, next) => {
 
 export const refreshToken = async (req, res, next) => {
     try {
-        const { refreshToken } = req.body;
+      // 1) Filtrage strict
+        const allowedFields = [
+            "refreshToken"
+        ];
+
+        const cleanData = pickAllowedFields(req.body, allowedFields);
+
+        // 2) Validation
+        const { refreshToken } = cleanData;
 
         if (!refreshToken) {
-            throw ApiError.unauthorized("Refresh token manquant.");
+            throw ApiError.badRequest("Refresh token requis.");
         }
 
-        // Vérification du refresh toekn
+        // 3) Vérification du refresh token
         const decoded = jwt.verify(
             refreshToken,
             process.env.JWT_REFRESH_SECRET
         );
 
-        // Génération nouveau access token
+        // 4) Génération nouveau access token
         const newAccessToken = jwt.sign(
             { id: decoded.id },
             process.env.JWT_SECRET,
             { expiresIn: process.env.ACCESS_TOKEN_DURATION || "15m" }
         );
 
+        // 5) Réponse
         res.status(200).json({
             success: true,
+            message: "Token rafraîchi.",
             accessToken: newAccessToken
         });
 
-    } catch {
-        next(ApiError.unauthorized("Session expirée."));
+    } catch (error) {
+        if (error instanceof ApiError) {
+            return next(error);
+        }
+
+        return next(
+            ApiError.unauthorized("Refresh token invalide ou expiré.")
+        );
     }
 };
 

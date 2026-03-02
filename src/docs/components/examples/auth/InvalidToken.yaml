@@ -1,0 +1,12 @@
+# ==========================================================
+# EXAMPLE - INVALID TOKEN
+# ----------------------------------------------------------
+# Exemple générique lorsque le token est invalide.
+#
+# Utilisable dans tous les endpoints.
+# ==========================================================
+
+summary: Token invalide
+value:
+  success: false
+  message: "Accès refusé: token invalide."

@@ -1,0 +1,23 @@
+# ==========================================================
+# CATWAY UPDATE REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de mise à jour
+# d'un catway (catwayState et/ou isOutOfService).
+#
+# Aucun champ requis strictement,
+# mais au moins un champ doit être fourni côté logique métier.
+# ==========================================================
+
+description: Structure standardisée des requêtes de mise à jour d'un catway.
+type: object
+
+properties:
+  catwayState:
+    description: État du catway
+    type: string
+    example: catway instable. À consolider avant de remettre en service
+
+  isOutOfService:
+    description: Catway hors service ?
+    type: boolean
+    example: true

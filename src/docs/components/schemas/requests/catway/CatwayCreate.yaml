@@ -1,0 +1,27 @@
+# ==========================================================
+# CATWAY CREATE REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de création d'un catway.
+# ==========================================================
+
+description: Structure standardisée des requêtes de création d'un catway.
+type: object
+required: [catwayNumber, catwayType, catwayState]
+
+properties:
+  catwayNumber:
+    description: Numéro de catway
+    type: integer
+    minimum: 1
+    example: 1
+
+  catwayType:
+    description: Type de catway
+    type: string
+    enum: [short, long]
+    example: short
+
+  catwayState:
+    description: État du catway
+    type: string
+    example: bon état

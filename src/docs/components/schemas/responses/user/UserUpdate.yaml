@@ -1,0 +1,22 @@
+# ==========================================================
+# USER UPDATE RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après mise à jour
+# d'un utilisateur.
+# ==========================================================
+
+description: Structure standardisée des réponses de mise à jour d'un utilisateur.
+type: object
+required: [success, message, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  message:
+    type: string
+    example: Utilisateur mis à jour.
+
+  data:
+    $ref: "../../../../openapi.yaml#/components/schemas/UserModel"

@@ -1,0 +1,30 @@
+# ==========================================================
+# CATWAY BULK DELETE REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de suppression
+# d'une sélection de catways (suppression en masse).
+# ==========================================================
+
+description:
+  Structure standardisée des requêtes de suppression
+  d'une sélection de catways (suppression en masse).
+type: object
+required: [ids]
+
+properties:
+  ids:
+    description: Numéros de catways
+    type: array
+    items:
+      type: integer
+
+  password:
+    description:
+      Mot de passe requis uniquement si au moins
+      un des catways sélectionnés est lié à des réservations.
+    $ref: "../../../../openapi.yaml#/components/schemas/PasswordRules"
+
+example:
+    ids:
+      - 1
+      - 25

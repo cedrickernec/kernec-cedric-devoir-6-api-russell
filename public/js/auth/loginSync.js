@@ -25,7 +25,7 @@
 
     const channel = new BroadcastChannel("russell-session");
 
-    // Flag injecté par le serveur après connexion réussi
+    // Flag injecté par le serveur après connexion réussie
     const justLoggedIn = document.body.dataset.justLoggedIn === "true";
 
     // ========================================================

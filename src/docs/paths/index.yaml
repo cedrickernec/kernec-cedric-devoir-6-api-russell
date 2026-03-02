@@ -1,0 +1,80 @@
+# ==========================================================
+# INDEX DES ROUTES
+# ==========================================================
+# Ce fichier centralise l’ensemble des routes de l’API.
+#
+# Architecture modulaire :
+# Chaque groupe fonctionnel (Auth, Users, Catways,
+# Reservations) est défini dans un fichier YAML dédié
+# dans le dossier correspondant.
+#
+# Référencé dans :
+# openapi.yaml → paths:
+# ==========================================================
+
+# ==========================================================
+# /API/AUTH
+# ==========================================================
+/api/auth/login:
+  $ref: "./auth/login.yaml"
+
+/api/auth/refresh:
+  $ref: "./auth/refresh.yaml"
+
+/api/auth/logout:
+  $ref: "./auth/logout.yaml"
+
+# ==========================================================
+# /API/USERS
+# ==========================================================
+/api/users:
+  $ref: "./users/users.yaml"
+
+/api/users/{id}:
+  $ref: "./users/users-id.yaml"
+
+/api/users/{id}/password:
+  $ref: "./users/users-id-password.yaml"
+
+# ==========================================================
+# /API/CATWAYS
+# ==========================================================
+/api/catways:
+  $ref: "./catways/catways.yaml"
+
+/api/catways/next-number:
+  $ref: "./catways/catways-next-number.yaml"
+
+/api/catways/check-number:
+  $ref: "./catways/catways-check-number.yaml"
+
+/api/catways/{id}:
+  $ref: "./catways/catways-id.yaml"
+  
+/api/catways/bulk-check:
+  $ref: "./catways/catways-bulk-check.yaml"
+
+/api/catways/bulk:
+  $ref: "./catways/catways-bulk.yaml"
+
+# ==========================================================
+# /API/RESERVATIONS
+# ==========================================================
+/api/reservations:
+  $ref: "./reservations/reservations.yaml"
+
+/api/reservations/availability:
+  $ref: "./reservations/catways-availability.yaml"
+
+/api/catways/{id}/reservations:
+  $ref: "./reservations/reservations-by-catway.yaml"
+
+/api/catways/{id}/reservations/{idReservation}:
+  $ref: "./reservations/reservations-id-by-catway.yaml"
+  
+/api/reservations/bulk-check:
+  $ref: "./reservations/reservations-bulk-check.yaml"
+
+/api/reservations/bulk:
+  $ref: "./reservations/reservations-bulk.yaml"
+

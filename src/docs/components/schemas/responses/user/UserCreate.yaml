@@ -1,0 +1,21 @@
+# ==========================================================
+# USER CREATE RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après création d’un utilisateur.
+# ==========================================================
+
+description: Structure standardisée des réponses de création d'un utilisateur.
+type: object
+required: [success, message, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  message:
+    type: string
+    example: Utilisateur créé avec succès.
+
+  data:
+    $ref: "../../../../openapi.yaml#/components/schemas/UserModel"

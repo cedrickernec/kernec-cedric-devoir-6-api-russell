@@ -1,0 +1,189 @@
+# ==========================================================
+# RESERVATIONS - BY CATWAY
+# ----------------------------------------------------------
+# Gestion des réservations associées à un catway spécifique.
+#
+# Permet :
+# - Récupérer la liste complète des réservations d'un catway
+# - Créer une réservation
+#
+# Paramètre requis :
+# - id (catwayNumber)
+#
+# Route protégée par JWT.
+# ==========================================================
+
+# ==========================================================
+# GET RESERVATIONS BY CATWAY
+# ==========================================================
+get:
+  tags: [Reservations]
+  summary: Liste des réservations d'un catway
+  description: Récupère la liste complète des réservations d'un catway
+
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Numéro de catway
+
+  responses:
+    "200":
+      description: Liste récupérée
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ReservationListResponse"
+
+    "400":
+      description: Numéro de catway invalide
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidCatwayId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCatwayId"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "404":
+      description: Catway introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            ResourceNotFound:
+              $ref: "../../openapi.yaml#/components/examples/CatwayNotFound"
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"
+
+# ==========================================================
+# CREATE RESERVATION
+# ==========================================================
+post:
+  tags: [Reservations]
+  summary: Créer une réservation
+  description: Crée un nouvelle réservation.
+
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Numéro de catway
+
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/ReservationCreateRequest"
+
+  responses:
+    "201":
+      description: Réservation créée
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ReservationCreateResponse"
+
+    "400":
+      description: Erreur de validation ou champ non autorisé
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            fieldNotAllowed:
+              $ref: "../../openapi.yaml#/components/examples/FieldNotAllowed"
+
+            invalidCatwayId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCatwayId"
+
+            missingFields:
+              summary: Champs requis manquants
+              value:
+                success: false
+                message: Donnée(s) invalide(s).
+                errors:
+                  clientName: "Champ obligatoire manquant : Nom du client."
+                  boatName: "Champ obligatoire manquant : Nom du bateau."
+                  startDate: "Champ obligatoire manquant : Date d'entrée."
+                  endDate: "Champ obligatoire manquant : Date de sortie."
+
+            invalidDateFormat:
+              $ref: "../../openapi.yaml#/components/examples/InvalidDateFormat"
+
+            invalidDateRange:
+              $ref: "../../openapi.yaml#/components/examples/InvalidDateRange"
+
+            invalidDateValue:
+              $ref: "../../openapi.yaml#/components/examples/InvalidDateValue"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "404":
+      description: Catway introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            ResourceNotFound:
+              $ref: "../../openapi.yaml#/components/examples/CatwayNotFound"
+
+    "409":
+      description: Conflit métier (réservation impossible)
+      content:
+        application/json:
+          schema:
+           oneOf:
+            - $ref: "../../openapi.yaml#/components/schemas/ReservationConflictErrorResponse"
+            - type: object
+              required: [success, message, context]
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: Catway hors service.
+                context:
+                  type: object
+                  required: [catwayNumber, isOutOfService, catwayState]
+                  
+                  properties:
+                    catwayNumber:
+                      type: integer
+                      example: 6
+                    isOutOfService:
+                      type: boolean
+                      example: true
+                    catwayState:
+                      type: string
+                      example: En cours de réparation. Ne peut être réservée actuellement.
+
+          examples:
+            reservationConflict:
+              $ref: "../../openapi.yaml#/components/examples/ReservationConflict"
+
+            catwayOutOfService:
+              summary: Catway hors service
+              value:
+                success: false
+                message: Catway hors service.
+                context:
+                    catwayNumber: 6
+                    isOutOfService: true
+                    catwayState: En cours de réparation. Ne peut être réservée actuellement.
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

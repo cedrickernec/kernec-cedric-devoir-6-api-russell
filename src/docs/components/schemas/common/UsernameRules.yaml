@@ -1,0 +1,17 @@
+# ==========================================================
+# COMMON SCHEMAS - USERNAME RULES
+# ----------------------------------------------------------
+# Schéma de nom d'utilisateur utilisé pour les opérations de
+# création et de mise à jour d'un compte utilisateur.
+#
+# Critères de nom d'utilisateur :
+# - 3 à 20 caractères
+# - Lettres, chiffres, underscores (_) et tirets (-) autorisés
+# ==========================================================
+
+type: string
+minLength: 3
+maxLength: 20
+pattern: "^[a-zA-Z0-9_-]{3,20}$"
+example: jdoe
+description: Nom d'utilisateur (3 à 20 caractères, lettres, chiffres, _ ou -)

@@ -1,0 +1,34 @@
+# ==========================================================
+# ERROR RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Schéma générique pour toutes les réponses d’erreur.
+#
+# Utilisé dans :
+# - 400 Bad Request
+# - 401 Unauthorized
+# - 500 Internal Server Error
+#
+# Peut inclure un champ "errors" optionnel contenant
+# des informations complémentaires.
+# ==========================================================
+
+description: Structure standardisée des réponses d'erreur.
+type: object
+required: [success, message]
+
+properties:
+  success:
+    type: boolean
+    example: false
+
+  message:
+    type: string
+    example: Une erreur est survenue.
+
+  errors:
+    type: object
+    description: Détails des erreurs par champ (optionnel) → string/object
+    additionalProperties:
+      oneOf:
+        - type: string
+        - type: object

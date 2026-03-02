@@ -1,0 +1,23 @@
+# ==========================================================
+# AUTH LOGIN REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de connexion
+# utilisateur.
+#
+# Champs requis :
+# - email
+# - password
+# ==========================================================
+
+description: Structure standardisée des requêtes de connexion d'un utilisateur.
+type: object
+required: [email, password]
+
+properties:
+  email:
+    description: Email utilisateur
+    $ref: "../../../../openapi.yaml#/components/schemas/EmailRules"
+
+  password:
+    description: Mot de passe utilisateur
+    $ref: "../../../../openapi.yaml#/components/schemas/PasswordRules"

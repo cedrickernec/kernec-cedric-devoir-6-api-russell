@@ -1,0 +1,25 @@
+# ===============================================================
+# RESERVATION CONFLICT ERROR RESPONSE
+# ---------------------------------------------------------------
+# Réponse retournée lorsqu'un catway est déjà réservé
+# sur le créneau demandé.
+# ===============================================================
+
+description: Conflit de réservation sur le catway.
+type: object
+required: [success, message, conflictWith]
+
+properties:
+  success:
+    type: boolean
+    example: false
+
+  message:
+    type: string
+    example: Ce catway est déjà réservé sur ce créneau.
+
+  conflictWith:
+    type: object
+    properties:
+      reservation:
+        $ref: "../../../../openapi.yaml#/components/schemas/ReservationConflictModel"

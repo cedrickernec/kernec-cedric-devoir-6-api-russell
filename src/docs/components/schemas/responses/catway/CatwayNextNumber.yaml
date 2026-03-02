@@ -1,0 +1,24 @@
+# ==========================================================
+# CATWAY NEXT NUMBER RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée pour la récupération du prochain
+# numéro de catway disponible.
+#
+# Contient :
+# - success
+# - data (catwayNumber)
+# ==========================================================
+
+description: Structure standardisée des réponses de récupération du prochain numéro de catway disponible.
+type: object
+required: [success, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  data:
+    type: integer
+    example: 25
+    

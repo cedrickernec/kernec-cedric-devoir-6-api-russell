@@ -1,0 +1,56 @@
+# ==========================================================
+# CATWAYS - CHECK NUMBER
+# ----------------------------------------------------------
+# Vérifie si un numéro de catway est disponible.
+#
+# Route protégée par JWT.
+# ==========================================================
+
+get:
+  tags: [Catways]
+  summary: Vérifier l'unicité d'un numéro de catway
+  description: Vérifie si un numéro de catway est disponible.
+
+  parameters:
+    - name: catwayNumber
+      in: query
+      required: true
+      schema:
+        type: integer
+      description: Numéro de catway
+    - name: excludeId
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: ID MongoDB à exclure (cas mise à jour)
+
+  responses:
+    "200":
+      description: Disponibilité d'un numéro de catway
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/CatwayCheckNumberResponse"
+
+    "400":
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidNumber:
+              $ref: "../../openapi.yaml#/components/examples/InvalidNumber"
+
+            invalidInteger:
+              $ref: "../../openapi.yaml#/components/examples/InvalidInteger"
+
+            invalidMinimum:
+              $ref: "../../openapi.yaml#/components/examples/InvalidMinimum"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

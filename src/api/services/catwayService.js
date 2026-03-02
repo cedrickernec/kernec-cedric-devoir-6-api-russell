@@ -128,17 +128,17 @@ export async function findNextCatwayNumberService() {
  * @async
  * @function checkCatwayNumberService
  *
- * @param {number|string} number Numéro à vérifier
+ * @param {number|string} catwayNumber Numéro à vérifier
  * @param {string} [excludeId] Identifiant à exclure (cas mise à jour)
  *
  * @returns {Promise<boolean>}
  */
 
-export async function checkCatwayNumberService(number, excludeId) {
+export async function checkCatwayNumberService(catwayNumber, excludeId) {
 
-    if (!number) return false;
+    if (!catwayNumber) return false;
 
-    const catwayNumberInt = Number(number);
+    const catwayNumberInt = Number(catwayNumber);
     if (Number.isNaN(catwayNumberInt)) return false;
 
     const existing = await findCatwayByNumber(catwayNumberInt);
@@ -304,6 +304,7 @@ export async function checkBulkCatwaysBeforeDeleteService(ids) {
             "La sélection contient des catways liés à des réservations.",
             {
                 reason: "password_required",
+                reservationsLinked: true,
                 reservationsStats: aggregatedStats
             }
         );
@@ -329,7 +330,7 @@ export async function checkBulkCatwaysBeforeDeleteService(ids) {
  *
  * @throws {ApiError} 400 Requête invalide
  * @throws {ApiError} 404 Catway introuvable
- * @throws {ApiError} 401 Mot de passe incorrect
+ * @throws {ApiError} 403 Mot de passe incorrect
  * @throws {ApiError} 409 Confirmation requise
  */
 
@@ -391,7 +392,7 @@ export async function deleteCatwaysBulkService(ids, { userId, password }) {
         const isValid = await verifyUserPassword(userId, password);
 
         if (!isValid) {
-            throw ApiError.unauthorized(
+            throw ApiError.forbidden(
                 "Mot de passe incorrect.",
                 { reason: "invalid_password" }
             );
@@ -429,7 +430,7 @@ export async function deleteCatwaysBulkService(ids, { userId, password }) {
  * @returns {Promise<Object>}
  *
  * @throws {ApiError} 404 Catway introuvable
- * @throws {ApiError} 401 Mot de passe incorrect
+ * @throws {ApiError} 403 Mot de passe incorrect
  * @throws {ApiError} 409 Confirmation requise
  */
 
@@ -474,7 +475,7 @@ export async function deleteCatwayService(catwayNumber, options = {}) {
 
     const isValid = await verifyUserPassword(userId, password);
     if (!isValid) {
-        throw ApiError.unauthorized(
+        throw ApiError.forbidden(
             "Mot de passe incorrect.",
             {
                 reason: "invalid_password"

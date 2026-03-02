@@ -1,0 +1,61 @@
+# ==========================================================
+# AUTH - REFRESH TOKEN
+# ----------------------------------------------------------
+# Permet de générer un nouvel accessToken
+# à partir d’un refreshToken valide.
+#
+# Objectif :
+# - Maintenir la session utilisateur active
+# - Éviter une reconnexion complète
+#
+# Route publique (nécessite un refreshToken valide).
+# ==========================================================
+
+post:
+  tags: [Auth]
+  summary: Rafraîchir l'access token
+  description: Retourne un nouvel accessToken à partir d'un refreshToken.
+  security: [] # Route publique
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/AuthRefreshRequest"
+
+  responses:
+    "200":
+      description: Token rafraîchi
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/AuthRefreshResponse"
+
+    "400":
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+            
+          examples:
+            fieldNotAllowed:
+              $ref: "../../openapi.yaml#/components/examples/FieldNotAllowed"
+
+            requiredFields:
+              summary: Refresh token requis
+              value:
+                success: false
+                message: Refresh token requis.
+
+    "401":
+      description: Refresh token invalide ou expiré
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "../../openapi.yaml#/components/schemas/BaseError"
+              - type: object
+                properties:
+                  message:
+                    example: Refresh token invalide ou expiré.

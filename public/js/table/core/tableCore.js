@@ -251,5 +251,3 @@ export function initBulkTable({
     updateDeleteButton();
   });
 }
-
-const a = initBulkTable()

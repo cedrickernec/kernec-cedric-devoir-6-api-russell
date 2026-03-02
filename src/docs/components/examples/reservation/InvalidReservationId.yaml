@@ -1,0 +1,11 @@
+# ==========================================================
+# EXAMPLE - INVALID RESERVATION ID
+# ----------------------------------------------------------
+# Exemple retourné lorsque l'identifiant réservation
+# fourni est invalide (format incorrect MongoDB).
+# ==========================================================
+
+summary: Identifiant réservation invalide
+value:
+  success: false
+  message: Identifiant réservation invalide.

@@ -1,0 +1,61 @@
+# ==========================================================
+# AUTH - LOGIN
+# ----------------------------------------------------------
+# Route d'authentification utilisateur.
+#
+# Permet :
+# - La vérification des identifiants (email / mot de passe)
+# - La génération d’un accessToken (JWT)
+# - La génération d’un refreshToken
+#
+# Route publique (aucune authentification requise).
+# ==========================================================
+
+post:
+  tags: [Auth]
+  summary: Connexion utilisateur
+  description: Authentifie un utilisateur et retourne un accessToken et un refreshToken au format JWT.
+  security: [] # Route publique
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/AuthLoginRequest"
+
+  responses:
+    "200":
+      description: Connexion réussie
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/AuthLoginResponse"
+
+    "400":
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+            
+          examples:
+            fieldNotAllowed:
+              $ref: "../../openapi.yaml#/components/examples/FieldNotAllowed"
+
+            requiredFields:
+              summary: Email et mot de passe requis
+              value:
+                success: false
+                message: Email et mot de passe requis.
+
+    "401":
+      description: Identifiants invalides
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "../../openapi.yaml#/components/schemas/BaseError"
+              - type: object
+                properties:
+                    message:
+                      example: Email ou mot de passe incorrect.

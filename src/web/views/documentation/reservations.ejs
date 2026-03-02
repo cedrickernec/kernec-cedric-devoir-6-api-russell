@@ -337,7 +337,7 @@
     "success": false,
     "message": "Donnée(s) invalide(s).",
     "errors": {
-        "Dates": "La date de fin doit être strictement postérieure à la date de début (minimum 1 nuit)."
+        "dates": "La date de fin doit être strictement postérieure à la date de début (minimum 1 nuit)."
     }
 }</code></pre>
         </details>
@@ -439,7 +439,7 @@
     "success": false,
     "message": "Donnée(s) invalide(s).",
     "errors": {
-        "Dates": "Format de date invalide. Format attendu : YYYY-MM-DD."
+        "dates": "Format de date invalide. Format attendu : YYYY-MM-DD."
     }
 }</code></pre>
 
@@ -450,7 +450,7 @@
     "success": false,
     "message": "Donnée(s) invalide(s).",
     "errors": {
-        "Dates": "Le mois et le jour sont incorrects."
+        "dates": "Le mois et le jour sont incorrects."
     }
 }</code></pre>
 
@@ -461,7 +461,7 @@
     "success": false,
     "message": "Donnée(s) invalide(s).",
     "errors": {
-        "Dates": "La date de fin doit être strictement postérieure à la date de début (minimum 1 nuit)."
+        "dates": "La date de fin doit être strictement postérieure à la date de début (minimum 1 nuit)."
     }
 }</code></pre>
 
@@ -656,8 +656,8 @@
                 "key": "UPCOMING",
                 "label": "À venir"
             },
-            "start": "2026-02-01T05:00:00.000Z",
-            "end": "2026-03-01T05:00:00.000Z",
+            "start": "2026-02-01T06:00:00.000Z",
+            "end": "2026-03-01T06:00:00.000Z",
             "createdAt": "2026-01-21T15:22:23.556Z",
             "updatedAt": "2026-01-21T15:23:19.987Z"
         }
@@ -703,7 +703,7 @@
     "success": false,
     "message": "Donnée(s) invalide(s).",
     "errors": {
-        "Dates": "Format de date invalide. Format attendu : YYYY-MM-DD."
+        "dates": "Format de date invalide. Format attendu : YYYY-MM-DD."
     }
 }</code></pre>
 
@@ -714,7 +714,7 @@
     "success": false,
     "message": "Donnée(s) invalide(s).",
     "errors": {
-        "Dates": "Le mois et le jour sont incorrects."
+        "dates": "Le mois et le jour sont incorrects."
     }
 }</code></pre>
 
@@ -733,7 +733,7 @@
     "success": false,
     "message": "Donnée(s) invalide(s).",
     "errors": {
-        "Dates": "La date de fin doit être strictement postérieure à la date de début (minimum 1 nuit)."
+        "dates": "La date de fin doit être strictement postérieure à la date de début (minimum 1 nuit)."
     }
 }</code></pre>
 
@@ -841,6 +841,7 @@
 
 <pre><code>{
     "success": true,
+    "message": "2 réservations supprimées avec succès.",
     "data": {
         "count": 2
     }
@@ -871,7 +872,7 @@
 }</code></pre>
 
             <p class="example-title">
-            Erreur <span class="badge doc-badge--error">401 Unauthorized</span> :
+            Erreur <span class="badge doc-badge--error">403 Forbidden</span> :
             </p>
 
             <!-- MOT DE PASSE INVALIDE -->
@@ -910,7 +911,7 @@
             
 <pre><code>{
     "success": false,
-    "message": "La sélection contient des réservations en cours ou terminée. La suppression nécessite une confirmation par mot de passe.",
+    "message": "La sélection contient des réservations en cours ou terminées. La suppression nécessite une confirmation par mot de passe.",
     "context": {
         "reason": "password_required"
     }
@@ -950,8 +951,8 @@
         },
         "reservation": {
             "id": "...",
-            "start": "2026-02-01T05:00:00.000Z",
-            "end": "2026-03-01T05:00:00.000Z",
+            "start": "2026-02-01T06:00:00.000Z",
+            "end": "2026-03-01T06:00:00.000Z",
             "createdAt": "2026-01-21T15:22:23.556Z",
             "updatedAt": "2026-01-21T15:23:19.987Z"
         }
@@ -983,7 +984,7 @@
 }</code></pre>
 
             <p class="example-title">
-            Erreur <span class="badge doc-badge--error">401 Unauthorized</span> :
+            Erreur <span class="badge doc-badge--error">403 Forbidden</span> :
             </p>
 
             <!-- MOT DE PASSE INVALIDE -->

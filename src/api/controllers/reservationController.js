@@ -49,6 +49,7 @@ import {
 
 import {
     validateReservationCreate,
+    validateReservationUpdate,
     validateAvailabilityInput
 } from "../validators/reservationValidators.js";
 
@@ -57,6 +58,8 @@ import {
     formatReservation,
     formatReservationsList
 } from "../utils/formatters/reservationFormatter.js";
+
+import { parseCompositeIds } from "../utils/parsers/parseCompositeIds.js";
 
 import { pickAllowedFields } from "../utils/errors/pickAllowedFields.js";
 import { ApiError } from "../utils/errors/apiError.js";
@@ -84,9 +87,6 @@ export const getAllReservations = async (req, res, next) => {
         res.status(200).json({
             success: true,
             count: reservations.length,
-            message: reservations.length === 0
-              ? "Aucune réservation trouvée."
-              : undefined,
             data: formatReservationsList(reservations)
         });
 
@@ -171,12 +171,12 @@ export const getReservationById = async (req, res, next) => {
         );
 
         // 2) Service
-        const reservation = await getReservationByIdService(catwayNumber, idReservation);
+        const result = await getReservationByIdService(catwayNumber, idReservation);
 
         // 3) Réponse
         res.status(200).json({
             success: true,
-            data: formatReservation(reservation)
+            data: formatReservation(result)
         });
 
     } catch (error) {
@@ -293,7 +293,16 @@ export const createReservation = async (req, res, next) => {
 
         const cleanData = pickAllowedFields(req.body, allowedFields)
 
-        // 3) Validation
+        // 3) Normalisation
+        if (typeof cleanData.clientName === "string") {
+            cleanData.clientName = cleanData.clientName.trim();
+        }
+
+        if (typeof cleanData.boatName === "string") {
+            cleanData.boatName = cleanData.boatName.trim();
+        }
+
+        // 4) Validation
         const errors = validateReservationCreate(cleanData);
         if (Object.keys(errors).length > 0) {
             throw ApiError.validation(
@@ -301,10 +310,10 @@ export const createReservation = async (req, res, next) => {
             );
         }
 
-        // 4) Service
+        // 5) Service
         const created = await createReservationService(catwayNumber, cleanData);
 
-        // 5) Réponse
+        // 6) Réponse
         res.status(201).json({
             success: true,
             message: "Réservation créée avec succès.",
@@ -361,22 +370,41 @@ export const updateReservation = async (req, res, next) => {
             "endDate"
         ];
 
+        
         const cleanData = pickAllowedFields(req.body, allowedFields);
 
+        // 3) Normalisation
+        if (typeof cleanData.clientName === "string") {
+            cleanData.clientName = cleanData.clientName.trim();
+        }
+
+        if (typeof cleanData.boatName === "string") {
+            cleanData.boatName = cleanData.boatName.trim();
+        }
+
+        // 4) Validation
         if (Object.keys(cleanData).length === 0) {
             throw ApiError.badRequest(
                 "Aucune donnée valide à mettre à jour."
             );
         }
 
-        // 3) Service
+        const errors = validateReservationUpdate(cleanData);
+
+        if (Object.keys(errors).length > 0) {
+            throw ApiError.validation(
+                errors
+            );
+        }
+
+        // 5) Service
         const updated = await updateReservationService(
             catwayNumber,
             idReservation,
             cleanData
         );
 
-        // 4) Réponse
+        // 6) Réponse
         res.status(200).json({
             success: true,
             message: "Réservation mise à jour.",
@@ -412,37 +440,20 @@ export const updateReservation = async (req, res, next) => {
 
 export const checkReservationsBeforeDelete = async (req, res, next) => {
     try {
-        // 1) Validation
+
+        // 1) Extraction
         const { ids } = req.body;
 
-        if (!Array.isArray(ids) || ids.length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: "Requête invalide."
-            });
-        }
-
         // 2) Parse Ids
-        const parsedIds = ids.map(compositeId => {
-
-            if (typeof compositeId !== "string" || !compositeId.includes("|")) {
-                throw ApiError.badRequest("Identifiant composite invalide.");
-            }
-
-            const [rawCatwayNumber, rawReservationId] = compositeId.split("|");
-
-            const catwayNumber = validateCatwayNumber(rawCatwayNumber);
-            const reservationId = validateObjectId(rawReservationId, "Identifiant réservation");
-
-            return { catwayNumber, reservationId };
-        });
+        const parsedIds = parseCompositeIds(ids);
 
         // 3) Service
-        await checkReservationsBeforeDeleteService(parsedIds);
+        const result = await checkReservationsBeforeDeleteService(parsedIds);
 
         // 4) Réponse
         return res.json({
-            success: true
+            success: true,
+            requiresPassword: result.requiresPassword
         });
 
     } catch (error) {
@@ -477,24 +488,12 @@ export const checkReservationsBeforeDelete = async (req, res, next) => {
 export const deleteReservationsBulk = async (req, res, next) => {
   try {
 
-    // 1) Validation
+    // 1) Extraction
     const { ids, password } = req.body;
     const userId = req.user.id;
 
-    // 2) Parse ids
-    const parsedIds = ids.map(compositeId => {
-
-        if (typeof compositeId !== "string" || !compositeId.includes("|")) {
-            throw ApiError.badRequest("Identifiant composite invalide.");
-        }
-
-        const [rawCatwayNumber, rawReservationId] = compositeId.split("|");
-
-        const catwayNumber = validateCatwayNumber(rawCatwayNumber);
-        const reservationId = validateObjectId(rawReservationId, "Identifiant réservation");
-
-        return `${catwayNumber}|${reservationId}`;
-    });
+    // 2) Parse Ids
+    const parsedIds = parseCompositeIds(ids);
 
     // 3) Service
     const result = await deleteReservationsBulkService(parsedIds, {
@@ -502,9 +501,14 @@ export const deleteReservationsBulk = async (req, res, next) => {
       password
     });
 
-    // 4) Réponse
+    // 4) Reponse
+    const count = result.count;
+    const reservationLabel = count > 1 ? "réservations" : "réservation";
+    const deletedLabel = count > 1 ? "supprimées" : "supprimée";
+    
     res.status(200).json({
       success: true,
+      message: `${count} ${reservationLabel} ${deletedLabel} avec succès.`,
       data: result
     });
 

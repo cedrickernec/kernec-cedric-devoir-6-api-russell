@@ -1,0 +1,26 @@
+# ==========================================================
+# 404 NOT FOUND - ROUTE SCHEMA
+# ----------------------------------------------------------
+# Structure JSON standardisée lorsqu'une route API
+# n'existe pas.
+#
+# Utilisé exclusivement par le middleware global 404.
+# Ne concerne pas les ressources métier.
+# ==========================================================
+
+description: Structure standardisée des réponses d'erreur 404 - Route introuvable.
+type: object
+required: [success, error, path]
+
+properties:
+  success:
+    type: boolean
+    example: false
+
+  error:
+    type: string
+    example: Route API introuvable.
+
+  path:
+    type: string
+    example: /api/unknown-route

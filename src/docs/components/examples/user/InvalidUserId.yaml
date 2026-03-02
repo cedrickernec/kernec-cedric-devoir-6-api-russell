@@ -1,0 +1,11 @@
+# ==========================================================
+# EXAMPLE - INVALID USER ID
+# ----------------------------------------------------------
+# Exemple retourné lorsque l'identifiant utilisateur
+# fourni est invalide (format incorrect MongoDB).
+# ==========================================================
+
+summary: Identifiant utilisateur invalide
+value:
+  success: false
+  message: Identifiant utilisateur invalide.

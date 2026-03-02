@@ -35,7 +35,7 @@ export const validateUsername = (username) => {
   const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
 
   if (!username) {
-    return "Le nom d'utilisateur est requis.";
+    return "Champ obligatoire manquant : Nom d'utilisateur.";
   }
 
   if (!usernameRegex.test(username)) {
@@ -61,7 +61,7 @@ export const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
 
   if (!email) {
-    return "L'email est requis.";
+    return "Champ obligatoire manquant : Email.";
   }
 
   if (!emailRegex.test(email)) {
@@ -103,7 +103,7 @@ export const validatePassword = (password) => {
   };
 
   if (!password) {
-    return { valid: false, errors: "Le mot de passe est requis." };
+    return { valid: false, errors: "Champ obligatoire manquant : Mot de passe." };
   }
 
   const validations = {

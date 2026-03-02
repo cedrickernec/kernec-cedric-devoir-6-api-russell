@@ -1,0 +1,83 @@
+# ==========================================================
+# RESERVATIONS - BULK CHECK
+# ----------------------------------------------------------
+# Vérifie si des réservations peuvent être supprimées sans
+# néccessiter de validation par mot de passe.
+#
+# Route protégée par JWT.
+# ==========================================================
+
+post:
+  tags: [Reservations]
+  summary: Vérifier une sélection de réservations
+  description: Vérifie si une sélection de réservations nécessite une validation par mot de passe.
+
+  requestBody:
+    required: true
+    description: Liste de réservations à vérifier.
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/ReservationBulkCheckRequest"
+
+  responses:
+    "200":
+      description: Résultat de la vérification de la sélection de réservations
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ReservationBulkCheckResponse"
+
+    "400":
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidCatwayId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCatwayId"
+
+            invalidReservationId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidReservationId"
+
+            invalidCompositeId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCompositeId"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "404":
+      description: Réservation introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            ResourceNotFound:
+              $ref: "../../openapi.yaml#/components/examples/ReservationNotFound"
+            
+    "409":
+      description: Mot de passe requis
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            passwordRequired:
+              summary: Mot de passe requis
+              value:
+                success: false
+                message: Au moins une réservation nécessite une confirmation par mot de passe. 
+                context:
+                    reason: "password_required"
+                    status:
+                      key: FINISHED
+                      label: Terminée
+                    clientName: John Doe
+                    boatName: Sea Breeze
+                    startDate: 2023-07-01T06:00:00.000Z
+                    endDate: 2023-07-02T06:00:00.000Z
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

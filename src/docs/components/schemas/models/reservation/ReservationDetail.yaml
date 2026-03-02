@@ -1,0 +1,82 @@
+# ==========================================================
+# RESERVATION DEATAIL MODEL SCHEMA
+# ----------------------------------------------------------
+# Représente la structure métier d'une réservation
+# retourné par l’API (version complète - detail).
+# ==========================================================
+
+description: 
+  Version détaillée d'une réservation retournée par l'API.
+type: object
+required: [catway, client, reservation]
+
+properties:
+  catway:
+    description: Informations du catway associé
+    type: object
+    required: [catwayNumber, catwayType]
+
+    properties:
+      catwayNumber:
+        type: integer
+        minimum: 1
+        example: 21
+      
+      catwayType:
+        type: string
+        enum: [short, long]
+        example: short
+
+  client:
+    description: Informations du client
+    type: object
+    required: [clientName, boatName]
+
+    properties:
+      clientName:
+        description: Nom du client
+        type: string
+        example: John Doe
+
+      boatName:
+        description: Nom du bateau
+        type: string
+        example: L'Atlantide
+
+  reservation:
+    desccription: Informations de la réservation
+    type: object
+    required: [id, status, startDate, endDate, createdAt, updatedAt]
+
+    properties:
+      id:
+        description: Identifiant unique MongoDB
+        type: string
+        example: 699ce49b3990671881a87cca
+
+      status:
+        $ref: "../../../../openapi.yaml#/components/schemas/ReservationStatusModel"
+
+      startDate:
+        description: Date de début de réservation
+        type: string
+        format: date-time
+        example: 2026-01-12T00:06:00.000Z
+
+      endDate:
+        description: Date de fin de réservation
+        type: string
+        format: date-time
+        example: 2026-01-14T00:06:00.000Z
+
+      createdAt:
+        description: Date de création
+        type: string
+        format: date-time
+        example: 2026-01-08T12:55:05.016Z
+
+      updatedAt:
+        description: Date de dernière modification
+        type: string
+        format: date-time
+        example: 2026-01-09T18:24:32.845Z

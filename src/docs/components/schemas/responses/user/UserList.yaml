@@ -1,0 +1,29 @@
+# ==========================================================
+# USER LIST RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée pour la récupération
+# de la liste des utilisateurs.
+#
+# Contient :
+# - success
+# - count
+# - data (array de User)
+# ==========================================================
+
+description: Structure standardisée des réponses de récupération d'une liste d'utilisateurs.
+type: object
+required: [success, count, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  count:
+    type: integer
+    example: 14
+
+  data:
+    type: array
+    items:
+      $ref: "../../../../openapi.yaml#/components/schemas/UserModel"

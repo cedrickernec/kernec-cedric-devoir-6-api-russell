@@ -1,0 +1,13 @@
+# ==========================================================
+# EXAMPLE - CATWAYNUMBER NOT NUMBER
+# ----------------------------------------------------------
+# Exemple retourné lorsqu'un numéro de catway
+# est invalide.
+# ==========================================================
+
+summary: N° de catway - Numéro invalide
+value:
+  success: false
+  message: Donnée(s) invalide(s).
+  errors:
+    catwayNumber: Le numéro de catway doit être un nombre valide.

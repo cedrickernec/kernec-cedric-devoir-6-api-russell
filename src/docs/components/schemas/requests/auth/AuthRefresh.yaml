@@ -1,0 +1,18 @@
+# ==========================================================
+# AUTH REFRESH REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de rafraîchissement
+# d'un accessToken via un refreshToken.
+#
+# Champs requis :
+# - refreshToken
+# ==========================================================
+
+description: Structure standardisée des requêtes de rafraîchissement de token.
+type: object
+required: [refreshToken]
+
+properties:
+  refreshToken:
+    type: string
+    example: eyJhbGciOi...

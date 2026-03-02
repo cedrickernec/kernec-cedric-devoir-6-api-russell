@@ -1,0 +1,22 @@
+# ==========================================================
+# CATWAY BULK CHECK REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de vérification
+# d'une sélection de catways.
+# ==========================================================
+
+description: Structure standardisée des requêtes de vérification d'une sélection de catways.
+type: object
+required: [ids]
+
+properties:
+  ids:
+    description: Numéros des catways à vérifier
+    type: array
+    items:
+      type: integer
+      
+example:
+  ids:
+    - 1
+    - 25

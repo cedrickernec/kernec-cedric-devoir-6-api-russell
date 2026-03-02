@@ -26,7 +26,7 @@
 
 <pre><code>{
     "success": true,
-    "message": "Connexion réussi",
+    "message": "Connexion réussie",
     "accessToken": "jwt_token_string",
     "refreshToken": "jwt_token_string",
     "data": {
@@ -50,7 +50,7 @@
 
 <pre><code>{
     "success": false,
-    "error": "Champ(s) non autorisé(s) : nom_du_champ."
+    "message": "Champ(s) non autorisé(s) : nom_du_champ."
 }</code></pre>
 
       <!-- CHAMPS REQUIS -->
@@ -58,7 +58,7 @@
 
 <pre><code>{
     "success": false
-    "error": "Email et mot de passe requis."
+    "message": "Email et mot de passe requis."
 }</code></pre>
 
       <p class="example-title">
@@ -70,7 +70,48 @@
 
 <pre><code>{
     "success": false
-    "error": "Email ou mot de passe incorrect."
+    "message": "Email ou mot de passe incorrect."
+}</code></pre>
+    </details>
+  </div>
+
+  <!-- ======================================================
+    AUTH - REFRESH
+    ========================================================= -->
+
+  <div class="card card--doc">
+    <p id="refresh">
+      <span class="method">POST</span> <code>/api/auth/refresh</code> - Rafraîchir le token
+    </p>
+
+    <!-- ========== SUCCESS ========== -->
+    <details>
+      <summary>Réponses valides</summary>
+
+      <p class="example-title">
+        Réponse <span class="badge doc-badge--success">200 OK</span> :
+      </p>
+
+<pre><code>{
+    "success": true,
+    "message": "Token rafraîchi.",
+    "accessToken": "jwt_token_string"
+}</code></pre>
+    </details>
+
+    <!-- ========== ERRORS ========== -->
+    <details>
+      <summary>Erreurs possibles</summary>
+      <p class="example-title">
+        Erreur <span class="badge doc-badge--error">401 Unauthorized</span> :
+      </p>
+
+      <!-- CHAMPS INVALIDE -->
+      <p class="error-type">Refresh token invalide ou expiré</p>
+
+<pre><code>{
+    "success": false
+    "message": "Refresh token invalide ou expiré."
 }</code></pre>
     </details>
   </div>
@@ -81,7 +122,7 @@
 
   <div class="card card--doc">
     <p id="logout">
-      <span class="method">POST</span> <code>api/auth/logout</code> - Se
+      <span class="method">POST</span> <code>/api/auth/logout</code> - Se
       déconnecter
     </p>
 
@@ -99,5 +140,4 @@
 }</code></pre>
     </details>
   </div>
-
 </div>

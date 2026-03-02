@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/cedrickernec/kernec-cedric-devoir-6-api-russell#readme",
   "dependencies": {
+    "@apidevtools/swagger-parser": "^12.1.0",
     "bcrypt": "^6.0.0",
     "connect-mongo": "^6.0.0",
     "cors": "^2.8.5",
@@ -33,7 +34,9 @@
     "express-session": "^1.18.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.0.1",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

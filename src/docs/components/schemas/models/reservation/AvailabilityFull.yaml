@@ -1,0 +1,31 @@
+# ==========================================================
+# RESERVATION - AVAILABILITY FULL MODEL SCHEMA
+# ----------------------------------------------------------
+# Représente une période de disponibilité complète
+# d'un catway, sans aucune réservation existante.
+#
+# Utilisé pour indiquer que le catway est entièrement
+# disponible sur la période demandée.
+# ==========================================================
+
+description: Période de disponibilité complète d'un catway.
+type: object
+required: [status, from, to]
+
+properties:
+  status:
+    description: Statut de disponibilité du catway
+    type: string
+    enum: [full]
+
+  from:
+    description: Date de début de la période de disponibilité
+    type: string
+    format: date
+    example: 2026-04-12
+
+  to:
+    description: Date de fin de la période de disponibilité
+    type: string
+    format: date
+    example: 2026-04-28

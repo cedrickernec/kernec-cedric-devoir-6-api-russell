@@ -1,7 +1,7 @@
 /**
  * REGISTER WEB ROUTES
  * =========================================================================================
- * @module registerWebRoutes
+ * @module index
  *
  * Registre central des routes Web.
  *

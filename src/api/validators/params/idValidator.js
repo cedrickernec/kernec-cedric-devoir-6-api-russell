@@ -33,11 +33,17 @@ import { ApiError } from "../../utils/errors/apiError.js";
 
 export function validateCatwayNumber(catwayNumber) {
 
-  if (isNaN(catwayNumber)) {
-    throw new ApiError(400, "Numéro de catway invalide.");
+  if (catwayNumber === undefined || catwayNumber === null) {
+    throw ApiError.badRequest("Numéro de catway invalide.");
   }
 
-  return Number(catwayNumber);
+  const num = Number(catwayNumber);
+
+  if (!Number.isInteger(num) || String(catwayNumber).trim() === "") {
+    throw ApiError.badRequest("Numéro de catway invalide.");
+  }
+
+  return num;
 }
 
 /**
@@ -58,7 +64,7 @@ export function validateCatwayNumber(catwayNumber) {
 export function validateObjectId(id, label = "Identifiant") {
   
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new ApiError(400, `${label} invalide.`);
+    throw ApiError.badRequest(`${label} invalide.`);
   }
 
   return id;

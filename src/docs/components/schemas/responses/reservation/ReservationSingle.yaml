@@ -1,0 +1,18 @@
+# ==========================================================
+# RESERVATION SINGLE RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée pour la récupération
+# d'une réservation unique.
+# ==========================================================
+
+description: Structure standardisée des réponses de récupération d'une réservation.
+type: object
+required: [success, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  data:
+    $ref: "../../../../openapi.yaml#/components/schemas/ReservationDetailModel"

@@ -39,7 +39,10 @@ import {
     deleteCatwayService
 } from "../services/catwayService.js";
 
-import { validateCatwayCreate } from "../validators/catwayValidators.js";
+import {
+    validateCatwayCreate,
+    validateCheckCatwayNumber
+} from "../validators/catwayValidators.js";
 import { validateCatwayNumber } from "../validators/params/idValidator.js";
 
 import {
@@ -75,9 +78,6 @@ export const getAllCatways = async (req, res, next) => {
         res.status(200).json({
             success: true,
             count: catways.length,
-            message: catways.length === 0
-              ? "Aucun catway trouvé."
-              : undefined,
             data: formatCatwaysList(catways)
         });
 
@@ -169,7 +169,7 @@ export const getNextCatwayNumber = async (req, res, next) => {
  *
  * @param {Object} req
  * @param {Object} req.query
- * @param {number} req.query.number
+ * @param {catwayNumber} req.query.catwayNumber
  * @param {string} [req.query.excludeId]
  * @param {Object} res
  * @param {Function} next
@@ -179,14 +179,31 @@ export const getNextCatwayNumber = async (req, res, next) => {
 
 export const checkCatwayNumber = async (req, res, next) => {
   try {
-    const { number, excludeId } = req.query;
+    const { catwayNumber, excludeId } = req.query;
 
+    // 1) Validation
+    const errors = validateCheckCatwayNumber(req.query);
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: "Donnée(s) invalide(s).",
+            errors
+        });
+    }
+
+    // 2) Service
     const available = await checkCatwayNumberService(
-      number,
+      catwayNumber,
       excludeId
     );
 
-    res.json({ available });
+    // 3) Réponse
+    res.status(200).json({
+      success: true,
+      data: {
+        available
+      }
+    });
 
   } catch (error) {
     next(error);
@@ -304,12 +321,11 @@ export const updateCatway = async (req, res, next) => {
         // 3) Service
         const updated = await updateCatwayService(
             catwayNumber,
-            req.body,
             cleanData
         );
 
         // 4) Réponse
-        res .status(200).json({
+        res.status(200).json({
             success: true,
             message: "Catway mis à jour.",
             data: formatCatway(updated)
@@ -386,16 +402,24 @@ export const checkCatwaysBeforeDelete = async (req, res, next) => {
 export const deleteCatwaysBulk = async (req, res, next) => {
   try {
 
+    // 1) Validation
     const { ids, password } = req.body;
     const userId = req.user.id;
 
+    // 2) Service
     const result = await deleteCatwaysBulkService(ids, {
       userId,
       password
     });
 
+    // 3) Réponse
+    const count = result.count;
+    const catwayLabel = count > 1 ? "catways" : "catway";
+    const deletedLabel = count > 1 ? "supprimés" : "supprimé";
+    
     res.status(200).json({
       success: true,
+      message: `${count} ${catwayLabel} ${deletedLabel} avec succès.`,
       data: result
     });
 

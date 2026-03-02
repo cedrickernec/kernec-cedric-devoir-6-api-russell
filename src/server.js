@@ -69,6 +69,7 @@ import { exposeFlash } from "./web/middlewares/ui/flashExpose.js";
 
 import { registerWebRoutes } from "./web/routes/index.js";
 import { registerApiRoutes } from "./api/routes/index.js";
+import { setupSwagger } from "./web/configs/swaggerConfig.js";
 
 // ============================================
 // ERROR HANDLING
@@ -77,75 +78,81 @@ import { registerApiRoutes } from "./api/routes/index.js";
 import { webNotFoundHandler, webErrorHandler } from "./web/middlewares/errors/webErrorHandler.js";
 import { apiNotFoundHandler, apiErrorHandler } from "./api/middlewares/apiErrorHandler.js";
 
-// ============================================
-// APP INIT.
-// ============================================
-
-const app = express();
-
-// ============================================
-// PROXY CONFIG. (prod.)
-// ============================================
-
-if (process.env.NODE_ENV === "production") {
-    app.set("trust proxy", 1);
+async function bootstrap() {
+    // ============================================
+    // APP INIT.
+    // ============================================
+    
+    const app = express();
+    
+    // ============================================
+    // PROXY CONFIG. (prod.)
+    // ============================================
+    
+    if (process.env.NODE_ENV === "production") {
+        app.set("trust proxy", 1);
+    }
+    
+    // ============================================
+    // TEMPLATE ENGINE CONFIG.
+    // ============================================
+    
+    app.use(expressLayouts);
+    app.set("layout", "layouts/appLayout"); // → Layout par défaut
+    
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    
+    app.set("view engine", "ejs");
+    app.set("views", path.join(__dirname, "web/views"));
+    
+    // ============================================
+    // GLOBAL MIDDLEWARES
+    // ============================================
+    
+    app.use(morgan("dev"));
+    app.use(cors());
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+    app.use(normalizeRequest);
+    app.use(express.static("public")); // Fichier statique → accessible via /css, /js, /images
+    app.use(sidebarClock);
+    
+    // ============================================
+    // SESSION & UI MIDDLEWARES
+    // ============================================
+    
+    app.use(sessionMiddleware);
+    app.use(exposeSessionData);
+    app.use(rememberLastPath);
+    app.use(exposeFlash);
+    
+    // ============================================
+    // ROUTES
+    // ============================================
+    
+    registerWebRoutes(app);
+    registerApiRoutes(app);
+    await setupSwagger(app);
+    
+    // ============================================
+    // ERROR HANDLERS
+    // ============================================
+    
+    app.use("/api", apiNotFoundHandler); // 404 - route inexistante
+    app.use("/api", apiErrorHandler); // 500 - Erreur serveur
+    app.use(webNotFoundHandler); // 404 - route inexistante
+    app.use(webErrorHandler); // 500 - Erreur serveur
+    
+    // ============================================
+    // SERVER START
+    // ============================================
+    const PORT = process.env.PORT || 3000;
+    
+    app.listen(PORT, () => {
+        console.info(`🚀 Serveur lancé sur le port ${PORT}`);
+        console.info(`⚙️ Environnement : ${process.env.NODE_ENV}`);
+    });
 }
 
-// ============================================
-// TEMPLATE ENGINE CONFIG.
-// ============================================
-
-app.use(expressLayouts);
-app.set("layout", "layouts/appLayout"); // → Layout par défaut
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "web/views"));
-
-// ============================================
-// GLOBAL MIDDLEWARES
-// ============================================
-
-app.use(morgan("dev"));
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(normalizeRequest);
-app.use(express.static("public")); // Fichier statique → accessible via /css, /js, /images
-app.use(sidebarClock);
-
-// ============================================
-// SESSION & UI MIDDLEWARES
-// ============================================
-
-app.use(sessionMiddleware);
-app.use(exposeSessionData);
-app.use(rememberLastPath);
-app.use(exposeFlash);
-
-// ============================================
-// ROUTES
-// ============================================
-
-registerWebRoutes(app);
-registerApiRoutes(app);
-
-// ============================================
-// ERROR HANDLERS
-// ============================================
-
-app.use("/api", apiNotFoundHandler); // 404 - route inexistante
-app.use("/api", apiErrorHandler); // 500 - Erreur serveur
-app.use(webNotFoundHandler); // 404 - route inexistante
-app.use(webErrorHandler); // 500 - Erreur serveur
-
-// ============================================
-// SERVER START
-// ============================================
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.info(`🚀 Serveur lancé sur le port ${PORT}`);
-});
+bootstrap();

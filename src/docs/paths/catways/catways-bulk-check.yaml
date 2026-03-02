@@ -1,0 +1,75 @@
+# ==========================================================
+# CATWAYS - BULK CHECK
+# ----------------------------------------------------------
+# Vérifie si des catways peuvent être supprimés sans
+# néccessiter de validation par mot de passe.
+#
+# Route protégée par JWT.
+# ==========================================================
+
+post:
+  tags: [Catways]
+  summary: Vérifier une sélection de catways
+  description: Vérifie si une sélection de catways nécessite une validation par mot de passe.
+
+  requestBody:
+    required: true
+    description: Liste de catways à vérifier.
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/CatwayBulkCheckRequest"
+
+  responses:
+    "200":
+      description: Catway récupéré
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/CatwayBulkCheckResponse"
+
+    "400":
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidCatwayId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCatwayIdBulk"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "404":
+      description: Catway introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            ResourceNotFound:
+              $ref: "../../openapi.yaml#/components/examples/CatwayNotFound"
+            
+    "409":
+      description: Mot de passe requis
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            passwordRequired:
+              summary: Mot de passe requis
+              value:
+                success: false
+                message: La sélection contient des catways liés à des réservations. 
+                context:
+                    reason: "password_required"
+                    reservationsLinked: true
+                    reservationsStats:
+                        upComing: 2
+                        inProgress: 1
+                        finished: 1
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

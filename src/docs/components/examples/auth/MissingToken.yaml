@@ -1,0 +1,12 @@
+# ==========================================================
+# EXAMPLE - MISSING TOKEN
+# ----------------------------------------------------------
+# Exemple générique lorsque le token est manquant.
+#
+# Utilisable dans tous les endpoints.
+# ==========================================================
+
+summary: Token manquant
+value:
+  success: false
+  message: "Accès refusé: aucun token fourni."

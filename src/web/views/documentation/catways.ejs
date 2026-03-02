@@ -337,6 +337,7 @@
     "message": "La sélection contient des catways liés à des réservations.",
     "context": {
         "reason": "password_required",
+        "reservationsLinked": true,
         "reservationsStats": {
             "upComing": 0,
             "inProgress": 1,
@@ -476,6 +477,7 @@
 
 <pre><code>{
     "success": true,
+    "message": "2 catways supprimés avec succès.",
     "data": {
         "count": 2
     }
@@ -502,7 +504,7 @@
 }</code></pre>
 
             <p class="example-title">
-            Erreur <span class="badge doc-badge--error">401 Unauthorized</span> :
+            Erreur <span class="badge doc-badge--error">403 Forbidden</span> :
             </p>
 
             <!-- MOT DE PASSE INVALIDE -->
@@ -606,7 +608,7 @@
 }</code></pre>
 
             <p class="example-title">
-            Erreur <span class="badge doc-badge--error">401 Unauthorized</span> :
+            Erreur <span class="badge doc-badge--error">403 Forbidden</span> :
             </p>
 
             <!-- MOT DE PASSE INVALIDE -->

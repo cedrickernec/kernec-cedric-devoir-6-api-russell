@@ -1,0 +1,237 @@
+openapi: 3.0.0
+
+info:
+  title: API Russell
+  version: 1.0.0
+  description: API de gestion du port de plaisance Russell
+
+servers:
+  - url: http://localhost:3000
+
+tags:
+  - name: Auth
+  - name: Users
+  - name: Catways
+  - name: Reservations
+
+security:
+  - bearerAuth: []
+
+paths:
+    $ref: "./paths/index.yaml"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # ============================================================================
+    # COMMON
+    # ============================================================================
+    BaseError:
+      $ref: "./components/schemas/responses/common/BaseError.yaml"
+    ErrorResponse:
+      $ref: "./components/schemas/responses/common/Error.yaml"
+    NotFoundResource:
+      $ref: "./components/schemas/responses/common/NotFoundResource.yaml"
+    NotFoundRoute:
+      $ref: "./components/schemas/responses/common/NotFoundRoute.yaml"
+    SuccessMessageResponse:
+      $ref: "./components/schemas/responses/common/SuccessMessage.yaml"
+    PasswordRules:
+      $ref: "./components/schemas/common/PasswordRules.yaml"
+    UsernameRules:
+      $ref: "./components/schemas/common/UsernameRules.yaml"
+    EmailRules:
+      $ref: "./components/schemas/common/EmailRules.yaml"
+    CompositeId:
+      $ref: "./components/schemas/common/CompositeId.yaml"
+    # ============================================================================
+    # AUTH
+    # ============================================================================
+    AuthLoginRequest:
+      $ref: "./components/schemas/requests/auth/AuthLogin.yaml"
+    AuthLoginResponse:
+      $ref: "./components/schemas/responses/auth/AuthLogin.yaml"
+    AuthRefreshRequest:
+      $ref: "./components/schemas/requests/auth/AuthRefresh.yaml"
+    AuthRefreshResponse:
+      $ref: "./components/schemas/responses/auth/AuthRefresh.yaml"
+    # ============================================================================
+    # USER
+    # ============================================================================
+    UserModel:
+      $ref: "./components/schemas/models/User.yaml"
+    UserListResponse:
+      $ref: "./components/schemas/responses/user/UserList.yaml"
+    UserSingleResponse:
+      $ref: "./components/schemas/responses/user/UserSingle.yaml"
+    UserCreateRequest:
+      $ref: "./components/schemas/requests/user/UserCreate.yaml"
+    UserCreateResponse:
+      $ref: "./components/schemas/responses/user/UserCreate.yaml"
+    UserUpdateRequest:
+      $ref: "./components/schemas/requests/user/UserUpdate.yaml"
+    UserUpdateResponse:
+      $ref: "./components/schemas/responses/user/UserUpdate.yaml"
+    UserUpdatePasswordRequest:
+      $ref: "./components/schemas/requests/user/UserUpdatePassword.yaml"
+    UserDeleteResponse:
+      $ref: "./components/schemas/responses/user/UserDelete.yaml"
+    # ============================================================================
+    # CATWAY
+    # ============================================================================
+    CatwayModel:
+      $ref: "./components/schemas/models/Catway.yaml"
+    CatwayListResponse:
+      $ref: "./components/schemas/responses/catway/CatwayList.yaml"
+    CatwaySingleResponse:
+      $ref: "./components/schemas/responses/catway/CatwaySingle.yaml"
+    CatwayNextNumberResponse:
+      $ref: "./components/schemas/responses/catway/CatwayNextNumber.yaml"
+    CatwayCheckNumberResponse:
+      $ref: "./components/schemas/responses/catway/CatwayCheckNumber.yaml"
+    CatwayCreateRequest:
+      $ref: "./components/schemas/requests/catway/CatwayCreate.yaml"
+    CatwayCreateResponse:
+      $ref: "./components/schemas/responses/catway/CatwayCreate.yaml"
+    CatwayUpdateRequest:
+      $ref: "./components/schemas/requests/catway/CatwayUpdate.yaml"
+    CatwayUpdateResponse:
+      $ref: "./components/schemas/responses/catway/CatwayUpdate.yaml"
+    CatwayDeleteRequest:
+      $ref: "./components/schemas/requests/catway/CatwayDelete.yaml"
+    CatwayDeleteResponse:
+      $ref: "./components/schemas/responses/catway/CatwayDelete.yaml"
+    CatwayBulkCheckRequest:
+      $ref: "./components/schemas/requests/catway/CatwayBulkCheck.yaml"
+    CatwayBulkCheckResponse:
+      $ref: "./components/schemas/responses/catway/CatwayBulkCheck.yaml"
+    CatwayBulkDeleteRequest:
+      $ref: "./components/schemas/requests/catway/CatwayBulkDelete.yaml"
+    CatwayBulkDeleteResponse:
+      $ref: "./components/schemas/responses/catway/CatwayBulkDelete.yaml"
+    # ============================================================================
+    # RESERVATION
+    # ============================================================================
+    ReservationSummaryModel:
+      $ref: "./components/schemas/models/reservation/ReservationSummary.yaml"
+    ReservationDetailModel:
+      $ref: "./components/schemas/models/reservation/ReservationDetail.yaml"
+    ReservationStatusModel:
+      $ref: "./components/schemas/models/reservation/ReservationStatus.yaml"
+    ReservationConflictModel:
+      $ref: "./components/schemas/models/reservation/ReservationConflict.yaml"
+    AvailabilityFullModel:
+      $ref: "./components/schemas/models/reservation/AvailabilityFull.yaml"
+    AvailabilityPartialModel:
+      $ref: "./components/schemas/models/reservation/AvailabilityPartial.yaml"
+    AvailabilityModel:
+      $ref: "./components/schemas/models/reservation/Availability.yaml"
+    CatwaysAvailabilityItemModel:
+      $ref: "./components/schemas/models/reservation/CatwaysAvailabilityItem.yaml"
+    ReservationListResponse:
+      $ref: "./components/schemas/responses/reservation/ReservationList.yaml"
+    ReservationSingleResponse:
+      $ref: "./components/schemas/responses/reservation/ReservationSingle.yaml"
+    CatwaysAvailabilityRequest:
+      $ref: "./components/schemas/requests/reservation/CatwaysAvailability.yaml"
+    CatwaysAvailabilityResponse:
+      $ref: "./components/schemas/responses/reservation/CatwaysAvailability.yaml"
+    ReservationCreateRequest:
+      $ref: "./components/schemas/requests/reservation/ReservationCreate.yaml"
+    ReservationCreateResponse:
+      $ref: "./components/schemas/responses/reservation/ReservationCreate.yaml"
+    ReservationUpdateRequest:
+      $ref: "./components/schemas/requests/reservation/ReservationUpdate.yaml"
+    ReservationUpdateResponse:
+      $ref: "./components/schemas/responses/reservation/ReservationUpdate.yaml"
+    ReservationConflictErrorResponse:
+      $ref: "./components/schemas/responses/reservation/ReservationConflictError.yaml"
+    ReservationDeleteRequest:
+      $ref: "./components/schemas/requests/reservation/ReservationDelete.yaml"
+    ReservationDeleteResponse:
+      $ref: "./components/schemas/responses/reservation/ReservationDelete.yaml"
+    ReservationBulkCheckRequest:
+      $ref: "./components/schemas/requests/reservation/ReservationBulkCheck.yaml"
+    ReservationBulkCheckResponse:
+      $ref: "./components/schemas/responses/reservation/ReservationBulkCheck.yaml"
+    ReservationBulkDeleteRequest:
+      $ref: "./components/schemas/requests/reservation/ReservationBulkDelete.yaml"
+    ReservationBulkDeleteResponse:
+      $ref: "./components/schemas/responses/reservation/ReservationBulkDelete.yaml"
+
+  examples:
+    # ============================================================================
+    # COMMON
+    # ============================================================================
+    FieldNotAllowed:
+      $ref: "./components/examples/common/FieldNotAllowed.yaml"
+    NoValidDataToUpdate:
+      $ref: "./components/examples/common/NoValidDataToUpdate.yaml"
+    InvalidPassword:
+      $ref: "./components/examples/common/InvalidPassword.yaml"
+    # ============================================================================
+    # AUTH
+    # ============================================================================
+    ExpiredToken:
+      $ref: "./components/examples/auth/ExpiredToken.yaml"
+    InvalidToken:
+      $ref: "./components/examples/auth/InvalidToken.yaml"
+    MissingToken:
+      $ref: "./components/examples/auth/MissingToken.yaml"
+    # ============================================================================
+    # USER
+    # ============================================================================
+    InvalidUserId:
+      $ref: "./components/examples/user/InvalidUserId.yaml"
+    UserNotFound:
+      $ref: "./components/examples/user/UserNotFound.yaml"
+    # ============================================================================
+    # CATWAY
+    # ============================================================================
+    InvalidCatwayId:
+      $ref: "./components/examples/catway/InvalidCatwayId.yaml"
+    InvalidCatwayIdBulk:
+      $ref: "./components/examples/catway/InvalidCatwayIdBulk.yaml"
+    InvalidNumber:
+      $ref: "./components/examples/catway/InvalidCatwayNumberNotNumber.yaml"
+    InvalidInteger:
+      $ref: "./components/examples/catway/InvalidCatwayNumberNotInteger.yaml"
+    InvalidMinimum:
+      $ref: "./components/examples/catway/InvalidCatwayNumberMin.yaml"
+    CatwayNotFound:
+      $ref: "./components/examples/catway/CatwayNotFound.yaml"
+    # ============================================================================
+    # RESERVATION
+    # ============================================================================
+    InvalidReservationId:
+      $ref: "./components/examples/reservation/InvalidReservationId.yaml"
+    InvalidCompositeId:
+      $ref: "./components/examples/reservation/InvalidCompositeId.yaml"
+    InvalidDateFormat:
+      $ref: "./components/examples/reservation/InvalidDateFormat.yaml"
+    InvalidDateRange:
+      $ref: "./components/examples/reservation/InvalidDateRange.yaml"
+    InvalidDateValue:
+      $ref: "./components/examples/reservation/InvalidDateValue.yaml"
+    ReservationConflict:
+      $ref: "./components/examples/reservation/ReservationConflict.yaml"
+    ReservationNotFound:
+      $ref: "./components/examples/reservation/ReservationNotFound.yaml"
+
+  responses:
+    # ============================================================================
+    # COMMON
+    # ============================================================================
+    AuthError401:
+      $ref: "./components/responses/AuthError401.yaml"
+    NotFoundRouteError404:
+      $ref: "./components/responses/NotFoundRouteError404.yaml"
+    NotFoundResourceError404:
+      $ref: "./components/responses/NotFoundResourceError404.yaml"
+    InternalServerError500:
+      $ref: "./components/responses/InternalServerError500.yaml"

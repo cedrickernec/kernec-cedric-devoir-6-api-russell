@@ -1,0 +1,91 @@
+# ==========================================================
+# RESERVATIONS - BULK
+# ----------------------------------------------------------
+# Permet de supprimer plusieurs réservations
+# en une seule requête.
+#
+# La suppression de réservations en cours ou terminées
+# nécessite une confirmation par mot de passe.
+#
+# Routes protégées par JWT.
+# ==========================================================
+
+delete:
+  tags: [Reservations]
+  summary: Supprimer plusieurs réservations
+  description:
+    Supprime une sélection de réservations.
+    Si au moins une réservation est en cours ou terminée,
+    une confirmation par mot de passe est requise.
+  
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/ReservationBulkDeleteRequest"
+
+  responses:
+    "200":
+      description: Sélection de réservations supprimée
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ReservationBulkDeleteResponse"
+
+    "400":
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidCatwayId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCatwayId"
+
+            invalidReservationId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidReservationId"
+
+            invalidCompositeId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCompositeId"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "403":
+      description: Mot de passe incorrect
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidPassword:
+              $ref: "../../openapi.yaml#/components/examples/InvalidPassword"
+
+    "404":
+      description: Réservation introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            ResourceNotFound:
+              $ref: "../../openapi.yaml#/components/examples/ReservationNotFound"
+
+    "409":
+      description: Mot de passe requis
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            passwordRequired:
+              summary: Mot de passe requis
+              value:
+                success: false
+                message: La sélection contient des réservations en cours ou terminées. La suppression nécessite une confirmation par mot de passe.
+                context:
+                    reason: "password_required"
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

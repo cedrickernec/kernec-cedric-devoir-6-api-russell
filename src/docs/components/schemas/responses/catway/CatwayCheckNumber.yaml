@@ -1,0 +1,27 @@
+# ==========================================================
+# CATWAY CHECK NUMBER RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée pour la vérification
+# d'unicité d'un numéro de catway.
+#
+# Contient :
+# - success
+# ==========================================================
+
+description: Structure standardisée des réponses de vérification d'unicité d'un numéro de catway.
+type: object
+required: [success, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+  data:
+    description: Indique si le numéro de catway est disponible ou non.
+    type: object
+    required: [available]
+    properties:
+      available:
+        type: boolean
+        example: true
+    

@@ -27,3 +27,5 @@ router.post("/refresh-session", authGuard, (req, res) => {
 
     return res.json({ ok: true });
 });
+
+export default router;

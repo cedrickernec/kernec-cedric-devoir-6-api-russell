@@ -374,7 +374,6 @@ export async function updateReservationService(catwayNumber, idReservation, data
  * @throws {ApiError} 409 Confirmation mot de passe requise
  */
 
-
 export async function checkReservationsBeforeDeleteService(ids) {
 
     for (const { catwayNumber, reservationId } of ids) {
@@ -406,7 +405,9 @@ export async function checkReservationsBeforeDeleteService(ids) {
         }
     }
 
-    return true;
+    return {
+        requiresPassword: false
+    };
 }
 
 /**
@@ -426,27 +427,16 @@ export async function checkReservationsBeforeDeleteService(ids) {
  *
  * @throws {ApiError} 400 Requête invalide
  * @throws {ApiError} 404 Réservation introuvable
- * @throws {ApiError} 401 Mot de passe incorrect
+ * @throws {ApiError} 403 Mot de passe incorrect
  * @throws {ApiError} 409 Confirmation requise
  */
 
 export async function deleteReservationsBulkService(ids, { userId, password }) {
 
-    if (!Array.isArray(ids) || ids.length === 0) {
-        throw ApiError.badRequest("Requête invalide.");
-    }
-
-    // 1) Parsing des IDs
-    const parsed = ids.map(compositeId => {
-        const [catwayNumber, reservationId] = compositeId.split("|");
-        return { catwayNumber, reservationId };
-    });
-
-    // 2) Récupération + validation complète avant suppression
     const reservations = [];
     let requiresPassword = false;
 
-    for (const { catwayNumber, reservationId } of parsed) {
+    for (const { catwayNumber, reservationId } of ids) {
 
         const reservation = await findReservationById(catwayNumber, reservationId);
 
@@ -471,7 +461,7 @@ export async function deleteReservationsBulkService(ids, { userId, password }) {
 
         if (!password) {
             throw ApiError.businessConflict(
-                "La sélection contient des réservations en cours ou terminée. La suppression nécessite une confirmation par mot de passe.",
+                "La sélection contient des réservations en cours ou terminées. La suppression nécessite une confirmation par mot de passe.",
                 { reason: "password_required" }
             );
         }
@@ -479,7 +469,7 @@ export async function deleteReservationsBulkService(ids, { userId, password }) {
         const isValid = await verifyUserPassword(userId, password);
 
         if (!isValid) {
-            throw ApiError.unauthorized(
+            throw ApiError.forbidden(
                 "Mot de passe incorrect.",
                 { reason: "invalid_password" }
             );
@@ -516,7 +506,7 @@ export async function deleteReservationsBulkService(ids, { userId, password }) {
  * @returns {Promise<{reservation: Object, catway: Object}>}
  *
  * @throws {ApiError} 404 Catway ou réservation introuvable
- * @throws {ApiError} 401 Mot de passe incorrect
+ * @throws {ApiError} 403 Mot de passe incorrect
  * @throws {ApiError} 409 Confirmation requise
  */
 
@@ -561,7 +551,7 @@ export async function deleteReservationService(catwayNumber, idReservation, opti
     
         const isValid = await verifyUserPassword(userId, password);
         if (!isValid) {
-            throw ApiError.unauthorized(
+            throw ApiError.forbidden(
                 "Mot de passe incorrect.",
                 {
                     reason: "invalid_password"

@@ -1,0 +1,21 @@
+# ==========================================================
+# SUCCESS MESSAGE RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Schéma générique utilisé pour toutes les réponses
+# simples de succès (sans objet data).
+#
+# Exemple : suppression, logout, mise à jour simple.
+# ==========================================================
+
+description: Structure standardisée des réponses de succès.
+type: object
+required: [success, message]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  message:
+    type: string
+    example: Opération réussie avec succès.
