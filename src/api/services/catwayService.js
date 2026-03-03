@@ -134,7 +134,7 @@ export async function findNextCatwayNumberService() {
  * @returns {Promise<boolean>}
  */
 
-export async function checkCatwayNumberService(catwayNumber, excludeId) {
+export async function checkCatwayNumberService(catwayNumber) {
 
     if (!catwayNumber) return false;
 
@@ -143,13 +143,7 @@ export async function checkCatwayNumberService(catwayNumber, excludeId) {
 
     const existing = await findCatwayByNumber(catwayNumberInt);
 
-    if (!existing) return true;
-
-    if (excludeId && existing._id.toString() === excludeId) {
-        return true;
-    }
-
-    return false;
+    return !existing;
 }
 
 /**

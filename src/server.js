@@ -151,7 +151,6 @@ async function bootstrap() {
     
     app.listen(PORT, () => {
         console.info(`🚀 Serveur lancé sur le port ${PORT}`);
-        console.info(`⚙️ Environnement : ${process.env.NODE_ENV}`);
     });
 }
 
