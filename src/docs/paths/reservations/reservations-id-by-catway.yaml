@@ -28,15 +28,17 @@ get:
     - name: id
       in: path
       required: true
+      description: Numéro de catway
       schema:
         type: integer
-      description: Numéro de catway
+        example: 11
     - name: idReservation
       in: path
       required: true
+      description: Identifiant MongoDB de la réservation
       schema:
         type: string
-      description: Identifiant MongoDB de la réservation
+        example: 698f52f59064103f2c1e58f1
 
   responses:
     "200":
@@ -89,15 +91,17 @@ put:
     - name: id
       in: path
       required: true
+      description: Numéro de catway
       schema:
         type: integer
-      description: Numéro de catway
+        example: 20
     - name: idReservation
       in: path
       required: true
+      description: Identifiant MongoDB de la réservation
       schema:
         type: string
-      description: Identifiant MongoDB de la réservation
+        example: 699ce49b3990671881a87cca
 
   requestBody:
     required: true
@@ -203,15 +207,26 @@ delete:
     - name: id
       in: path
       required: true
+      description: Numéro de catway
       schema:
         type: integer
-      description: Numéro de catway
+        example: 20
     - name: idReservation
       in: path
       required: true
+      description: Identifiant MongoDB de la réservation
       schema:
         type: string
-      description: Identifiant MongoDB de la réservation
+        example: 699ce49b3990671881a87cca
+
+  requestBody:
+    required: false
+    nullable: true
+    description: Mot de passe requis uniquement si la réservation est en cours ou terminée.
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/ReservationDeleteRequest"
 
   responses:
     "200":

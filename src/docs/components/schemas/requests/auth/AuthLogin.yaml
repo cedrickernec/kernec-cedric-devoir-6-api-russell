@@ -17,7 +17,9 @@ properties:
   email:
     description: Email utilisateur
     $ref: "../../../../openapi.yaml#/components/schemas/EmailRules"
+    example: user@example.com
 
   password:
     description: Mot de passe utilisateur
     $ref: "../../../../openapi.yaml#/components/schemas/PasswordRules"
+    example: MyPassword123!

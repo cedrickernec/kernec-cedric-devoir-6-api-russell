@@ -28,3 +28,4 @@ example:
     ids:
       - 1
       - 25
+    password: "MyPassword123!"

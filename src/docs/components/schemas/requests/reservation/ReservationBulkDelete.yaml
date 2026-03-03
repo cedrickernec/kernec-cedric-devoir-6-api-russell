@@ -24,3 +24,10 @@ properties:
       Mot de passe requis uniquement si au moins
       un des catways sélectionnés est lié à des réservations.
     $ref: "../../../../openapi.yaml#/components/schemas/PasswordRules"
+
+example:
+    ids:
+      - "20|699ce49b3990671881a87cca"
+      - "11|698f52f59064103f2c1e58f1"
+
+    password: "MyPassword123!"

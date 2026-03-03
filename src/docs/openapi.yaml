@@ -7,6 +7,9 @@ info:
 
 servers:
   - url: http://localhost:3000
+    description: Serveur de développement local
+  - url: https://kernec-cedric-devoir-6-api-russell.onrender.com/
+    description: Serveur de production
 
 tags:
   - name: Auth

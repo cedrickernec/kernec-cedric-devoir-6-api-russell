@@ -11,4 +11,4 @@
 type: string
 format: email
 pattern: "^[^\\s@]+@[^\\s@]+\\.[a-zA-Z]{2,}$"
-example: john@doe.com
+example: user@example.com

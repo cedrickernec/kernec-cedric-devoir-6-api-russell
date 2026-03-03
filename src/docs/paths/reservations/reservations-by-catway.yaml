@@ -25,9 +25,10 @@ get:
     - name: id
       in: path
       required: true
+      description: Numéro de catway
       schema:
         type: integer
-      description: Numéro de catway
+        example: 1
 
   responses:
     "200":
@@ -75,9 +76,10 @@ post:
     - name: id
       in: path
       required: true
+      description: Numéro de catway
       schema:
         type: integer
-      description: Numéro de catway
+        example: 21
 
   requestBody:
     required: true

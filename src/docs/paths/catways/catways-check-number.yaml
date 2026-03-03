@@ -15,15 +15,10 @@ get:
     - name: catwayNumber
       in: query
       required: true
-      schema:
-        type: integer
       description: Numéro de catway
-    - name: excludeId
-      in: query
-      required: false
       schema:
         type: integer
-      description: ID MongoDB à exclure (cas mise à jour)
+        example: 25
 
   responses:
     "200":

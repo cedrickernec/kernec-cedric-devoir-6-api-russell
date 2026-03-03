@@ -14,10 +14,12 @@ type: object
 properties:
   username:
     description: Nouveau nom d'utilisateur
-    $ref: "../../../../openapi.yaml#/components/schemas/UsernameRules"
+    allOf:
+      - $ref: "../../../../openapi.yaml#/components/schemas/UsernameRules"
     example: nouveauUsername
 
   email:
     description: Nouveau email utilisateur
-    $ref: "../../../../openapi.yaml#/components/schemas/EmailRules"
+    allOf:
+      - $ref: "../../../../openapi.yaml#/components/schemas/EmailRules"
     example: nouveau@email.com

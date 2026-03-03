@@ -16,3 +16,6 @@ properties:
     minItems: 1
     items:
       $ref: "../../../../openapi.yaml#/components/schemas/CompositeId"
+    example:
+      - "20|699ce49b3990671881a87cca"
+      - "11|698f52f59064103f2c1e58f1"

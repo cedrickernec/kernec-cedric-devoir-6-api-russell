@@ -13,7 +13,7 @@ properties:
     description: Numéro de catway
     type: integer
     minimum: 1
-    example: 1
+    example: 26
 
   catwayType:
     description: Type de catway

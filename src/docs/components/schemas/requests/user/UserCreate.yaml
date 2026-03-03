@@ -12,11 +12,15 @@ required: [username, email, password]
 properties:
   username:
     description: Nom d'utilisateur
-    $ref: "../../../../openapi.yaml#/components/schemas/UsernameRules"
+    allOf:
+      - $ref: "../../../../openapi.yaml#/components/schemas/UsernameRules"
+    example: jdoe
 
   email:
     description: Email utilisateur
-    $ref: "../../../../openapi.yaml#/components/schemas/EmailRules"
+    allOf:
+      - $ref: "../../../../openapi.yaml#/components/schemas/EmailRules"
+    example: john@doe.com
 
   password:
     description: Mot de passe utilisateur
