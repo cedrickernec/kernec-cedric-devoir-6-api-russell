@@ -33,6 +33,11 @@ export async function setupSwagger(app) {
     // Bundle tous les $ref (multi-fichiers)
     const bundledSpec = await SwaggerParser.bundle(openapiPath);
 
+    // Expose le YAML brut (optionnel, pour debug ou importation dans d’autres outils)
+    app.use("/api/openapi.json", (req, res) => {
+        res.json(bundledSpec);
+    });
+
     // Expose Swagger
     app.use(
         "/api-docs",
