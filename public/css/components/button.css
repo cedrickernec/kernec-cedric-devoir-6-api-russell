@@ -65,6 +65,15 @@
     border: var(--border-light);
 }
 
+/* Bouton compact pour l'affichage de compteur (ex: suppression multiple) */
+.btn--compact-gap{
+    gap: var(--btn-compact-gap);
+}
+
+.btn--compact-gap #delete-selected-count:empty {
+    display: none;
+}
+
 /* ======================================================
    BUTTON TYPES
    ====================================================== */

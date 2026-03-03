@@ -35,7 +35,8 @@
 
    /* Base */
    --btn-radius:                             var(--radius-md);
-   --btn-gap:                                var(--flow-normal);
+   --btn-gap:                                var(--space-md);
+   --btn-compact-gap:                        var(--space-xs);
    --btn-padding-x:                          var(--control-padding-x);
 
    --btn-font-size:                          var(--text-small-size);
