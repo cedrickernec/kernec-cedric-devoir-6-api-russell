@@ -1,0 +1,20 @@
+# ==========================================================
+# CATWAY BULK CHECK RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après vérification
+# d'une sélection de catways.
+#
+# Contient :
+# - success
+# ==========================================================
+
+description:
+  Structure standardisée des réponses de vérification
+  d'une sélection de catways.
+type: object
+required: [success]
+
+properties:
+  success:
+    type: boolean
+    example: true

@@ -1,0 +1,13 @@
+# ==========================================================
+# EXAMPLE - INVALID COMPOSITE ID
+# ----------------------------------------------------------
+# Exemple retourné lorsque l'identifiant composite
+# fourni est invalide.
+# ==========================================================
+
+summary: Identifiant composite invalide
+value:
+  success: false
+  message: Identifiant composite invalide.
+  context:
+    compositeId: "|699ce4183990671881a87cb1"

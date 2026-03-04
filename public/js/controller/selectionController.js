@@ -1,15 +1,23 @@
 /**
- * ===================================================================
  * GENERIC SELECTION CONTROLLER
- * ===================================================================
- * - Gère le toggle de sélection des boutons ".btn-toggle"
- * - Synchronise :
- *      → l'état visuel
- *      → le selectionStore global
- *      → l'accessibilité (aria-pressed)
- * - Émet un event global "selection:change" consommé par les autres
- *   modules UI
- * ===================================================================
+ * =========================================================================================
+ * @module selectionController
+ * 
+ * Contrôleur générique de sélection UI.
+ *
+ * - Gère le toggle des boutons ".btn-toggle"
+ * - Synchronise l'état visuel (classe CSS)
+ * - Met à jour le selectionStore global
+ * - Met à jour l'attribut aria-pressed
+ * - Émet un événement global "selection:change"
+ *
+ * Dépendances :
+ * - selectionStore (addSelection, removeSelection, hasSelection)
+ * - Boutons avec data-selection-id
+ *
+ * Événement émis :
+ * - "selection:change"
+ *   detail: { id: string, active: boolean }
  */
 
 import {

@@ -1,14 +1,34 @@
 /**
- * ===================================================================
- * RESERVATION STATUS COMPUTATION
- * ===================================================================
- * - Détermine le statut temporel d'une réservation
- * - Basé uniquement sur la date actuelle
- * - Retourne les métadonnées UI associées
- * ===================================================================
+ * RESERVATION STATUS COMPUTATION (WEB)
+ * =========================================================================================
+ * @module reservationStatus
+ *
+ * Détermine le statut temporel d’une réservation pour l’UI.
+ *
+ * Responsabilités :
+ * - Comparer la date actuelle avec startDate et endDate
+ * - Retourner les métadonnées visuelles associées
  */
 
 import { normalizeDateRange } from "../../normalizeDateRange.js";
+
+/**
+ * COMPUTE RESERVATION STATUS
+ * =========================================================================================
+ * Calcule le statut temporel d’une réservation.
+ *
+ * @function computeReservationStatus
+ *
+ * @param {Object} params
+ * @param {Date|string} params.startDate
+ * @param {Date|string} params.endDate
+ *
+ * @returns {Object}
+ * @returns {string} returns.label
+ * @returns {string} returns.className
+ * @returns {string} returns.aria
+ * @returns {string} returns.semantic
+ */
 
 export function computeReservationStatus({startDate, endDate}) {
     const now = new Date();

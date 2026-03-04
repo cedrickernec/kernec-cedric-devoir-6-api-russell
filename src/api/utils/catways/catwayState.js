@@ -1,14 +1,32 @@
 /**
- * ===================================================================
  * CATWAY STATE COMPUTATION
- * ===================================================================
- * - Détermine la clé d'état d'un catway
- * ===================================================================
- * Retourne une clé simplifiée utilisée par l'UI :
- *      - HS        → Hors service
- *      - OK        → Bon état
- *      - WARNING   → Nécessite une attention
- * ===================================================================
+ * =========================================================================================
+ * @module catwayState
+ *
+ * Détermine une clé d’état simplifiée destinée à l’UI.
+ *
+ * Règles :
+ * - HS       : catway hors service
+ * - OK       : état "bon état"
+ * - WARNING  : tout autre état
+ *
+ * Effets de bord :
+ * - Aucun (fonction pure)
+ */
+
+
+/**
+ * COMPUTE CATWAY STATE KEY
+ * =========================================================================================
+ * Calcule la clé d’état simplifiée d’un catway pour l’UI.
+ *
+ * @function computeCatwayStateKey
+ *
+ * @param {Object} options
+ * @param {string} options.catwayState
+ * @param {boolean} options.isOutOfService
+ *
+ * @returns {"HS"|"OK"|"WARNING"}
  */
 
 export function computeCatwayStateKey({ catwayState, isOutOfService }) {

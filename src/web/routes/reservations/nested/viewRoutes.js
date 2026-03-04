@@ -1,10 +1,21 @@
 /**
- * ===================================================================
  * RESERVATIONS NESTED ROUTES (WEB)
- * ===================================================================
- * - Routes GET dépendantes de catways :
- *      - /catways/:catwayNumber/reservations
- * ===================================================================
+ * =========================================================================================
+ * @module viewRoutes
+ * 
+ * Routeur des vues Réservations imbriquées (couche Web).
+ *
+ * - Dépend d’un catway : /catways/:catwayNumber/reservations
+ * - mergeParams activé pour récupérer catwayNumber
+ * - Protège les routes via authGuard
+ * - Valide les ObjectId dynamiques
+ * - Gère vues complètes et panneaux partiels
+ *
+ * Routes :
+ * GET    /:id
+ * GET    /:id/edit
+ * GET    /:id/panel
+ * DELETE /:id
  */
 
 import express from "express";

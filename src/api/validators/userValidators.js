@@ -1,20 +1,41 @@
 /**
- * ===================================================================
  * USER VALIDATORS
- * ===================================================================
- * - Validation username, email et password
- * - Validation création et mise à jour utilisateur
- * ===================================================================
+ * =========================================================================================
+ * @module userValidators
+ *
+ * Validation des utilisateurs (username, email, password) + validation de payload
+ * pour création et mise à jour.
+ *
+ * Stratégie :
+ * - validateUsername / validateEmail : retourne un message d’erreur ou null
+ * - validatePassword : retourne un objet { valid, errors }
+ * - validateUserCreate / validateUserUpdate : retourne un objet `errors`
+ *   (controller/service décide ensuite de lever ApiError.validation)
  */
 
-// =====================================
-// USERNAME VALIDATION
-// =====================================
+
+/**
+ * VALIDATE USERNAME
+ * =========================================================================================
+ * Valide un nom d’utilisateur.
+ *
+ * Règles :
+ * - requis
+ * - 3 à 20 caractères
+ * - lettres, chiffres, "_" ou "-"
+ *
+ * @function validateUsername
+ *
+ * @param {string} username
+ *
+ * @returns {string|null} Message d’erreur ou null si valide
+ */
+
 export const validateUsername = (username) => {
   const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
 
   if (!username) {
-    return "Le nom d'utilisateur est requis.";
+    return "Champ obligatoire manquant : Nom d'utilisateur.";
   }
 
   if (!usernameRegex.test(username)) {
@@ -24,14 +45,23 @@ export const validateUsername = (username) => {
   return null;
 };
 
-// =====================================
-// EMAIL VALIDATION
-// =====================================
+/**
+ * VALIDATE EMAIL
+ * =========================================================================================
+ * Valide un email.
+ *
+ * @function validateEmail
+ *
+ * @param {string} email
+ *
+ * @returns {string|null} Message d’erreur ou null si valide
+ */
+
 export const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
 
   if (!email) {
-    return "L'email est requis.";
+    return "Champ obligatoire manquant : Email.";
   }
 
   if (!emailRegex.test(email)) {
@@ -41,9 +71,28 @@ export const validateEmail = (email) => {
   return null;
 };
 
-// =====================================
-// PASSWORD VALIDATION
-// =====================================
+/**
+ * VALIDATE PASSWORD
+ * =========================================================================================
+ * Valide un mot de passe selon des règles de sécurité.
+ *
+ * Règles :
+ * - 8 caractères minimum
+ * - 1 majuscule
+ * - 1 minuscule
+ * - 1 chiffre
+ * - 1 caractère spécial
+ *
+ * @function validatePassword
+ *
+ * @param {string} password
+ *
+ * @returns {{
+ *   valid: boolean,
+ *   errors: Object|string|null
+ * }} Résultat de validation
+ */
+
 export const validatePassword = (password) => {
   const errors = {
     minLength: "8 caractères minimum requis",
@@ -54,7 +103,7 @@ export const validatePassword = (password) => {
   };
 
   if (!password) {
-    return { valid: false, errors: "Le mot de passe est requis." };
+    return { valid: false, errors: "Champ obligatoire manquant : Mot de passe." };
   }
 
   const validations = {
@@ -82,9 +131,23 @@ export const validatePassword = (password) => {
   return { valid: false, errors: detailedErrors };
 };
 
-// =====================================
-// USER UPDATE VALIDATION
-// =====================================
+/**
+ * VALIDATE USER UPDATE
+ * =========================================================================================
+ * Valide les champs modifiés lors d’une mise à jour utilisateur.
+ *
+ * Champs optionnels :
+ * - username
+ * - email
+ * - password
+ *
+ * @function validateUserUpdate
+ *
+ * @param {Object} body Données filtrées (cleanData)
+ *
+ * @returns {Object} errors Erreurs par champ (vide si OK)
+ */
+
 export function validateUserUpdate(body) {
   const errors = {};
 
@@ -111,9 +174,25 @@ export function validateUserUpdate(body) {
   return errors
 };
 
-// =====================================
-// USER CREATE VALIDATION
-// =====================================
+/**
+ * VALIDATE USER CREATE
+ * =========================================================================================
+ * Valide les données de création d’un utilisateur.
+ *
+ * Champs requis :
+ * - username
+ * - email
+ * - password
+ *
+ * @function validateUserCreate
+ *
+ * @param {Object} options
+ * @param {string} options.username
+ * @param {string} options.email
+ * @param {string} options.password
+ *
+ * @returns {Object} errors Erreurs par champ (vide si OK)
+ */
 
 export function validateUserCreate({ username, email, password }) {
   const errors = {};

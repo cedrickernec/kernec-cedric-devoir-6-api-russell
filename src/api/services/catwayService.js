@@ -1,12 +1,30 @@
 /**
- * ============================================================
  * CATWAY SERVICE
- * ============================================================
- * - Décide si une action métier est autorisée :
- *      - Contient la logique métier de l'application
- *      - Applique les règles fonctionnelles
- *      - Appelle les validators, les rules et les repositories
- * ============================================================
+ * =========================================================================================
+ * @module catwayService
+ *
+ * Porte la logique métier des catways.
+ *
+ * Fonctionnalités :
+ * - Consultation (liste, détail)
+ * - Création / mise à jour
+ * - Suppression simple et suppression bulk (avec gestion des réservations liées)
+ * - Calcul du prochain numéro disponible
+ * - Vérification de disponibilité d’un numéro
+ *
+ * Dépendances :
+ * - catwayRepo (CRUD catways + liens réservations)
+ * - reservationRepo (lecture réservations par catway)
+ * - validators (validateCatwayUpdate)
+ * - security (verifyUserPassword)
+ * - reservationStats (computeReservationStats)
+ * - ApiError
+ *
+ * Sécurité :
+ * - Certaines suppressions requièrent confirmation par mot de passe si réservations liées
+ *
+ * Effets de bord :
+ * - Suppressions en cascade possibles (réservations liées)
  */
 
 import {
@@ -27,18 +45,36 @@ import { verifyUserPassword } from "../utils/security/passwordVerifier.js";
 
 import { ApiError } from "../utils/errors/apiError.js";
 
-// ===============================================
-// GET ALL CATWAYS
-// ===============================================
+/**
+ * GET ALL CATWAYS
+ * =========================================================================================
+ * Retourne la liste complète des catways.
+ *
+ * @async
+ * @function getAllCatwaysService
+ *
+ * @returns {Promise<Array<Object>>}
+ */
 
 export async function getAllCatwaysService() {
 
     return getAllCatways();
 }
 
-// ===============================================
-// GET CATWAY BY NUMBER
-// ===============================================
+/**
+ * GET CATWAY BY NUMBER
+ * =========================================================================================
+ * Retourne un catway par son numéro.
+ *
+ * @async
+ * @function getCatwayByNumberService
+ *
+ * @param {number} catwayNumber
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 404 Catway introuvable
+ */
 
 export async function getCatwayByNumberService(catwayNumber) {
 
@@ -54,9 +90,16 @@ export async function getCatwayByNumberService(catwayNumber) {
     return catway;
 }
 
-// ===============================================
-// GET NEXT CATWAY NUMBER
-// ===============================================
+/**
+ * GET NEXT CATWAY NUMBER
+ * =========================================================================================
+ * Calcule le prochain numéro disponible (premier “trou logique” dans la séquence).
+ *
+ * @async
+ * @function findNextCatwayNumberService
+ *
+ * @returns {Promise<number>}
+ */
 
 export async function findNextCatwayNumberService() {
 
@@ -77,31 +120,46 @@ export async function findNextCatwayNumberService() {
     return expected;
 }
 
-// ===============================================
-// CHECK CATWAY NUMBER AVAILABILITY
-// ===============================================
+/**
+ * CHECK CATWAY NUMBER AVAILABILITY
+ * =========================================================================================
+ * Vérifie si un numéro de catway est disponible.
+ *
+ * @async
+ * @function checkCatwayNumberService
+ *
+ * @param {number|string} catwayNumber Numéro à vérifier
+ * @param {string} [excludeId] Identifiant à exclure (cas mise à jour)
+ *
+ * @returns {Promise<boolean>}
+ */
 
-export async function checkCatwayNumberService(number, excludeId) {
+export async function checkCatwayNumberService(catwayNumber) {
 
-    if (!number) return false;
+    if (!catwayNumber) return false;
 
-    const catwayNumberInt = Number(number);
+    const catwayNumberInt = Number(catwayNumber);
     if (Number.isNaN(catwayNumberInt)) return false;
 
     const existing = await findCatwayByNumber(catwayNumberInt);
 
-    if (!existing) return true;
-
-    if (excludeId && existing._id.toString() === excludeId) {
-        return true;
-    }
-
-    return false;
+    return !existing;
 }
 
-// ===============================================
-// CREATE CATWAY
-// ===============================================
+/**
+ * CREATE CATWAY
+ * =========================================================================================
+ * Crée un catway après contrôle d’unicité.
+ *
+ * @async
+ * @function createCatwayService
+ *
+ * @param {Object} data
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 409 Conflit d’unicité (numéro déjà utilisé)
+ */
 
 export async function createCatwayService(data) {
 
@@ -128,9 +186,22 @@ export async function createCatwayService(data) {
     return createCatway(data);
 }
 
-// ===============================================
-// UPDATE CATWAY
-// ===============================================
+/**
+ * UPDATE CATWAY
+ * =========================================================================================
+ * Met à jour un catway après validation des données.
+ *
+ * @async
+ * @function updateCatwayService
+ *
+ * @param {number} catwayNumber
+ * @param {Object} data
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 404 Catway introuvable
+ * @throws {ApiError} 400 Données invalides
+ */
 
 export async function updateCatwayService(catwayNumber, data) {
 
@@ -153,9 +224,22 @@ export async function updateCatwayService(catwayNumber, data) {
     return updateCatwayByNumber(catwayNumber, data);
 }
 
-// ===============================================
-// CHECK BULK DELETE CATWAYS
-// ===============================================
+/**
+ * CHECK BULK DELETE CATWAYS
+ * =========================================================================================
+ * Vérifie les contraintes avant suppression multiple.
+ *
+ * @async
+ * @function checkBulkCatwaysBeforeDeleteService
+ *
+ * @param {Array<number|string>} ids
+ *
+ * @returns {Promise<{success: true}>}
+ *
+ * @throws {ApiError} 400 Liste invalide
+ * @throws {ApiError} 404 Catway introuvable
+ * @throws {ApiError} 409 Confirmation mot de passe requise (réservations liées)
+ */
 
 export async function checkBulkCatwaysBeforeDeleteService(ids) {
 
@@ -171,7 +255,20 @@ export async function checkBulkCatwaysBeforeDeleteService(ids) {
         finished: 0
     };
 
-    for (const catwayNumber of ids) {
+    const parsedIds = ids.map(rawId => {
+        const number = Number(rawId);
+
+        if (Number.isNaN(number)) {
+            throw ApiError.badRequest(
+                "Numéro de catway invalide.",
+                { value: rawId }
+            );
+        }
+
+        return number;
+    });
+
+    for (const catwayNumber of parsedIds) {
 
         const catway = await findCatwayByNumber(catwayNumber);
 
@@ -201,6 +298,7 @@ export async function checkBulkCatwaysBeforeDeleteService(ids) {
             "La sélection contient des catways liés à des réservations.",
             {
                 reason: "password_required",
+                reservationsLinked: true,
                 reservationsStats: aggregatedStats
             }
         );
@@ -209,9 +307,26 @@ export async function checkBulkCatwaysBeforeDeleteService(ids) {
     return { success: true };
 }
 
-// ===============================================
-// BULK DELETE CATWAYS
-// ===============================================
+/**
+ * BULK DELETE CATWAYS
+ * =========================================================================================
+ * Supprime plusieurs catways avec validation et confirmation mot de passe si nécessaire.
+ *
+ * @async
+ * @function deleteCatwaysBulkService
+ *
+ * @param {Array<number|string>} ids
+ * @param {Object} options
+ * @param {string} options.userId
+ * @param {string} [options.password]
+ *
+ * @returns {Promise<{count: number}>}
+ *
+ * @throws {ApiError} 400 Requête invalide
+ * @throws {ApiError} 404 Catway introuvable
+ * @throws {ApiError} 403 Mot de passe incorrect
+ * @throws {ApiError} 409 Confirmation requise
+ */
 
 export async function deleteCatwaysBulkService(ids, { userId, password }) {
 
@@ -263,7 +378,7 @@ export async function deleteCatwaysBulkService(ids, { userId, password }) {
 
         if (!password) {
             throw ApiError.businessConflict(
-                "Ce catway contient des réservations. La suppression nécessite une confirmation par mot de passe.",
+                "La sélection contient des catways liés à des réservations. La suppression nécessite une confirmation par mot de passe.",
                 { reason: "password_required" }
             );
         }
@@ -271,7 +386,7 @@ export async function deleteCatwaysBulkService(ids, { userId, password }) {
         const isValid = await verifyUserPassword(userId, password);
 
         if (!isValid) {
-            throw ApiError.businessConflict(
+            throw ApiError.forbidden(
                 "Mot de passe incorrect.",
                 { reason: "invalid_password" }
             );
@@ -293,9 +408,25 @@ export async function deleteCatwaysBulkService(ids, { userId, password }) {
     };
 }
 
-// ===============================================
-// DELETE CATWAY
-// ===============================================
+/**
+ * DELETE CATWAY
+ * =========================================================================================
+ * Supprime un catway unique, avec suppression des réservations liées si nécessaire.
+ *
+ * @async
+ * @function deleteCatwayService
+ *
+ * @param {number} catwayNumber
+ * @param {Object} [options]
+ * @param {string} [options.userId]
+ * @param {string} [options.password]
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 404 Catway introuvable
+ * @throws {ApiError} 403 Mot de passe incorrect
+ * @throws {ApiError} 409 Confirmation requise
+ */
 
 export async function deleteCatwayService(catwayNumber, options = {}) {
 
@@ -338,7 +469,7 @@ export async function deleteCatwayService(catwayNumber, options = {}) {
 
     const isValid = await verifyUserPassword(userId, password);
     if (!isValid) {
-        throw ApiError.businessConflict(
+        throw ApiError.forbidden(
             "Mot de passe incorrect.",
             {
                 reason: "invalid_password"

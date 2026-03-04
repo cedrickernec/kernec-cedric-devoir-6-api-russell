@@ -1,7 +1,18 @@
 /**
- * ===================================================================
  * USERS FORM ROUTES (WEB)
- * ===================================================================
+ * =========================================================================================
+ * @module formRoutes
+ *
+ * Routeur des formulaires Utilisateurs (couche Web).
+ *
+ * - Protège les routes via authGuard
+ * - Valide les paramètres dynamiques (ObjectId)
+ * - Délègue aux contrôleurs Form
+ *
+ * Routes :
+ * POST /create
+ * POST /:id/edit
+ * POST /:id/edit/password
  */
 
 import express from "express";

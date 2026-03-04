@@ -1,0 +1,301 @@
+# ==========================================================
+# RESERVATION - SINGLE RESOURCE (BY CATWAY)
+# ----------------------------------------------------------
+# Gestion d'une réservation spécifique associée à un catway.
+#
+# Permet :
+# - Récupérer une réservation spécifique d'un catway
+# - Modifier ses informations (clientName, boatName,
+#   startDate, endDate)
+# - Supprimer une réservation d'un catway
+#
+# Paramètre requis :
+# - id (catwayNumber)
+# - idReservation (identifiant MongoDB de la réservation)
+#
+# Route protégée par JWT.
+# ==========================================================
+
+# ==========================================================
+# GET RESERVATION BY CATWAY
+# ==========================================================
+get:
+  tags: [Reservations]
+  summary: Récupérer une réservation
+  description: Récupère une réservation spécifique d'un catway à partir de son identifiant.
+
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Numéro de catway
+      schema:
+        type: integer
+        example: 11
+    - name: idReservation
+      in: path
+      required: true
+      description: Identifiant MongoDB de la réservation
+      schema:
+        type: string
+        example: 698f52f59064103f2c1e58f1
+
+  responses:
+    "200":
+      description: Réservation récupérée
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ReservationSingleResponse"
+
+    "400":
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidCatwayId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCatwayId"
+
+            invalidReservationId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidReservationId"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "404":
+      description: Catway introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            CatwayNotFound:
+              $ref: "../../openapi.yaml#/components/examples/CatwayNotFound"
+            ReservationNotFound:
+              $ref: "../../openapi.yaml#/components/examples/ReservationNotFound"
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"
+
+# ==========================================================
+# UPDATE RESERVATION
+# ==========================================================
+put:
+  tags: [Reservations]
+  summary: Modifier une réservation
+  description: Modifie les informations d'une réservation spécifique d'un catway à partir de son identifiant.
+
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Numéro de catway
+      schema:
+        type: integer
+        example: 20
+    - name: idReservation
+      in: path
+      required: true
+      description: Identifiant MongoDB de la réservation
+      schema:
+        type: string
+        example: 699ce49b3990671881a87cca
+
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/ReservationUpdateRequest"
+
+  responses:
+    "200":
+      description: Réservation modifiée
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ReservationUpdateResponse"
+
+    "400":
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            fieldNotAllowed:
+              $ref: "../../openapi.yaml#/components/examples/FieldNotAllowed"
+
+            invalidCatwayId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCatwayId"
+
+            invalidReservationId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidReservationId"
+
+            invalidDateFormat:
+              $ref: "../../openapi.yaml#/components/examples/InvalidDateFormat"
+
+            invalidDateRange:
+              $ref: "../../openapi.yaml#/components/examples/InvalidDateRange"
+
+            invalidDateValue:
+              $ref: "../../openapi.yaml#/components/examples/InvalidDateValue"
+
+            noValidDataToUpdate:
+              $ref: "../../openapi.yaml#/components/examples/NoValidDataToUpdate"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "403":
+      description: Modification interdite (réservation passée ou en cours)
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            EntryDateNotEditable:
+              summary: Modification interdite - Date de début dépassée
+              value:
+                success: false
+                message: La date de début ne peut plus être modifiée une fois la réservation commencée.
+            
+            ReservationNotEditable:
+              summary: Modification interdite - Réservation terminée
+              value:
+                success: false
+                message: Les réservations passées ou en cours ne peuvent plus être modifiées.
+
+    "404":
+      description: Catway ou réservation introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            CatwayNotFound:
+              $ref: "../../openapi.yaml#/components/examples/CatwayNotFound"
+
+            ReservationNotFound:
+              $ref: "../../openapi.yaml#/components/examples/ReservationNotFound"
+
+    "409":
+      description: Conflit métier (réservation impossible)
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            ReservationConflict:
+              $ref: "../../openapi.yaml#/components/examples/ReservationConflict"
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"
+
+# ==========================================================
+# DELETE RESERVATION
+# ==========================================================
+
+delete:
+  tags: [Reservations]
+  summary: Supprimer une réservation
+  description: Supprime une réservation spécifique d'un catway à partir de son identifiant.
+
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Numéro de catway
+      schema:
+        type: integer
+        example: 20
+    - name: idReservation
+      in: path
+      required: true
+      description: Identifiant MongoDB de la réservation
+      schema:
+        type: string
+        example: 699ce49b3990671881a87cca
+
+  requestBody:
+    required: false
+    nullable: true
+    description: Mot de passe requis uniquement si la réservation est en cours ou terminée.
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/ReservationDeleteRequest"
+
+  responses:
+    "200":
+      description: Réservation supprimée
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ReservationDeleteResponse"
+
+    "400":
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidCatwayId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCatwayId"
+
+            invalidReservationId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidReservationId"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "403":
+      description: Mot de passe incorrect
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidPassword:
+              $ref: "../../openapi.yaml#/components/examples/InvalidPassword"
+
+    "404":
+      description: Catway ou réservation introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            CatwayNotFound:
+              $ref: "../../openapi.yaml#/components/examples/CatwayNotFound"
+
+            ReservationNotFound:
+              $ref: "../../openapi.yaml#/components/examples/ReservationNotFound"
+
+    "409":
+      description: Mot de passe requis
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            passwordRequired:
+              summary: Mot de passe requis
+              value:
+                success: false
+                message: La réservation est 'En cours'. La suppression nécessite une confirmation par mot de passe.
+                context:
+                    reason: "password_required"
+                    status: 
+                        key: IN_PROGRESS
+                        label: En cours
+                    clientName: John Doe
+                    boatName: L'Intrépide
+                    startDate: 2026-02-05T06:00:00.000Z
+                    endDate: 2026-02-14T06:00:00.000Z
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

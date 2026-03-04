@@ -1,0 +1,27 @@
+# ==========================================================
+# USER CREATE REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de
+# création d'un utilisateur.
+# ==========================================================
+
+description: Structure standardisée des requêtes de création d'un utilisateur.
+type: object
+required: [username, email, password]
+
+properties:
+  username:
+    description: Nom d'utilisateur
+    allOf:
+      - $ref: "../../../../openapi.yaml#/components/schemas/UsernameRules"
+    example: jdoe
+
+  email:
+    description: Email utilisateur
+    allOf:
+      - $ref: "../../../../openapi.yaml#/components/schemas/EmailRules"
+    example: john@doe.com
+
+  password:
+    description: Mot de passe utilisateur
+    $ref: "../../../../openapi.yaml#/components/schemas/PasswordRules"

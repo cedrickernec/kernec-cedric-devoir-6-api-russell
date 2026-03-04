@@ -1,20 +1,41 @@
 /**
- * ===================================================================
  * VIEW MAPPER - RESERVATIONS
- * ===================================================================
- * - Transforme les données API en ViewModels utilisables par les vues
- * - Centralise le formatage des dates, status et durées
- * - Évite toute logique de présentation dans les contrôleurs
- * ===================================================================
-*/
+ * =========================================================================================
+ * @module reservationMapper
+ *
+ * Adaptateur principal API → ViewModel pour les réservations.
+ *
+ * Responsabilités :
+ * - Centraliser le formatage dates
+ * - Enrichir le statut
+ * - Calculer durée en nuits
+ * - Préparer données pour liste / détail / édition
+ *
+ * Dépendances :
+ * - computeNightsBetweenDates
+ * - formatDateFR
+ * - mapApiStatusToViewStatus
+ */
 
 import { computeNightsBetweenDates } from "../formatters/computeReservationNights.js";
 import { formatDateFR } from "../formatters/dateFormatter.js";
-import { mapApiStatusToToViewStatus } from "./mapApiStatusToViewStatus.js";
+import { mapApiStatusToViewStatus } from "./mapApiStatusToViewStatus.js";
 
-// ==================================================
-// MAPPER - RESERVATION LIST (TABLE)
-// ==================================================
+/**
+ * MAP RESERVATION TO LIST
+ * =========================================================================================
+ * Transforme une réservation API en modèle liste.
+ * 
+ * - Convertit les dates ISO
+ * - Formate les dates pour affichage
+ * - Enrichit le statut via mapApiStatusToViewStatus
+ *
+ * @function mapReservationToList
+ *
+ * @param {Object} reservation
+ *
+ * @returns {Object} - Modèle liste
+ */
 
 export function mapReservationToList(reservation) {
   
@@ -28,7 +49,7 @@ export function mapReservationToList(reservation) {
   ? new Date(reservation.endDate)
   : null;
 
-  const status = mapApiStatusToToViewStatus(
+  const status = mapApiStatusToViewStatus(
     reservation.status,
     startDate,
     endDate
@@ -58,9 +79,24 @@ export function mapReservationToList(reservation) {
   };
 }
 
-// ==================================================
-// MAPPER - RESERVATION DETAIL
-// ==================================================
+/**
+ * MAP RESERVATION TO DETAIL
+ * =========================================================================================
+ * Transforme une réservation enrichie API en modèle détail.
+ *
+ * - Calcule la durée en nuits
+ * - Formate les dates
+ * - Enrichit le statut
+ *
+ * @function mapReservationToDetail
+ *
+ * @param {Object} apiReservation
+ * @param {Object} apiReservation.reservation
+ * @param {Object} apiReservation.client
+ * @param {Object} apiReservation.catway
+ *
+ * @returns {Object} - Modèle détail
+ */
 
 export function mapReservationToDetail(apiReservation) {
 
@@ -90,7 +126,7 @@ export function mapReservationToDetail(apiReservation) {
   
   const nights = computeNightsBetweenDates(startDate, endDate);
 
-  const status = mapApiStatusToToViewStatus(
+  const status = mapApiStatusToViewStatus(
     reservation.status,
     startDate,
     endDate
@@ -126,9 +162,20 @@ export function mapReservationToDetail(apiReservation) {
   };
 }
 
-// ==================================================
-// MAPPER - RESERVATION EDIT
-// ==================================================
+/**
+ * MAP RESERVATION EDIT
+ * =========================================================================================
+ * Transforme une réservation API en modèle édition.
+ *
+ * - Détermine si la date de début est verrouillée
+ * - Prépare les dates ISO pour les inputs HTML
+ *
+ * @function mapReservationEdit
+ *
+ * @param {Object} apiReservation
+ *
+ * @returns {Object} - Modèle édition
+ */
 
 export function mapReservationEdit(apiReservation) {
 
@@ -179,9 +226,23 @@ export function mapReservationEdit(apiReservation) {
   };
 }
 
-// ==================================================
-// MAPPER - AVAILABILITY (TABLE)
-// ==================================================
+/**
+ * MAP AVAILABILITY TO TABLE
+ * =========================================================================================
+ * Transforme les données de disponibilité API en modèle table.
+ *
+ * - Gère les disponibilités complètes et partielles
+ * - Peut éclater les partiels en plusieurs lignes
+ *
+ * @function mapAvailabilityToTable
+ *
+ * @param {Object} params
+ * @param {Object} params.catway
+ * @param {Object} params.availability
+ * @param {boolean} [params.flattenPartials=false]
+ *
+ * @returns {Object|Object[]} - Modèle table ou liste éclatée
+ */
 
 export function mapAvailabilityToTable({ catway, availability, flattenPartials = false }) {
 
@@ -250,9 +311,22 @@ export function mapAvailabilityToTable({ catway, availability, flattenPartials =
   };
 }
 
-// ==================================================
-// MAPPER - ERRORS (EDIT RESERVATION)
-// ==================================================
+/**
+ * MAP RESERVATION ERRORS
+ * =========================================================================================
+ * Transforme les erreurs API en modèle d’erreurs vue.
+ *
+ * - Regroupe les erreurs de date
+ * - Adapte les erreurs si la date de début est verrouillée
+ *
+ * @function mapReservationErrors
+ *
+ * @param {Object} apiData
+ * @param {Object} reservation
+ * @param {Object} [rawErrors]
+ *
+ * @returns {Object} - Objet contenant viewErrors
+ */
 
 export function mapReservationErrors(apiData, reservation, rawErrors = {}) {
 

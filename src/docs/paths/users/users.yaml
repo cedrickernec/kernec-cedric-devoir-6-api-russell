@@ -1,0 +1,97 @@
+# ==========================================================
+# USERS - COLLECTION
+# ----------------------------------------------------------
+# Gestion de la collection des utilisateurs.
+#
+# Permet :
+# - Récupérer la liste complète des utilisateurs
+# - Créer un nouvel utilisateur
+#
+# Routes protégées par JWT.
+# ==========================================================
+
+# ==========================================================
+# GET ALL USERS
+# ==========================================================
+get:
+  tags: [Users]
+  summary: Liste des utilisateurs
+  description: Récupère la liste complète des utilisateurs.
+  
+  responses:
+    "200":
+      description: Liste récupérée
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/UserListResponse"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"
+
+# ==========================================================
+# CREATE USER
+# ==========================================================
+post:
+  tags: [Users]
+  summary: Créer un utilisateur
+  description: Crée un nouvel utilisateur.
+
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/UserCreateRequest"
+
+  responses:
+    "201":
+      description: Utilisateur créé
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/UserCreateResponse"
+
+    "400":
+      description: Erreur de validation ou champ non autorisé
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            fieldNotAllowed:
+              $ref: "../../openapi.yaml#/components/examples/FieldNotAllowed"
+
+            missingFields:
+              summary: Champs requis manquants
+              value:
+                success: false
+                message: Donnée(s) invalide(s).
+                errors:
+                  username: "Champ obligatoire manquant : Nom d'utilisateur."
+                  email: "Champ obligatoire manquant : Email."
+                  password: "Champ obligatoire manquant : Mot de passe."
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "409":
+      description: Conflit d'unicité
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            uniquenessConflict:
+              summary: Conflit d'email
+              value:
+                success: false
+                message: Impossible de créer l'utilisateur.
+                errors:
+                  email: Un utilisateur avec cet email existe déjà.
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

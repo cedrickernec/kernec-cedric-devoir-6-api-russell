@@ -1,13 +1,21 @@
 /**
- * ===================================================================
- * ENTITY PANEL CONTROLLER
- * ===================================================================
- * - Initialise le comportement des lignes ouvrant un side panel
- * - Charge dynamiquement le contenu HTML via fetch
- * - Gère les erreurs backend
- * - Configure dynamiquement actions Edit/Delete
- * - Supporte les routes imbriquées (nested entities)
- * ===================================================================
+ * ENTITY PANEL MODULE
+ * =========================================================================================
+ * @module entityPanel
+ * 
+ * Contrôleur générique d'ouverture de side panel pour les entités.
+ *
+ * Responsabilités :
+ * - Résolution d'URL dynamiques (nested routes)
+ * - Chargement asynchrone du contenu
+ * - Gestion des erreurs backend
+ * - Configuration dynamique des actions Edit / Delete
+ *
+ * Dépendances :
+ * - sidePanel.js (open / close / state helpers)
+ *
+ * Architecture :
+ * → Module générique réutilisable par catwaysPanel, reservationsPanel, usersPanel
  */
 
 import {
@@ -17,9 +25,21 @@ import {
   getCurrentEntityId
 } from "./sidePanel.js";
 
-// ==================================================
-// URL RESOLVER
-// ==================================================
+/**
+ * URL RESOLVER
+ * =========================================================================================
+ * Résout une URL à partir d'un template contenant des paramètres.
+ *
+ * Exemple :
+ *  template = "/catways/:catwayNumber/reservations/:id"
+ *
+ * @function resolveNestedUrl
+ * 
+ * @param {string} template
+ * @param {Object<string,string|number>} params
+ *
+ * @returns {string}
+ */
 
 export function resolveNestedUrl(template, params = {}) {
   let url = template;
@@ -31,9 +51,33 @@ export function resolveNestedUrl(template, params = {}) {
   return url
 }
 
-// ==================================================
-// INITIALISATION
-// ==================================================
+/**
+ * ENTITY PANEL CONTROLLER
+ * =========================================================================================
+ * Initialise le comportement des lignes ouvrant un side panel.
+ *
+ * Fonctionnalités :
+ * - Charge dynamiquement le contenu via fetch
+ * - Gère les erreurs backend (404 / 500)
+ * - Configure dynamiquement les actions Edit / Delete
+ * - Supporte les routes imbriquées (nested entities)
+ *
+ * @function initEntityPanel
+ * 
+ * @param {Object} config
+ * @param {string} [config.panelTitle]
+ * @param {string} [config.panelUrl]
+ * @param {string} [config.nestedPanelUrl]
+ * @param {Function} [config.nestedParams]
+ * @param {string} [config.nestedEditUrl]
+ * @param {Function} [config.nestedEditParams]
+ * @param {Object} [config.deleteConfig]
+ * @param {string} [config.editBaseUrl]
+ * @param {string} [config.editTitle]
+ * @param {Object} config.messages
+ *
+ * @returns {void}
+ */
 
 export function initEntityPanel({
   panelTitle,

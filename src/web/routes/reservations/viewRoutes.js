@@ -1,9 +1,18 @@
 /**
- * ===================================================================
  * RESERVATIONS VIEW ROUTES (WEB)
- * ===================================================================
- * - Routes globales non dépendantes de catways
- * ===================================================================
+ * =========================================================================================
+ * @module viewRoutes
+ * 
+ * Routeur des vues Réservations (couche Web).
+ *
+ * - Routes globales non dépendantes d’un catway
+ * - Protège les routes via authGuard
+ * - Délègue aux contrôleurs View
+ * - Rend les pages EJS
+ *
+ * Routes :
+ * GET /
+ * GET /create
  */
 
 import express from "express";

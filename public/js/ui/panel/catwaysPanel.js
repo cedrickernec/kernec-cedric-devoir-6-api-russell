@@ -1,20 +1,23 @@
 /**
- * ===================================================================
  * CATWAYS PANEL CONFIGURATION
- * ===================================================================
- * - Configure le side panel pour l'entité Catway
- * - Définit les routes panel / édition / suppression
- * - Centralise les messages spécifiques métier
- * ===================================================================
+ * =========================================================================================
+ * @module catwaysPanel
+ * 
+ * Configuration du side panel pour l'entité Catway.
+ *
+ * Responsabilités :
+ * - Définir les routes de chargement du panel
+ * - Configurer les routes d'édition
+ * - Configurer la suppression
+ * - Centraliser les messages métier spécifiques
+ *
+ * Architecture :
+ * → Adaptateur métier au-dessus du contrôleur générique initEntityPanel
  */
 
 import { initEntityPanel } from "./entityPanel.js";
 import { CATWAY_MESSAGES } from "../../messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
-
-// ==================================================
-// PANEL INITIALISATION
-// ==================================================
 
 initEntityPanel({
   panelTitle: "Détails",

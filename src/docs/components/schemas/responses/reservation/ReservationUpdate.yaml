@@ -1,0 +1,22 @@
+# ==========================================================
+# RESERVATION UPDATE RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après mise à jour
+# d'une réservation.
+# ==========================================================
+
+description: Structure standardisée des réponses de mise à jour d'une réservation.
+type: object
+required: [success, message, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  message:
+    type: string
+    example: Réservation mise à jour.
+
+  data:
+    $ref: "../../../../openapi.yaml#/components/schemas/ReservationDetailModel"

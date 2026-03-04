@@ -1,0 +1,27 @@
+# ==========================================================
+# CATWAYS - NEXT NUMBER
+# ----------------------------------------------------------
+# Récupère le prochain numéro de catway disponible.
+# Utiliser lors de la création de catway.
+#
+# Route protégée par JWT.
+# ==========================================================
+
+get:
+  tags: [Catways]
+  summary: Récupérer le prochain numéro de catway disponible
+  description: Récupère le prochain numéro de catway disponible.
+  
+  responses:
+    "200":
+      description: Prochain numéro de catway disponible
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/CatwayNextNumberResponse"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

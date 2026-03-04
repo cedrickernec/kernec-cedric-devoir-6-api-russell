@@ -1,0 +1,20 @@
+# ==========================================================
+#  AVAILABILITY RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse retournée lorsqu'on recherche des catways
+# disponible pour une période donnée.
+# ==========================================================
+
+type: object
+required: [success, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  data:
+    description: Liste des catways disponibles pour la période demandée
+    type: array
+    items:
+      $ref: "../../../../openapi.yaml#/components/schemas/CatwaysAvailabilityItemModel"

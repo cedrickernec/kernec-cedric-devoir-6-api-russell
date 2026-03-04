@@ -1,9 +1,13 @@
 /**
- * ===================================================================
  * DOC BOOTSTRAP
- * ===================================================================
- * - Initialisation de la documentation API
- * ===================================================================
+ * =========================================================================================
+ * @module docBootstrap
+ *
+ * Point d'entrée de l'interface de documentation API.
+ *
+ * - Active les mécanismes d'accessibilité
+ * - Synchronise la session utilisateur entre onglets
+ * - Initialise la navigation du menu documentation
  */
 
 // ACCESSIBILITY

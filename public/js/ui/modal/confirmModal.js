@@ -1,16 +1,25 @@
 /**
- * ===================================================================
  * GLOBAL CONFIRM MODAL CONTROLLER
- * ===================================================================
- * - Contrôle l'affichage de la modale de confirmation globale
- * - Expose window.openConfirmModal(options)
- * - Gère :
- *      → injection dynamique du contenu
- *      → callbacks async de confirmation
- *      → fermeture (Escape / backdrop / boutons)
- *      → accessibilité (focus trap + interaction mode)
- * ===================================================================
+ * =========================================================================================
+ * @module confirmModal
+ * 
+ * Contrôleur global de la modale de confirmation.
+ *
+ * Fonctionnalités :
+ * - Injection dynamique de contenu DOM
+ * - Gestion async des callbacks de confirmation
+ * - Gestion fermeture (Escape, backdrop, boutons)
+ * - Intégration accessibilité (focus trap + escape manager)
+ *
+ * Expose :
+ * → window.openConfirmModal(options)
+ *
+ * Effets de bord :
+ * - Manipulation du DOM
+ * - Focus management
+ * - Enregistrement dans escapeManager
  */
+
 import { escapeManager } from "../accessibility/escapeManager.js";
 import { createFocusTrap } from "../accessibility/focusTrap.js";
 import { isKeyboardInteraction } from "../accessibility/interactionMode.js";

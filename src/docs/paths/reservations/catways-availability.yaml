@@ -1,0 +1,100 @@
+# ==========================================================
+# RESERVATION - CATWAYS AVAILABILITY
+# ----------------------------------------------------------
+# Permet de rechercher les catways disponibles pour une
+# période donnée en fonction des réservations existantes.
+#
+# Route protégée par JWT.
+# ==========================================================
+
+post:
+  tags: [Reservations]
+  summary: Rechercher les catways disponibles
+  description:
+    Recherche les catways disponibles pour une période donnée
+    en fonction des réservations existantes.
+
+  requestBody:
+    description:
+      Seul les champs "startDate" et "endDate" sont obligatoires, les autres sont optionnels.
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/CatwaysAvailabilityRequest"
+
+  responses:
+    "200":
+      description: Résultat de la recherche de disponibilité des catways
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/CatwaysAvailabilityResponse"
+          examples:
+            fullAvailability:
+              summary: Catway totalement disponible
+              value:
+                success: true
+                data:
+                  - catway:
+                      catwayNumber: 1
+                      catwayType: short
+                      catwayState: bon état
+                    availability:
+                      status: full
+                      from: 2024-02-01
+                      to: 2024-12-03
+            
+            partialAvailability:
+              summary: Catway partiellement disponible
+              value:
+                success: true
+                data:
+                  - catway:
+                      catwayNumber: 2
+                      catwayType: long
+                      catwayState: bon état
+                    availability:
+                      status: partial
+                      slots:
+                        - from: 2024-02-01
+                          to: 2024-06-20
+                        - from: 2024-08-28
+                          to: 2024-12-03
+
+    "400":
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            fieldNotAllowed:
+              $ref: "../../openapi.yaml#/components/examples/FieldNotAllowed"
+
+            invalidCatwayId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCatwayId"
+
+            missingFields:
+              summary: Champs requis manquants
+              value:
+                success: false
+                message: Donnée(s) invalide(s).
+                errors:
+                  startDate: "Champ obligatoire manquant : Date d'entrée."
+                  endDate: "Champ obligatoire manquant : Date de sortie."
+
+            invalidDateFormat:
+              $ref: "../../openapi.yaml#/components/examples/InvalidDateFormat"
+
+            invalidDateValue:
+              $ref: "../../openapi.yaml#/components/examples/InvalidDateValue"
+
+            invalidDateRange:
+              $ref: "../../openapi.yaml#/components/examples/InvalidDateRange"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

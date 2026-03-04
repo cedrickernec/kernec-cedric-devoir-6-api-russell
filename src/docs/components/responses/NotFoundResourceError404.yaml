@@ -1,0 +1,13 @@
+# ==========================================================
+# 404 NOT FOUND - RESOURCE RESPONSE
+# ----------------------------------------------------------
+# Wrapper OpenAPI pour une ressource métier introuvable.
+#
+# Référence le schéma NotFoundResource.
+# ==========================================================
+
+description: Ressource introuvable
+content:
+  application/json:
+    schema:
+      $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"

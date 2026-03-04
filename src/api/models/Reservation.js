@@ -1,10 +1,23 @@
 /**
- * ===================================================================
  * RESERVATION MODEL
- * ===================================================================
- * - Représente une réservation de catway
- * - Contient les informations client, bateau et période
- * ===================================================================
+ * =========================================================================================
+ * @module Reservation
+ *
+ * Modèle Mongoose représentant une réservation de catway.
+ *
+ * Responsabilités :
+ * - Définir la structure persistée d’une réservation
+ * - Encadrer les contraintes de validation (required, enum, type Date)
+ * - Stocker les informations client, bateau et période
+ *
+ * Dépendances :
+ * - mongoose
+ *
+ * Sécurité :
+ * - Validation de schéma côté base (required, enum)
+ *
+ * Effets de bord :
+ * - Persistance en base MongoDB via Mongoose
  */
 
 import mongoose from "mongoose";

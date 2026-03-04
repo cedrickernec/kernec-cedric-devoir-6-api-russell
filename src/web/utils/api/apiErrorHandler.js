@@ -1,14 +1,34 @@
 /**
- * ===================================================================
- * API ERROR HANDLER
- * ===================================================================
- * - Centralise la gestion des erreurs API côté web
- * - Gère :
- *          → AJAX vs HTML
- *          → password_required
- *          → invalid_password
- *          → erreurs classiques
- * ===================================================================
+ * WEB API ERROR HANDLER
+ * =========================================================================================
+ * @module apiErrorHandler
+ *
+ * Handler centralisé des erreurs API côté Web.
+ *
+ * Responsabilités :
+ * - Interpréter la réponse normalisée issue de apiFetch
+ * - Gérer les cas métier spécifiques (password_required, invalid_password)
+ * - Adapter la réponse selon le contexte (AJAX ou HTML)
+ */
+
+/**
+ * HANDLE API ERROR
+ * =========================================================================================
+ * Analyse une réponse API et gère les erreurs côté Web.
+ *
+ * @function handleApiError
+ *
+ * @param {Object} apiResponse - Réponse issue de apiFetch
+ * @param {boolean} apiResponse.success
+ * @param {string} [apiResponse.message]
+ * @param {Object} [apiResponse.context]
+ *
+ * @param {Object} req
+ * @param {Object} res
+ *
+ * @returns {boolean}
+ * - true  → aucune erreur, le contrôleur peut continuer
+ * - false → une réponse a déjà été envoyée
  */
 
 export function handleApiError(apiResponse, req, res) {

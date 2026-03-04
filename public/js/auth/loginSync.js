@@ -1,15 +1,20 @@
 /**
- * ===================================================================
  * AUTH - LOGIN SESSION SYNCHRONISATION
- * ===================================================================
- * - Synchronise la connexion entre plusieurs onglets
- * - Lorsqu'un login est effectué :
- *      → envoie un event broadcastChannel
- *      → force le rechargement des autres onglets ouverts
- * ===================================================================
- * Utilise broadcastChannel pour partager l'état de session
- * entre les contextes navigateur actifs.
- * ===================================================================
+ * =========================================================================================
+ * @module loginSync
+ * 
+ * Synchronise la connexion utilisateur entre plusieurs onglets.
+ *
+ * - Lit le flag data-just-logged-in injecté côté serveur
+ * - Émet un message BroadcastChannel "LOGIN_SUCCESS"
+ * - Recharge les autres onglets actifs lors de réception
+ *
+ * Dépendances :
+ * - document.body.dataset.justLoggedIn
+ * - BroadcastChannel "russell-session"
+ *
+ * Effets de bord :
+ * - Peut déclencher un rechargement complet de la page
  */
 
 (() => {
@@ -20,7 +25,7 @@
 
     const channel = new BroadcastChannel("russell-session");
 
-    // Flag injecté par le serveur après connexion réussi
+    // Flag injecté par le serveur après connexion réussie
     const justLoggedIn = document.body.dataset.justLoggedIn === "true";
 
     // ========================================================

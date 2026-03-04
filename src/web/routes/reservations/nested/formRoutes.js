@@ -1,10 +1,18 @@
 /**
- * ===================================================================
  * RESERVATIONS NESTED ROUTES (WEB)
- * ===================================================================
- * - Routes POST dépendantes de catways :
- *      - /catways/:catwayNumber/reservations
- * ===================================================================
+ * =========================================================================================
+ * @module formRoutes
+ * 
+ * Routeur des formulaires Réservations imbriquées (couche Web).
+ *
+ * - Dépend d’un catway : /catways/:catwayNumber/reservations
+ * - mergeParams activé pour récupérer catwayNumber
+ * - Protège les routes via authGuard
+ * - Valide les ObjectId dynamiques
+ * - Délègue aux contrôleurs Form
+ *
+ * Route :
+ * POST /:id/edit
  */
 
 import express from "express";

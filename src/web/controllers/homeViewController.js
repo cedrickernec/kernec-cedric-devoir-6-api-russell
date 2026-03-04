@@ -1,16 +1,20 @@
 /**
- * ===================================================================
- * HOME / LOGIN VIEW CONTROLLER
- * ===================================================================
- * - Affiche la page de connexion
- * - Gère les erreurs d'authentification
- * - Désactive animations après échec login
- * ===================================================================
+ * HOME PAGE
+ * =========================================================================================
+ * Affiche la page de connexion.
+ *
+ * - Redirige vers le dashboard si déjà connecté
+ * - Gère les erreurs d'authentification stockées en session
+ * - Nettoie les flags temporaires de session
+ *
+ * @function getHomeView
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {void}
  */
-
-// ==================================================
-// HOME PAGE
-// ==================================================
 
 export const getHomeView = (req, res, next) => {
     try {

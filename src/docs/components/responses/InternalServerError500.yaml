@@ -1,0 +1,20 @@
+# ==========================================================
+# 500 INTERNAL SERVER ERROR RESPONSE
+# ----------------------------------------------------------
+# Réponse standardisée en cas d’erreur interne
+# inattendue côté serveur.
+#
+# Référence le schéma ErrorResponse.
+# ==========================================================
+
+description: Erreur interne du serveur
+content:
+  application/json:
+    schema:
+      $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+    examples:
+      serverError:
+        summary: Erreur serveur
+        value:
+          success: false
+          message: "Erreur interne du serveur."

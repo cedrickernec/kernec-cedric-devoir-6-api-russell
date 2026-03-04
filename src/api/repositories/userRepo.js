@@ -1,17 +1,37 @@
 /**
- * ===================================================================
  * USER REPOSITORY
- * ===================================================================
- * - Lit et écrit les données uniquement :
- *      - Centralise tous les accès à la base de données
- * ===================================================================
+ * =========================================================================================
+ * @module userRepo
+ *
+ * Couche d’accès aux données pour les utilisateurs.
+ *
+ * Responsabilités :
+ * - Centraliser tous les accès MongoDB liés aux utilisateurs
+ * - Gérer les sélections sécurisées (exclusion password)
+ * - Ne contenir aucune logique métier
+ *
+ * Dépendances :
+ * - User model
+ *
+ * Effets de bord :
+ * - Lecture et écriture en base MongoDB
  */
 
 import User from "../models/User.js";
 
-// ===============================================
-// GET ALL USERS
-// ===============================================
+/**
+ * GET ALL USERS
+ * =========================================================================================
+ * Récupère tous les utilisateurs.
+ *
+ * - Trie par username (ordre alphabétique)
+ * - Exclut le champ password
+ *
+ * @async
+ * @function getAllUsers
+ *
+ * @returns {Promise<Object[]>}
+ */
 
 export async function getAllUsers() {
 
@@ -21,56 +41,118 @@ export async function getAllUsers() {
     .select("-password");
 }
 
-// ===============================================
-// FIND USER BY ID
-// ===============================================
+/**
+ * FIND USER BY ID
+ * =========================================================================================
+ * Recherche un utilisateur par identifiant.
+ *
+ * - Exclut le champ password
+ *
+ * @async
+ * @function findUserById
+ *
+ * @param {string} id
+ *
+ * @returns {Promise<Object|null>}
+ */
 
 export async function findUserById(id) {
 
     return User.findById(id).select("-password");
 }
 
-// ===============================================
-// FIND USER BY ID (WITH PASSWORD)
-// - For updatePassword
-// ===============================================
+/**
+ * FIND USER BY ID (WITH PASSWORD)
+ * =========================================================================================
+ * Recherche un utilisateur par identifiant
+ * en incluant le mot de passe.
+ *
+ * @async
+ * @function findUserByIdWithPassword
+ *
+ * @param {string} id
+ *
+ * @returns {Promise<Object|null>}
+ */
 
 export async function findUserByIdWithPassword(id) {
 
     return User.findById(id);
 }
 
-// ===============================================
-// FIND USER BY EMAIL
-// ===============================================
+/**
+ * FIND USER BY EMAIL
+ * =========================================================================================
+ * Recherche un utilisateur par email.
+ *
+ * - Exclut le champ password
+ *
+ * @async
+ * @function findUserByEmail
+ *
+ * @param {string} email
+ *
+ * @returns {Promise<Object|null>}
+ */
 
 export async function findUserByEmail(email) {
 
     return User.findOne({ email }).select("-password");
 }
 
-// ===============================================
-// FIND USER BY EMAIL (WITH PASSWORD)
-// - For login
-// ===============================================
+/**
+ * FIND USER BY EMAIL (WITH PASSWORD)
+ * =========================================================================================
+ * Recherche un utilisateur par email
+ * en incluant le mot de passe.
+ *
+ * @async
+ * @function findUserByEmailWithPassword
+ *
+ * @param {string} email
+ *
+ * @returns {Promise<Object|null>}
+ */
 
 export async function findUserByEmailWithPassword(email) {
 
     return User.findOne({ email });
 }
 
-// ===============================================
-// CREATE USER
-// ===============================================
+/**
+ * CREATE USER
+ * =========================================================================================
+ * Crée un nouvel utilisateur.
+ *
+ * @async
+ * @function createUser
+ *
+ * @param {Object} data
+ *
+ * @returns {Promise<Object>}
+ */
 
 export async function createUser(data) {
 
     return User.create(data);
 }
 
-// ===============================================
-// UPDATE USER
-// ===============================================
+/**
+ * UPDATE USER
+ * =========================================================================================
+ * Met à jour un utilisateur par identifiant.
+ *
+ * - Retourne la version mise à jour
+ * - Exclut le champ password
+ *
+ * @async
+ * @function updateUserById
+ *
+ * @param {string} id
+ * @param {Object} data
+ *
+ * @returns {Promise<Object|null>}
+ */
 
 export async function updateUserById(id, data) {
 
@@ -81,9 +163,18 @@ export async function updateUserById(id, data) {
     ).select("-password");
 }
 
-// ===============================================
-// DELETE USER
-// ===============================================
+/**
+ * DELETE USER
+ * =========================================================================================
+ * Supprime un utilisateur par identifiant.
+ *
+ * @async
+ * @function deleteUserById
+ *
+ * @param {string} id
+ *
+ * @returns {Promise<Object|null>}
+ */
 
 export async function deleteUserById(id) {
 

@@ -1,9 +1,20 @@
 /**
- * ===================================================================
  * REGISTER WEB ROUTES
- * ===================================================================
- * - Registre de toutes les routes web
- * ===================================================================
+ * =========================================================================================
+ * @module index
+ *
+ * Registre central des routes Web.
+ *
+ * - Monte les routes publiques
+ * - Monte les routes protégées
+ * - Sépare View / Form / AJAX
+ * - Structure les modules par domaine :
+ *   - Users
+ *   - Catways
+ *   - Reservations
+ *   - Dashboard
+ *   - Auth
+ *   - Documentation
  */
 
 import homeRoutes from "./homeRoutes.js"
@@ -25,6 +36,15 @@ import catwaysViewRoutes from "./catways/viewRoutes.js";
 import reservationsAjaxRoutes from "./reservations/ajaxRoutes.js";
 import reservationsFormRoutes from "./reservations/formRoutes.js";
 import reservationsViewRoutes from "./reservations/viewRoutes.js";
+
+/**
+ *
+ * @function registerWebRoutes
+ *
+ * @param {Object} app - Instance Express
+ *
+ * @returns {void}
+ */
 
 export function registerWebRoutes(app) {
     app.use("/", homeRoutes);

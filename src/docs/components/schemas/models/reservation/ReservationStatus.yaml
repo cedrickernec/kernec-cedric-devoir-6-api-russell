@@ -1,0 +1,20 @@
+# ==========================================================
+# RESERVATION STATUS MODEL SCHEMA
+# ----------------------------------------------------------
+# Représente l'état métier d'une réservation.
+# ==========================================================
+
+description: État métier d'une réservation avec clé technique et libellé.
+type: object
+required: [key, label]
+
+properties:
+  key:
+    description: Clé métier de la réservation
+    type: string
+    example: FINISHED
+
+  label:
+    description: Clé métier transformée en label
+    type: string
+    example: Terminée

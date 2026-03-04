@@ -1,21 +1,31 @@
 /**
- * ===================================================================
- * USERS LIVE FILTER CONTROLLER
- * ===================================================================
- * - Filtre dynamiquement les lignes de la table Users
- * - Applique plusieurs critères combinable :
- *      → Nom d'utilisateur
- *      → Email
- * - Met à jour le compteur de résultats visibles
- * - Gère l'affichage de la ligne "aucun résultat"
- * - Notifie tableCore des changements de visibilité
- * ===================================================================
- * Synchronisé avec tableCore via l'event "table:visibility-change"
- * ===================================================================
+ * USERS LIVE FILTER MODULE
+ * =========================================================================================
+ * @module usersLiveFilter
+ *
+ * Gère le filtrage dynamique côté client
+ * pour la table des utilisateurs.
+ *
+ * Responsabilités :
+ * - Filtrer par recherche texte (username / email)
+ * - Mettre à jour la visibilité des lignes
+ * - Maintenir le compteur visible / total
+ * - Gérer l'affichage "aucun résultat"
+ * - Émettre l'événement "table:visibility-change"
  */
 
 import { normalizeString } from "../../utils/normalizeString.js";
 import { handleNoResult } from "../noResultHandler.js";
+
+/**
+ * USERS LIVE FILTER INITIALISATION
+ * =========================================================================================
+ * Initialise le moteur de filtrage dynamique
+ * pour la table des utilisateurs.
+ *
+ * @function initUsersLiveFilter
+ * @returns {void}
+ */
 
 export function initUsersLiveFilter() {
 

@@ -1,0 +1,22 @@
+# ==========================================================
+# BASE ERROR RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Schéma racine pour toutes les réponses d'erreur de l'API.
+# 
+# Contient la structure minimale commune :
+# - success (boolean)
+# - message (string)
+# ==========================================================
+
+description: Structure standardisée des réponses d'erreur minimale.
+type: object
+required: [success, message]
+
+properties:
+  success:
+    type: boolean
+    example: false
+
+  message:
+    type: string
+    example: Une erreur est survenue.

@@ -1,17 +1,28 @@
 /**
- * ===================================================================
  * RESERVATION PAGE — SELECTION STATE CONTROLLER
- * ===================================================================
- * - Écoute les changements de sélection utilisateur
- * - Met à jour dynamiquement l'interface :
- *      → bouton de validation
- *      → résumé de créneaux partiels
- * - Initialise la logique de validation de réservation
- * ===================================================================
- * Rôle :
- * - Ce fichier agit comme contrôleur principal de la page réservation
- * - Il orchestre les modules sans contenir de logique métier
- * ===================================================================
+ * =========================================================================================
+ * @module reservationSelection
+ * 
+ * Contrôleur principal de la page Réservation.
+ *
+ * Responsabilités :
+ * - Initialise la validation de réservation
+ * - Écoute les événements globaux "selection:change"
+ * - Met à jour dynamiquement :
+ *      → le bouton de validation
+ *      → les résumés partiels de créneaux
+ *
+ * Dépendances :
+ * - selectionStore (getSelections)
+ * - partialSummary (updatePartialSummary, refreshAllPartialSummaries)
+ * - initReservationValidation()
+ *
+ * Événements écoutés :
+ * - "selection:change"
+ *
+ * Effet de bord :
+ * - Manipule le DOM
+ * - Active / Désactive le bouton de validation
  */
 
 import { getSelections } from "../../table/core/selectionStore.js";
@@ -41,17 +52,13 @@ document.addEventListener("selection:change", event => {
 
   const { id } = event.detail;
 
-  // Format attendu : "catwayNumber|shotId"
+  // Format attendu : "catwayNumber|slotId"
   const [catwayNumber] = id.split("|");
 
   updateValidationButton();
   updatePartialSummary(catwayNumber);
   refreshAllPartialSummaries();
 });
-
-// ==================================================
-// UI HELPERS
-// ==================================================
 
 function updateValidationButton() {
 

@@ -1,0 +1,14 @@
+# ==========================================================
+# EXAMPLE - RESERVATION NOT FOUND
+# ----------------------------------------------------------
+# Exemple retourné lorsqu'une réservation
+# est introuvable en base de données.
+# ==========================================================
+
+summary: Réservation introuvable
+value:
+  success: false
+  message: Réservation introuvable.
+  context:
+    catwayNumber: 32
+    reservationId: 60c72b2f9b1e8a5f4d3e8c9a

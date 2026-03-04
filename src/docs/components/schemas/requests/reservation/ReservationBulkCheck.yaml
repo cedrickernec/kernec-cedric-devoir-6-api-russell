@@ -1,0 +1,21 @@
+# ==========================================================
+# RESERVATION BULK CHECK REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de vérification
+# d'une sélection de réservations.
+# ==========================================================
+
+description: Structure standardisée des requêtes de vérification d'une sélection de réservations.
+type: object
+required: [ids]
+
+properties:
+  ids:
+    description: Liste des identifiants composés (catwayNumber|reservationId)
+    type: array
+    minItems: 1
+    items:
+      $ref: "../../../../openapi.yaml#/components/schemas/CompositeId"
+    example:
+      - "20|699ce49b3990671881a87cca"
+      - "11|698f52f59064103f2c1e58f1"

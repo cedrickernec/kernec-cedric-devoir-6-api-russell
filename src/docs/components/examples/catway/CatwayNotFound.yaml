@@ -1,0 +1,13 @@
+# ==========================================================
+# EXAMPLE - CATWAY NOT FOUND
+# ----------------------------------------------------------
+# Exemple retourné lorsqu'un catway
+# est introuvable en base de données.
+# ==========================================================
+
+summary: Catway introuvable
+value:
+  success: false
+  message: Catway introuvable.
+  context:
+    catwayNumber: 32

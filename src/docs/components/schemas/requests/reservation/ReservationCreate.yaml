@@ -1,0 +1,33 @@
+# ==========================================================
+# RESERVATION CREATE REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de création
+# d'une réservation.
+# ==========================================================
+
+description: Structure standardisée des requêtes de création d'une réservation.
+type: object
+required: [clientName, boatName, startDate, endDate]
+
+properties:
+  clientName:
+    description: Nom du client
+    type: string
+    example: John Doe
+
+  boatName:
+    description: Nom du bateau
+    type: string
+    example: L'Atlantide
+
+  startDate:
+    description: Date de début de réservation
+    type: string
+    format: date
+    example: 2026-01-12
+
+  endDate:
+    description: Date de fin de réservation
+    type: string
+    format: date
+    example: 2026-01-14

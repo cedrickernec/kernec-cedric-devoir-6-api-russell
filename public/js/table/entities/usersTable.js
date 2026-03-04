@@ -1,20 +1,32 @@
 /**
- * ===================================================================
- * USERS TABLE INITIALISER
- * ===================================================================
- * - Configure et initialise la table des utilisateurs
- * - Active la sélection multiple
- * - Active la suppression en masse (bulk delete)
- * - Injecte les messages métier spécifique aux utilisateurs
- * ===================================================================
- * Architecture :
- * → Adaptateur métier au-dessus du moteur générique entityTable
- * ===================================================================
+ * USERS TABLE MODULE
+ * =========================================================================================
+ * @module usersTable
+ *
+ * Configure la table des utilisateurs à partir du moteur générique entityTable.
+ *
+ * Rôle :
+ * - Activer la sélection multiple
+ * - Activer la suppression en masse
+ * - Injecter les messages métier spécifiques aux catways
+ *
+ * Ce module ne contient aucune logique métier :
+ * il se contente de fournir une configuration adaptée.
  */
 
 import { initEntityTable } from "../core/entityTable.js";
 import { USER_MESSAGES } from "../../messages/userMessages.js";
 import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
+
+/**
+ * USERS TABLE INITIALISATION
+ * =========================================================================================
+ * Initialise la table des utilisateurs avec sa configuration spécifique.
+ *
+ * @function initUsersTable
+ * 
+ * @returns {void}
+ */
 
 export function initUsersTable() {
     initEntityTable({

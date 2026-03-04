@@ -1,15 +1,35 @@
 /**
- * ===================================================================
  * REQUEST BODY FILTER
- * ===================================================================
- * - Autorise uniquement certains champs dans une requête
- * - Bloque toute tentative d'injection de propriété
- * ===================================================================
- * Sécurise les entrées utilisateur côté contrôleur
- * ===================================================================
+ * =========================================================================================
+ * @module pickAllowedFields
+ *
+ * Filtre strict d’un body de requête.
+ *
+ * Objectifs :
+ * - Appliquer une “liste blanche” de champs autorisés côté contrôleur
+ * - Bloquer toute tentative d’injection de propriété (mass assignment)
+ *
+ * Comportement :
+ * - Si un champ non autorisé est présent → throw ApiError(400)
+ * - Sinon, renvoie un objet ne contenant que les champs autorisés
  */
 
 import { ApiError } from "./apiError.js";
+
+/**
+ * PICK ALLOWED FIELDS
+ * =========================================================================================
+ * Filtre un body en ne conservant que les champs autorisés.
+ *
+ * @function pickAllowedFields
+ *
+ * @param {Object} body Données reçues (req.body)
+ * @param {Array<string>} allowedFields Liste blanche des champs autorisés
+ *
+ * @returns {Object} Objet filtré
+ *
+ * @throws {ApiError} 400 Champs non autorisés détectés
+ */
 
 export const pickAllowedFields = (body, allowedFields) => {
   const receivedFields = Object.keys(body);

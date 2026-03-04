@@ -1,11 +1,9 @@
 /**
- * ===================================================================
  * FORM CONTROLLER - USERS
- * ===================================================================
+ * =========================================================================================
  * - Gestion soumission formulaires
  * - Mapping erreurs API → vue EJS
  * - Redirections + flash messages
- * ===================================================================
  */
 
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
@@ -29,9 +27,27 @@ import { handleApiError } from "../../utils/api/apiErrorHandler.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 import { USER_MESSAGES } from "../../../../public/js/messages/userMessages.js";
 
-// ==================================================
-// CREATE USER
-// ==================================================
+/**
+ * CREATE USER
+ * =========================================================================================
+ * Traite la création d'un utilisateur.
+ *
+ * - Construit le payload depuis le formulaire
+ * - Appelle l'API (gateway) de création
+ * - Gère l'expiration d'authentification
+ * - Mappe les erreurs API vers la vue EJS (champs / global)
+ * - Pose un flash message succès
+ * - Redirige vers la liste des utilisateurs
+ *
+ * @async
+ * @function postCreateUser
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 
 export const postCreateUser = async (req, res, next) => {
   try {
@@ -93,9 +109,28 @@ export const postCreateUser = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// EDIT USER 
-// ==================================================
+/**
+ * EDIT USER 
+ * =========================================================================================
+ * Traite la modification d'un utilisateur.
+ * 
+ * - Récupère l'identifiant via req.params
+ * - Construit le payload depuis le formulaire
+ * - Appelle l'API (gateway) de mise à jour
+ * - Gère l'expiration d'authentification
+ * - Mappe les erreurs API vers la vue EJS (champs / métier / global)
+ * - Pose un flash message de succès
+ * - Redirige vers la page détail utilisateur
+ * 
+ * @async
+ * @function postEditUser
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 
 export const postEditUser = async (req, res, next) => {
   try {
@@ -156,9 +191,28 @@ export const postEditUser = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// EDIT USER PASSWORD
-// ==================================================
+/**
+ * EDIT USER PASSWORD
+ * =========================================================================================
+ * Traite la modification du mot de passe utilisateur.
+ * 
+ * - Récupère l'identifiant via req.params
+ * - Charge l'utilisateur via l'API (gateway) pour alimenter la vue en cas d'erreur
+ * - Appelle l'API (gateway) de mise à jour du mot de passe
+ * - Gère l'expiration d'authentification
+ * - Mappe les erreurs API vers la vue EJS (règles password / métier / global)
+ * - Pose un flash message de succès
+ * - Redirige vers la page détail utilisateur
+ *
+ * @async
+ * @function postEditUserPassword
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 
 export const postEditUserPassword = async (req, res, next) => {
   try {
@@ -230,9 +284,28 @@ export const postEditUserPassword = async (req, res, next) => {
   }
 };
 
-// ==================================================
-// DELETE USER
-// ==================================================
+/**
+ * DELETE USER
+ * =========================================================================================
+ * Supprime un utilisateur.
+ *
+ * - Récupère l'identifiant via req.params
+ * - Appelle l'API (gateway) de suppression
+ * - Gère l'expiration d'authentification
+ * - Passe par le handler d'erreurs API partagé
+ * - Supporte le mode AJAX (JSON) et le mode HTML (redirect)
+ * - Pose un flash message de succès
+ * - Redirige vers la liste des utilisateur
+ *
+ * @async
+ * @function deleteUserAction
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 
 export const deleteUserAction = async (req, res, next) => {
     try {

@@ -1,9 +1,12 @@
 /**
- * ===================================================================
  * ERROR BOOTSTRAP
- * ===================================================================
- * - Initialisation minimale pour pages d'erreur
- * ===================================================================
+ * =========================================================================================
+ * @module errorBootstrap
+ *
+ * Point d'entrée minimal pour les pages d'erreur.
+ *
+ * - Active les mécanismes d'accessibilité essentiels
+ * - Maintient la synchronisation de session entre onglets
  */
 
 // ACCESSIBILITY

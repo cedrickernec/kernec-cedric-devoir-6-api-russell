@@ -1,0 +1,27 @@
+# ==========================================================
+# USER DELETE RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après suppression
+# d'un utilisateur.
+#
+# Contient :
+# - success
+# - message
+# - data (User supprimé)
+# ==========================================================
+
+description: Structure standardisée des réponses de suppression d'un utilisateur.
+type: object
+required: [success, message, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  message:
+    type: string
+    example: Utilisateur supprimé avec succès.
+
+  data:
+    $ref: "../../../../openapi.yaml#/components/schemas/UserModel"

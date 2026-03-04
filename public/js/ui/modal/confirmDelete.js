@@ -1,24 +1,33 @@
 /**
- * ===================================================================
- * DELETE CONFIRMATION CONTENT BUILDER
- * ===================================================================
- * - Génère dynamiquement le contenu DOM de confirmation
- * - Centralise les messages métier selon le type d'entité
- * - Gère :
- *      → singular/plural
- *      → contexte métier (reservation, catway, user)
- *      → demande sécurisée par mot de passe
- * ===================================================================
- * Ce fichier ne gère pas la modale,
- * il construit uniquement le contenu injecté dans confirmModal
- * ===================================================================
+ * CONFIRM DELETE BUILDER MODULE
+ * =========================================================================================
+ * @module confirmDelete
+ *
+ * Génère dynamiquement le contenu DOM
+ * d'une confirmation de suppression.
+ *
+ * Responsabilités :
+ * - Adapter le message selon le type d'entité
+ * - Gérer singulier / pluriel
+ * - Injecter un contexte métier si fourni
+ * - Ajouter un champ mot de passe si requis
+ *
+ * Ne gère pas l'affichage de la modale :
+ * retourne uniquement un noeud DOM prêt à injecter.
  */
 
-// =====================================================
-// MAPPING
-// =====================================================
+/**
+ * MAPPING
+ * =========================================================================================
+ * Mappe une clé de statut API vers une classe CSS.
+ * 
+ * @function getStatusClass
+ *
+ * @param {string} statusKey
+ * 
+ * @returns {string}
+ */
 
-// Mapping entre le statut API et les classes CSS
 function getStatusClass(statusKey) {
   const map = {
     "UPCOMING": "upcoming",
@@ -29,9 +38,25 @@ function getStatusClass(statusKey) {
   return map[statusKey] || "plain";
 }
 
-// =====================================================
-// CONTENT BUILDER
-// =====================================================
+/**
+ * DELETE CONFIRMATION CONTENT BUILDER
+ * =========================================================================================
+ * Construit le contenu de confirmation de suppression.
+ *
+ * @function confirmDelete
+ * 
+ * @param {Object} options
+ * @param {"user"|"catway"|"reservation"} options.type
+ * @param {number} [options.count=1]
+ * @param {boolean} [options.requirePassword=false]
+ * @param {string|null} [options.message=null]
+ * @param {Object|null} [options.context=null]
+ * 
+ * @returns {{
+ *   node: HTMLElement,
+ *   getPassword: () => string|null
+ * }}
+ */
 
 export function confirmDelete({
   type,

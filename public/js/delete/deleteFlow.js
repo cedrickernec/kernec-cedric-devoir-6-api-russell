@@ -1,23 +1,37 @@
 /**
- * ===================================================================
  * GENERIC DELETE FLOW
- * ===================================================================
- * Centralise tout le workflow de suppression :
- *      → ouverture de la modale de confirmation
- *      → gestion password_required
- *      → appel API DELETE
- *      → gestion des erreurs métier
- *      → feedback utilisateur (toast)
- * ===================================================================
- * Utilisé par :
- *      - suppression simple (entité unique)
- *      - suppression multiple (bulk table)
- *      - suppression sensible (avec confirmation par mot de passe)
- * ===================================================================
+ * =========================================================================================
+ * @module deleteFlow
+ * 
+ * Exécute un workflow complet de suppression avec gestion avancée.
+ *
+ * Fonctionnalités :
+ * - Ouverture modale de confirmation
+ * - Pré-check (optionnel) avant suppression
+ * - Gestion password_required / invalid_password
+ * - Appel API DELETE
+ * - Callback succès / annulation
+ *
+ * Dépendances globales :
+ * - window.openConfirmModal
+ * - showToast
+ * - confirmDelete()
+ * 
+ * @function runDeleteFlow
+ *
+ * @param {Object} options
+ * @param {string|null} options.checkUrl - Endpoint de pré-vérification
+ * @param {string} options.deleteUrl - Endpoint DELETE
+ * @param {string} options.deleteType - Type d'entité supprimée
+ * @param {number} [options.count=1] - Nombre d’éléments supprimés
+ * @param {Function} [options.buildBody] - Builder du body (reçoit password)
+ * @param {Function} [options.onSuccess] - Callback après succès
+ * @param {Function} [options.onCancel] - Callback annulation
+ * 
+ * @return {void}
  */
 
 /* global showToast */
-
 import { confirmDelete } from "../ui/modal/confirmDelete.js";
 import { COMMON_MESSAGES } from "../messages/commonMessages.js";
 

@@ -1,12 +1,34 @@
 /**
- * ===================================================================
- * NORMALIZE DATE (START/END)
- * ===================================================================
- * - Normalise la date de début et de fin d'une journée
- * ===================================================================
+ * NORMALIZE DATE RANGE MODULE
+ * =========================================================================================
+ * @module normalizeDateRange
+ *
+ * Normalise une date en début ou fin de journée logique métier.
+ *
+ * Responsabilités :
+ * - Convertir une date valide
+ * - Appliquer une heure métier cohérente
+ *
+ * Sécurité :
+ * - Lance une erreur si la date est invalide
+ *
+ * Effets de bord :
+ * - Modifie l’objet Date localement
+ */
+
+/**
+ * NORMALIZE DATE RANGE
+ * =========================================================================================
+ * Normalise une date selon le mode "start" ou "end".
+ *
+ * @function normalizeDateRange
+ *
  * @param {Date|string} date
- * @param {"start"|"end"} mode
- * @returns {Date}
+ * @param {"start"|"end"} [mode="start"]
+ *
+ * @returns {Date|null}
+ *
+ * @throws {Error} - Si la date est invalide
  */
 
 export function normalizeDateRange(date, mode = "start") {

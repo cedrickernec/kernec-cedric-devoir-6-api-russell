@@ -1,10 +1,8 @@
 /**
- * ===================================================================
  * AJAX CONTROLLER - CATWAYS
- * ===================================================================
+ * =========================================================================================
  * - Validation asynchrone formulaire
  * - Suppression multiple via AJAX
- * ===================================================================
  */
 
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
@@ -15,9 +13,19 @@ import {
 } from "../../gateways/api/catwayApi.js";
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
 
-// ==================================================
-// CHECK - CATWAY NUMBER AVAILABILITY
-// ==================================================
+/**
+ * CHECK - CATWAY NUMBER AVAILABILITY
+ * =========================================================================================
+ * Vérifie la disponibilité d'un numéro de catway via AJAX.
+ *
+ * @async
+ * @function checkCatwayNumberAvailability
+ *
+ * @param {Object} req
+ * @param {Object} res
+ *
+ * @returns {Promise<void>}
+ */
 
 export const checkCatwayNumberAvailability = async (req, res) => {
   try {
@@ -29,9 +37,22 @@ export const checkCatwayNumberAvailability = async (req, res) => {
   }
 };
 
-// ==================================================
-// CHECK BULK CATWAY
-// ==================================================
+/**
+ * CHECK BULK CATWAY
+ * =========================================================================================
+ * Vérifie si une suppression multiple de catways nécessite une confirmation.
+ *
+ * - Appelle l'API de "bulk-check"
+ * - Retourne directement le résultat au format JSON
+ *
+ * @async
+ * @function checkBulkCatwayDeleteAjax
+ *
+ * @param {Object} req
+ * @param {Object} res
+ *
+ * @returns {Promise<void>}
+ */
 
 export async function checkBulkCatwayDeleteAjax(req, res) {
   try {
@@ -46,9 +67,23 @@ export async function checkBulkCatwayDeleteAjax(req, res) {
   }
 }
 
-// ==================================================
-// BULK DELETE - TABLE
-// ==================================================
+/**
+ * BULK DELETE - TABLE
+ * =========================================================================================
+ * Supprime plusieurs catways via AJAX.
+ *
+ * - Appelle l'API de suppression bulk
+ * - Retourne 409 si conflit (ex: password_required)
+ * - Retourne le résultat JSON de l'API
+ *
+ * @async
+ * @function deleteCatways
+ *
+ * @param {Object} req
+ * @param {Object} res
+ *
+ * @returns {Promise<void>}
+ */
 
 export const deleteCatways = async (req, res) => {
   try {

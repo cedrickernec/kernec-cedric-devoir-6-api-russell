@@ -1,0 +1,219 @@
+# ==========================================================
+# USERS - SINGLE RESOURCE
+# ----------------------------------------------------------
+# Gestion d'un utilisateur spécifique via son identifiant.
+#
+# Permet :
+# - Récupérer un utilisateur
+# - Modifier ses informations (username / email)
+# - Supprimer un utilisateur
+#
+# Paramètre requis :
+# - id (Identifiant MongoDB)
+#
+# Route protégée par JWT.
+# ==========================================================
+
+# ==========================================================
+# GET USER BY ID
+# ==========================================================
+get:
+  tags: [Users]
+  summary: Récupérer un utilisateur
+  description: Récupère un utilisateur à partir de son identifiant.
+  
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Identifiant MongoDB de l'utilisateur
+      schema:
+        type: string
+        example: 69694b3fda5fa0c48294315a
+
+  responses:
+    "200":
+      description: Utilisateur récupéré
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/UserSingleResponse"
+
+    "400":
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidUserId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidUserId"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "404":
+      description: Utilisateur introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            ResourceNotFound:
+              $ref: "../../openapi.yaml#/components/examples/UserNotFound"
+            
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"
+
+# ==========================================================
+# UPDATE USER (without password)
+# ==========================================================
+put:
+  tags: [Users]
+  summary: Modifier un utilisateur
+  description: Met à jour le username et/ou l'email d'un utilisateur.
+
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Identifiant MongoDB de l'utilisateur
+      schema:
+        type: string
+        example: 69694b3fda5fa0c48294315a
+
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/UserUpdateRequest"
+
+  responses:
+    "200":
+      description: Utilisateur mis à jour
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/UserUpdateResponse"
+
+    "400":
+      description: Erreur de validation ou champ non autorisé
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            fieldNotAllowed:
+              $ref: "../../openapi.yaml#/components/examples/FieldNotAllowed"
+
+            invalidUserId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidUserId"
+
+            NoValidDataToUpdate:
+              $ref: "../../openapi.yaml#/components/examples/NoValidDataToUpdate"
+
+            invalidFormat:
+              summary: Format invalide
+              value:
+                success: false
+                message: Donnée(s) invalide(s).
+                errors:
+                  username: Le nom d'utilisateur doit contenir entre 3 et 20 caractères (lettres, chiffres, - ou _).
+                  email: "Format d'email invalide (ex : nom@domaine.com)."
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "404":
+      description: Utilisateur introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            ResourceNotFound:
+              $ref: "../../openapi.yaml#/components/examples/UserNotFound"
+
+    "409":
+      description: Conflit d'unicité
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            uniquenessConflict:
+              summary: Conflit d'email
+              value:
+                success: false
+                message: Impossible de mettre à jour l'utilisateur.
+                errors:
+                  email: Un utilisateur avec cet email existe déjà.
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"
+
+# ==========================================================
+# DELETE USER
+# ==========================================================
+delete:
+  tags: [Users]
+  summary: Supprimer un utilisateur
+  description: Supprime un utilisateur existant.
+
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: Identifiant MongoDB de l'utilisateur
+      schema:
+        type: string
+        example: 69694b3fda5fa0c48294315a
+
+  responses:
+    "200":
+      description: Utilisateur supprimé
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/UserDeleteResponse"
+
+    "400":
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidUserId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidUserId"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "403":
+      description: Suppression interdite
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            prohibitedDelete:
+              summary: Suppression impossible
+              value:
+                success: false
+                message: Vous ne pouvez pas supprimer votre propre compte.
+
+    "404":
+      description: Utilisateur introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            ResourceNotFound:
+              $ref: "../../openapi.yaml#/components/examples/UserNotFound"
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

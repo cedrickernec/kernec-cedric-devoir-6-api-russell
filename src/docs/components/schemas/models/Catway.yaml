@@ -1,0 +1,65 @@
+# ==========================================================
+# CATWAY MODEL SCHEMA
+# ----------------------------------------------------------
+# Représente la structure métier d'un catway
+# retourné par l’API.
+# ==========================================================
+
+description: Structure métier d'un catway retourné par l'API.
+type: object
+required: [
+  id,
+  catwayNumber,
+  catwayType,
+  catwayState,
+  isOutOfService,
+  stateKey,
+  createdAt,
+  updatedAt
+]
+
+properties:
+  id:
+    description: Identifiant unique MongoDB
+    type: string
+    example: 699ce49b3990671881a87cca
+
+  catwayNumber:
+    description: Numéro de catway
+    type: integer
+    minimum: 1
+    example: 25
+
+  catwayType:
+    description: Type de catway
+    type: string
+    enum: [short, long]
+    example: short
+
+  catwayState:
+    description: État du catway
+    type: string
+    example: bon état
+
+  isOutOfService:
+    description: Catway hors service ?
+    type: boolean
+    example: false
+
+  stateKey:
+    description: État métier du catway
+    type: string
+    enum: [OK, HS, WARNING]
+    example: OK
+
+  createdAt:
+    description: Date de création
+    type: string
+    format: date-time
+    example: 2026-01-08T12:55:05.016Z
+
+  updatedAt:
+    description: Date de dernière modification
+    type: string
+    format: date-time
+    example: 2026-01-09T18:24:32.845Z

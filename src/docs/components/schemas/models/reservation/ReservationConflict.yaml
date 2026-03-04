@@ -1,0 +1,50 @@
+# ===============================================================
+# RESERVATION CONFLICT MODEL SCHEMA
+# ---------------------------------------------------------------
+# Représente une réservation existante entrant en conflit
+# avec une tentative de création ou modification.
+# ===============================================================
+
+description: Réservation existante entrant en conflit avec la demande.
+type: object
+required: [id, clientName, boatName, startDate, endDate, createdAt, updatedAt]
+
+properties:
+  id:
+    description: Identifiant unique MongoDB
+    type: string
+    example: 65a8c123abc456def7890123
+
+  clientName:
+    description: Nom du client
+    type: string
+    example: Jacky Snow
+
+  boatName:
+    description: Nom du bateau
+    type: string
+    example: Léandra
+
+  startDate:
+    description: Date de début de réservation
+    type: string
+    format: date-time
+    example: 2024-09-18T06:00:00.000Z
+
+  endDate:
+    description: Date de fin de réservation
+    type: string
+    format: date-time
+    example: 2024-12-23T06:00:00.000Z
+
+  createdAt:
+    description: Date de création
+    type: string
+    format: date-time
+    example: 2024-08-26T18:57:40.845Z
+
+  updatedAt:
+    description: Date de mise à jour
+    type: string
+    format: date-time
+    example: 2024-08-26T18:57:40.845Z

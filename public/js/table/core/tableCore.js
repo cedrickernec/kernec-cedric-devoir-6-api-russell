@@ -1,21 +1,48 @@
 /**
- * ===================================================================
  * BULK TABLE CORE ENGINE
- * ===================================================================
- * - Gestion générique des tables avec sélection multiple
- * - Sélection multiple persistante (indépendante des filtres)
- * - "Select all" agit uniquement sur les lignes visibles
- * - Suppression en masse avec confirmation sécurisée
- * - Synchronisation UI dynamique (compteur, états)
- * ===================================================================
- * Principe clé :
- * → La sélection est conservée en mémoire même si la table change
- * ===================================================================
+ * =========================================================================================
+ * @module bulkTableCore
+ *
+ * Moteur générique de gestion de table avec sélection multiple.
+ *
+ * Responsabilités :
+ * - Maintenir une mémoire interne indépendante des filtres
+ * - Synchroniser l’état UI ↔ mémoire
+ * - Gérer le select-all contextuel
+ * - Piloter la suppression bulk sécurisée
+ *
+ * Effets de bord :
+ * - Manipulation DOM
+ * - Suppression visuelle de lignes
+ * - Appels réseau via runDeleteFlow
  */
 
 /* global showToast */
-
 import { runDeleteFlow } from "../../delete/deleteFlow.js";
+
+/**
+ * BULK TABLE INITIALISATION
+ * =========================================================================================
+ * Initialise une table avec gestion complète
+ * de sélection multiple et suppression en masse.
+ *
+ * Le moteur fonctionne indépendamment
+ * des filtres ou de la pagination visuelle.
+ *
+ * @function initBulkTable
+ * 
+ * @param {Object} config
+ * @param {string} config.tableSelector
+ * @param {string} config.checkboxName
+ * @param {string} config.deleteBtnId
+ * @param {string} config.selectAllId
+ * @param {string|null} config.checkUrl
+ * @param {string} config.bulkUrl
+ * @param {string} config.deleteType
+ * @param {Object} config.messages
+ * 
+ * @returns {void}
+ */
 
 export function initBulkTable({
   tableSelector,

@@ -1,20 +1,32 @@
 /**
- * ===================================================================
- * CATWAYS TABLE INITIALISER
- * ===================================================================
- * - Configure et initialise la table des catways
- * - Active la sélection multiple
- * - Active la suppression en masse (bulk delete)
- * - Injecte les messages métier spécifique aux catways
- * ===================================================================
- * Architecture :
- * → Adaptateur métier au-dessus du moteur générique entityTable
- * ===================================================================
+ * CATWAYS TABLE MODULE
+ * =========================================================================================
+ * @module catwaysTable
+ *
+ * Configure la table des catways à partir du moteur générique entityTable.
+ *
+ * Rôle :
+ * - Activer la sélection multiple
+ * - Activer la suppression en masse
+ * - Injecter les messages métier spécifiques aux catways
+ *
+ * Ce module ne contient aucune logique métier :
+ * il se contente de fournir une configuration adaptée.
  */
 
 import { initEntityTable } from "../core/entityTable.js";
 import { CATWAY_MESSAGES } from "../../messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
+
+/**
+ * CATWAYS TABLE INITIALISATION
+ * =========================================================================================
+ * Initialise la table des catways avec sa configuration spécifique.
+ *
+ * @function initCatwaysTable
+ * 
+ * @returns {void}
+ */
 
 export function initCatwaysTable() {
     initEntityTable({

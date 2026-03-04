@@ -1,0 +1,35 @@
+# ==========================================================
+# RESERVATION UPDATE REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de mise à jour
+# d'une réservation (clientName, boatName, startDate, endDate).
+#
+# Aucun champ requis strictement,
+# mais au moins un champ doit être fourni côté logique métier.
+# ==========================================================
+
+description: Structure standardisée des requêtes de mise à jour d'une réservation.
+type: object
+
+properties:
+  clientName:
+    description: Nom du client
+    type: string
+    example: Dupont
+
+  boatName:
+    description: Nom du bateau
+    type: string
+    example: Le Bateau de Dupont
+
+  startDate:
+    description: Date de début de réservation
+    type: string
+    format: date
+    example: 2024-01-01
+
+  endDate:
+    description: Date de fin de réservation
+    type: string
+    format: date
+    example: 2024-01-01

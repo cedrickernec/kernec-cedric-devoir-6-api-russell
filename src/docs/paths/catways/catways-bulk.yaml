@@ -1,0 +1,84 @@
+# ==========================================================
+# CATWAYS - BULK
+# ----------------------------------------------------------
+# Permet de supprimer plusieurs catways en une seule requête.
+#
+# Si au moins un catway est lié à des réservations,
+# une confirmation par mot de passe est requise.
+#
+# Routes protégées par JWT.
+# ==========================================================
+
+delete:
+  tags: [Catways]
+  summary: Supprimer plusieurs catways
+  description:
+    Supprime une sélection de catways.
+    Si au moins un catway est lié à des réservations,
+    une confirmation par mot de passe est requise.
+  
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/CatwayBulkDeleteRequest"
+
+  responses:
+    "200":
+      description: Sélection de catways supprimée
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/CatwayBulkDeleteResponse"
+
+    "400":
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidCatwayId:
+              $ref: "../../openapi.yaml#/components/examples/InvalidCatwayIdBulk"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "403":
+      description: Mot de passe incorrect
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            invalidPassword:
+              $ref: "../../openapi.yaml#/components/examples/InvalidPassword"
+
+    "404":
+      description: Catway introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/NotFoundResource"
+          examples:
+            ResourceNotFound:
+              $ref: "../../openapi.yaml#/components/examples/CatwayNotFound"
+
+    "409":
+      description: Mot de passe requis
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ErrorResponse"
+          examples:
+            passwordRequired:
+              summary: Mot de passe requis
+              value:
+                success: false
+                message: La sélection contient des catways liés à des réservations. La suppression nécessite une confirmation par mot de passe.
+                context:
+                    reason: "password_required"
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

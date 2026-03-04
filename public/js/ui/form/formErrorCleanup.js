@@ -1,12 +1,15 @@
 /**
- * ===================================================================
  * FORM ERROR CLEANUP
- * ===================================================================
- * - Supprime les erreurs backend dès la reprise de saisie utilisateur
- * - Maintient les erreurs AJAX vérouillées
- * - Gère les champs liés (startDate / endDate)
- * - Ignore les règles dynamiques du mot de passe
- * ===================================================================
+ * =========================================================================================
+ * @module formErrorCleanup
+ * 
+ * Nettoie dynamiquement les erreurs backend lors de la reprise de saisie.
+ *
+ * Comportement :
+ * - Supprime les erreurs backend classiques
+ * - Conserve les erreurs AJAX verrouillées
+ * - Synchronise les champs liés (startDate / endDate)
+ * - Supprime les erreurs métier globales
  */
 
 document.addEventListener("DOMContentLoaded", () => {

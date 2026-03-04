@@ -1,3 +1,37 @@
+/**
+ * USER MESSAGES
+ * =========================================================================================
+ * @module userMessages
+ * 
+ * Registre centralisé des messages liés aux Utilisateurs.
+ *
+ * Regroupe :
+ * - Validation sécurité (email, password)
+ * - Messages CRUD
+ * - Messages d’erreur métier
+ * 
+ * Certaines clés peuvent être des fonctions dynamiques
+ * (ex : BULK_DELETE_SUCCESS).
+ * 
+ * @constant USER_MESSAGES
+ * @type {Object}
+ *
+ * @property {string} EMAIL_CONFLICT
+ * @property {string} INVALID_PASSWORD
+ * @property {string} PASSWORD_CONFLICT
+ *
+ * @property {string} CREATE_SUCCESS
+ * @property {string} UPDATE_SUCCESS
+ * @property {string} PASSWORD_UPDATE_SUCCESS
+ *
+ * @property {string} DELETE_CONFIRM
+ * @property {string} DELETE_SUCCESS
+ * @property {(n:number) => string} BULK_DELETE_SUCCESS
+ *
+ * @property {string} NOT_FOUND
+ * @property {string} LOAD_ERROR
+ */
+
 export const USER_MESSAGES = {
   // ===== VALIDATION =====
   EMAIL_CONFLICT: "Cet email est déjà utilisé par un autre utilisateur.",

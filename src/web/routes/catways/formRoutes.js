@@ -1,7 +1,21 @@
 /**
- * ===================================================================
  * CATWAYS FORM ROUTES (WEB)
- * ===================================================================
+ * =========================================================================================
+ * @module formRoutes
+ * 
+ * Routeur des formulaires Catways (couche Web).
+ *
+ * - Protège les routes via authGuard
+ * - Valide les paramètres dynamiques
+ * - Délègue la logique aux contrôleurs Form
+ * - Monte les sous-routes Réservations
+ *
+ * Routes principales :
+ * POST /create
+ * POST /:catwayNumber/edit
+ *
+ * Sous-ressource :
+ * /:catwayNumber/reservations
  */
 
 import express from "express";

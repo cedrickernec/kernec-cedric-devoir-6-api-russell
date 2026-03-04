@@ -1,0 +1,38 @@
+# ==========================================================
+# RESERVATION - AVAILABILITY PARTIAL MODEL SCHEMA
+# ----------------------------------------------------------
+# Représente une période de disponibilité partielle 
+# d'un catway, avec des créneaux disponibles.
+#
+# Utilisé pour indiquer que le catway est partiellement
+# disponible sur la période demandée.
+# ==========================================================
+
+description: Période de disponibilité partielle d'un catway, avec des créneaux disponibles.
+type: object
+required: [status, slots]
+
+properties:
+  status:
+    description: Statut de disponibilité du catway
+    type: string
+    enum: [partial]
+
+  slots:
+    description: Liste des créneaux disponibles
+    type: array
+    items:
+      type: object
+      required: [from, to]
+
+      properties:
+        from:
+          description: Date de début du créneau disponible
+          type: string
+          format: date
+          example: 2026-04-12
+        to:
+          description: Date de fin du créneau disponible
+          type: string
+          format: date
+          example: 2026-04-28

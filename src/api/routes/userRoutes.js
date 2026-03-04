@@ -1,7 +1,21 @@
 /**
- * ===================================================================
  * USERS ROUTES (API)
- * ===================================================================
+ * =========================================================================================
+ * @module userRoutes
+ *
+ * Déclare les routes API liées aux utilisateurs.
+ *
+ * Fonctionnalités :
+ * - CRUD utilisateurs
+ * - Mise à jour mot de passe (PUT /:id/password)
+ *
+ * Dépendances :
+ * - userController
+ * - authMiddleware
+ * - Express Router
+ *
+ * Sécurité :
+ * - Routes protégées via authMiddleware
  */
 
 import { Router } from "express";

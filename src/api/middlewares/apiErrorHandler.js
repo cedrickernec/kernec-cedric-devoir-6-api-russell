@@ -1,10 +1,39 @@
 /**
- * ===================================================================
  * API ERROR HANDLERS
- * ===================================================================
- * - Gestion des erreurs 404
- * - Gestion centralisée des erreurs globales
- * ===================================================================
+ * =========================================================================================
+ * @module apiErrorHandler
+ *
+ * Middlewares de gestion des erreurs pour l’API.
+ *
+ * Responsabilités :
+ * - Gérer les routes API non trouvées (404)
+ * - Centraliser la transformation des erreurs en réponse JSON normalisée
+ *
+ * Déclenché par :
+ * - Fin de chaîne middleware Express
+ *
+ * Dépendances :
+ * - ApiError (erreurs métier personnalisées)
+ *
+ * Sécurité :
+ * - Masque les détails internes en production
+ * - Expose la stack uniquement en environnement development
+ *
+ * Effets de bord :
+ * - Retourne une réponse JSON normalisée
+ */
+
+/**
+ * API NOT FOUND HANDLER
+ * =========================================================================================
+ * Middleware 404 pour les routes API non trouvées.
+ *
+ * @function apiNotFoundHandler
+ *
+ * @param {Object} req
+ * @param {Object} res
+ *
+ * @returns {void}
  */
 
 export const apiNotFoundHandler = (req, res) => {
@@ -15,9 +44,22 @@ export const apiNotFoundHandler = (req, res) => {
     });
 };
 
-// ==================================================
-// GLOBAL ERROR
-// ==================================================
+/**
+ * API ERROR HANDLER
+ * =========================================================================================
+ * Middleware global de gestion centralisée des erreurs.
+ *
+ * Transforme une ApiError (ou erreur standard) en réponse JSON normalisée.
+ *
+ * @function apiErrorHandler
+ *
+ * @param {Error} err - Erreur capturée
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} _next
+ *
+ * @returns {void}
+ */
 
 export const apiErrorHandler = (err, req, res, _next) => {
     const status = err.status || 500;

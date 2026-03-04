@@ -1,3 +1,37 @@
+/**
+ * CATWAY MESSAGES
+ * =========================================================================================
+ * @module catwayMessages
+ * 
+ * Registre centralisé des messages liés aux Catways.
+ *
+ * Regroupe :
+ * - Messages de validation
+ * - Messages CRUD
+ * - Messages d’erreur métier
+ *
+ * Certaines clés peuvent être des fonctions dynamiques
+ * (ex : BULK_DELETE_SUCCESS).
+ *
+ * @constant CATWAY_MESSAGES
+ * @type {Object}
+ *
+ * @property {string} CATWAY_REQUIRED
+ * @property {string} INVALID_CATWAY
+ * @property {string} CATWAY_CONFLICT
+ * @property {string} INVALID_TYPE
+ * @property {string} STATE_REQUIRED
+ *
+ * @property {string} CREATE_SUCCESS
+ * @property {string} UPDATE_SUCCESS
+ * @property {string} DELETE_CONFIRM
+ * @property {string} DELETE_SUCCESS
+ * @property {(n:number) => string} BULK_DELETE_SUCCESS
+ *
+ * @property {string} NOT_FOUND
+ * @property {string} LOAD_ERROR
+ */
+
 export const CATWAY_MESSAGES = {
   // ===== VALIDATION =====
   CATWAY_REQUIRED: "Le numéro du catway est requis.",

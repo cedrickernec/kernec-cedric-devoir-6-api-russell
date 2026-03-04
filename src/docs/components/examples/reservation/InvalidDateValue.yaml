@@ -1,0 +1,18 @@
+# ==========================================================
+# EXAMPLE - INVALID DATE VALUE
+# ----------------------------------------------------------
+# Exemple retourné lorsque les valeurs du mois ou du jour
+# d'une date est sont incohérentes.
+#
+# Exemple :
+# - Mois supérieur à 12
+# - Jour supérieur au nombre de jours du mois concerné
+# - Date inexistante (ex. : 2026-02-30)
+# ==========================================================
+
+summary: Dates réservation - Valeur invalide
+value:
+  success: false
+  message: Donnée(s) invalide(s).
+  errors:
+    date: Le mois et le jour sont incorrects.

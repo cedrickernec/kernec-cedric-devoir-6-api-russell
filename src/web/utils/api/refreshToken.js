@@ -1,17 +1,38 @@
 /**
- * ===================================================================
- * AUTH - REFRESH TOKEN HANDLER
- * ===================================================================
- * - Tente de renouveler automatiquement le JWT utilisateur
- * - Utilise le refreshToken stocké en session
- * - Met à jour le accessToken en cas de succès
- * ===================================================================
- * Utilisé pour maintenir une session active côté WEB
- * sans forcer une reconnexion utilisateur.
- * ===================================================================
+ * WEB REFRESH TOKEN HANDLER
+ * =========================================================================================
+ * @module refreshToken
+ *
+ * Gestion automatique du renouvellement JWT côté Web.
+ *
+ * Responsabilités :
+ * - Lire le refreshToken stocké en session
+ * - Appeler l’API /api/auth/refresh
+ * - Mettre à jour l’accessToken en session
+ *
+ * Dépendances :
+ * - apiFetch
+ *
+ * Effets de bord :
+ * - Met à jour req.session.user.token
  */
 
 import { apiFetch } from "../../gateways/api/apiFetch.js";
+
+/**
+ * TRY REFRESH TOKEN
+ * =========================================================================================
+ * Tente de renouveler le JWT utilisateur via le refreshToken.
+ *
+ * @function tryRefreshToken
+ * @async
+ *
+ * @param {Object} req
+ *
+ * @returns {Promise<boolean>}
+ * - true  → token renouvelé
+ * - false → échec du refresh
+ */
 
 export async function tryRefreshToken(req) {
 

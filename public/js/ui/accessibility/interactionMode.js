@@ -1,11 +1,15 @@
 /**
- * ===================================================================
- * INTERACTION MODE DETECTOR
- * ===================================================================
- * - Détecte si l'utilisateur navigue au clavier ou à la souris
- * - Permet d'adapter l'affichage du focus
- * - Synchronise JS et CSS via la classe body → using-kerboard
- * ===================================================================
+ * INTERACTION MODE MODULE
+ * =========================================================================================
+ * @module interactionMode
+ *
+ * Détecte si l'utilisateur interagit via clavier ou souris.
+ *
+ * Objectif :
+ * - Adapter le style du focus (classe body "using-keyboard")
+ * - Améliorer l'accessibilité visuelle
+ *
+ * Expose une API simple : isKeyboardInteraction().
  */
 
 // =====================================================
@@ -58,9 +62,16 @@ function handleMousedown() {
 document.addEventListener("keydown", handleKeydown, true);
 document.addEventListener("mousedown", handleMousedown, true);
 
-// =====================================================
-// PUBLIC API
-// =====================================================
+/**
+ * INTERACTION MODE DETECTOR
+ * =========================================================================================
+ * Indique si la dernière interaction pertinente
+ * a été effectuée au clavier.
+ *
+ * @function isKeyboardInteraction
+ * 
+ * @returns {boolean}
+ */
 
 export function isKeyboardInteraction() {
     return lastInteractionWasKeyboard;

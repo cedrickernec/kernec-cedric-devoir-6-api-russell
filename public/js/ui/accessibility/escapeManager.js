@@ -1,11 +1,28 @@
 /**
- * ===================================================================
- * GLOBAL ESCAPE KEY MANAGER
- * ===================================================================
- * - Centralise la gestion de la touche Escape
- * - Permet aux composant UI de s'enregistrer dynamiquement
- * - Ferme toujours le composant ouvert le plus récemment
- * ===================================================================
+ * GLOBAL ESCAPE MANAGER MODULE
+ * =========================================================================================
+ * @module escapeManager
+ *
+ * Gestionnaire global de la touche Escape basé sur une pile LIFO.
+ *
+ * Objectif :
+ * - Permettre à plusieurs composants UI (modale, panel, menu...)
+ *   de s'enregistrer dynamiquement
+ * - Garantir que seul le composant actif (dernier ouvert)
+ *   soit fermé lors d'un appui sur Escape
+ *
+ * Architecture :
+ * - Stack interne
+ * - Pattern Last In, First Out
+ */
+
+/**
+ * GLOBAL ESCAPE MANAGER
+ * =========================================================================================
+ * Gère la pile des composants enregistrés
+ * et orchestre la fermeture via la touche Escape.
+ *
+ * @class EscapeManager
  */
 
 class EscapeManager {
@@ -13,11 +30,6 @@ class EscapeManager {
     // ==================================================
     // INITIALISATION
     // ==================================================
-    /**
-     * Pile de composants enregistrés. Chaque entrée doit contenir :
-     * - id : identifiant unique du composant
-     * - close : fonction de fermeture appelée
-     */
 
     constructor() {
         // Stack des composants actifs
@@ -30,27 +42,42 @@ class EscapeManager {
         });
     }
 
-    // ==================================================
-    // COMPONENT REGISTRATION
-    // ==================================================
-
-    // Enregistre un composant dans la pile
-    // Si déjà présent → remplacé pour éviter les doublons
+    /**
+     * STACK COMPONENT SAVING
+     * =========================================================================================
+     * Enregistre un composant dans la pile
+     * (remplace si déjà présent → mis au premier plan).
+     * 
+     * @param {{ id: string, close: Function }} component
+     * 
+     * @returns {void}
+     */
     register(component) {
         this.stack = this.stack.filter(c => c.id !== component.id);
         this.stack.push(component);
     }
 
-    // Retire un composant de la pile
+    /**
+     * STACK COMPONENT REMOVING
+     * =========================================================================================
+     * Retire un composant de la pile.
+     * 
+     * @param {string} id
+     * 
+     * @returns {void}
+     */
     unregister(id) {
         this.stack = this.stack.filter(c => c.id !== id);
     }
 
-    // ==================================================
-    // ESCAPE HANDLING
-    // ==================================================
+    /**
+     * ESCAPE HANDLING
+     * =========================================================================================
+     * Ferme le composant actif (dernier ouvert).
+     * 
+     * @returns {void}
+     */
 
-    // Ferme uniquement le composant actif (dernier ouvert)
     handleEscape() {
         if (this.stack.length === 0) return;
         const top = this.stack[this.stack.length - 1];

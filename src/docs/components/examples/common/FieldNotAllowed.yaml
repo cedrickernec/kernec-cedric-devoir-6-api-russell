@@ -1,0 +1,13 @@
+# ==========================================================
+# EXAMPLE - FIELD NOT ALLOWED
+# ----------------------------------------------------------
+# Exemple générique lorsqu'un champ non autorisé
+# est présent dans la requête.
+#
+# Utilisable dans tous les endpoints acceptant un body.
+# ==========================================================
+
+summary: Champ non autorisé
+value:
+  success: false
+  message: "Champ(s) non autorisé(s) : nom_du_champ."

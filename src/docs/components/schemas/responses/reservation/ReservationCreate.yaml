@@ -1,0 +1,21 @@
+# ==========================================================
+# RESERVATION CREATE RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après création d’une réservation.
+# ==========================================================
+
+description: Structure standardisée des réponses de création d'une réservation.
+type: object
+required: [success, message, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  message:
+    type: string
+    example: Réservation créée avec succès.
+
+  data:
+    $ref: "../../../../openapi.yaml#/components/schemas/ReservationDetailModel"

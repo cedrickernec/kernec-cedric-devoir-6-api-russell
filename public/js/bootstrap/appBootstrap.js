@@ -1,9 +1,12 @@
 /**
- * ===================================================================
  * APP BOOTSTRAP
- * ===================================================================
- * - Initialisation globale de l'application interne (pages privées)
- * ===================================================================
+ * =========================================================================================
+ * @module appBootstrap
+ * Point d'entrée principale de l'application interne.
+ * 
+ * - Charge les modules globaux
+ * - Initialise les contrôleurs UI
+ * - Active les synchronisations de session
  */
 
 // ACCESSIBILITY

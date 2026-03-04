@@ -1,0 +1,29 @@
+# ==========================================================
+# 404 NOT FOUND - RESOURCE SCHEMA
+# ----------------------------------------------------------
+# Structure JSON standardisée lorsqu'une ressource métier
+# n'existe pas.
+#
+# Utilisé exclusivement par le middleware global 404.
+# Ne concerne pas les routes introuvables.
+# ==========================================================
+# ==========================================================
+
+description: Structure standardisée des réponses d'erreur 404 - Ressource introuvable.
+type: object
+required: [success, message]
+
+properties:
+  success:
+    type: boolean
+    example: false
+
+  message:
+    type: string
+    example: Ressource introuvable.
+
+  context:
+    type: object
+    description: Contexte lié à la ressource (optionnel)
+    additionalProperties:
+      type: string

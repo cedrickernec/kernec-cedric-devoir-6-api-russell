@@ -1,0 +1,32 @@
+# ==========================================================
+# RESERVATIONS - COLLECTION
+# ----------------------------------------------------------
+# Gestion de la collection des réservations.
+#
+# Permet :
+# - Récupérer la liste complète des réservations
+#
+# Routes protégées par JWT.
+# ==========================================================
+
+# ==========================================================
+# GET ALL RESERVATIONS
+# ==========================================================
+get:
+  tags: [Reservations]
+  summary: Liste des réservations
+  description: Récupère la liste complète des réservations.
+  
+  responses:
+    "200":
+      description: Liste récupérée
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ReservationListResponse"
+
+    "401":
+      $ref: "../../openapi.yaml#/components/responses/AuthError401"
+
+    "500":
+      $ref: "../../openapi.yaml#/components/responses/InternalServerError500"

@@ -1,0 +1,14 @@
+# ==========================================================
+# COMMON SCHEMAS - EMAIL RULES
+# ----------------------------------------------------------
+# Schéma d'email utilisé pour les opérations de
+# création ou de mise à jour d'un compte utilisateur.
+#
+# Critères d'email :
+# - Doit être au format email valide
+# ==========================================================
+
+type: string
+format: email
+pattern: "^[^\\s@]+@[^\\s@]+\\.[a-zA-Z]{2,}$"
+example: user@example.com

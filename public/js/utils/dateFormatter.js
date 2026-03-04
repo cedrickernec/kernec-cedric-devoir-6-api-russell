@@ -1,16 +1,30 @@
 /**
- * ===================================================================
  * DATE & TIME FORMATTER (FR)
- * ===================================================================
+ * =========================================================================================
+ * @module dateFormatter
+ * 
+ * Fonctions utilitaires de formatage des dates et heures.
+ * 
  * - Centralise le formatage des dates/heures UI
  * - Sécurise les entrées invalides
  * - Garantit une cohérence d'affichage globale
- * ===================================================================
  */
 
-// ==================================================
-// SHORT DATE (JJ/MM/AAAA)
-// ==================================================
+/**
+ * SHORT DATE (JJ/MM/AAAA)
+ * =========================================================================================
+ * Formate une date au format français court (JJ/MM/AAAA).
+ *
+ * Sécurités :
+ * - Retourne "-" si la valeur est absente
+ * - Retourne "-" si la date est invalide
+ *
+ * @function formatDateFR
+ * 
+ * @param {Date|string|null} date
+ *
+ * @returns {string}
+ */
 
 export function formatDateFR(date) {
     if (!date) return "-";
@@ -25,9 +39,21 @@ export function formatDateFR(date) {
     });
 }
 
-// ==================================================
-// TIME (HH:MM:SS)
-// ==================================================
+/**
+ * TIME (HH:MM:SS)
+ * =========================================================================================
+ * Formate une date au format heure française (HH:MM:SS).
+ *
+ * Sécurités :
+ * - Retourne "-" si la valeur est absente
+ * - Retourne "-" si la date est invalide
+ *
+ * @function formatTimeFR
+ * 
+ * @param {Date|string|null} date
+ *
+ * @returns {string}
+ */
 
 export function formatTimeFR(date) {
     if (!date) return "-";

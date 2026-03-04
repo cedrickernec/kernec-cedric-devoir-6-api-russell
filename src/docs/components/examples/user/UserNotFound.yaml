@@ -1,0 +1,13 @@
+# ==========================================================
+# EXAMPLE - USER NOT FOUND
+# ----------------------------------------------------------
+# Exemple retourné lorsqu'un utilisateur
+# est introuvable en base de données.
+# ==========================================================
+
+summary: Utilisateur introuvable
+value:
+  success: false
+  message: Utilisateur introuvable.
+  context:
+    userId: 699ce49b3990671881a87cca

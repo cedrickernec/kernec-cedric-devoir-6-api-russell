@@ -1,0 +1,34 @@
+# ==========================================================
+# CATWAY BULK DELETE RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après suppression d’une sélection
+# de catways (suppression en masse).
+#
+# Contient :
+# - success
+# - data (nombre de catways)
+# ==========================================================
+
+description:
+  Structure standardisée des réponses de suppression
+  d'une sélection de catways (suppression en masse).
+type: object
+required: [success, message, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+  
+  message:
+    type: string
+    example: 3 catways supprimés avec succès.
+
+  data:
+    type: object
+    required: [count]
+
+    properties:
+      count:
+        type: integer
+        example: 3

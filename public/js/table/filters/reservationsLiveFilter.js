@@ -1,23 +1,33 @@
 /**
- * ===================================================================
- * RESERVATIONS LIVE FILTER CONTROLLER
- * ===================================================================
- * - Filtre dynamiquement les lignes de la table Reservations
- * - Applique plusieurs critères combinable :
- *      → Numéro de catway
- *      → Recherche client / bateau
- *      → Période (dates)
- *      → Statut de la réservation (UPCOMING / IN_PROGRESS / FINISHED)
- * - Met à jour le compteur de résultats visibles
- * - Gère l'affichage de la ligne "aucun résultat"
- * - Notifie tableCore des changements de visibilité
- * ===================================================================
- * → Synchronisé avec tableCore via l'event "table:visibility-change"
- * ===================================================================
+ * RESERVATIONS LIVE FILTER MODULE
+ * =========================================================================================
+ * @module reservationsLiveFilter
+ *
+ * Implémente le filtrage dynamique côté client
+ * pour la table des réservations.
+ *
+ * Responsabilités :
+ * - Combiner plusieurs critères (catway, texte, dates, statut)
+ * - Mettre à jour dynamiquement la visibilité des lignes
+ * - Maintenir le compteur visible / total
+ * - Gérer l'affichage "aucun résultat"
+ * - Émettre l'événement "table:visibility-change"
+ *
+ * Aucun appel réseau : logique 100% UI.
  */
 
 import { normalizeString } from "../../utils/normalizeString.js";
 import { handleNoResult } from "../noResultHandler.js";
+
+/**
+ * RESERVATIONS LIVE FILTER INITIALISATION
+ * =========================================================================================
+ * Initialise les filtres dynamiques des réservations
+ * et attache les listeners nécessaires.
+ *
+ * @function initReservationsLiveFilter
+ * @returns {void}
+ */
 
 export function initReservationsLiveFilter() {
 

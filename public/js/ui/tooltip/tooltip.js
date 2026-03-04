@@ -1,12 +1,27 @@
 /**
- * ==============================================================
- * TOOLTIP SYSTEM (UI LAYER PORTAL)
- * ==============================================================
- * - Une seule tooltip globale rendue dans #ui-layer
- * - Animation gérée uniquement par le CSS existant
- * - Positionnement intelligent selon l'espace disponible :
- *      → RIGHT → LEFT → BOTTOM → TOP
- * ============================================================== */
+ * TOOLTIP SYSTEM MODULE
+ * =========================================================================================
+ * @module tooltip
+ *
+ * Implémente un système global de tooltip
+ * basé sur un unique portail UI (#ui-layer).
+ *
+ * Fonctionnalités :
+ * - Instance unique partagée
+ * - Positionnement adaptatif (RIGHT → LEFT → BOTTOM → TOP)
+ * - Repositionnement automatique (scroll / resize)
+ * - Gestion via délégation d'événements
+ */
+
+/**
+ * TOOLTIP SYSTEM INITIALISATION
+ * =========================================================================================
+ * Initialise le système global de tooltip.
+ *
+ * @function initTooltipSystem
+ * 
+ * @returns {void}
+ */
 
 function initTooltipSystem() {
 

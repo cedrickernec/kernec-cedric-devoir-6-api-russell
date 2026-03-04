@@ -1,0 +1,25 @@
+# ==========================================================
+# RESERVATION BULK CHECK RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après vérification
+# d'une sélection de réservations.
+#
+# Contient :
+# - success
+# ==========================================================
+
+description:
+  Structure standardisée des réponses de vérification
+  d'une sélection de réservations.
+type: object
+required: [success, requiresPassword]
+
+properties:
+  success:
+    type: boolean
+    example: true
+  
+  requiresPassword:
+    description: Indique si une validation par mot de passe est nécessaire pour supprimer les réservations sélectionnées.
+    type: boolean
+    example: false

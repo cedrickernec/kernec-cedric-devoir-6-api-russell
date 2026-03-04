@@ -1,12 +1,26 @@
 /**
- * ============================================================
  * AUTH SERVICE
- * ============================================================
- * - Décide si une action métier est autorisée :
- *      - Contient la logique métier de l'application
- *      - Applique les règles fonctionnelles
- *      - Appelle les validators, les rules et les repositories
- * ============================================================
+ * =========================================================================================
+ * @module authService
+ *
+ * Porte la logique métier d’authentification.
+ *
+ * Fonctionnalités :
+ * - Validation des identifiants (email/mot de passe)
+ * - Génération de tokens JWT (access / refresh)
+ *
+ * Dépendances :
+ * - bcrypt (comparaison mot de passe)
+ * - jsonwebtoken (signature JWT)
+ * - userRepo (findUserByEmailWithPassword)
+ * - ApiError (normalisation des erreurs métier)
+ *
+ * Sécurité :
+ * - Secrets JWT via variables d’environnement
+ * - Ne renvoie jamais le mot de passe en clair (c’est au controller de filtrer la réponse)
+ *
+ * Effets de bord :
+ * - Aucun accès direct HTTP ; uniquement génération de tokens et lecture DB via repository
  */
 
 import bcrypt from "bcrypt";
@@ -17,9 +31,21 @@ import {
     findUserByEmailWithPassword
 } from "../repositories/userRepo.js";
 
-// ===============================================
-// LOGIN
-// ===============================================
+/**
+ * LOGIN
+ * =========================================================================================
+ * Authentifie un utilisateur et génère les tokens d’accès.
+ *
+ * @async
+ * @function loginService
+ *
+ * @param {string} email Email utilisateur
+ * @param {string} password Mot de passe en clair
+ *
+ * @returns {Promise<{accessToken: string, refreshToken: string, user: Object}>}
+ *
+ * @throws {ApiError} 401 Identifiants invalides
+ */
 
 export async function loginService(email, password) {
 

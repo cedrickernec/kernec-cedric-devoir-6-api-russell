@@ -1,21 +1,40 @@
 /**
- * ===================================================================
- * APIERROR
- * ===================================================================
- * - Erreur métier personnalisée pour l'API
- *   - Centralise la gestion des erreurs HTTP + métier
- *   - Intercepté par le middleware apiErrorHandler
- * ===================================================================
+ * API ERROR
+ * =========================================================================================
+ * @module ApiError
+ *
+ * Erreur personnalisée utilisée pour normaliser les erreurs HTTP + métier dans l’API.
+ *
+ * Objectifs :
+ * - Porter un status HTTP (err.status)
+ * - Porter des détails structurés (err.detail) :
+ *    - fields        : erreurs de validation par champ
+ *    - conflictWith  : ressource en conflit (payload utile au front)
+ *    - context       : informations métier/diagnostic
+ *
+ * Cette erreur est consommée par le middleware global apiErrorHandler qui transforme
+ * l’exception en JSON standardisé.
+ */
+
+/**
+ * API ERROR CLASS
+ * =========================================================================================
+ * Représente une erreur applicative normalisée.
+ *
+ * @class ApiError
+ * @extends Error
  */
 
 export class ApiError extends Error {
 
     /**
-     * 
-     * @param {number} status - code HTTP
-     * @param {string|null} message - Message global (optionnel)
-     * @param {object|null} detail - Détails métier
+     * @constructor
+     *
+     * @param {number} status Code HTTP
+     * @param {string|null} message Message global (optionnel)
+     * @param {object|null} [detail=null] Détails structurés (validation, conflict, context…)
      */
+
     constructor(status, message, detail = null) {
         super(message);
         this.status = status;
@@ -27,68 +46,103 @@ export class ApiError extends Error {
     // ==================================================
 
     /**
-     * 
-     * @param {string} message 
-     * @param {object|null} detail
+     * BAD REQUEST
+     * =========================================================================================
+     * @static
+     * @function badRequest
+     *
+     * @param {string} message
+     * @param {object|null} [detail=null]
+     *
      * @returns {ApiError}
      */
+
     static badRequest(message, detail = null) {
         return new ApiError(400, message, detail);
     }
 
     /**
-     * 
-     * @param {string} message
-     * @param {object|null} context
+     * NOT FOUND
+     * =========================================================================================
+     * @static
+     * @function notFound
+     *
+     * @param {string} [message="Ressource introuvable"]
+     * @param {object|null} [context=null]
+     *
      * @returns {ApiError}
      */
+
     static notFound(message = "Ressource introuvable", context = null) {
         return new ApiError(404, message, context ? { context } : null);
     }
 
     /**
-     * 
-     * @param {string} message 
+     * FORBIDDEN
+     * =========================================================================================
+     * @static
+     * @function forbidden
+     *
+     * @param {string} [message="Accès interdit"]
+     * @param {object|null} [context=null]
+     *
      * @returns {ApiError}
      */
-    static forbidden(message = "Accès interdit") {
-        return new ApiError(403, message);
+
+    static forbidden(message = "Accès interdit", context = null) {
+        return new ApiError(403, message, context ? { context } : undefined);
     }
 
     /**
-     * 
-     * @param {string} message 
+     * UNAUTHORIZED
+     * =========================================================================================
+     * @static
+     * @function unauthorized
+     *
+     * @param {string} [message="Non autorisé"]
+     * @param {object|null} [context=null]
+     *
      * @returns {ApiError}
      */
-    static unauthorized(message = "Non autorisé") {
-        return new ApiError(401, message);
+
+    static unauthorized(message = "Non autorisé", context = null) {
+        return new ApiError(401, message, context ? { context } : null);
     }
 
-    // ==================================================
-    // VALIDATION
-    // Erreur de validation de formulaire
-    // ==================================================
     /**
+     * VALIDATION
+     * =========================================================================================
+     * Erreur de validation de formulaire
      * 
-     * @param {Object<string, any>} fields
-     * @param {string} message
+     * @static
+     * @function validation
+     *
+     * @param {Object<string, any>} fields Erreurs par champ
+     * @param {string} [message="Donnée(s) invalide(s)."]
+     *
      * @returns {ApiError}
      */
+
     static validation(fields, message = "Donnée(s) invalide(s).") {
         return new ApiError(400, message, { fields });
     }
 
-    // ==================================================
-    // FIELD CONFLICT
-    // Conflit sur un champ précis
-    // ==================================================
     /**
+     * FIELD CONFLICT
+     * =========================================================================================
+     * Conflit sur un champ précis
      * 
-     * @param {string} field 
-     * @param {string} message 
-     * @param {object|null} conflictWith
+     * @static
+     * @function fieldConflict
+     *
+     * @param {string} message Message global
+     * @param {string} field Nom du champ en conflit
+     * @param {string} fieldMessage Message spécifique au champ
+     * @param {object|null} [conflictWith=null] Payload optionnel décrivant la ressource en conflit
+     *
      * @returns {ApiError}
      */
+
     static fieldConflict(message, field, fieldMessage, conflictWith = null) {
         return new ApiError(409, message, {
             fields: {
@@ -98,30 +152,35 @@ export class ApiError extends Error {
         });
     }
 
-    // ==================================================
-    // RESOURCE CONFLICT
-    // Conflit avec une ressource
-    // ==================================================
     /**
-     * 
-     * @param {string} message 
-     * @param {object|null} conflictWith
+     * RESOURCE CONFLICT
+     * =========================================================================================
+     * Conflit avec une ressource
+     * @static
+     * @function resourceConflict
+     *
+     * @param {string} message
+     * @param {object|null} [conflictWith=null]
+     *
      * @returns {ApiError}
      */
     static resourceConflict(message, conflictWith = null) {
         return new ApiError(409, message, { conflictWith });
     }
 
-    // ==================================================
-    // BUSINESS CONFLICT
-    // Conflit métier global
-    // ==================================================
     /**
-     * 
-     * @param {string} message 
-     * @param {object|null} context
+     * BUSINESS CONFLICT
+     * =========================================================================================
+     * Conflit métier global
+     * @static
+     * @function businessConflict
+     *
+     * @param {string} message
+     * @param {object|null} [context=null]
+     *
      * @returns {ApiError}
      */
+
     static businessConflict(message, context = null) {
         return new ApiError(409, message, context ? { context } : null);
     }

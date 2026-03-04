@@ -1,0 +1,21 @@
+# ==========================================================
+# EXAMPLE - RESERVATION CONFLICT
+# ----------------------------------------------------------
+# Exemple retourné lorsque le client tente de créer ou
+# modifier une réservation qui entre en conflit avec
+# une réservation existante sur le même catway et créneau.
+# ==========================================================
+
+summary: Réservation en conflit
+value:
+  success: false
+  message: Ce catway est déjà réservé sur ce créneau.
+  conflictWith:
+    reservation:
+      id: 65a8c123abc456def7890123
+      clientName: Jacky Snow
+      boatName: Léandra
+      startDate: 2024-09-18T06:00:00.000Z
+      endDate: 2024-12-23T06:00:00.000Z
+      createdAt: 2024-08-26T18:57:40.845Z
+      updatedAt: 2024-08-26T18:57:40.845Z

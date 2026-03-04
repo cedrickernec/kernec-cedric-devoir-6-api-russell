@@ -1,9 +1,13 @@
 /**
- * ===================================================================
  * AUTH BOOTSTRAP
- * ===================================================================
- * - Initialisation minimale pour l'authentification
- * ===================================================================
+ * =========================================================================================
+ * @module authBootstrap
+ *
+ * Point d'entrée minimal pour les pages d'authentification.
+ *
+ * - Active les mécanismes d'accessibilité de base
+ * - Synchronise la session entre onglets (login / logout)
+ * - Initialise les helpers de formulaire (erreurs, visibilité mot de passe)
  */
 
 // ACCESSIBILITY

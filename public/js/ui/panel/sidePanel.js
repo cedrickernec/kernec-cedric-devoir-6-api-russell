@@ -1,12 +1,20 @@
 /**
- * ===================================================================
  * SIDE PANEL UI CONTROLLER
- * ===================================================================
- * - Gère l'ouverture / fermeture du side panel
- * - Injecte dynamiquement le contenu et les actions
- * - Gère accessibilité (focus trap + escape)
- * - Expose des helpers d'état
- * ===================================================================
+ * =========================================================================================
+ * @module sidePanel
+ * 
+ * Contrôleur UI du side panel.
+ *
+ * Responsabilités :
+ * - Ouvrir / fermer le panel
+ * - Injecter dynamiquement le contenu HTML
+ * - Configurer dynamiquement les actions (Edit / Delete)
+ * - Gérer l'accessibilité (focus trap + Escape)
+ * - Exposer des helpers d'état
+ *
+ * Dépendances :
+ * - escapeManager
+ * - createFocusTrap
  */
 
 import { escapeManager } from "../accessibility/escapeManager.js";
@@ -35,9 +43,25 @@ const panelActions = panel?.querySelector(".side-panel-actions");
 
 let currentEntityId = null;
 
-// ==================================================
-// OPEN PANEL
-// ==================================================
+/**
+ * OPEN PANEL
+ * =========================================================================================
+ * Ouvre le side panel et configure ses actions.
+ *
+ * @function openSidePanel
+ * 
+ * @param {Object} options
+ * @param {string} options.title
+ * @param {string} options.content
+ * @param {string|null} options.entityId
+ * @param {string|null} [options.editTitle]
+ * @param {string|null} [options.editBaseUrl]
+ * @param {string|null} [options.nestedEditUrl]
+ * @param {string|null} [options.nestedEditParams]
+ * @param {Object|null} [options.actions]
+ *
+ * @returns {void}
+ */
 
 export function openSidePanel({
   title,
@@ -131,9 +155,15 @@ export function openSidePanel({
   })
 }
 
-// ==================================================
-// CLOSE PANEL
-// ==================================================
+/**
+ * CLOSE PANEL
+ * =========================================================================================
+ * Ferme le side panel et réinitialise son état.
+ *
+ * @function closeSidePanel
+ * 
+ * @returns {void}
+ */
 
 export function closeSidePanel() {
   panel.classList.remove("open");
@@ -159,9 +189,29 @@ export function closeSidePanel() {
 // STATE HELPERS
 // ==================================================
 
+/**
+ * SIDE PANEL IS OPEN ?
+ * =========================================================================================
+ * Indique si le side panel est actuellement ouvert.
+ *
+ * @function isSidePanelOpen
+ * 
+ * @returns {boolean}
+ */
+
 export function isSidePanelOpen() {
   return panel.classList.contains("open");
 }
+
+/**
+ * CURRENT DISPLAY ENTITY ID
+ * =========================================================================================
+ * Retourne l'identifiant de l'entité actuellement affichée.
+ *
+ * @function getCurrentEntityId
+ * 
+ * @returns {string|null}
+ */
 
 export function getCurrentEntityId() {
   return currentEntityId;

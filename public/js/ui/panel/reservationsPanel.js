@@ -1,21 +1,22 @@
 /**
- * ===================================================================
  * RESERVATIONS PANEL CONFIGURATION
- * ===================================================================
- * - Configure le side panel pour l'entité Reservation
- * - Définit les routes panel / édition / suppression
- * - Centralise les messages spécifiques métier
- * - Supporte les routes imbriquées Catway → Reservation
- * ===================================================================
+ * =========================================================================================
+ * @module reservationsPanel
+ * 
+ * Configuration du side panel pour l'entité Reservation.
+ *
+ * Spécificités :
+ * - Support des routes imbriquées Catway → Reservation
+ * - Configuration des routes panel / edit / delete
+ * - Centralisation des messages métier
+ *
+ * Architecture :
+ * → Adaptateur métier au-dessus de initEntityPanel
  */
 
 import { initEntityPanel } from "./entityPanel.js";
 import { RESERVATION_MESSAGES } from "../../messages/reservationMessage.js";
 import { COMMON_MESSAGES } from "../../messages/commonMessages.js";
-
-// ==================================================
-// PANEL INITIALISATION
-// ==================================================
 
 initEntityPanel({
   panelTitle: "Détails",

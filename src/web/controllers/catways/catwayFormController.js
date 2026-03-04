@@ -1,11 +1,9 @@
 /**
- * ===================================================================
  * FORM CONTROLLER - CATWAYS
- * ===================================================================
+ * =========================================================================================
  * - Gestion soumission formulaires
  * - Mapping erreurs API → vue EJS
  * - Redirections + flash messages
- * ===================================================================
  */
 
 import { handleAuthExpired } from "../../middlewares/auth/authExpiredHandler.js";
@@ -26,9 +24,27 @@ import { handleApiError } from "../../utils/api/apiErrorHandler.js";
 import { CATWAY_MESSAGES } from "../../../../public/js/messages/catwayMessages.js";
 import { COMMON_MESSAGES } from "../../../../public/js/messages/commonMessages.js";
 
-// ==================================================
-// CREATE CATWAY
-// ==================================================
+/**
+ * CREATE CATWAY
+ * =========================================================================================
+ * Traite la création d'un catway.
+ *
+ * - Construit le payload depuis le formulaire
+ * - Appelle l'API (gateway) de création
+ * - Gère l'expiration d'authentification
+ * - Mappe les erreurs API vers la vue EJS (champs / global)
+ * - Pose un flash message succès
+ * - Redirige vers la liste des catways
+ *
+ * @async
+ * @function postCreateCatway
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 
 export const postCreateCatway = async (req, res, next) => {
     try {
@@ -83,9 +99,28 @@ export const postCreateCatway = async (req, res, next) => {
     }
 };
 
-// ==================================================
-// EDIT CATWAY
-// ==================================================
+/**
+ * EDIT CATWAY
+ * =========================================================================================
+ * Traite la modification d'un catway.
+ *
+ * - Valide et parse catwayNumber via req.params
+ * - Construit le payload depuis le formulaire
+ * - Appelle l'API (gateway) de mise à jour
+ * - Gère l'expiration d'authentification
+ * - Mappe les erreurs API vers la vue EJS (champs / métier / global)
+ * - Pose un flash message de succès
+ * - Redirige vers la page détail utilisateur
+ *
+ * @async
+ * @function postEditCatway
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 
 export const postEditCatway = async (req, res, next) => {
     try {
@@ -148,9 +183,28 @@ export const postEditCatway = async (req, res, next) => {
     }
 };
 
-// ==================================================
-// DELETE CATWAY
-// ==================================================
+/**
+ * DELETE CATWAY
+ * =========================================================================================
+ * Supprime un catway.
+ *
+ * - Valide et parse catwayNumber via req.params
+ * - Appelle l'API (gateway) de suppression (avec confirmation mot de passe si nécessaire)
+ * - Gère l'expiration d'authentification
+ * - Passe par le handler d'erreurs API partagé
+ * - Supporte le mode AJAX (JSON) et le mode HTML (redirect)
+ * - Pose un flash message de succès
+ * - Redirige vers la liste des catways
+ *
+ * @async
+ * @function deleteCatwayAction
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {Promise<void>}
+ */
 
 export const deleteCatwayAction = async (req, res, next) => {
     try {

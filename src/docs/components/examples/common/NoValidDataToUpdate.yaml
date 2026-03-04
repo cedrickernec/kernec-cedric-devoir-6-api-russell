@@ -1,0 +1,11 @@
+# ==========================================================
+# EXAMPLE - NO VALID DATA TO UPDATE
+# ----------------------------------------------------------
+# Exemple retourné lorsqu'aucune donnée valide
+# n'est fournie dans le body pour une mise à jour.
+# ==========================================================
+
+summary: Aucune donnée valide à mettre à jour
+value:
+  success: false
+  message: "Aucune donnée valide à mettre à jour."

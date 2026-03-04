@@ -1,0 +1,18 @@
+# ==========================================================
+# RESERVATION - AVAILABILITY
+# ----------------------------------------------------------
+# Ce schéma rassemble les modèles de disponibilité
+# d'un catway.
+#
+# Le champ "status" est utilisé comme discriminant
+# pour différencier les cas où le catway :
+# - est disponible complètement (status: "full")
+# - est disponible partiellement (status: "partial").
+# ==========================================================
+
+oneOf:
+  - $ref: "../../../../openapi.yaml#/components/schemas/AvailabilityFullModel"
+  - $ref: "../../../../openapi.yaml#/components/schemas/AvailabilityPartialModel"
+
+discriminator:
+  propertyName: status

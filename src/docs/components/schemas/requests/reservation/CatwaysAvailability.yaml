@@ -1,0 +1,42 @@
+# ==========================================================
+# CATWAYS AVAILABILITY REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de recherche
+# de disponibilité des catways.
+# ==========================================================
+
+description: Structure standardisée des requêtes de recherche de disponibilité des catways.
+type: object
+required: [startDate, endDate]
+
+properties:
+  startDate:
+    description: Date de début de la période de réservation
+    type: string
+    format: date
+    example: 2026-02-01
+
+  endDate:
+    description: Date de fin de la période de réservation
+    type: string
+    format: date
+    example: 2026-12-03
+
+  catwayType:
+    description: Type de catway recherché (optionnel)
+    type: string
+    enum: [short, long]
+    example: short
+
+  allowPartial:
+    description:
+      Autorise les disponibilités partielles sur la période demandée (optionnel).
+      Si true, les catways partiellement disponibles seront inclus dans les résultats.
+    type: boolean
+    default: false
+    example: true
+
+  catwayNumber:
+    description: Numéro spécifique de catway recherché (optionnel)
+    type: integer
+    example: 1

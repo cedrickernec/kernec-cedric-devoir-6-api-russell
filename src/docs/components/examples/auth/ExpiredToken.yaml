@@ -1,0 +1,12 @@
+# ==========================================================
+# EXAMPLE - EXPIRED TOKEN
+# ----------------------------------------------------------
+# Exemple générique lorsque le token est expiré.
+#
+# Utilisable dans tous les endpoints.
+# ==========================================================
+
+summary: Token expiré
+value:
+  success: false
+  message: Token expiré. Veuillez vous reconnecter.

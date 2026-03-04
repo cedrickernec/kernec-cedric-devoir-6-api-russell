@@ -1,0 +1,36 @@
+# ==========================================================
+# AUTH LOGIN RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée après connexion.
+#
+# Contient :
+# - success
+# - message
+# - accessToken
+# - refreshToken
+# - data (User)
+# ==========================================================
+
+description: Structure standardisée des réponses de connexion utilisateur.
+type: object
+required: [success, message, accessToken, refreshToken, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  message:
+    type: string
+    example: Connexion réussie.
+
+  accessToken:
+    type: string
+    example: eyJhbGciOi...
+
+  refreshToken:
+    type: string
+    example: eyJhbGciOi...
+
+  data:
+    $ref: "../../../../openapi.yaml#/components/schemas/UserModel"

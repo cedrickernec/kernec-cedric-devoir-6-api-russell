@@ -1,24 +1,45 @@
 /**
- * ===================================================================
  * RESERVATION VALIDATORS
- * ===================================================================
- * - Empêche les données invalides d'entrer dans l'application :
- *      - Vérifie la validité des données entrantes
- *      - Contrôle les formats, types et champs obligatoires
- * ===================================================================
+ * =========================================================================================
+ * @module reservationValidators
+ *
+ * Validation des données Reservation + requêtes de disponibilité.
+ *
+ * Stratégie :
+ * - validateReservationCreate / validateAvailabilityInput : “soft”
+ *   → retourne un objet `errors`
+ * - validateReservationPeriod : “hard”
+ *   → throw ApiError si la période est incohérente
  */
 
 import { ApiError } from "../utils/errors/apiError.js";
 
-// Champs obligatoires
+/**
+ * VALIDATE RESERVATION CREATE
+ * =========================================================================================
+ * Valide les champs obligatoires pour la création d’une réservation.
+ *
+ * Champs requis :
+ * - clientName
+ * - boatName
+ * - startDate
+ * - endDate
+ *
+ * @function validateReservationCreate
+ *
+ * @param {Object} body Données filtrées (cleanData)
+ *
+ * @returns {Object} errors Erreurs par champ (vide si OK)
+ */
+
 export function validateReservationCreate(body) {
     const errors = {};
     const { clientName, boatName, startDate, endDate } = body;
 
-    if (!clientName)
+    if (!clientName || typeof clientName !== "string" || clientName.trim().length === 0)
         errors.clientName = "Champ obligatoire manquant : Nom du client.";
 
-    if (!boatName)
+    if (!boatName || typeof boatName !== "string" || boatName.trim().length === 0)
         errors.boatName = "Champ obligatoire manquant : Nom du bateau.";
 
     if (!startDate)
@@ -30,7 +51,65 @@ export function validateReservationCreate(body) {
     return errors;
 }
 
-// Champs obligatoires
+/**
+ * VALIDATE RESERVATION UPDATE
+ * =========================================================================================
+ * Valide les champs pour la mise à jour d’une réservation.
+ * 
+ * Champs optionnels (mais non vides si présents) :
+ * - clientName
+ * - boatName
+ * - startDate
+ * - endDate
+ * 
+ * @function validateReservationUpdate
+ *
+ * @param {Object} body Données filtrées (cleanData)
+ * 
+ * @return {Object} errors Erreurs par champ (vide si OK)
+ */
+
+export function validateReservationUpdate(body) {
+    const errors = {};
+    const { clientName, boatName, startDate, endDate } = body;
+
+    if ("clientName" in body) {
+        if (typeof clientName !== "string" || clientName.trim().length === 0) {
+            errors.clientName = "Le nom du client doit être une chaîne de caractères non vide.";
+        }
+    }
+
+    if ("boatName" in body) {
+        if (typeof boatName !== "string" || boatName.trim().length === 0) {
+            errors.boatName = "Le nom du bateau doit être une chaîne de caractères non vide.";
+        }
+    }
+
+    if ("startDate" in body && !startDate)
+        errors.startDate = "La date d'entrée ne peut être vide.";
+
+    if ("endDate" in body && !endDate)
+        errors.endDate = "La date de sortie ne peut être vide.";
+
+    return errors;
+}
+
+/**
+ * VALIDATE AVAILABILITY INPUT
+ * =========================================================================================
+ * Valide les champs obligatoires pour une requête de disponibilité.
+ *
+ * Champs requis :
+ * - startDate
+ * - endDate
+ *
+ * @function validateAvailabilityInput
+ *
+ * @param {Object} body Données filtrées (cleanData)
+ *
+ * @returns {Object} errors Erreurs par champ (vide si OK)
+ */
+
 export function validateAvailabilityInput(body) {
     const errors = {};
     const { startDate, endDate } = body;
@@ -44,7 +123,23 @@ export function validateAvailabilityInput(body) {
     return errors;
 }
 
-// Validation cohérence période
+/**
+ * VALIDATE RESERVATION PERIOD
+ * =========================================================================================
+ * Vérifie la cohérence d’une période de réservation.
+ *
+ * Règles :
+ * - start et end doivent exister
+ * - start < end (minimum 1 nuit)
+ *
+ * @function validateReservationPeriod
+ *
+ * @param {Date} start Date de début (déjà parsée)
+ * @param {Date} end Date de fin (déjà parsée)
+ *
+ * @throws {ApiError} 400 Période invalide
+ */
+
 export function validateReservationPeriod(start, end) {
     if (!start || !end) {
         throw ApiError.badRequest(
@@ -54,7 +149,7 @@ export function validateReservationPeriod(start, end) {
 
     if (start >= end) {
         throw ApiError.validation({
-            Dates: "La date de fin doit être strictement postérieure à la date de début (minimum 1 nuit)."
+            dates: "La date de fin doit être strictement postérieure à la date de début (minimum 1 nuit)."
         });
     }
 }

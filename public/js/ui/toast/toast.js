@@ -1,11 +1,22 @@
 /**
- * ===================================================================
  * TOAST NOTIFICATION SYSTEM
- * ===================================================================
- * - Affiche des notifications temporaires (success / error / info)
- * - Supporte les actions personnalisées optionnelles
- * - Met en pause le timer au survol
- * ===================================================================
+ * =========================================================================================
+ * @module toast
+ * 
+ * Système global de notifications toast.
+ *
+ * Responsabilités :
+ * - Afficher des notifications temporaires (success / error / info)
+ * - Gérer une durée personnalisable
+ * - Supporter des actions interactives optionnelles
+ * - Mettre en pause le timer au survol
+ * - Gérer l'animation et la suppression propre du DOM
+ *
+ * Expose :
+ * → window.showToast(type, message, options)
+ *
+ * Architecture :
+ * → UI utility global autonome (IIFE)
  */
 
 (function () {
@@ -26,15 +37,23 @@
   // ==================================================
   // PUBLIC API
   // ==================================================
+
   /**
-   * Afficher une notification toast
+   * SHOW TOAST
+   * =========================================================================================
+   * Affiche une notification toast.
+   *
+   * @function showToast
+   * 
    * @param {"success"|"error"|"info"} type
    * @param {string} message
    * @param {Object} [options]
-   * @param {number} [options.duration]
-   * @param {Object} [options.action]
-   * @param {string} options.action.label
-   * @param {Function} options.action.onClick
+   * @param {number} [options.duration] Durée en millisecondes
+   * @param {Object} [options.action] Action personnalisée
+   * @param {string} options.action.label Texte du bouton
+   * @param {Function} options.action.onClick Callback exécuté au clic
+   *
+   * @returns {void}
    */
 
   window.showToast = function (type, message, options = {}) {

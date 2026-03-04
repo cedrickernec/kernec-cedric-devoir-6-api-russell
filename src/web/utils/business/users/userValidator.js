@@ -1,9 +1,21 @@
 /**
- * ===================================================================
- * VALIDATION RULE - USER PASSWORD
- * ===================================================================
- * - Liste centralisée des règles de sécurité du mot de passe
- * ===================================================================
+ * USER PASSWORD RULES (WEB)
+ * =========================================================================================
+ * @module userValidator
+ *
+ * Règles de validation du mot de passe côté Web.
+ *
+ * Responsabilités :
+ * - Fournir la liste des règles affichées en UI
+ * - Rester synchronisé avec la validation backend
+ */
+
+/**
+ * PASSWORD_RULES
+ * =========================================================================================
+ * Liste des règles de mot de passe affichées côté interface.
+ *
+ * @constant {string[]}
  */
 
 export const PASSWORD_RULES = [

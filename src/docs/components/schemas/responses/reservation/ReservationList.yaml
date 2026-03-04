@@ -1,0 +1,29 @@
+# ==========================================================
+# RESERVATION LIST RESPONSE SCHEMA
+# ----------------------------------------------------------
+# Réponse standardisée pour la récupération
+# de la liste des réservations.
+#
+# Contient :
+# - success
+# - count
+# - data (array de Reservation)
+# ==========================================================
+
+description: Structure standardisée des réponses de récupération d'une liste de réservations.
+type: object
+required: [success, count, data]
+
+properties:
+  success:
+    type: boolean
+    example: true
+
+  count:
+    type: integer
+    example: 14
+
+  data:
+    type: array
+    items:
+      $ref: "../../../../openapi.yaml#/components/schemas/ReservationSummaryModel"

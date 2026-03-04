@@ -1,0 +1,15 @@
+# ==========================================================
+# COMMON SCHEMA: COMPOSITE ID
+# ----------------------------------------------------------
+# Schéma commun pour les identifiants composites
+# utilisés dans les opérations de suppression en masse de
+# réservations, où l'identifiant combine le numéro de catway
+# et l'identifiant de réservation.
+#
+# Format de l'identifiant composite :
+# - "catwayNumber|reservationId"
+# ==========================================================
+
+type: string
+pattern: "^[0-9]+\\|[a-fA-F0-9]{24}$"
+example: 20|699ce49b3990671881a87cca

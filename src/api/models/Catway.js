@@ -1,10 +1,23 @@
 /**
- * ===================================================================
  * CATWAY MODEL
- * ===================================================================
- * - Représente un emplacement d'amarrage (catway)
- * - Définit les caractéristiques et l'état de disponibilité
- * ===================================================================
+ * =========================================================================================
+ * @module Catway
+ *
+ * Modèle Mongoose représentant un emplacement d’amarrage (catway).
+ *
+ * Responsabilités :
+ * - Définir la structure persistée d’un catway
+ * - Encadrer les contraintes de validation (required, enum, unique)
+ * - Fournir des méthodes métier liées à l’entité
+ *
+ * Dépendances :
+ * - mongoose
+ *
+ * Sécurité :
+ * - Validation de schéma côté base (required, enum, unique)
+ *
+ * Effets de bord :
+ * - Persistance en base MongoDB via Mongoose
  */
 
 import mongoose from "mongoose";
@@ -34,11 +47,18 @@ const CatwaySchema = new mongoose.Schema({
 }
 );
 
-// ===============================================
-// INSTANCE METHODS
-// ===============================================
+/**
+ * CATWAY INSTANCE METHOD - IS UNAVAILABLE
+ * =========================================================================================
+ * Indique si le catway est actuellement indisponible.
+ *
+ * @function isUnavailable
+ *
+ * @this {import("mongoose").Document}
+ *
+ * @returns {boolean}
+ */
 
-// Indique si le catway est indisponible
 CatwaySchema.methods.isUnavailable = function () {
     return this.isOutOfService === true;
 };

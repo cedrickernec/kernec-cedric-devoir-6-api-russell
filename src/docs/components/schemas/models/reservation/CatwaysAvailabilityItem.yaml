@@ -1,0 +1,39 @@
+# ============================================================
+# CATWAYS AVAILABILITY ITEM
+# -----------------------------------------------------------
+# Représente la liste des catways disponibles
+# pour une période donnée.
+#
+# Contient les informations sur le catway ainsi que
+# sa disponibilité sur la période demandée.
+# ============================================================
+
+type: object
+required: [catway, availability]
+
+properties:
+  catway:
+    description: Informations sur le catway disponible
+    type: object
+    required: [catwayNumber, catwayType, catwayState]
+
+    properties:
+      catwayNumber:
+        description: Numéro du catway
+        type: integer
+        example: 1
+
+      catwayType:
+        description: Type de catway
+        type: string
+        enum: [short, long]
+        example: short
+      
+      catwayState:
+        description: État du catway
+        type: string
+        example: bon état
+
+  availability:
+    description: Disponibilité du catway sur la période demandée
+    $ref: "../../../../openapi.yaml#/components/schemas/AvailabilityModel"

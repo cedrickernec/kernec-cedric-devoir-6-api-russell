@@ -1,11 +1,18 @@
 /**
- * ===================================================================
  * SIDEBAR CLOCK
- * ===================================================================
- * - Met à jour dynamiquement la date et l'heure affichées dans la sidebar
- * - Mise à jour immédiate au chargement
+ * =========================================================================================
+ * @module sidebarClock
+ * 
+ * Horloge dynamique de la sidebar.
+ *
+ * Responsabilités :
+ * - Mettre à jour la date et l'heure affichées
+ * - Synchronisation immédiate au chargement
  * - Rafraîchissement automatique toutes les secondes
- * ===================================================================
+ *
+ * Dépendances :
+ * - formatDateFR
+ * - formatTimeFR
  */
 
 import { formatDateFR, formatTimeFR } from "../../utils/dateFormatter.js";

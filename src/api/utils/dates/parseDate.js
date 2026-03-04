@@ -1,24 +1,49 @@
 /**
- * ===================================================================
  * PARSE DATE
- * ===================================================================
- * - Sécurise les entrées de type date :
- *      - Convertit une date fournie en objet date
- *      - Vérifie le format
- *      - Rejète les dates invalides
- * ===================================================================
+ * =========================================================================================
+ * @module parseDate
+ *
+ * Sécurise les entrées de type date (format strict YYYY-MM-DD).
+ *
+ * Fonctionnalités :
+ * - Validation du type et du format
+ * - Validation de cohérence mois/jour
+ * - Retourne une Date UTC normalisée (heure fixée pour cohérence métier)
+ *
+ * Dépendances :
+ * - ApiError (erreurs normalisées)
+ *
+ * Sécurité :
+ * - Rejette toute entrée non conforme (validation stricte)
+ *
+ * Effets de bord :
+ * - Peut lever une ApiError en cas de format invalide
  */
 
 import { ApiError } from "../errors/apiError.js";
 
 const RESERVATION_HOUR = 6;
 
+/**
+ * PARSE DATE
+ * =========================================================================================
+ * Parse et valide une date au format strict YYYY-MM-DD.
+ *
+ * @function parseDate
+ *
+ * @param {string} dateStr Date au format YYYY-MM-DD
+ *
+ * @returns {Date}
+ *
+ * @throws {ApiError} 400 Format invalide ou date incohérente
+ */
+
 export const parseDate = (dateStr) => {
 
     // 1) Type
     if (typeof dateStr !== "string") {
         throw ApiError.validation({
-            Dates: "Format de date invalide. Format attendu : YYYY-MM-DD."
+            dates: "Format de date invalide. Format attendu : YYYY-MM-DD."
         });
     }
 
@@ -30,7 +55,7 @@ export const parseDate = (dateStr) => {
 
     if (!match) {
         throw ApiError.validation({
-            Dates: "Format de date invalide. Format attendu : YYYY-MM-DD."
+            dates: "Format de date invalide. Format attendu : YYYY-MM-DD."
         });
     }
 
@@ -60,11 +85,11 @@ export const parseDate = (dateStr) => {
 
         if (errors.length === 1) {
             throw ApiError.validation({
-                Dates: `Le ${errors[0]} est incorrect.`
+                dates: `Le ${errors[0]} est incorrect.`
             });
         } else {
             throw ApiError.validation({
-                Dates: "Le mois et le jour sont incorrects."
+                dates: "Le mois et le jour sont incorrects."
             });
         }
     }

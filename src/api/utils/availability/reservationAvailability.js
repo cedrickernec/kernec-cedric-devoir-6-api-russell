@@ -1,17 +1,36 @@
 /**
- * ===================================================================
  * CATWAY COMPATIBILITY CALCULATION
- * ===================================================================
- * Règles :
- * - full    : aucun chevauchement, période entièrement disponible
- * - partial : une sous-période est disponible
+ * =========================================================================================
+ * @module reservationAvailability
+ *
+ * Calcule la compatibilité d’un catway avec une période demandée.
+ *
+ * Statuts :
+ * - full    : période entièrement disponible
+ * - partial : au moins un créneau disponible dans la période
  * - none    : aucun créneau compatible
- * 
- * Retour :
- * - none    → {status, slots}
- * - partial → {status, from, to}
- * - none    → {status, from, to, slots}
- * ===================================================================
+ *
+ * Dépendances :
+ * - Aucune (calcul local à partir des dates et des réservations)
+ *
+ * Format attendu :
+ * - reservations : tableau contenant startDate/endDate et catwayNumber
+ * - startDate/endDate : Date
+ *
+ * Effets de bord :
+ * - Aucun (fonction pure)
+ */
+
+/**
+ * DAY START
+ * =========================================================================================
+ * Normalise une date au début du jour (UTC) pour des comparaisons cohérentes.
+ *
+ * @function dayStart
+ *
+ * @param {Date|string|number} date
+ *
+ * @returns {Date}
  */
 
 function dayStart(date) {
@@ -22,6 +41,27 @@ function dayStart(date) {
     d.getUTCDate()
   ));
 }
+
+/**
+ * GET CATWAY COMPATIBILITY
+ * =========================================================================================
+ * Calcule la compatibilité d’un catway avec une période demandée.
+ *
+ * @function getCatwayCompatibility
+ *
+ * @param {Object} options
+ * @param {number} options.catwayNumber
+ * @param {Array<Object>} options.reservations
+ * @param {Date} options.startDate
+ * @param {Date} options.endDate
+ *
+ * @returns {{
+ *   status: "full"|"partial"|"none",
+ *   from?: Date,
+ *   to?: Date,
+ *   slots?: Array<{from: Date, to: Date}>
+ * }}
+ */
 
 export function getCatwayCompatibility({
   catwayNumber,

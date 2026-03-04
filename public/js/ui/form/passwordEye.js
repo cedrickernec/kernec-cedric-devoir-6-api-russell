@@ -1,11 +1,14 @@
 /**
- * ===================================================================
  * PASSWORD VISIBILITY TOGGLE
- * ===================================================================
- * - Affiche / Masque le mot de passe utilisateur
+ * =========================================================================================
+ * @module passwordEye
+ * 
+ * Gère l'affichage / masquage du mot de passe utilisateur.
+ *
+ * Fonctionnalités :
+ * - Alterne le type du champ (password / text)
  * - Synchronise l'icône visuelle (eye / eye-slash)
- * - Met à jour l'attribut ARIA pour l'accessibilité
- * ===================================================================
+ * - Met à jour les attributs ARIA pour l'accessibilité
  */
 
 document.addEventListener("DOMContentLoaded", () => {

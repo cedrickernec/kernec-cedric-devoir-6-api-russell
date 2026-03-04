@@ -1,0 +1,18 @@
+# ==========================================================
+# CATWAY DELETE REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de suppression
+# d'un catway lié à des réservation.
+#
+# Requête protégée → confirmation par mot de passe
+# ==========================================================
+
+description: Structure standardisée des requêtes de suppression d'un catway associé à des réservations.
+type: object
+
+properties:
+  password:
+    description:
+      Mot de passe requis uniquement si
+      le catway sélectionné est lié à des réservations.
+    $ref: "../../../../openapi.yaml#/components/schemas/PasswordRules"

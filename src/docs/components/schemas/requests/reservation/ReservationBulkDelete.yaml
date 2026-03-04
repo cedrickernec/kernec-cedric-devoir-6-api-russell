@@ -1,0 +1,33 @@
+# ==========================================================
+# RESERVATION BULK DELETE REQUEST SCHEMA
+# ----------------------------------------------------------
+# Structure standardisée des requêtes de suppression
+# d'une sélection de réservations (suppression en masse).
+# ==========================================================
+
+description:
+  Structure standardisée des requêtes de suppression
+  d'une sélection de réservations (suppression en masse).
+type: object
+required: [ids]
+
+properties:
+  ids:
+    description: Liste des identifiants composés (catwayNumber|reservationId)
+    type: array
+    minItems: 1
+    items:
+      $ref: "../../../../openapi.yaml#/components/schemas/CompositeId"
+
+  password:
+    description:
+      Mot de passe requis uniquement si au moins
+      un des catways sélectionnés est lié à des réservations.
+    $ref: "../../../../openapi.yaml#/components/schemas/PasswordRules"
+
+example:
+    ids:
+      - "20|699ce49b3990671881a87cca"
+      - "11|698f52f59064103f2c1e58f1"
+
+    password: "MyPassword123!"

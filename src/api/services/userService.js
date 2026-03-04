@@ -1,20 +1,35 @@
 /**
- * ============================================================
  * USER SERVICE
- * ============================================================
- * - Décide si une action métier est autorisée :
- *      - Contient la logique métier de l'application
- *      - Applique les règles fonctionnelles
- *      - Appelle les validators, les rules et les repositories
- * ============================================================
+ * =========================================================================================
+ * @module userService
+ *
+ * Porte la logique métier des utilisateurs.
+ *
+ * Fonctionnalités :
+ * - Consultation (liste / détail)
+ * - Création (unicité email + hash password)
+ * - Mise à jour (unicité email)
+ * - Mise à jour mot de passe (validation + non réutilisation)
+ * - Suppression (règles métier : interdiction auto-suppression)
+ *
+ * Dépendances :
+ * - userRepo (CRUD)
+ * - bcrypt (hash / compare)
+ * - userValidators (validatePassword)
+ * - userRules (canDeleteUser)
+ * - ApiError
+ *
+ * Sécurité :
+ * - Hashage systématique des mots de passe
+ * - Protection contre réutilisation de l’ancien mot de passe
  */
 
 import bcrypt from "bcrypt";
-import { findUserByEmail } from "../repositories/userRepo.js";
 
 import {
     getAllUsers,
     findUserById,
+    findUserByEmail,
     createUser,
     updateUserById,
     deleteUserById,
@@ -28,18 +43,36 @@ import {
 import { canDeleteUser } from "./userRules.js";
 import { ApiError } from "../utils/errors/apiError.js";
 
-// ===============================================
-// GET ALL USERS
-// ===============================================
+/**
+ * GET ALL USERS
+ * =========================================================================================
+ * Retourne la liste des utilisateurs.
+ *
+ * @async
+ * @function getAllUsersService
+ *
+ * @returns {Promise<Array<Object>>}
+ */
 
 export async function getAllUsersService() {
 
     return getAllUsers();
 }
 
-// ===============================================
-// GET USER BY ID
-// ===============================================
+/**
+ * GET USER BY ID
+ * =========================================================================================
+ * Retourne un utilisateur par identifiant.
+ *
+ * @async
+ * @function getUserByIdService
+ *
+ * @param {string} id
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 404 Utilisateur introuvable
+ */
 
 export async function getUserByIdService(id) {
 
@@ -55,9 +88,20 @@ export async function getUserByIdService(id) {
     return user;
 }
 
-// ===============================================
-// CREATE USER
-// ===============================================
+/**
+ * CREATE USER
+ * =========================================================================================
+ * Crée un utilisateur (unicité email + hash password).
+ *
+ * @async
+ * @function createUserService
+ *
+ * @param {Object} data
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 409 Email déjà utilisé
+ */
 
 export async function createUserService(data) {
 
@@ -80,10 +124,22 @@ export async function createUserService(data) {
     });
 }
 
-// ===============================================
-// UPDATE USER
-// ===============================================
-
+/**
+ * UPDATE USER
+ * =========================================================================================
+ * Met à jour un utilisateur (existence + unicité email si modifiée).
+ *
+ * @async
+ * @function updateUserService
+ *
+ * @param {string} id
+ * @param {Object} cleanData
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 404 Utilisateur introuvable
+ * @throws {ApiError} 409 Email déjà utilisé
+ */
 export async function updateUserService(id, cleanData) {
 
     const user = await findUserById(id);
@@ -94,23 +150,38 @@ export async function updateUserService(id, cleanData) {
             { userId: id }
         );
     }
+    
+    if (cleanData.email) {
+        const existing = await findUserByEmail(cleanData.email);
 
-    const existing = await findUserByEmail(cleanData.email);
-
-    if (existing && existing._id.toString() !== id) {
-        throw ApiError.fieldConflict(
-            "Impossible de mettre à jour l'utilisateur.",
-            "email",
-            "Un utilisateur avec cet email existe déjà."
-        );
+        if (existing && existing._id.toString() !== id) {
+            throw ApiError.fieldConflict(
+                "Impossible de mettre à jour l'utilisateur.",
+                "email",
+                "Un utilisateur avec cet email existe déjà."
+            );
+        }
     }
 
     return updateUserById(id, cleanData);
 }
 
-// ===============================================
-// UPDATE PASSWORD
-// ===============================================
+/**
+ * UPDATE PASSWORD
+ * =========================================================================================
+ * Met à jour le mot de passe (validation + différent de l’ancien).
+ *
+ * @async
+ * @function updatePasswordService
+ *
+ * @param {string} id
+ * @param {string} newPassword
+ *
+ * @returns {Promise<boolean>}
+ *
+ * @throws {ApiError} 404 Utilisateur introuvable
+ * @throws {ApiError} 400 Mot de passe invalide ou identique à l’ancien
+ */
 
 export async function updatePasswordService(id, newPassword) {
 
@@ -149,9 +220,22 @@ export async function updatePasswordService(id, newPassword) {
     return true;
 }
 
-// ===============================================
-// DELETE USER
-// ===============================================
+/**
+ * DELETE USER
+ * =========================================================================================
+ * Supprime un utilisateur cible si les règles métier l’autorisent.
+ *
+ * @async
+ * @function deleteUserService
+ *
+ * @param {string} currentUserId
+ * @param {string} targetUserId
+ *
+ * @returns {Promise<Object>}
+ *
+ * @throws {ApiError} 404 Utilisateur introuvable
+ * @throws {ApiError} 403 Suppression interdite (règle métier)
+ */
 
 export async function deleteUserService(currentUserId, targetUserId) {
     

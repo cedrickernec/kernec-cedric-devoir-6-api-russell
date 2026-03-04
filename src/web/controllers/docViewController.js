@@ -1,15 +1,17 @@
 /**
- * ===================================================================
- * DOCUMENTATION VIEW CONTROLLER
- * ===================================================================
- * - Affiche la documentation technique de l'API
+ * DOCUMENTATION PAGE
+ * =========================================================================================
+ * Affiche la page de documentation technique.
  * - Utilise un layout dédié documentation
- * ===================================================================
+ *
+ * @function getDocumentation
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ *
+ * @returns {void}
  */
-
-// ==================================================
-// DOCUMENTATION PAGE
-// ==================================================
 
 export const getDocumentation = (req, res, next) => {
     try {
