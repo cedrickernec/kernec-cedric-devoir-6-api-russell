@@ -448,4 +448,4 @@ Outils :
 
 Projet réalisé dans le cadre de la formation **Développeur Web & Web Mobile (CEF)**.
 
-Auteur : **Cédric Kernec**
+Auteur : **Cédric Kernec** | **PixSeed**
